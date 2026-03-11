@@ -459,6 +459,7 @@ def coinflip_home(request):
 # ==========================================
 
 @login_required
+@csrf_exempt
 def create_game(request):
     if request.method == 'POST':
 
@@ -514,6 +515,7 @@ def create_game(request):
 
 
 @login_required
+@csrf_exempt
 def join_game(request, game_id):
     if request.method == 'POST':
         # Проверяем, это AJAX запрос или обычный?
@@ -618,6 +620,7 @@ def join_game(request, game_id):
 
 
 @login_required
+@csrf_exempt
 def cancel_game(request, game_id):
     if request.method == 'POST':
         game = get_object_or_404(CoinflipGame, id=game_id)
@@ -794,50 +797,7 @@ def accept_trade_log(request):
     return JsonResponse({'status': 'error'}, status=405)
 
 
-# views.py
-
-# ... (импорты и другие функции остаются без изменений) ...
-
-# === НОВАЯ ЛОГИКА АВТОРИЗАЦИИ (JSON) ===
-
-@csrf_exempt
-def robox_login(request):
-    """Шаг 1: Принимаем ник, находим ID, генерируем код"""
-    if request.method == 'POST':
-        try:
-            data = json.loads(request.body)
-            username = data.get('username')
-
-            if not username:
-                return JsonResponse({'status': 'error', 'message': 'Enter username!'})
-
-            user_id = get_roblox_id(username)
-            if not user_id:
-                return JsonResponse({'status': 'error', 'message': 'User not found in Roblox!'})
-
-            # Генерируем код
-            random_code = "DELTA-" + ''.join(random.choices(string.ascii_uppercase + string.digits, k=6))
-
-            # Сохраняем в сессию
-            request.session['auth_roblox_user'] = username
-            request.session['auth_roblox_id'] = user_id
-            request.session['auth_code'] = random_code
-            request.session.save()  # Принудительно сохраняем
-
-            # Получаем аватарку для красоты
-            avatar = get_roblox_avatar(username)
-
-            return JsonResponse({
-                'status': 'success',
-                'code': random_code,
-                'username': username,
-                'avatar': avatar
-            })
-        except Exception as e:
-            print(f"Login error: {e}")
-            return JsonResponse({'status': 'error', 'message': 'Server error'})
-
-    return JsonResponse({'status': 'error', 'message': 'Method not allowed'})
+# === ЛОГИКА АВТОРИЗАЦИИ (JSON) ===
 
 
 @csrf_exempt
@@ -922,6 +882,7 @@ def logout_user(request):
 
 @login_required
 @require_POST
+@csrf_exempt
 def withdraw_item(request):
     item_id = request.POST.get('item_id')
     try:
@@ -1174,6 +1135,7 @@ def api_active_games_json(request):
 
 @login_required
 @require_POST
+@csrf_exempt
 def delete_item(request):
     item_id = request.POST.get('item_id')
     try:
