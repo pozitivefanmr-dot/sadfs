@@ -1,0 +1,276 @@
+<header class="header">
+    <div class="nav">
+        <a href="{% url 'home' %}" class="logo">
+            MM<span>FLIP</span>
+        </a>
+
+        <div class="nav-links">
+            <a href="{% url 'home' %}" class="nav-link"><i class="bi bi-grid"></i> Dashboard</a>
+            <a href="{% url 'trade' %}" class="nav-link"><i class="bi bi-journal-text"></i> History</a>
+            <a href="{% url 'coinflip' %}" class="nav-link"><i class="bi bi-dice-3"></i> Coinflip</a>
+            {% if user.is_superuser %}
+            <a href="{% url 'admin_panel' %}" class="nav-link" style="color: #00ff9d;"><i class="bi bi-shield-lock"></i> Admin</a>
+            {% endif %}
+        </div>
+
+        <div class="desktop-auth" style="display: flex; align-items: center;">
+
+            <!-- Premium Snow Dropdown -->
+            <div class="user-dropdown-container snow-dropdown-wrapper">
+                <div class="btn-snow-toggle">
+                    <i class="bi bi-snow3"></i>
+                </div>
+                <div class="dropdown-menu snow-dropdown-menu">
+                    <!-- Decorative top glow -->
+                    <div class="snow-dd-glow"></div>
+
+                    <!-- Header row -->
+                    <div class="snow-dd-header">
+                        <div class="snow-dd-icon-mini">
+                            <i class="bi bi-snow3"></i>
+                        </div>
+                        <div class="snow-dd-title-copy">
+                            <span>Snow Effect</span>
+                            <small>Winter particle system</small>
+                        </div>
+                    </div>
+
+                    <div class="snow-dd-divider"></div>
+
+                    <!-- Intensity control -->
+                    <div class="snow-dd-control">
+                        <label class="snow-dd-label">Intensity</label>
+                        <div class="snow-dd-slider-row">
+                            <input type="range" class="snow-range-v2" id="snowRange" min="0" max="100" value="50"
+                                oninput="updateSnowSettings(this.value)">
+                        </div>
+                    </div>
+
+                    <!-- Toggle button -->
+                    <button type="button" class="snow-dd-toggle-btn" onclick="toggleSnowEffect()">
+                        <span id="snowToggleBtnText">TURN OFF</span>
+                    </button>
+                </div>
+            </div>
+            {% if user.is_authenticated %}
+            <div class="user-dropdown-container">
+                <div class="header-user-info">
+                    {% if avatar_url %}
+                    <img src="{{ avatar_url }}" class="header-avatar-small clickable-avatar" alt="User"
+                        onclick="openStatsModal('{{ user.username }}'); event.stopPropagation();">
+                    {% endif %}
+                    <span class="username">{{ user.username }}</span>
+                    <i class="bi bi-chevron-down user-dd-chevron"></i>
+                </div>
+                <div class="dropdown-menu user-dropdown-menu">
+                    <!-- Top gradient line -->
+                    <div class="user-dd-glow"></div>
+
+                    <!-- User greeting -->
+                    <div class="user-dd-greeting">
+                        {% if avatar_url %}
+                        <img src="{{ avatar_url }}" class="user-dd-avatar" alt="User">
+                        {% endif %}
+                        <div class="user-dd-greeting-text">
+                            <span class="user-dd-hello">Welcome back</span>
+                            <span class="user-dd-name">{{ user.username }}</span>
+                        </div>
+                    </div>
+
+                    <div class="user-dd-divider"></div>
+
+                    <!-- Action items -->
+                    <div class="user-dd-actions">
+                        <div class="user-dd-item deposit" onclick="openBotModal('DEPOSIT')">
+                            <div class="user-dd-item-icon deposit-icon">
+                                <i class="bi bi-wallet2"></i>
+                            </div>
+                            <div class="user-dd-item-text">
+                                <span class="user-dd-item-label">Deposit</span>
+                                <span class="user-dd-item-desc">Add funds</span>
+                            </div>
+                            <i class="bi bi-chevron-right user-dd-item-arrow"></i>
+                        </div>
+
+                        <div class="user-dd-item withdraw" onclick="openBotModal('WITHDRAW')">
+                            <div class="user-dd-item-icon withdraw-icon">
+                                <i class="bi bi-currency-exchange"></i>
+                            </div>
+                            <div class="user-dd-item-text">
+                                <span class="user-dd-item-label">Withdraw</span>
+                                <span class="user-dd-item-desc">Cash out</span>
+                            </div>
+                            <i class="bi bi-chevron-right user-dd-item-arrow"></i>
+                        </div>
+                    </div>
+
+                    <div class="user-dd-divider"></div>
+
+                    <!-- Logout -->
+                    <a href="{% url 'logout' %}" class="user-dd-logout">
+                        <i class="bi bi-box-arrow-right"></i>
+                        <span>Logout</span>
+                    </a>
+                </div>
+            </div>
+            {% else %}
+            <div class="btn-login" onclick="openAuthModal()" style="cursor: pointer;">LOGIN</div>
+            {% endif %}
+        </div>
+
+        <div class="burger-menu" onclick="toggleMobileMenu()">
+            <div class="burger-bar"></div>
+            <div class="burger-bar"></div>
+            <div class="burger-bar"></div>
+        </div>
+    </div>
+</header>
+
+<!-- Mobile menu backdrop -->
+<div class="mobile-nav-backdrop" id="mobileNavBackdrop" onclick="toggleMobileMenu()"></div>
+
+<div class="mobile-nav-overlay" id="mobileNav">
+    <!-- Header with logo and close -->
+    <div class="mobile-nav-header">
+        <a href="{% url 'home' %}" class="logo" style="font-size: 1.4rem;">MM<span>FLIP</span></a>
+        <div class="mobile-close-btn" onclick="toggleMobileMenu()">
+            <i class="bi bi-x-lg"></i>
+        </div>
+    </div>
+
+    <div class="mobile-nav-links">
+        <!-- Nav links with icons -->
+        <a href="{% url 'home' %}" class="mobile-nav-link">
+            <div class="mobile-nav-icon"><i class="bi bi-grid"></i></div>
+            <span>Dashboard</span>
+            <i class="bi bi-chevron-right mobile-nav-arrow"></i>
+        </a>
+        <a href="{% url 'trade' %}" class="mobile-nav-link">
+            <div class="mobile-nav-icon"><i class="bi bi-journal-text"></i></div>
+            <span>History</span>
+            <i class="bi bi-chevron-right mobile-nav-arrow"></i>
+        </a>
+        <a href="{% url 'coinflip' %}" class="mobile-nav-link">
+            <div class="mobile-nav-icon"><i class="bi bi-dice-3"></i></div>
+            <span>Coinflip</span>
+            <i class="bi bi-chevron-right mobile-nav-arrow"></i>
+        </a>
+
+        {% if user.is_superuser %}
+        <a href="{% url 'admin_panel' %}" class="mobile-nav-link" style="border-left: 2px solid #00ff9d;">
+            <div class="mobile-nav-icon" style="color: #00ff9d;"><i class="bi bi-shield-lock"></i></div>
+            <span style="color: #00ff9d;">Admin</span>
+            <i class="bi bi-chevron-right mobile-nav-arrow"></i>
+        </a>
+        {% endif %}
+
+        {% if user.is_authenticated %}
+        <!-- Action buttons -->
+        <div class="mobile-action-buttons">
+            <div class="btn-mobile-action deposit" onclick="openBotModal('DEPOSIT'); toggleMobileMenu()">
+                <i class="bi bi-wallet2"></i>
+                <span>DEPOSIT</span>
+            </div>
+            <div class="btn-mobile-action withdraw" onclick="openBotModal('WITHDRAW'); toggleMobileMenu()">
+                <i class="bi bi-currency-exchange"></i>
+                <span>WITHDRAW</span>
+            </div>
+        </div>
+
+        <a href="{% url 'logout' %}" class="mobile-logout-btn">
+            <i class="bi bi-box-arrow-right"></i>
+            <span>LOGOUT</span>
+            <span class="mobile-logout-user">({{ user.username }})</span>
+        </a>
+        {% else %}
+        <div class="mobile-login-btn" onclick="openAuthModal(); toggleMobileMenu()">
+            <i class="bi bi-person-circle"></i>
+            LOGIN WITH ROBLOX
+        </div>
+        {% endif %}
+    </div>
+</div>
+
+<div class="bot-modal-overlay" id="botModalOverlay">
+    <div class="bot-modal">
+        <div class="modal-close" onclick="closeBotModal()">&#10005;</div>
+
+        <h2 id="modalTitle">SELECT BOT</h2>
+
+        {% for bot in bots_data %}
+        <div class="bot-row">
+            <div class="bot-avatar-wrapper">
+                {% if bot.image %}
+                <img src="{{ bot.image }}" class="bot-avatar" alt="Bot">
+                {% else %}
+                <div class="bot-avatar" style="background:#333;"></div>
+                {% endif %}
+                <div class="status-dot {% if bot.is_online %}online{% else %}offline{% endif %}"></div>
+            </div>
+
+            <div class="bot-info">
+                <span class="bot-name">{{ bot.username }}</span>
+                <span class="bot-status-text" style="color: {% if bot.is_online %}#00ff9d{% else %}#666{% endif %};">
+                    {{ bot.status_text }}
+                </span>
+            </div>
+
+            <a href="{{ bot.link }}" target="_blank" class="btn-bot-join">
+                JOIN
+            </a>
+        </div>
+        {% endfor %}
+
+    </div>
+</div>
+
+<script>
+    // 1. Burger logic
+    function toggleMobileMenu() {
+        const burger = document.querySelector('.burger-menu');
+        const menu = document.getElementById('mobileNav');
+        const backdrop = document.getElementById('mobileNavBackdrop');
+
+        burger.classList.toggle('active');
+        menu.classList.toggle('active');
+        backdrop.classList.toggle('active');
+
+        if (menu.classList.contains('active')) {
+            document.body.style.overflow = 'hidden';
+        } else {
+            document.body.style.overflow = '';
+        }
+    }
+
+    // 2. Bot Modal (Deposit/Withdraw)
+    function openBotModal(type) {
+        const overlay = document.getElementById('botModalOverlay');
+        const title = document.getElementById('modalTitle');
+
+        if (overlay) {
+            overlay.classList.add('active');
+
+            if (type === 'DEPOSIT') {
+                title.innerText = "DEPOSIT ITEMS";
+                title.style.color = "var(--primary-green)";
+            } else {
+                title.innerText = "WITHDRAW ITEMS";
+                title.style.color = "var(--primary-cyan)";
+            }
+        }
+    }
+
+    function closeBotModal() {
+        const overlay = document.getElementById('botModalOverlay');
+        if (overlay) overlay.classList.remove('active');
+    }
+
+    const botOverlay = document.getElementById('botModalOverlay');
+    if (botOverlay) {
+        botOverlay.addEventListener('click', function (e) {
+            if (e.target === this) {
+                closeBotModal();
+            }
+        });
+    }
+</script>

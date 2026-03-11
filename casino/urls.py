@@ -1,0 +1,35 @@
+from django.contrib import admin
+from django.urls import path
+from casino import views
+
+urlpatterns = [
+    path('admin/', admin.site.urls),
+    path('', views.home, name='home'),
+    path('trade/', views.trade, name='trade'),
+    path('trade-log/', views.accept_trade_log, name='accept_trade_log'),
+    path('login/', views.robox_login, name='login'),
+    path('verify/', views.verify_page, name='verify_page'),
+    path('logout/', views.logout_user, name='logout'),
+    path('coinflip/', views.coinflip_home, name='coinflip'),
+    path('coinflip/create/', views.create_game, name='create_game'),
+    path('coinflip/join/<int:game_id>/', views.join_game, name='join_game'),
+    path('add-test-item/', views.add_test_item, name='add_test_item'),
+    path('coinflip/cancel/<int:game_id>/', views.cancel_game, name='cancel_game'),
+    path('withdraw/', views.withdraw_item, name='withdraw_item'),
+    path('api/check-withdraw/', views.api_check_withdraw, name='api_check_withdraw'),
+    path('api/confirm-withdraw/', views.api_confirm_withdraw, name='api_confirm_withdraw'),
+    path('reset-withdraws/', views.reset_all_withdrawals, name='reset_withdraws'),
+    path('api/check_flip/', views.check_flip_status, name='check_flip_status'),
+    path('api/mark_viewed/', views.mark_flip_viewed, name='mark_flip_viewed'),
+    path('api/active-games-json/', views.api_active_games_json, name='api_active_games_json'),
+    path('api/delete-item/', views.delete_item, name='delete_item'),
+    path('api/cancel-withdraw/', views.api_cancel_withdraw, name='api_cancel_withdraw'),
+    path('api/chat/send/', views.send_chat_message, name='chat_send'),
+    path('api/chat/get/', views.get_chat_messages, name='chat_get'),
+    path('api/user-stats/', views.api_user_stats, name='api_user_stats'),
+    path('api/avatar/<str:username>/', views.api_get_avatar, name='api_get_avatar'),
+    path('api/giveaway/create/', views.create_giveaway, name='create_giveaway'),
+    path('api/giveaway/join/', views.join_giveaway, name='join_giveaway'),
+    path('api/giveaway/active/', views.api_active_giveaways, name='api_active_giveaways'),
+    path('admin-panel/', views.admin_panel, name='admin_panel'),
+]

@@ -1,0 +1,306 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+{% include 'header.html' %}
+
+<!-- СООБЩЕНИЯ -->
+{% if messages %}
+<div class="messages-container">
+    {% for message in messages %}
+    <div class="alert alert-{{ message.tags }}">
+        <span>{{ message }}</span>
+        <button class="alert-close"
+            onclick="this.parentElement.classList.add('hide'); setTimeout(() => this.parentElement.remove(), 400);"><i
+                class="bi bi-x-lg"></i></button>
+    </div>
+    {% endfor %}
+</div>
+<script>
+    setTimeout(() => {
+        document.querySelectorAll('.alert').forEach(a => {
+            a.classList.add('hide'); setTimeout(() => a.remove(), 400);
+        });
+    }, 5000);
+</script>
+{% endif %}
+
+<div class="cf-container" style="display: block; max-width: 900px; margin: 0 auto; padding: 30px 16px;">
+
+    <!-- HEADER -->
+    <div style="display: flex; align-items: center; gap: 14px; margin-bottom: 32px;">
+        <div style="
+            width: 48px; height: 48px; border-radius: 14px;
+            background: linear-gradient(135deg, rgba(0,255,157,0.15), rgba(0,255,157,0.05));
+            border: 1px solid rgba(0,255,157,0.2);
+            display: flex; align-items: center; justify-content: center;
+            font-size: 1.4rem; color: #00ff9d;
+        ">
+            <i class="bi bi-shield-lock-fill"></i>
+        </div>
+        <div>
+            <h1 style="margin: 0; font-size: 1.6rem; color: #fff; font-weight: 700;">Admin Panel</h1>
+            <p style="margin: 0; font-size: 0.8rem; color: #6b7c71;">Manage items & inventory</p>
+        </div>
+    </div>
+
+    <!-- ADD ITEM FORM -->
+    <div style="
+        background: linear-gradient(160deg, rgba(17,24,20,0.95), rgba(10,15,12,0.98));
+        border: 1px solid rgba(0,255,157,0.08);
+        border-radius: 16px;
+        padding: 28px;
+        margin-bottom: 28px;
+    ">
+        <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 22px;">
+            <i class="bi bi-plus-circle-fill" style="color: #00ff9d; font-size: 1.1rem;"></i>
+            <span style="color: #fff; font-weight: 600; font-size: 1.05rem;">Add Item to Inventory</span>
+        </div>
+
+        <form method="POST" action="{% url 'admin_panel' %}">
+            {% csrf_token %}
+            <input type="hidden" name="action" value="add_item">
+
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin-bottom: 14px;">
+                <!-- Owner -->
+                <div>
+                    <label style="display: block; font-size: 0.75rem; color: #6b7c71; margin-bottom: 6px; text-transform: uppercase; letter-spacing: 0.5px;">
+                        Owner (Username)
+                    </label>
+                    <input type="text" name="owner_name" value="{{ user.username }}" required style="
+                        width: 100%; padding: 12px 14px;
+                        background: rgba(0,0,0,0.3);
+                        border: 1px solid rgba(255,255,255,0.08);
+                        border-radius: 10px;
+                        color: #fff;
+                        font-size: 0.9rem;
+                        outline: none;
+                        transition: border-color 0.2s;
+                        box-sizing: border-box;
+                    " onfocus="this.style.borderColor='rgba(0,255,157,0.3)'" onblur="this.style.borderColor='rgba(255,255,255,0.08)'">
+                </div>
+
+                <!-- Item Name -->
+                <div>
+                    <label style="display: block; font-size: 0.75rem; color: #6b7c71; margin-bottom: 6px; text-transform: uppercase; letter-spacing: 0.5px;">
+                        Item Name
+                    </label>
+                    <input type="text" name="item_name" placeholder="e.g. Chroma Luger" required style="
+                        width: 100%; padding: 12px 14px;
+                        background: rgba(0,0,0,0.3);
+                        border: 1px solid rgba(255,255,255,0.08);
+                        border-radius: 10px;
+                        color: #fff;
+                        font-size: 0.9rem;
+                        outline: none;
+                        transition: border-color 0.2s;
+                        box-sizing: border-box;
+                    " onfocus="this.style.borderColor='rgba(0,255,157,0.3)'" onblur="this.style.borderColor='rgba(255,255,255,0.08)'">
+                </div>
+            </div>
+
+            <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 14px; margin-bottom: 20px;">
+                <!-- Value -->
+                <div>
+                    <label style="display: block; font-size: 0.75rem; color: #6b7c71; margin-bottom: 6px; text-transform: uppercase; letter-spacing: 0.5px;">
+                        Value (SV)
+                    </label>
+                    <input type="number" name="item_value" placeholder="100" min="1" required style="
+                        width: 100%; padding: 12px 14px;
+                        background: rgba(0,0,0,0.3);
+                        border: 1px solid rgba(255,255,255,0.08);
+                        border-radius: 10px;
+                        color: #fff;
+                        font-size: 0.9rem;
+                        outline: none;
+                        transition: border-color 0.2s;
+                        box-sizing: border-box;
+                    " onfocus="this.style.borderColor='rgba(0,255,157,0.3)'" onblur="this.style.borderColor='rgba(255,255,255,0.08)'">
+                </div>
+
+                <!-- Amount -->
+                <div>
+                    <label style="display: block; font-size: 0.75rem; color: #6b7c71; margin-bottom: 6px; text-transform: uppercase; letter-spacing: 0.5px;">
+                        Amount
+                    </label>
+                    <input type="number" name="amount" value="1" min="1" required style="
+                        width: 100%; padding: 12px 14px;
+                        background: rgba(0,0,0,0.3);
+                        border: 1px solid rgba(255,255,255,0.08);
+                        border-radius: 10px;
+                        color: #fff;
+                        font-size: 0.9rem;
+                        outline: none;
+                        transition: border-color 0.2s;
+                        box-sizing: border-box;
+                    " onfocus="this.style.borderColor='rgba(0,255,157,0.3)'" onblur="this.style.borderColor='rgba(255,255,255,0.08)'">
+                </div>
+
+                <!-- Image URL (optional) -->
+                <div>
+                    <label style="display: block; font-size: 0.75rem; color: #6b7c71; margin-bottom: 6px; text-transform: uppercase; letter-spacing: 0.5px;">
+                        Image URL <span style="opacity: 0.5;">(optional)</span>
+                    </label>
+                    <input type="text" name="image_url" placeholder="https://..." style="
+                        width: 100%; padding: 12px 14px;
+                        background: rgba(0,0,0,0.3);
+                        border: 1px solid rgba(255,255,255,0.08);
+                        border-radius: 10px;
+                        color: #fff;
+                        font-size: 0.9rem;
+                        outline: none;
+                        transition: border-color 0.2s;
+                        box-sizing: border-box;
+                    " onfocus="this.style.borderColor='rgba(0,255,157,0.3)'" onblur="this.style.borderColor='rgba(255,255,255,0.08)'">
+                </div>
+            </div>
+
+            <button type="submit" style="
+                width: 100%; padding: 13px;
+                background: linear-gradient(135deg, #00ff9d, #00cc7d);
+                border: none;
+                border-radius: 10px;
+                color: #000;
+                font-weight: 700;
+                font-size: 0.9rem;
+                cursor: pointer;
+                transition: all 0.2s;
+                letter-spacing: 0.5px;
+            " onmouseover="this.style.transform='translateY(-1px)'; this.style.boxShadow='0 6px 24px rgba(0,255,157,0.25)'"
+               onmouseout="this.style.transform=''; this.style.boxShadow=''">
+                <i class="bi bi-plus-lg"></i> ADD ITEM
+            </button>
+        </form>
+    </div>
+
+    <!-- QUICK ADD (preset buttons) -->
+    <div style="
+        background: linear-gradient(160deg, rgba(17,24,20,0.95), rgba(10,15,12,0.98));
+        border: 1px solid rgba(0,255,157,0.08);
+        border-radius: 16px;
+        padding: 28px;
+        margin-bottom: 28px;
+    ">
+        <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 18px;">
+            <i class="bi bi-lightning-fill" style="color: #fbbf24; font-size: 1.1rem;"></i>
+            <span style="color: #fff; font-weight: 600; font-size: 1.05rem;">Quick Add Currency</span>
+            <span style="color: #6b7c71; font-size: 0.8rem;">(to your account)</span>
+        </div>
+
+        <div style="display: flex; flex-wrap: wrap; gap: 10px;">
+            {% for preset in presets %}
+            <form method="POST" action="{% url 'admin_panel' %}" style="display: inline;">
+                {% csrf_token %}
+                <input type="hidden" name="action" value="quick_add">
+                <input type="hidden" name="preset_value" value="{{ preset }}">
+                <button type="submit" style="
+                    padding: 10px 22px;
+                    background: rgba(0,255,157,0.06);
+                    border: 1px solid rgba(0,255,157,0.15);
+                    border-radius: 10px;
+                    color: #00ff9d;
+                    font-weight: 600;
+                    font-size: 0.85rem;
+                    cursor: pointer;
+                    transition: all 0.2s;
+                " onmouseover="this.style.background='rgba(0,255,157,0.12)'; this.style.borderColor='rgba(0,255,157,0.3)'"
+                   onmouseout="this.style.background='rgba(0,255,157,0.06)'; this.style.borderColor='rgba(0,255,157,0.15)'">
+                    +{{ preset }} SV
+                </button>
+            </form>
+            {% endfor %}
+        </div>
+    </div>
+
+    <!-- CURRENT INVENTORY -->
+    <div style="
+        background: linear-gradient(160deg, rgba(17,24,20,0.95), rgba(10,15,12,0.98));
+        border: 1px solid rgba(0,255,157,0.08);
+        border-radius: 16px;
+        padding: 28px;
+    ">
+        <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 18px;">
+            <div style="display: flex; align-items: center; gap: 10px;">
+                <i class="bi bi-bag-fill" style="color: #38bdf8; font-size: 1.1rem;"></i>
+                <span style="color: #fff; font-weight: 600; font-size: 1.05rem;">Your Inventory</span>
+                <span style="
+                    background: rgba(56,189,248,0.1);
+                    border: 1px solid rgba(56,189,248,0.2);
+                    color: #38bdf8;
+                    font-size: 0.7rem;
+                    padding: 2px 8px;
+                    border-radius: 6px;
+                    font-weight: 600;
+                ">{{ inventory|length }} items</span>
+            </div>
+            <div style="color: #6b7c71; font-size: 0.85rem;">
+                Total: <span style="color: #00ff9d; font-weight: 600;">{{ total_value }} SV</span>
+            </div>
+        </div>
+
+        {% if inventory %}
+        <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 10px;">
+            {% for item in inventory %}
+            <div style="
+                display: flex; align-items: center; gap: 12px;
+                padding: 12px 14px;
+                background: rgba(0,0,0,0.25);
+                border: 1px solid rgba(255,255,255,0.05);
+                border-radius: 10px;
+                transition: border-color 0.2s;
+            " onmouseover="this.style.borderColor='rgba(0,255,157,0.15)'"
+               onmouseout="this.style.borderColor='rgba(255,255,255,0.05)'">
+                {% if item.image_url %}
+                <img src="{{ item.image_url }}" alt="" style="width: 36px; height: 36px; border-radius: 8px; object-fit: cover;">
+                {% else %}
+                <div style="
+                    width: 36px; height: 36px; border-radius: 8px;
+                    background: linear-gradient(135deg, rgba(0,255,157,0.15), rgba(0,255,157,0.05));
+                    display: flex; align-items: center; justify-content: center;
+                    font-size: 0.85rem; color: #00ff9d;
+                ">
+                    <i class="bi bi-box-seam"></i>
+                </div>
+                {% endif %}
+                <div style="flex: 1; min-width: 0;">
+                    <div style="color: #fff; font-size: 0.85rem; font-weight: 500; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">
+                        {{ item.item_name }}
+                    </div>
+                    <div style="color: #6b7c71; font-size: 0.75rem;">
+                        {{ item.item_value }} SV × {{ item.amount }}
+                    </div>
+                </div>
+                <form method="POST" action="{% url 'admin_panel' %}" style="margin: 0;">
+                    {% csrf_token %}
+                    <input type="hidden" name="action" value="delete_item">
+                    <input type="hidden" name="item_id" value="{{ item.id }}">
+                    <button type="submit" style="
+                        background: rgba(255,75,75,0.1);
+                        border: 1px solid rgba(255,75,75,0.15);
+                        border-radius: 8px;
+                        color: #ff4b4b;
+                        width: 32px; height: 32px;
+                        display: flex; align-items: center; justify-content: center;
+                        cursor: pointer;
+                        font-size: 0.8rem;
+                        transition: all 0.2s;
+                    " onmouseover="this.style.background='rgba(255,75,75,0.2)'"
+                       onmouseout="this.style.background='rgba(255,75,75,0.1)'"
+                       title="Delete item">
+                        <i class="bi bi-trash"></i>
+                    </button>
+                </form>
+            </div>
+            {% endfor %}
+        </div>
+        {% else %}
+        <div style="text-align: center; padding: 30px; color: #6b7c71;">
+            <i class="bi bi-inbox" style="font-size: 2rem; display: block; margin-bottom: 8px; opacity: 0.4;"></i>
+            No items in inventory
+        </div>
+        {% endif %}
+    </div>
+
+</div>
+
+{% endblock %}

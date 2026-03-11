@@ -1,0 +1,90 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block content %}
+
+{% include 'header.html' %}
+
+<div class="container">
+    <div class="text-center" style="margin-bottom: 60px;">
+        {% if mode == 'admin' %}
+            <h1 class="trade-page-title text-gradient">GLOBAL LOGS</h1>
+            <p class="trade-page-desc">System monitor & incoming trades.</p>
+        {% else %}
+            <h1 class="trade-page-title text-gradient">GAME HISTORY</h1>
+            <p class="trade-page-desc">Your recent wins and losses.</p>
+        {% endif %}
+    </div>
+
+    {% if mode == 'admin' %}
+        <div class="history-list-container">
+            {% for trade in logs %}
+                <div class="log-card">
+                    <div class="log-header">
+                        <div class="log-users">
+                            <span class="text-yellow">👤 {{ trade.sender_name }}</span>
+                            <span class="log-arrow">➜</span>
+                            <span class="text-cyan">🤖 {{ trade.bot_name }}</span>
+                        </div>
+                        <span class="log-date">{{ trade.created_at|date:"M d, H:i" }}</span>
+                    </div>
+                    <div class="log-items-grid">
+                        {% for item in trade.items %}
+                            <span class="log-item-tag">{{ item }}</span>
+                        {% endfor %}
+                    </div>
+                </div>
+            {% empty %}
+                <div class="empty-history">
+                    <div class="empty-icon">📂</div>
+                    <p>No trade logs found.</p>
+                </div>
+            {% endfor %}
+        </div>
+
+    {% else %}
+        <div class="history-wrapper">
+
+            <div class="history-grid-header">
+                <span class="col-left">PLAYERS</span>
+                <span class="col-center">RESULT</span>
+                <span class="col-right">BET</span> <span class="col-right">TIME</span>
+            </div>
+
+            <div class="history-list">
+                {% for game in logs %}
+                    <div class="history-card {% if game.winner == user.username %}win-card{% else %}lose-card{% endif %}">
+
+                        <div class="hist-col col-left hist-players">
+                            <span class="p-name {% if game.player1 == user.username %}me{% endif %}">{{ game.player1 }}</span>
+                            <span class="vs-badge">VS</span>
+                            <span class="p-name {% if game.player2 == user.username %}me{% endif %}">{{ game.player2 }}</span>
+                        </div>
+
+                        <div class="hist-col col-center">
+                            {% if game.winner == user.username %}
+                                <div class="badge-win">VICTORY</div>
+                            {% else %}
+                                <div class="badge-lose">DEFEAT</div>
+                            {% endif %}
+                        </div>
+
+                        <div class="hist-col col-right hist-bet">
+                            <span>{{ game.value1|add:game.value2 }}</span>
+                            <img src="{% static 'img/sv_coin.png' %}" class="tiny-coin-icon">
+                        </div>
+
+                        <div class="hist-col col-right hist-date">
+                            {{ game.created_at|date:"M d, H:i" }}
+                        </div>
+                    </div>
+                {% empty %}
+                    <div class="empty-history">
+                        <div class="empty-icon">📜</div>
+                        <p>No games played yet.<br><a href="{% url 'coinflip' %}" class="text-green">Start a game!</a></p>
+                    </div>
+                {% endfor %}
+            </div>
+        </div>
+    {% endif %}
+</div>
+{% endblock %}

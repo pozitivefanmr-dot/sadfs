@@ -1,0 +1,467 @@
+{% extends 'base.html' %}
+{% load static %}
+{% load custom_filters %}
+
+{% block content %}
+{% include 'header.html' %}
+
+<!-- РЎРћРћР‘Р©Р•РќРРЇ -->
+{% if messages %}
+<div class="messages-container">
+    {% for message in messages %}
+    <div class="alert alert-{{ message.tags }}">
+        <span>{{ message }}</span>
+        <button class="alert-close"
+            onclick="this.parentElement.classList.add('hide'); setTimeout(() => this.parentElement.remove(), 400);"><i
+                class="bi bi-x-lg"></i></button>
+    </div>
+    {% endfor %}
+</div>
+<script>
+    setTimeout(() => {
+        document.querySelectorAll('.alert').forEach(a => {
+            a.classList.add('hide'); setTimeout(() => a.remove(), 400);
+        });
+    }, 5000);
+</script>
+{% endif %}
+
+
+<div class="cf-container" style="display: block;">
+
+    <!-- Р’Р•Р РҐРќРЇРЇ РџРђРќР•Р›Р¬ (REDESIGNED) -->
+    <div class="cf-header-bar">
+        <div class="cf-stats-grid cf-stats-grid--compact">
+
+            <!-- ACTIVE GAMES -->
+            <div class="cf-stat-card cf-stat-card--premium">
+                <div class="cf-stat-icon-circle cf-stat-icon-circle--green">
+                    <i class="bi bi-fire"></i>
+                </div>
+                <div class="cf-stat-body">
+                    <div class="cf-stat-label">ACTIVE GAMES</div>
+                    <div class="cf-stat-value cf-stat-value--large text-green">{{ games.count }}</div>
+                </div>
+            </div>
+
+            {% if user.is_authenticated %}
+            <!-- PROFIT -->
+            <div class="cf-stat-card cf-stat-card--premium cf-stat-card--profit">
+                <div
+                    class="cf-stat-icon-circle {% if profit_all >= 0 %}cf-stat-icon-circle--green{% else %}cf-stat-icon-circle--red{% endif %}">
+                    <i class="bi bi-trophy-fill"></i>
+                </div>
+                <div class="cf-stat-body">
+                    <div class="cf-stat-label">
+                        PROFIT
+                        <div class="cf-profit-tabs">
+                            <span class="cf-profit-tab active" onclick="switchProfitTab(this, 'all')">ALL</span>
+                            <span class="cf-profit-tab" onclick="switchProfitTab(this, '7d')">7D</span>
+                            <span class="cf-profit-tab" onclick="switchProfitTab(this, 'today')">24H</span>
+                        </div>
+                    </div>
+                    <div class="cf-stat-value cf-stat-value--large {% if profit_all >= 0 %}text-green{% else %}text-red{% endif %}"
+                        id="profitValue">
+                        <span class="cf-profit-sign">{% if profit_all >= 0 %}+{% endif %}</span>{{ profit_all }} <img src="{% static 'img/sv_coin.png' %}" class="cf-profit-coin-icon" alt="SV">
+                    </div>
+                </div>
+                <!-- Hidden data for JS switching -->
+                <span id="profitAll" hidden>{{ profit_all }}</span>
+                <span id="profit7d" hidden>{{ profit_7d }}</span>
+                <span id="profitToday" hidden>{{ profit_today }}</span>
+            </div>
+            {% endif %}
+        </div>
+
+        {% if user.is_authenticated %}
+        <button type="button" class="btn-place-bet" onclick="openCreateModal()">
+            <span><i class="bi bi-plus-lg"></i></span> CREATE GAME
+        </button>
+        {% else %}
+        <div class="btn-login" onclick="openAuthModal()" style="cursor: pointer;">LOGIN TO PLAY</div>
+        {% endif %}
+    </div>
+
+    <script>
+        const svCoinUrl = "{% static 'img/sv_coin.png' %}";
+        function switchProfitTab(el, period) {
+            // Switch active tab
+            el.parentElement.querySelectorAll('.cf-profit-tab').forEach(t => t.classList.remove('active'));
+            el.classList.add('active');
+
+            // Get value
+            let val = 0;
+            if (period === 'all') val = parseInt(document.getElementById('profitAll').textContent) || 0;
+            else if (period === '7d') val = parseInt(document.getElementById('profit7d').textContent) || 0;
+            else val = parseInt(document.getElementById('profitToday').textContent) || 0;
+
+            // Update display
+            const display = document.getElementById('profitValue');
+            display.innerHTML = '<span class="cf-profit-sign">' + (val >= 0 ? '+' : '') + '</span>' + val.toLocaleString() + ' <img src="' + svCoinUrl + '" class="cf-profit-coin-icon" alt="SV">';
+            display.className = 'cf-stat-value cf-stat-value--large ' + (val >= 0 ? 'text-green' : 'text-red');
+        }
+    </script>
+
+    <!-- РЎРџРРЎРћРљ РР“Р  -->
+    <div class="games-box" style="width: 100%;">
+        <div class="games-list" id="gamesListContainer">
+            {% for game in games %}
+            {% include 'includes/game_card.html' %}
+            {% empty %}
+            <div class="text-center text-muted empty-msg" style="padding: 80px 20px; display: flex; flex-direction: column; align-items: center; gap: 8px;">
+                <i class="bi bi-dice-3" style="font-size: 2.4rem; color: rgba(0,255,157,0.15);"></i>
+                <h3 style="margin: 0; font-size: 1rem; font-weight: 700; color: #4a5e52; letter-spacing: 2px; text-transform: uppercase;">NO GAMES YET</h3>
+                <p style="margin: 0; font-size: 0.8rem; color: #3d4f45;">Be the first to create one!</p>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</div>
+
+
+<!-- РњРћР”РђР›РљРђ РЎРћР—Р”РђРќРРЇ / Р’РҐРћР”Рђ -->
+<div class="create-modal-overlay" id="inventoryModal">
+    <form method="POST" id="modalForm" class="create-modal">
+        {% csrf_token %}
+
+        <div class="modal-header">
+            <h2 id="modalTitle">CREATE GAME</h2>
+            <div class="modal-close-btn" onclick="closeModal()"><i class="bi bi-x-lg"></i></div>
+        </div>
+
+        <div class="modal-inventory-body">
+            {% if user.is_superuser %}
+            <div class="admin-panel" style="margin-bottom: 15px; padding: 10px;">
+                <div style="display:flex; gap:10px;">
+                    <select class="admin-select"
+                        onchange="document.getElementById('cheat_val').value=this.options[this.selectedIndex].getAttribute('data-val'); document.getElementById('cheat_name').value=this.value;">
+                        <option value="Test Item" data-val="10">Test Item</option>
+                        <option value="Gingerscope" data-val="13400">Gingerscope</option>
+                    </select>
+                    <input type="hidden" name="item_name" id="cheat_name" value="Test Item">
+                    <input type="number" name="item_value" id="cheat_val" class="admin-input-val" value="10">
+                    <button type="submit" formaction="{% url 'add_test_item' %}" class="btn-admin-add"
+                        style="margin:0; width:auto;">ADD</button>
+                </div>
+            </div>
+            {% endif %}
+
+            <div class="modal-inventory-grid">
+                {% if user.is_authenticated %}
+                {% for item in inventory %}
+                <label class="modal-item-card" onclick="toggleHighlight(this)">
+                    <input type="checkbox" name="items" class="modal-checkbox" value="{{ item.id }}"
+                        data-value="{{ item.item_value }}" onchange="calcModalTotal()">
+                    <div class="check-indicator"></div>
+
+                    <div class="item-img-container" style="height: 60px; background: transparent;">
+                        <img src="{{ item.image_url }}" class="item-img" alt="Item"
+                            onerror="this.src='https://static.wikia.nocookie.net/murder-mystery-2/images/5/53/Godly_Icon.png'">
+                    </div>
+
+                    <div class="item-title" title="{{ item.item_name }}">{{ item.item_name }}</div>
+
+                    <div class="item-price-tag">
+                        <img src="{% static 'img/sv_coin.png' %}" class="coin-icon" alt="SV">
+                        <span class="price-val">{{ item.item_value }}</span>
+                    </div>
+                </label>
+                {% empty %}
+                <div class="empty-inventory-placeholder premium-empty">
+                    <i class="bi bi-box-seam empty-icon-premium"></i>
+                    <h3 class="empty-title premium-title">INVENTORY EMPTY</h3>
+                    <p class="empty-desc premium-desc">
+                        You don't have any items yet.<br>
+                        Use our bot to start playing.
+                    </p>
+                    <button type="button" class="btn-deposit-premium" onclick="openBotModal('DEPOSIT')">
+                        <i class="bi bi-wallet2"></i> DEPOSIT ITEMS
+                    </button>
+                </div>
+                {% endfor %}
+                {% endif %}
+            </div>
+        </div>
+
+        <div class="modal-footer">
+            <div class="modal-footer-left">
+                <div class="selection-info premium-selection">
+                    <div class="premium-sel-icon">
+                        <i class="bi bi-layers-fill"></i>
+                    </div>
+                    <div class="premium-sel-content">
+                        <span class="premium-selected-label">SELECTED</span>
+                        <div class="premium-selected-value-row">
+                            <img src="{% static 'img/sv_coin.png' %}" class="premium-selected-coin" alt="SV">
+                            <span id="modal-selected-sum" class="premium-selected-value">0</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Р’Р«Р‘РћР  РЎРўРћР РћРќР« (РљРђР РўРРќРљР) -->
+                <div id="coinSelector" class="coin-selector-group">
+                    <label class="coin-label premium-coin-label">
+                        <input type="radio" name="side" value="green" checked>
+                        <img src="{% static 'img/b_chip.png' %}" class="coin-img-select premium-coin-img gold">
+                    </label>
+                    <label class="coin-label premium-coin-label">
+                        <input type="radio" name="side" value="yellow">
+                        <img src="{% static 'img/h_chip.png' %}" class="coin-img-select premium-coin-img green">
+                    </label>
+                </div>
+
+                <div id="joinInfoBox" class="join-info-bar" style="display:none; margin:0;">
+                    <div class="join-info-icon">
+                        <i class="bi bi-sliders2"></i>
+                    </div>
+                    <div class="join-info-content">
+                        <span class="req-label">Entry Range</span>
+                        <span class="req-range" id="joinRangeVal">0 - 0</span>
+                    </div>
+                </div>
+            </div>
+
+            <button type="submit" id="modalActionBtn" class="btn btn-create btn-submit-create"
+                style="width: auto; padding: 0 50px;" disabled>
+                CREATE
+            </button>
+        </div>
+    </form>
+</div>
+
+<!-- РђРќРРњРђР¦РРЇ -->
+
+<script>
+    let mode = 'CREATE';
+    let joinMin = 0;
+    let joinMax = 0;
+
+    function openCreateModal() {
+        mode = 'CREATE';
+        resetModal();
+        document.getElementById('inventoryModal').classList.add('active');
+        document.body.style.overflow = 'hidden';
+        document.getElementById('modalTitle').innerText = "CREATE GAME";
+        document.getElementById('coinSelector').style.display = "flex";
+        document.getElementById('joinInfoBox').style.display = "none";
+
+        const btn = document.getElementById('modalActionBtn');
+        btn.innerText = "CREATE";
+        btn.className = 'btn btn-create btn-submit-create';
+        document.getElementById('modalForm').action = "{% url 'create_game' %}";
+    }
+
+    function openJoinModal(gameId, target, min, max, creator) {
+        mode = 'JOIN';
+        joinMin = parseInt(min);
+        joinMax = parseInt(max);
+        resetModal();
+        document.getElementById('inventoryModal').classList.add('active');
+        document.body.style.overflow = 'hidden';
+        document.getElementById('modalTitle').innerText = "JOIN VS " + creator;
+        document.getElementById('coinSelector').style.display = "none";
+        document.getElementById('joinInfoBox').style.display = "flex";
+        document.getElementById('joinRangeVal').innerText = min + " - " + max;
+
+        const btn = document.getElementById('modalActionBtn');
+        btn.innerText = "CONFIRM JOIN";
+        btn.className = 'btn btn-confirm-join btn-submit-join';
+        document.getElementById('modalForm').action = "/coinflip/join/" + gameId + "/";
+    }
+
+    function closeModal() {
+        document.getElementById('inventoryModal').classList.remove('active');
+        document.body.style.overflow = '';
+    }
+
+    function resetModal() {
+        document.querySelectorAll('.modal-checkbox').forEach(cb => {
+            cb.checked = false;
+            cb.parentElement.classList.remove('checked');
+        });
+        document.getElementById('modal-selected-sum').innerText = "0";
+        const btn = document.getElementById('modalActionBtn');
+        btn.disabled = true;
+        btn.style.opacity = "0.5";
+    }
+
+    function calcModalTotal() {
+        let total = 0;
+        document.querySelectorAll('.modal-checkbox:checked').forEach((cb) => {
+            total += parseInt(cb.getAttribute('data-value')) || 0;
+        });
+
+        const display = document.getElementById('modal-selected-sum');
+        const btn = document.getElementById('modalActionBtn');
+        display.innerText = total;
+
+        let isValid = false;
+        if (mode === 'CREATE') {
+            if (total >= 10) isValid = true;
+        } else {
+            if (total >= joinMin && total <= joinMax) isValid = true;
+        }
+
+        if (isValid) {
+            display.style.color = 'var(--primary-cyan)';
+            btn.disabled = false;
+            btn.style.opacity = '1';
+            btn.style.cursor = 'pointer';
+        } else {
+            display.style.color = 'var(--primary-red)';
+            btn.disabled = true;
+            btn.style.opacity = '0.5';
+            btn.style.cursor = 'not-allowed';
+        }
+    }
+
+    function toggleHighlight(label) {
+        setTimeout(() => {
+            const cb = label.querySelector('input');
+            if (cb.checked) label.classList.add('checked');
+            else label.classList.remove('checked');
+        }, 10);
+    }
+
+    // === РћР‘Р РђР‘РћРўРљРђ РўРРҐРћР™ РћРўРџР РђР’РљР Р¤РћР РњР« (NO RELOAD) ===
+    // === Р—РђР©РРўРђ РћРў Р”Р’РћР™РќРћР“Рћ РљР›РРљРђ Р AJAX ===
+    document.addEventListener("DOMContentLoaded", function () {
+        const form = document.getElementById('modalForm');
+        const btn = document.getElementById('modalActionBtn');
+
+        form.addEventListener('submit', function (e) {
+            // 1. РџСЂРѕРІРµСЂСЏРµРј, РЅРµ РЅР°Р¶Р°С‚Р° Р»Рё СѓР¶Рµ РєРЅРѕРїРєР°
+            if (btn.disabled || btn.getAttribute('data-processing') === 'true') {
+                e.preventDefault();
+                return; // РћСЃС‚Р°РЅР°РІР»РёРІР°РµРј РІС‹РїРѕР»РЅРµРЅРёРµ, РµСЃР»Рё СѓР¶Рµ РёРґРµС‚ РїСЂРѕС†РµСЃСЃ
+            }
+
+            // === Р›РћР“РРљРђ Р”Р›РЇ JOIN (Р’РҐРћР” Р’ РР“Р РЈ) ===
+            if (mode === 'JOIN') {
+                e.preventDefault(); // РћСЃС‚Р°РЅР°РІР»РёРІР°РµРј РѕР±С‹С‡РЅСѓСЋ РѕС‚РїСЂР°РІРєСѓ
+
+                // Р‘Р»РѕРєРёСЂСѓРµРј РєРЅРѕРїРєСѓ
+                btn.disabled = true;
+                btn.setAttribute('data-processing', 'true');
+                const originalText = btn.innerText;
+                btn.innerText = "JOINING...";
+
+                const formData = new FormData(form);
+
+                fetch(form.action, {
+                    method: 'POST',
+                    body: formData,
+                    headers: { 'X-Requested-With': 'XMLHttpRequest' }
+                })
+                    .then(response => response.json())
+                    .then(data => {
+                        if (data.status === 'success') {
+                            closeModal();
+                            // РљРЅРѕРїРєСѓ СЂР°Р·Р±Р»РѕРєРёСЂСѓРµРј С‚РѕР»СЊРєРѕ РµСЃР»Рё РѕС‚РєСЂС‹РІР°РµРј РјРѕРґР°Р»РєСѓ Р·Р°РЅРѕРІРѕ
+                        } else {
+                            alert(data.message || "Error joining game");
+                            // Р•СЃР»Рё РѕС€РёР±РєР° - РІРѕР·РІСЂР°С‰Р°РµРј РєРЅРѕРїРєСѓ Рє Р¶РёР·РЅРё
+                            btn.disabled = false;
+                            btn.removeAttribute('data-processing');
+                            btn.innerText = originalText;
+                        }
+                    })
+                    .catch(err => {
+                        console.error(err);
+                        btn.disabled = false;
+                        btn.removeAttribute('data-processing');
+                        btn.innerText = originalText;
+                    });
+            }
+
+            // === Р›РћР“РРљРђ Р”Р›РЇ CREATE (РЎРћР—Р”РђРќРР• РР“Р Р«) ===
+            else if (mode === 'CREATE') {
+                // РќР• РґРµР»Р°РµРј e.preventDefault(), С‡С‚РѕР±С‹ С„РѕСЂРјР° РѕС‚РїСЂР°РІРёР»Р°СЃСЊ РЅР° СЃРµСЂРІРµСЂ
+                // РќРћ Р‘Р›РћРљРР РЈР•Рњ РєРЅРѕРїРєСѓ, С‡С‚РѕР±С‹ РЅРµР»СЊР·СЏ Р±С‹Р»Рѕ РЅР°Р¶Р°С‚СЊ РІС‚РѕСЂРѕР№ СЂР°Р·
+
+                btn.disabled = true;
+                btn.setAttribute('data-processing', 'true');
+                btn.innerText = "CREATING...";
+
+                // Р•СЃР»Рё С„РѕСЂРјР° РѕС‚РїСЂР°РІР»СЏРµС‚СЃСЏ СЃС‚Р°РЅРґР°СЂС‚РЅРѕ (РїРµСЂРµР·Р°РіСЂСѓР·РєР°),
+                // РєРЅРѕРїРєР° РѕСЃС‚Р°РЅРµС‚СЃСЏ Р·Р°Р±Р»РѕРєРёСЂРѕРІР°РЅРЅРѕР№ РґРѕ РїРµСЂРµР·Р°РіСЂСѓР·РєРё СЃС‚СЂР°РЅРёС†С‹.
+                // Р­С‚Рѕ С‚Рѕ, С‡С‚Рѕ РЅР°Рј РЅСѓР¶РЅРѕ!
+            }
+        });
+    });
+
+    document.addEventListener("DOMContentLoaded", function () {
+        const modalOverlay = document.getElementById('inventoryModal');
+
+        if (modalOverlay) {
+            modalOverlay.addEventListener('mousedown', function (e) {
+                // РџСЂРѕРІРµСЂСЏРµРј, С‡С‚Рѕ РєР»РёРє Р±С‹Р» РёРјРµРЅРЅРѕ РїРѕ РѕРІРµСЂР»РµСЋ (this),
+                // Р° РЅРµ РїРѕ РµРіРѕ РґРѕС‡РµСЂРЅРёРј СЌР»РµРјРµРЅС‚Р°Рј (С„РѕСЂРјРµ РІРЅСѓС‚СЂРё)
+                if (e.target === this) {
+                    closeModal();
+                }
+            });
+        }
+    });
+
+
+</script>
+
+<script>
+    // === РђР’РўРћ-РћР‘РќРћР’Р›Р•РќРР• РЎРџРРЎРљРђ РР“Р  ===
+    function refreshGames() {
+        // РџРѕР»СѓС‡Р°РµРј ID РІСЃРµС… РёРіСЂ, РєРѕС‚РѕСЂС‹Рµ СѓР¶Рµ РµСЃС‚СЊ РЅР° СЃС‚СЂР°РЅРёС†Рµ
+        const existingIds = [];
+        document.querySelectorAll('.game-card').forEach(card => {
+            existingIds.push(parseInt(card.getAttribute('data-game-id')));
+        });
+
+        // Р”РµР»Р°РµРј Р·Р°РїСЂРѕСЃ РЅР° СЃРµСЂРІРµСЂ
+        fetch("{% url 'api_active_games_json' %}")
+            .then(response => response.json())
+            .then(data => {
+                const container = document.getElementById('gamesListContainer');
+                const emptyMsg = container.querySelector('.empty-msg');
+
+                // 1. РЈР”РђР›Р•РќРР•: Р•СЃР»Рё РёРіСЂР° РµСЃС‚СЊ РЅР° СЃР°Р№С‚Рµ, РЅРѕ РЅРµС‚ РІ РґР°РЅРЅС‹С… СЃРµСЂРІРµСЂР° -> СѓРґР°Р»СЏРµРј
+                const serverIds = data.games.map(g => g.id);
+                document.querySelectorAll('.game-card').forEach(card => {
+                    const id = parseInt(card.getAttribute('data-game-id'));
+                    if (!serverIds.includes(id)) {
+                        card.classList.add('removing'); // РђРЅРёРјР°С†РёСЏ СѓРґР°Р»РµРЅРёСЏ
+                        setTimeout(() => card.remove(), 400);
+                    }
+                });
+
+                // 2. Р”РћР‘РђР’Р›Р•РќРР•: Р•СЃР»Рё РёРіСЂС‹ РЅРµС‚ РЅР° СЃР°Р№С‚Рµ, РЅРѕ РµСЃС‚СЊ РЅР° СЃРµСЂРІРµСЂРµ -> РґРѕР±Р°РІР»СЏРµРј
+                data.games.forEach(gameData => {
+                    if (!existingIds.includes(gameData.id)) {
+                        // Р•СЃР»Рё Р±С‹Р»Р° РЅР°РґРїРёСЃСЊ "NO GAMES", СЃРєСЂС‹РІР°РµРј РµС‘
+                        if (emptyMsg) emptyMsg.style.display = 'none';
+
+                        // РЎРѕР·РґР°РµРј РІСЂРµРјРµРЅРЅС‹Р№ РєРѕРЅС‚РµР№РЅРµСЂ, С‡С‚РѕР±С‹ РїСЂРµРІСЂР°С‚РёС‚СЊ СЃС‚СЂРѕРєСѓ HTML РІ СЌР»РµРјРµРЅС‚
+                        const tempDiv = document.createElement('div');
+                        tempDiv.innerHTML = gameData.html;
+                        const newCard = tempDiv.firstElementChild;
+
+                        // Р”РѕР±Р°РІР»СЏРµРј РєР»Р°СЃСЃ Р°РЅРёРјР°С†РёРё РїРѕСЏРІР»РµРЅРёСЏ
+                        newCard.classList.add('new-game-anim');
+
+                        // Р’СЃС‚Р°РІР»СЏРµРј РІ РЅР°С‡Р°Р»Рѕ СЃРїРёСЃРєР°
+                        container.prepend(newCard);
+                    }
+                });
+
+                // Р•СЃР»Рё СЃРїРёСЃРѕРє РїСѓСЃС‚, РІРѕР·РІСЂР°С‰Р°РµРј РЅР°РґРїРёСЃСЊ
+                if (serverIds.length === 0 && !emptyMsg) {
+                    // РњРѕР¶РЅРѕ РІРµСЂРЅСѓС‚СЊ Р·Р°РіР»СѓС€РєСѓ, РµСЃР»Рё РЅСѓР¶РЅРѕ
+                }
+            })
+            .catch(err => console.error("Auto-refresh error:", err));
+    }
+
+    // Р—Р°РїСѓСЃРєР°РµРј РєР°Р¶РґС‹Рµ 2 СЃРµРєСѓРЅРґС‹
+    setInterval(refreshGames, 2000);
+</script>
+
+{% endblock %}

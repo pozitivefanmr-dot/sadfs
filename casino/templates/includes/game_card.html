@@ -1,0 +1,98 @@
+{% load static %}
+{% load custom_filters %}
+
+<div class="game-card" id="game-{{ game.id }}" data-game-id="{{ game.id }}">
+    <div class="game-players-section">
+        <div class="game-avatar-wrapper">
+            <img src="{{ avatars|get_item:game.player1 }}" class="game-avatar clickable-avatar"
+                onclick="openStatsModal('{{ game.player1 }}')"
+                onerror="this.src='https://tr.rbxcdn.com/53db0d0cb349309a7c91eb4361790e39/150/150/AvatarHeadshot/Png'">
+
+            {% if game.creator_side == 'green' %}
+            <img src="{% static 'img/b_chip.png' %}" class="game-avatar-coin">
+            {% else %}
+            <img src="{% static 'img/h_chip.png' %}" class="game-avatar-coin">
+            {% endif %}
+        </div>
+
+        <div class="game-vs-badge">VS</div>
+
+        <div class="game-avatar-wrapper">
+            {% if game.player2 %}
+            <img src="{{ avatars|get_item:game.player2 }}" class="game-avatar clickable-avatar"
+                onclick="openStatsModal('{{ game.player2 }}')"
+                onerror="this.src='https://tr.rbxcdn.com/53db0d0cb349309a7c91eb4361790e39/150/150/AvatarHeadshot/Png'">
+            {% else %}
+            <div class="game-avatar"
+                style="background: #111; display:flex; align-items:center; justify-content:center; color:#333; font-weight:900; font-size:1.5rem;">
+                ?</div>
+            {% endif %}
+
+            {% if game.creator_side == 'green' %}
+            <img src="{% static 'img/h_chip.png' %}" class="game-avatar-coin">
+            {% else %}
+            <img src="{% static 'img/b_chip.png' %}" class="game-avatar-coin">
+            {% endif %}
+        </div>
+    </div>
+
+    <div class="game-items-section">
+        {% for i in game.items1 %}
+        {% if forloop.counter <= 4 %} <div class="game-item-circle" title="{{ i.name }}">
+            <img src="{% if i.image %}{{ i.image }}{% else %}https://static.wikia.nocookie.net/murder-mystery-2/images/5/53/Godly_Icon.png{% endif %}"
+                class="game-item-img"
+                onerror="this.src='https://static.wikia.nocookie.net/murder-mystery-2/images/5/53/Godly_Icon.png'">
+    </div>
+    {% endif %}
+    {% endfor %}
+
+    {% if game.items1|length > 4 %}
+    <div class="game-items-count" onclick="openAllItemsModal(this)">
+        +{{ game.items1|length|add:"-4" }}
+
+        <div class="hidden-full-list" style="display: none;">
+            {% for item in game.items1 %}
+            <div class="view-item-card">
+                <div class="view-item-img-box">
+                    <img src="{% if item.image %}{{ item.image }}{% else %}https://static.wikia.nocookie.net/murder-mystery-2/images/5/53/Godly_Icon.png{% endif %}"
+                        alt="{{ item.name }}">
+                </div>
+                <div class="view-item-name">{{ item.name }}</div>
+                <div class="view-item-val">
+                    <img src="{% static 'img/sv_coin.png' %}" class="coin-icon"> {{ item.value }}
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+    {% endif %}
+</div>
+
+<div class="game-actions-section">
+
+    <div class="room-price-label">TOTAL BET</div>
+
+    <div class="room-price-val">
+        <img src="{% static 'img/sv_coin.png' %}" class="coin-icon">
+        {{ game.value1 }}
+    </div>
+
+    <div style="width: 100%; display:flex; justify-content:flex-end;">
+        {% if user.is_authenticated %}
+        {% if user.username|lower == game.player1|lower %}
+        <form method="POST" action="{% url 'cancel_game' game.id %}" class="cancel-btn-compact-form">
+            {% csrf_token %}
+            <button type="submit" class="cancel-btn-compact">CANCEL</button>
+        </form>
+        {% elif not game.player2 %}
+        <button type="button" class="join-btn-compact"
+            onclick="openJoinModal('{{ game.id }}', {{ game.value1 }}, {{ game.min_join_value }}, {{ game.max_join_value }}, '{{ game.player1 }}')">
+            JOIN
+        </button>
+        {% else %}
+        <button class="join-btn-compact" style="background:#555; color:#aaa; cursor:default;">WATCH</button>
+        {% endif %}
+        {% endif %}
+    </div>
+</div>
+</div>

@@ -1,0 +1,621 @@
+{% extends 'base.html' %}
+{% load static %}
+{% load custom_filters %}
+
+{% block content %}
+
+{% include 'header.html' %}
+
+<div class="container">
+
+    {% if user.is_authenticated %}
+    <!-- ====== GIVEAWAY SECTION (ВЫШЕ ВСЕГО) ====== -->
+    <div class="box-card giveaway-section-card" id="giveawaySectionCard">
+        <div class="box-title" style="border-left-color: #a855f7 !important;">
+            <span><i class="bi bi-gift" style="color: #c084fc; margin-right: 8px;"></i>ACTIVE GIVEAWAYS</span>
+            <span class="ga-count-badge" id="gaCountBadge">{{ active_giveaways|length }}</span>
+        </div>
+
+        <div class="ga-cards-container" id="giveawayCardsContainer">
+            {% for ga in active_giveaways %}
+            <div class="ga-card{% if forloop.counter > 3 %} ga-card-hidden{% endif %}" data-ga-id="{{ ga.id }}" data-ends-at="{{ ga.ends_at|date:'c' }}">
+                <!-- Картинка -->
+                <div class="ga-card-img">
+                    <img src="{{ ga.item_image }}" alt="{{ ga.item_name }}"
+                        onerror="this.src='https://static.wikia.nocookie.net/murder-mystery-2/images/5/53/Godly_Icon.png'">
+                </div>
+
+                <!-- Центральный блок -->
+                <div class="ga-card-center">
+                    <div class="ga-card-item-name" title="{{ ga.item_name }}">{{ ga.item_name }}</div>
+                    <div class="ga-card-row">
+                        <div class="ga-card-value">
+                            <img src="{% static 'img/sv_coin.png' %}" class="coin-icon" alt="SV">
+                            <span>{{ ga.item_value }}</span>
+                        </div>
+                        <span class="ga-card-dot">·</span>
+                        <div class="ga-card-by">by <span>{{ ga.creator }}</span></div>
+                        <span class="ga-card-dot">·</span>
+                        <div class="ga-timer" data-ends="{{ ga.ends_at|date:'c' }}">
+                            <i class="bi bi-clock"></i>
+                            <span class="ga-timer-text">--:--:--</span>
+                        </div>
+                        <span class="ga-card-dot">·</span>
+                        <div class="ga-participants">
+                            <i class="bi bi-people-fill"></i>
+                            <span class="ga-participants-count">{{ ga.participants_count }}</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Кнопка справа -->
+                {% if user.is_authenticated %}
+                    {% if user.username != ga.creator %}
+                    <button class="btn-ga-join" onclick="joinGiveaway({{ ga.id }}, this)">
+                        JOIN
+                    </button>
+                    {% else %}
+                    <div class="ga-your-badge">YOUR GIVEAWAY</div>
+                    {% endif %}
+                {% else %}
+                <button class="btn-ga-join btn-ga-login" onclick="openAuthModal()">
+                    <i class="bi bi-box-arrow-in-right"></i> LOGIN
+                </button>
+                {% endif %}
+            </div>
+            {% empty %}
+            <div class="ga-empty">
+                <i class="bi bi-gift" style="font-size: 2rem; color: #c084fc; margin-bottom: 10px;"></i>
+                <p>No active giveaways right now.</p>
+                <p class="text-muted" style="font-size: 0.8rem;">Click <strong>GIVEAWAY</strong> on any item in your inventory to start one!</p>
+            </div>
+            {% endfor %}
+
+            {% if active_giveaways|length > 3 %}
+            <button class="btn-ga-show-more" id="gaShowMoreBtn" onclick="toggleGiveaways()">
+                <span class="ga-show-more-dots">
+                    <span></span><span></span><span></span>
+                </span>
+                <span class="ga-show-more-text">SHOW {{ active_giveaways|length|add:"-3" }} MORE</span>
+            </button>
+            {% endif %}
+        </div>
+    </div>
+    {% endif %}
+
+    <!-- Блок приветствия -->
+    <div class="box-card welcome-box">
+        {% if user.is_authenticated %}
+        <div class="profile-header">
+            <!-- СЛОТ ДЛЯ АВАТАРА -->
+            <div class="avatar-slot">
+                {% if avatar_url %}
+                <img src="{{ avatar_url }}" alt="Avatar" class="avatar-circle clickable-avatar"
+                    onclick="openStatsModal('{{ user.username }}')">
+                {% else %}
+                <!-- Заглушка (если API не ответил) -->
+                <span class="avatar-placeholder">&#128100;</span>
+                {% endif %}
+            </div>
+
+            <div>
+                <h1 class="text-white" style="margin-bottom: 5px;">WELCOME BACK, <span class="text-cyan">{{
+                        user.username }}</span></h1>
+                <p class="text-muted">Manage your inventory and view statistics.</p>
+            </div>
+        </div>
+        {% else %}
+        <div class="welcome-hero">
+            <div class="welcome-hero-glow"></div>
+            <div class="welcome-hero-content">
+                <div class="hero-game-badge">
+                    <i class="bi bi-controller"></i>
+                    <div class="hero-game-badge-text">
+                        <span class="hero-game-badge-title">ROBLOX MM2</span>
+                        <span class="hero-game-badge-sub">Murder Mystery 2</span>
+                    </div>
+                </div>
+                <h1 class="welcome-hero-title">MM2 <span>FLIPPING</span></h1>
+                <p class="welcome-hero-desc">The #1 platform for Murder Mystery 2 coinflip battles. Flip your items,
+                    double your inventory.</p>
+                <div class="btn-login" onclick="openAuthModal()"
+                    style="cursor:pointer; display:inline-block; margin-top: 18px;">
+                    START PLAYING
+                </div>
+            </div>
+        </div>
+        {% endif %}
+    </div>
+
+    {% if not user.is_authenticated %}
+
+    <div class="hero-features-row">
+        <div class="hero-feature-card hero-feature-card--instant">
+            <div class="hero-feature-topline">Live Results</div>
+            <div class="hero-feature-icon"><i class="bi bi-lightning-charge-fill"></i></div>
+            <div class="hero-feature-title">Instant Flips</div>
+            <div class="hero-feature-desc">Results in seconds, no waiting</div>
+        </div>
+        <div class="hero-feature-card hero-feature-card--fair">
+            <div class="hero-feature-topline">Trusted System</div>
+            <div class="hero-feature-icon"><i class="bi bi-shield-check"></i></div>
+            <div class="hero-feature-title">Provably Fair</div>
+            <div class="hero-feature-desc">Verified random.org results</div>
+        </div>
+        <div class="hero-feature-card hero-feature-card--players">
+            <div class="hero-feature-topline">Daily Action</div>
+            <div class="hero-feature-icon"><i class="bi bi-people-fill"></i></div>
+            <div class="hero-feature-title">500+ Players</div>
+            <div class="hero-feature-desc">Active community daily</div>
+        </div>
+    </div>
+    {% endif %}
+
+    {% if user.is_authenticated %}
+    <!-- STATS (Premium Design) -->
+    <div class="profile-stats">
+        <div class="stat-card stat-card--worth">
+            <div class="stat-card__icon">
+                <i class="bi bi-gem"></i>
+            </div>
+            <div class="stat-card__body">
+                <h3>NET WORTH</h3>
+                <div class="stat-card__value-row">
+                    <img src="{% static 'img/sv_coin.png' %}" class="stat-coin-icon" alt="SV">
+                    <div class="value-glow" id="net-worth-value">{{ total_profit|default:0 }}</div>
+                </div>
+                <div class="stat-card__subtitle">Supreme Values</div>
+            </div>
+            <div class="stat-card__bar">
+                <div class="stat-card__bar-fill stat-card__bar-fill--green"></div>
+            </div>
+        </div>
+        <div class="stat-card stat-card--items">
+            <div class="stat-card__icon stat-card__icon--blue">
+                <i class="bi bi-box-seam-fill"></i>
+            </div>
+            <div class="stat-card__body">
+                <h3>TOTAL ITEMS</h3>
+                <div class="stat-card__value-row">
+                    <div class="value-glow value-glow--blue" id="total-items-value">{{ inventory_count|default:0 }}</div>
+                </div>
+                <div class="stat-card__subtitle">In your inventory</div>
+            </div>
+            <div class="stat-card__bar">
+                <div class="stat-card__bar-fill stat-card__bar-fill--blue"></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ИНВЕНТАРЬ -->
+    <div class="box-card">
+        <div class="box-title">
+            <span>YOUR INVENTORY</span>
+            <span class="home-value">MM2 VALUE: <img src="{% static 'img/sv_coin.png' %}" class="coin-icon home-coin"
+                    alt="SV"> </span>
+        </div>
+
+        <div class="dashboard-inventory-grid">
+            {% for item in inventory_items %}
+            <div class="dashboard-item-card">
+                <!-- ОВЕРЛЕЙ С КНОПКАМИ -->
+                <div class="item-overlay">
+                    <button class="btn-item-action btn-withdraw" onclick="openWithdrawConfirm('{{ item.id }}')">
+                        <i class="bi bi-send-fill"></i> WITHDRAW
+                    </button>
+                    <button class="btn-item-action btn-giveaway" onclick="openGiveawayModal('{{ item.id }}', this)">
+                        <i class="bi bi-gift"></i> GIVEAWAY
+                    </button>
+                </div>
+
+                <!-- ОСТАЛЬНОЕ КАК БЫЛО -->
+                <!-- Картинка оружия -->
+                <div class="dashboard-item-img">
+                    <!-- Используем item.image_url -->
+                    <img src="{{ item.image_url }}" alt="Weapon"
+                        onerror="this.src='https://static.wikia.nocookie.net/murder-mystery-2/images/5/53/Godly_Icon.png'">
+                </div>
+                <div class="item-title" title="{{ item.item_name }}">{{ item.item_name }}</div>
+                <div class="item-price-tag">
+                    <img src="{% static 'img/sv_coin.png' %}" class="coin-icon" alt="SV">
+                    <span class="price-val">{{ item.item_value }}</span>
+                </div>
+            </div>
+            {% empty %}
+            <div class="empty-inventory-container">
+                <div class="empty-inv-icon"><i class="bi bi-box-seam"></i></div>
+                <h3 class="empty-inv-title">No Items Yet</h3>
+                <p class="empty-inv-desc">Trade with one of our bots to deposit your MM2 items and start flipping.</p>
+                <button class="ice-deposit-btn" onclick="openBotModal('DEPOSIT')">
+                    <i class="bi bi-plus-circle"></i> DEPOSIT ITEMS
+                </button>
+            </div>
+            {% endfor %}
+        </div>
+    </div> {% endif %}
+</div>
+</div>
+
+<!-- WITHDRAW CONFIRMATION MODAL -->
+<div class="withdraw-overlay" id="withdrawConfirmModal">
+    <div class="withdraw-box">
+        <div class="withdraw-icon-wrap">
+            <i class="bi bi-send-fill"></i>
+        </div>
+        <h3 class="withdraw-title">CONFIRM WITHDRAWAL</h3>
+        <p class="withdraw-desc">
+            You are about to withdraw this item.<br>
+            It will be sent to the <span class="text-cyan">trade bot</span> for pickup.
+        </p>
+        <div class="withdraw-actions">
+            <button class="btn-cancel-withdraw" onclick="closeWithdrawConfirm()">CANCEL</button>
+            <button class="btn-confirm-withdraw" onclick="processWithdraw()">
+                <i class="bi bi-check-lg"></i> CONFIRM
+            </button>
+        </div>
+    </div>
+</div>
+
+<!-- WITHDRAW SUCCESS MODAL -->
+<div class="success-modal-overlay" id="successModal">
+    <div class="success-box">
+        <div class="success-icon-wrapper">
+            <i class="bi bi-check-circle" style="font-size: 80px; color: #00FF88; filter: drop-shadow(0 0 15px rgba(0, 255, 136, 0.5));"></i>
+        </div>
+
+        <h2 class="success-title">WITHDRAWAL READY</h2>
+        <p class="success-desc">
+            Your item is ready for pickup. Join our bot to receive it.
+        </p>
+
+        <a href="https://www.roblox.com/users/5413661688/profile" target="_blank" class="btn-ice-join">
+            <i class="bi bi-person-plus"></i> JOIN BOT
+        </a>
+
+        <div class="close-modal-link" onclick="location.reload()">Close</div>
+    </div>
+</div>
+
+{% if user.is_authenticated %}
+<script>
+    let withdrawItemId = null;
+
+    function openWithdrawConfirm(itemId) {
+        withdrawItemId = itemId;
+        document.getElementById('withdrawConfirmModal').classList.add('active');
+    }
+
+    function closeWithdrawConfirm() {
+        document.getElementById('withdrawConfirmModal').classList.remove('active');
+        withdrawItemId = null;
+    }
+
+    function processWithdraw() {
+        if (!withdrawItemId) return;
+
+        const confirmBtn = document.querySelector('.btn-confirm-withdraw');
+        const originalText = confirmBtn.innerHTML;
+        confirmBtn.innerHTML = '<i class="bi bi-hourglass-split"></i> PROCESSING...';
+
+        const formData = new FormData();
+        formData.append('item_id', withdrawItemId);
+        formData.append('csrfmiddlewaretoken', '{{ csrf_token }}');
+
+        fetch("{% url 'withdraw_item' %}", {
+            method: 'POST',
+            body: formData
+        })
+            .then(response => response.json())
+            .then(data => {
+                if (data.status === 'success') {
+                    closeWithdrawConfirm();
+                    document.getElementById('successModal').classList.add('active');
+                } else {
+                    alert("Error: " + data.message);
+                    confirmBtn.innerHTML = originalText;
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                alert("Connection error");
+                confirmBtn.innerHTML = originalText;
+            });
+    }
+
+    // Close withdraw modal on backdrop click
+    document.addEventListener("DOMContentLoaded", function () {
+        const wOverlay = document.getElementById('withdrawConfirmModal');
+        if (wOverlay) {
+            wOverlay.addEventListener('mousedown', function (e) {
+                if (e.target === this) closeWithdrawConfirm();
+            });
+        }
+    });
+</script>
+{% endif %}
+
+<script>
+    // Переменные
+    let giveawayItemId = null;
+    let giveawayItemBtn = null;
+
+    // 1. Открываем окно гивэвея
+    function openGiveawayModal(itemId, btnElement) {
+        giveawayItemId = itemId;
+        giveawayItemBtn = btnElement;
+        document.getElementById('giveawayConfirmModal').classList.add('active');
+    }
+
+    // 2. Закрываем окно
+    function closeGiveawayModal() {
+        document.getElementById('giveawayConfirmModal').classList.remove('active');
+        giveawayItemId = null;
+        giveawayItemBtn = null;
+    }
+
+    // 3. Подтверждаем — СОЗДАЁМ РОЗЫГРЫШ
+    function processGiveaway() {
+        if (!giveawayItemId) return;
+
+        const formData = new FormData();
+        formData.append('item_id', giveawayItemId);
+        formData.append('csrfmiddlewaretoken', '{{ csrf_token }}');
+
+        const confirmBtn = document.querySelector('.btn-confirm-giveaway');
+        const originalHTML = confirmBtn.innerHTML;
+        confirmBtn.innerHTML = '<i class="bi bi-hourglass-split"></i> CREATING...';
+
+        fetch("{% url 'create_giveaway' %}", {
+            method: 'POST',
+            body: formData
+        })
+            .then(response => response.json())
+            .then(data => {
+                if (data.status === 'success') {
+                    confirmBtn.innerHTML = '<i class="bi bi-check-lg"></i> CREATED!';
+                    setTimeout(() => {
+                        window.location.reload();
+                    }, 500);
+                } else {
+                    alert("Error: " + data.message);
+                    closeGiveawayModal();
+                    confirmBtn.innerHTML = originalHTML;
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                alert("Connection error");
+                confirmBtn.innerHTML = originalHTML;
+            });
+    }
+
+    // Закрытие по клику на фон
+    document.addEventListener("DOMContentLoaded", function () {
+        const gOverlay = document.getElementById('giveawayConfirmModal');
+        if (gOverlay) {
+            gOverlay.addEventListener('mousedown', function (e) {
+                if (e.target === this) closeGiveawayModal();
+            });
+        }
+    });
+
+    // ==========================================
+    // GIVEAWAY: Таймеры + Join + Auto-refresh
+    // ==========================================
+
+    // Обратный отсчёт для всех таймеров
+    function updateGiveawayTimers() {
+        document.querySelectorAll('.ga-timer').forEach(el => {
+            const endsAt = new Date(el.dataset.ends);
+            const now = new Date();
+            const diff = Math.max(0, Math.floor((endsAt - now) / 1000));
+
+            if (diff <= 0) {
+                el.querySelector('.ga-timer-text').textContent = 'ENDED';
+                el.closest('.ga-card')?.classList.add('ga-card--ended');
+                return;
+            }
+
+            const h = Math.floor(diff / 3600);
+            const m = Math.floor((diff % 3600) / 60);
+            const s = diff % 60;
+            el.querySelector('.ga-timer-text').textContent =
+                `${h.toString().padStart(2,'0')}:${m.toString().padStart(2,'0')}:${s.toString().padStart(2,'0')}`;
+        });
+    }
+
+    setInterval(updateGiveawayTimers, 1000);
+    document.addEventListener('DOMContentLoaded', updateGiveawayTimers);
+
+    // Toggle show more / show less giveaways
+    let gaExpanded = false;
+    function toggleGiveaways() {
+        gaExpanded = !gaExpanded;
+        const hiddenCards = document.querySelectorAll('.ga-card-hidden');
+        const btn = document.getElementById('gaShowMoreBtn');
+        if (!btn) return;
+        hiddenCards.forEach(card => {
+            card.style.display = gaExpanded ? 'flex' : 'none';
+        });
+        const textEl = btn.querySelector('.ga-show-more-text');
+        if (gaExpanded) {
+            textEl.textContent = 'SHOW LESS';
+            btn.classList.add('ga-show-more-expanded');
+        } else {
+            textEl.textContent = 'SHOW ' + hiddenCards.length + ' MORE';
+            btn.classList.remove('ga-show-more-expanded');
+        }
+    }
+
+    // Присоединиться к розыгрышу
+    function joinGiveaway(giveawayId, btn) {
+        const originalHTML = btn.innerHTML;
+        btn.innerHTML = '<i class="bi bi-hourglass-split"></i>';
+        btn.disabled = true;
+
+        fetch("{% url 'join_giveaway' %}", {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-CSRFToken': '{{ csrf_token }}'
+            },
+            body: JSON.stringify({ giveaway_id: giveawayId })
+        })
+        .then(r => r.json())
+        .then(data => {
+            if (data.status === 'success') {
+                btn.innerHTML = '<i class="bi bi-check-lg"></i> JOINED';
+                btn.classList.add('btn-ga-joined');
+                btn.disabled = true;
+
+                // Обновляем счётчик участников
+                const card = btn.closest('.ga-card');
+                if (card) {
+                    const countEl = card.querySelector('.ga-participants-count');
+                    if (countEl) countEl.textContent = data.participants_count;
+                }
+            } else {
+                if (data.message.includes('already joined')) {
+                    btn.innerHTML = '<i class="bi bi-check-lg"></i> JOINED';
+                    btn.classList.add('btn-ga-joined');
+                    btn.disabled = true;
+                } else {
+                    showGaError(data.message);
+                    btn.innerHTML = originalHTML;
+                    btn.disabled = false;
+                }
+            }
+        })
+        .catch(() => {
+            showGaError('Connection error. Please try again.');
+            btn.innerHTML = originalHTML;
+            btn.disabled = false;
+        });
+    }
+
+    function showGaError(msg) {
+        const modal = document.getElementById('gaErrorModal');
+        const msgEl = document.getElementById('gaErrorMessage');
+        if (!modal) return;
+        // Подставляем иконку и заголовок в зависимости от типа ошибки
+        const iconEl = modal.querySelector('.ga-error-icon-wrap i');
+        const titleEl = modal.querySelector('.ga-error-title');
+        if (msg.includes('play at least') || msg.includes('24 hours')) {
+            iconEl.className = 'bi bi-controller';
+            titleEl.textContent = 'PLAY TO JOIN';
+            msgEl.innerHTML = 'You need to <strong>play at least one game</strong> in the last <span class="text-purple">24 hours</span> to participate in giveaways.';
+        } else {
+            iconEl.className = 'bi bi-exclamation-triangle';
+            titleEl.textContent = 'OOPS';
+            msgEl.textContent = msg;
+        }
+        modal.classList.add('active');
+    }
+
+    function closeGaErrorModal() {
+        const modal = document.getElementById('gaErrorModal');
+        if (modal) modal.classList.remove('active');
+    }
+
+    // Auto-refresh giveaways каждые 30 секунд
+    setInterval(() => {
+        fetch("{% url 'api_active_giveaways' %}")
+            .then(r => r.json())
+            .then(data => {
+                // Обновляем счётчик участников для существующих карточек
+                data.active.forEach(ga => {
+                    const card = document.querySelector(`.ga-card[data-ga-id="${ga.id}"]`);
+                    if (card) {
+                        const countEl = card.querySelector('.ga-participants-count');
+                        if (countEl) countEl.textContent = ga.participants_count;
+
+                        // Если уже joined — обновляем кнопку
+                        if (ga.already_joined) {
+                            const btn = card.querySelector('.btn-ga-join');
+                            if (btn && !btn.classList.contains('btn-ga-joined')) {
+                                btn.innerHTML = '<i class="bi bi-check-lg"></i> JOINED';
+                                btn.classList.add('btn-ga-joined');
+                                btn.disabled = true;
+                            }
+                        }
+                    }
+                });
+
+                // Если количество активных изменилось — перезагрузить
+                const currentCards = document.querySelectorAll('.ga-card').length;
+                if (data.active.length !== currentCards) {
+                    location.reload();
+                }
+            })
+            .catch(() => {});
+    }, 30000);
+
+    // Count-up animation for stat cards
+    function animateValue(element, start, end, duration) {
+        if (start === end) return;
+        const range = end - start;
+        const startTime = performance.now();
+        function update(currentTime) {
+            const elapsed = currentTime - startTime;
+            const progress = Math.min(elapsed / duration, 1);
+            // easeOutExpo
+            const eased = 1 - Math.pow(2, -10 * progress);
+            const current = Math.round(start + range * eased);
+            element.innerText = current.toLocaleString();
+            if (progress < 1) requestAnimationFrame(update);
+        }
+        requestAnimationFrame(update);
+    }
+
+    document.addEventListener('DOMContentLoaded', function() {
+        const netWorthEl = document.getElementById('net-worth-value');
+        const totalItemsEl = document.getElementById('total-items-value');
+        if (netWorthEl) {
+            const target = parseInt(netWorthEl.innerText.replace(/,/g, '')) || 0;
+            netWorthEl.innerText = '0';
+            animateValue(netWorthEl, 0, target, 1200);
+        }
+        if (totalItemsEl) {
+            const target = parseInt(totalItemsEl.innerText.replace(/,/g, '')) || 0;
+            totalItemsEl.innerText = '0';
+            animateValue(totalItemsEl, 0, target, 800);
+        }
+    });
+</script>
+
+{% if user.is_authenticated %}
+<!-- ====== GA ERROR MODAL ====== -->
+<div class="ga-error-overlay" id="gaErrorModal">
+    <div class="ga-error-box">
+        <div class="ga-error-icon-wrap">
+            <i class="bi bi-shield-lock"></i>
+        </div>
+        <h3 class="ga-error-title">ACCESS DENIED</h3>
+        <p class="ga-error-desc" id="gaErrorMessage">Error</p>
+        <button class="btn-ga-error-close" onclick="closeGaErrorModal()">GOT IT</button>
+    </div>
+</div>
+
+<div class="giveaway-overlay" id="giveawayConfirmModal">
+    <div class="giveaway-box">
+        <div class="giveaway-icon-wrap">
+            <i class="bi bi-gift"></i>
+        </div>
+        <h3 class="giveaway-title">START A GIVEAWAY?</h3>
+        <p class="giveaway-desc">
+            This item will be raffled to the community.<br>
+            A random winner will be selected in <span class="text-purple">24 hours</span>.<br>
+            This action <strong>cannot be undone</strong>.
+        </p>
+
+        <div class="giveaway-actions">
+            <button class="btn-cancel-giveaway" onclick="closeGiveawayModal()">CANCEL</button>
+            <button class="btn-confirm-giveaway" onclick="processGiveaway()">
+                <i class="bi bi-gift"></i> START GIVEAWAY
+            </button>
+        </div>
+    </div>
+</div>
+{% endif %}
+
+{% endblock %}

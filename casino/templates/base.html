@@ -1,0 +1,1048 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="ru">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MMFLIP | Murder Mystery 2 Coinflip</title>
+    <link rel="stylesheet" href="{% static 'css/style.css' %}?v={% now 'U' %}">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+</head>
+
+<body>
+    <!-- PAGE LOADER -->
+    <div id="pageLoader" style="
+        position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+        background: #060908; z-index: 999999;
+        display: flex; align-items: center; justify-content: center;
+        transition: opacity 0.8s ease, visibility 0.8s ease;
+    ">
+        <div style="
+            width: 44px; height: 44px;
+            border: 3px solid rgba(0, 255, 157, 0.08);
+            border-top: 3px solid #00ff9d;
+            border-radius: 50%;
+            animation: loaderSpin 0.8s linear infinite;
+        "></div>
+    </div>
+    <style>
+        @keyframes loaderSpin {
+            to {
+                transform: rotate(360deg);
+            }
+        }
+
+        body.loading {
+            overflow: hidden !important;
+        }
+
+        body.loading>*:not(#pageLoader):not(style):not(script) {
+            opacity: 0;
+        }
+
+        body.reveal>*:not(#pageLoader):not(style):not(script) {
+            animation: contentReveal 0.8s ease forwards;
+        }
+
+        @keyframes contentReveal {
+            from {
+                opacity: 0;
+                transform: translateY(8px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+    </style>
+    <script>
+        document.body.classList.add('loading');
+
+        (function () {
+            let loaderHidden = false;
+
+            function hidePageLoader() {
+                if (loaderHidden) return;
+
+                const loader = document.getElementById('pageLoader');
+                loaderHidden = true;
+
+                document.body.classList.remove('loading');
+                document.body.classList.add('reveal');
+
+                if (!loader) {
+                    setTimeout(function () {
+                        document.body.classList.remove('reveal');
+                    }, 900);
+                    return;
+                }
+
+                loader.style.opacity = '0';
+                loader.style.visibility = 'hidden';
+
+                setTimeout(function () {
+                    if (loader.parentNode) {
+                        loader.parentNode.removeChild(loader);
+                    }
+                    document.body.classList.remove('reveal');
+                }, 900);
+            }
+
+            if (document.readyState === 'complete' || document.readyState === 'interactive') {
+                setTimeout(hidePageLoader, 250);
+            } else {
+                document.addEventListener('DOMContentLoaded', function () {
+                    setTimeout(hidePageLoader, 250);
+                }, { once: true });
+                window.addEventListener('load', hidePageLoader, { once: true });
+            }
+
+            window.addEventListener('pageshow', hidePageLoader, { once: true });
+            setTimeout(hidePageLoader, 3000);
+        })();
+    </script>
+
+    <main class="site-main">
+        {% block content %}
+        {% endblock %}
+    </main>
+
+    {% include 'footer.html' %}
+
+    <div class="flip-overlay" id="globalFlipOverlay">
+        <div class="coin-container">
+            <div class="coin" id="globalCoin">
+                <div class="side side-a">
+                    <img src="{% static 'img/b_chip.png' %}" style="width:100%; height:100%; object-fit:contain;">
+                </div>
+                <div class="side side-b">
+                    <img src="{% static 'img/h_chip.png' %}" style="width:100%; height:100%; object-fit:contain;">
+                </div>
+            </div>
+        </div>
+
+        <div class="flip-result-box" id="globalResultBox">
+            <!-- Icon -->
+            <div class="result-icon" id="resultIcon">
+                <i class="bi bi-trophy-fill"></i>
+            </div>
+            <!-- Main title -->
+            <div class="result-title" id="globalWinnerText">YOU WON!</div>
+            <!-- Subtitle -->
+            <div class="result-subtitle" id="resultSubtitle">Lucky one!</div>
+            <!-- Bet -->
+            <div class="result-bet-row">
+                <span class="result-bet-label">TOTAL BET</span>
+                <div class="result-bet-amount">
+                    <span class="result-bet-value" id="globalBetText">0</span>
+                    <img src="{% static 'img/sv_coin.png' %}" class="result-coin-img" alt="SV">
+                </div>
+            </div>
+            <!-- Hash -->
+            <div class="result-hash" id="globalHashText" title="Click to copy hash" onclick="copyHash(this)">
+                <i class="bi bi-shield-lock-fill"></i>
+                <span id="globalHashValue">—</span>
+            </div>
+            <!-- Close -->
+            <button class="btn-close-flip" onclick="closeGlobalFlip()">CLOSE</button>
+        </div>
+    </div>
+
+    <script>
+        let isAnimating = false;
+        let flipTimeouts = [];
+        let flipSkipped = false;
+        let flipCurrentData = null;
+
+        function checkFlipStatus() {
+            if (isAnimating) return;
+
+            // Р—Р°РїСЂРѕСЃ Рє API
+            fetch("{% url 'check_flip_status' %}")
+                .then(res => {
+                    if (res.ok) return res.json();
+                    throw new Error('Network error');
+                })
+                .then(data => {
+                    if (data.found) {
+                        console.log("Game found! Starting animation...");
+                        startGlobalAnimation(data);
+                    }
+                })
+                .catch(err => console.error("Polling error:", err));
+        }
+
+        // 2. Р¤СѓРЅРєС†РёСЏ Р·Р°РїСѓСЃРєР° Р°РЅРёРјР°С†РёРё (РўРћР§Р¬-Р’-РўРћР§Р¬ РљРђРљ Р‘Р«Р›Рђ)
+        function startGlobalAnimation(data) {
+            isAnimating = true;
+            flipSkipped = false;
+            flipCurrentData = data;
+            flipTimeouts = [];
+            const overlay = document.getElementById('globalFlipOverlay');
+            const coin = document.getElementById('globalCoin');
+            const resultBox = document.getElementById('globalResultBox');
+            const winnerText = document.getElementById('globalWinnerText');
+
+            // РџРѕРєР°Р·С‹РІР°РµРј РѕРІРµСЂР»РµР№
+            overlay.classList.add('active');
+            resultBox.classList.remove('show');
+
+            // РЎР±СЂРѕСЃ РїРѕР·РёС†РёРё РјРѕРЅРµС‚РєРё РїРµСЂРµРґ СЃС‚Р°СЂС‚РѕРј
+            coin.style.transition = 'none';
+            coin.style.transform = 'rotateX(0deg)';
+            coin.offsetHeight; // trigger reflow
+
+            // РћРїСЂРµРґРµР»СЏРµРј: СЏ РІС‹РёРіСЂР°Р» РёР»Рё РЅРµС‚?
+            const myUsername = "{{ user.username }}".toLowerCase();
+            const winnerName = data.winner.toLowerCase();
+            const iWon = (myUsername === winnerName);
+
+            // Настраиваем окно результата (win / lose)
+            const subtitle = document.getElementById('resultSubtitle');
+            const iconEl = document.getElementById('resultIcon');
+
+            resultBox.classList.remove('result-win', 'result-lose');
+
+            if (iWon) {
+                resultBox.classList.add('result-win');
+                winnerText.innerText = 'YOU WON!';
+                subtitle.innerText = 'Lucky one!';
+                iconEl.innerHTML = '<i class="bi bi-trophy-fill"></i>';
+            } else {
+                resultBox.classList.add('result-lose');
+                winnerText.innerText = 'YOU LOST';
+                subtitle.innerText = 'Loser :(';
+                iconEl.innerHTML = '<i class="bi bi-heartbreak-fill"></i>';
+            }
+            document.getElementById('globalBetText').innerText = data.total_bet;
+            document.getElementById('globalHashValue').innerText = data.game_hash || 'N/A';
+
+            // === РќРђРЎРўР РћР™РљР Р’Р Р•РњР•РќР (Р—Р”Р•РЎР¬ РњР•РќРЇР•Рњ Р”Р›РРўР•Р›Р¬РќРћРЎРўР¬) ===
+            const duration = 8; // Р”Р»РёС‚РµР»СЊРЅРѕСЃС‚СЊ РІ СЃРµРєСѓРЅРґР°С… (Р±С‹Р»Рѕ 3)
+            const rotations = 15; // РљРѕР»РёС‡РµСЃС‚РІРѕ РѕР±РѕСЂРѕС‚РѕРІ (Р±С‹Р»Рѕ 5)
+
+            // Р›РѕРіРёРєР° СЃС‚РѕСЂРѕРЅС‹
+            // 1 (Green) = С‡РµС‚РЅРѕРµ С‡РёСЃР»Рѕ РѕР±РѕСЂРѕС‚РѕРІ * 360
+            // 2 (Yellow) = ... + 180
+            let degrees = rotations * 360;
+            if (data.result_code !== 1) {
+                degrees += 180;
+            }
+
+            // Р—Р°РїСѓСЃРє РІСЂР°С‰РµРЅРёСЏ
+            // cubic-bezier(0.1, 0, 0.2, 1) вЂ” СЌС‚Рѕ СЌС„С„РµРєС‚ "Р±С‹СЃС‚СЂРѕ РІ РЅР°С‡Р°Р»Рµ, РѕС‡РµРЅСЊ РјРµРґР»РµРЅРЅРѕ РІ РєРѕРЅС†Рµ"
+            flipTimeouts.push(setTimeout(() => {
+                if (flipSkipped) return;
+                coin.style.transition = `transform ${duration}s cubic-bezier(0.1, 0, 0.2, 1)`;
+                coin.style.transform = `rotateX(${degrees}deg)`;
+            }, 100));
+
+            // РџРѕРєР°Р· СЂРµР·СѓР»СЊС‚Р°С‚Р° (Р’СЂРµРјСЏ Р°РЅРёРјР°С†РёРё + 500РјСЃ РїР°СѓР·С‹)
+            flipTimeouts.push(setTimeout(() => {
+                if (flipSkipped) return;
+                const coinContainer = document.querySelector('.coin-container');
+                if (coinContainer) {
+                    coinContainer.style.transition = 'opacity 0.5s ease, transform 0.5s ease';
+                    coinContainer.style.opacity = '0';
+                    coinContainer.style.transform = 'scale(0.5)';
+                }
+                resultBox.classList.add('show');
+                markGameAsViewed(data.game_id); // РџРѕРєР°Р·С‹РІР°РµРј РѕРєРЅРѕ
+                markGameAsViewed(data.game_id);  // Р“РѕРІРѕСЂРёРј СЃРµСЂРІРµСЂСѓ "СЏ СѓРІРёРґРµР»"
+            }, (duration * 1000) + 500));
+        }
+
+        // 3. РћС‚РјРµС‡Р°РµРј, С‡С‚Рѕ РїРѕСЃРјРѕС‚СЂРµР»Рё
+        function markGameAsViewed(gameId) {
+            const formData = new FormData();
+            formData.append('game_id', gameId);
+            fetch("{% url 'mark_flip_viewed' %}", { method: 'POST', body: formData });
+        }
+
+        // Copy game hash to clipboard
+        function copyHash(el) {
+            const hash = document.getElementById('globalHashValue').innerText;
+            if (hash && hash !== '—' && hash !== 'N/A') {
+                navigator.clipboard.writeText(hash).then(() => {
+                    el.style.borderColor = '#00ff9d';
+                    el.style.color = '#00ff9d';
+                    setTimeout(() => { el.style.borderColor = ''; el.style.color = ''; }, 1500);
+                });
+            }
+        }
+
+        // 4. Р—Р°РєСЂС‹С‚РёРµ
+        function closeGlobalFlip() {
+            flipTimeouts.forEach(function(t) { clearTimeout(t); });
+            flipTimeouts = [];
+            flipSkipped = false;
+            flipCurrentData = null;
+            document.getElementById('globalFlipOverlay').classList.remove('active');
+            // Восстанавливаем монетку
+            const coinContainer = document.querySelector('.coin-container');
+            if (coinContainer) {
+                coinContainer.style.transition = 'none';
+                coinContainer.style.opacity = '1';
+                coinContainer.style.transform = 'scale(1)';
+            }
+            document.getElementById('globalResultBox').classList.remove('show');
+            isAnimating = false;
+            // Р•СЃР»Рё РјС‹ РЅР° СЃС‚СЂР°РЅРёС†Рµ РєРѕРёРЅС„Р»РёРїР°, РѕР±РЅРѕРІРёРј РµС‘, С‡С‚РѕР±С‹ РѕР±РЅРѕРІРёС‚СЊ Р±Р°Р»Р°РЅСЃ
+            if (window.location.pathname.includes('coinflip')) {
+                window.location.reload();
+            }
+        }
+
+        function skipFlipAnimation() {
+            if (flipSkipped || !flipCurrentData) return;
+            flipSkipped = true;
+            flipTimeouts.forEach(function(t) { clearTimeout(t); });
+            flipTimeouts = [];
+            var coin = document.getElementById('globalCoin');
+            var resultBox = document.getElementById('globalResultBox');
+            var coinContainer = document.querySelector('.coin-container');
+            coin.style.transition = 'none';
+            var finalDeg = 15 * 360;
+            if (flipCurrentData.result_code !== 1) finalDeg += 180;
+            coin.style.transform = 'rotateX(' + finalDeg + 'deg)';
+            if (coinContainer) {
+                coinContainer.style.transition = 'opacity 0.4s ease, transform 0.4s ease';
+                coinContainer.style.opacity = '0';
+                coinContainer.style.transform = 'scale(0.5)';
+            }
+            resultBox.classList.add('show');
+            markGameAsViewed(flipCurrentData.game_id);
+        }
+
+        document.addEventListener('DOMContentLoaded', function() {
+            document.getElementById('globalFlipOverlay').addEventListener('mousedown', function() {
+                if (!isAnimating || flipSkipped) return;
+                if (document.getElementById('globalResultBox').classList.contains('show')) return;
+                skipFlipAnimation();
+            });
+        });
+
+        // Р—Р°РїСѓСЃРєР°РµРј РѕРїСЂРѕСЃ РєР°Р¶РґС‹Рµ 2 СЃРµРє
+        {% if user.is_authenticated %}
+        setInterval(checkFlipStatus, 2000);
+        {% endif %}
+    </script>
+
+
+    <script>
+        // Р“Р»РѕР±Р°Р»СЊРЅС‹Рµ РїРµСЂРµРјРµРЅРЅС‹Рµ РґР»СЏ СЃРЅРµРіР°
+        let snowInterval = null;
+        let savedSnowValue = localStorage.getItem('snowDensity');
+
+        // Р•СЃР»Рё РЅР°СЃС‚СЂРѕР№РєРё РЅРµС‚, СЃС‚Р°РІРёРј 50 (СЃСЂРµРґРЅРµ)
+        if (savedSnowValue === null) savedSnowValue = 50;
+
+        // РЈСЃС‚Р°РЅР°РІР»РёРІР°РµРј РїРѕР»Р·СѓРЅРѕРє РІ РїСЂР°РІРёР»СЊРЅРѕРµ РїРѕР»РѕР¶РµРЅРёРµ РїСЂРё Р·Р°РіСЂСѓР·РєРµ
+        document.addEventListener("DOMContentLoaded", function () {
+            const slider = document.getElementById('snowRange');
+            if (slider) {
+                slider.value = savedSnowValue;
+                updateSnowSettings(savedSnowValue); // Р—Р°РїСѓСЃРєР°РµРј СЃРЅРµРі
+            }
+        });
+
+        function createSnowflake() {
+            const snowflake = document.createElement('div');
+            snowflake.classList.add('snowflake');
+
+            const size = Math.random() * 5 + 2 + 'px';
+            snowflake.style.width = size;
+            snowflake.style.height = size;
+
+            // РЎРїР°РІРЅРёРј С‡СѓС‚СЊ РїСЂР°РІРµРµ СЌРєСЂР°РЅР°, С‡С‚РѕР±С‹ Р»РµС‚РµР» РІР»РµРІРѕ
+            snowflake.style.left = Math.random() * 120 + 'vw';
+
+            // РЎРєРѕСЂРѕСЃС‚СЊ (2-5 СЃРµРє)
+            const duration = Math.random() * 3 + 2 + 's';
+            snowflake.style.animationDuration = duration;
+
+            snowflake.style.opacity = Math.random() * 0.5 + 0.3;
+
+            document.body.appendChild(snowflake);
+
+            setTimeout(() => { snowflake.remove(); }, 6000);
+        }
+
+        function updateSnowSettings(val) {
+            // 1. РЎРѕС…СЂР°РЅСЏРµРј
+            localStorage.setItem('snowDensity', val);
+
+            // 2. РћС‡РёС‰Р°РµРј С‚РµРєСѓС‰РёР№ С‚Р°Р№РјРµСЂ
+            if (snowInterval) clearInterval(snowInterval);
+
+            // 3. Р›РѕРіРёРєР° РїРѕР»Р·СѓРЅРєР°
+            // 0 = Р’С‹РєР»
+            // 100 = РњР°РєСЃРёРјСѓРј (РѕС‡РµРЅСЊ С‡Р°СЃС‚Рѕ)
+
+            val = parseInt(val);
+
+            // Update UI if available
+            const statusText = document.getElementById('snowStatusText');
+            const toggleBtnText = document.getElementById('snowToggleBtnText');
+
+            if (val === 0) {
+                document.querySelectorAll('.snowflake').forEach(el => el.remove());
+                if (statusText) { statusText.innerText = "OFF"; statusText.style.color = "#ff4d4d"; }
+                if (toggleBtnText) { toggleBtnText.innerText = "TURN ON"; toggleBtnText.parentElement.style.color = "#00ff9d"; }
+                return;
+            } else {
+                if (statusText) { statusText.innerText = "ON"; statusText.style.color = "#00ff9d"; }
+                if (toggleBtnText) { toggleBtnText.innerText = "TURN OFF"; toggleBtnText.parentElement.style.color = ""; }
+            }
+
+            const minDelay = 15;
+            const maxDelay = 2000;
+            const t = val / 100; // 0..1
+            const delay = maxDelay * Math.pow(minDelay / maxDelay, t);
+
+            snowInterval = setInterval(createSnowflake, delay);
+        }
+
+        let previousSnowValue = 50;
+        function toggleSnowEffect() {
+            const slider = document.getElementById('snowRange');
+            if (!slider) return;
+
+            let currentVal = parseInt(slider.value);
+            if (currentVal > 0) {
+                previousSnowValue = currentVal;
+                slider.value = 0;
+                updateSnowSettings(0);
+            } else {
+                slider.value = previousSnowValue || 50;
+                updateSnowSettings(slider.value);
+            }
+        }
+    </script>
+
+    <div class="items-view-overlay" id="itemsViewModal">
+        <div class="items-view-box">
+            <div class="items-view-header">
+                <h3>GAME ITEMS</h3>
+                <div class="items-view-close" onclick="closeItemsModal()"><i class="bi bi-x-lg"></i></div>
+            </div>
+
+            <div class="items-view-grid" id="itemsViewGrid">
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // 1. РћРўРљР Р«РўР¬ РћРљРќРћ
+        function openAllItemsModal(btnElement) {
+            // РќР°С…РѕРґРёРј СЃРєСЂС‹С‚С‹Р№ СЃРїРёСЃРѕРє РІРЅСѓС‚СЂРё РЅР°Р¶Р°С‚РѕР№ РєРЅРѕРїРєРё
+            const hiddenContent = btnElement.querySelector('.hidden-full-list');
+
+            if (hiddenContent) {
+                // РљРѕРїРёСЂСѓРµРј HTML РёР· СЃРєСЂС‹С‚РѕРіРѕ Р±Р»РѕРєР° РІ РјРѕРґР°Р»РєСѓ
+                document.getElementById('itemsViewGrid').innerHTML = hiddenContent.innerHTML;
+
+                // РџРѕРєР°Р·С‹РІР°РµРј РјРѕРґР°Р»РєСѓ
+                document.getElementById('itemsViewModal').classList.add('active');
+            }
+        }
+
+        // 2. Р—РђРљР Р«РўР¬ РћРљРќРћ
+        function closeItemsModal() {
+            document.getElementById('itemsViewModal').classList.remove('active');
+        }
+
+        // 3. Р—РђРљР Р«РўРР• РџРћ РљР›РРљРЈ РќРђ Р¤РћРќ
+        document.addEventListener("DOMContentLoaded", function () {
+            const overlay = document.getElementById('itemsViewModal');
+            if (overlay) {
+                overlay.addEventListener('mousedown', function (e) {
+                    if (e.target === this) closeItemsModal();
+                });
+            }
+        });
+    </script>
+
+    <div class="auth-overlay" id="authModal">
+        <div class="auth-box">
+            <div class="auth-close" onclick="closeAuthModal()">
+                <i class="bi bi-x-circle"></i>
+            </div>
+
+            <div class="auth-step active" id="step1">
+                <div class="auth-title">ROBLOX LOGIN</div>
+                <p class="text-muted-ice" style="text-align: center; font-size: 1rem;">Enter your Roblox username to
+                    start.</p>
+
+                <input type="text" id="authUsername" class="auth-input" placeholder="Username..."
+                    onkeypress="handleEnter(event, nextStep)">
+                <div class="auth-error" id="errorStep1"></div>
+
+                <button class="auth-btn" onclick="nextStep()" id="btnStep1">
+                    <span>NEXT STEP</span>
+                    <i class="bi bi-arrow-right" style="font-size: 1.2rem;"></i>
+                </button>
+            </div>
+
+            <div class="auth-step" id="step2">
+                <div class="auth-title">VERIFICATION</div>
+
+                <div class="auth-avatar">
+                    <img src="" id="authAvatarImg" alt="Avatar">
+                </div>
+                <p class="text-muted-ice" style="text-align: center; margin: 10px 0; font-size: 1.1rem;">Hello, <b
+                        class="text-white-ice" id="displayUsername">User</b>!</p>
+
+                <p style="font-size: 0.95rem; color: #80deea; text-align: center; opacity: 0.8;">Paste this code into
+                    your Roblox <b>About</b> section:</p>
+
+                <div class="code-display-wrapper" onclick="copyCode()">
+                    <div class="code-display" id="authCodeBox" title="Click to Copy">...</div>
+                    <i class="bi bi-clipboard copy-hint-icon"
+                        style="font-size: 1rem; opacity: 0.6; cursor: pointer;"></i>
+                </div>
+
+                <div class="auth-error" id="errorStep2"></div>
+                <div class="auth-loading" id="loadingText">Checking profile for code...</div>
+
+                <button class="auth-btn" onclick="verifyCode()" id="btnStep2">
+                    <i class="bi bi-check-lg" style="font-size: 1.2rem;"></i>
+                    <span>I PASTED THE CODE</span>
+                </button>
+                <div class="cancel-link" onclick="resetAuth()">Cancel / Back</div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // === Р›РћР“РРљРђ РђР’РўРћР РР—РђР¦РР (JS) ===
+
+        function openAuthModal() {
+            document.getElementById('authModal').classList.add('active');
+            setTimeout(() => document.getElementById('authUsername').focus(), 100);
+        }
+
+        function closeAuthModal() {
+            document.getElementById('authModal').classList.remove('active');
+            setTimeout(resetAuth, 400);
+        }
+
+        function resetAuth() {
+            document.getElementById('step1').classList.add('active');
+            document.getElementById('step2').classList.remove('active');
+            document.getElementById('authUsername').value = '';
+            document.getElementById('errorStep1').innerText = '';
+            document.getElementById('errorStep2').innerText = '';
+            setLoading(false);
+        }
+
+        function handleEnter(e, func) {
+            if (e.key === 'Enter') func();
+        }
+
+        // РћР±РЅРѕРІР»РµРЅРЅР°СЏ С„СѓРЅРєС†РёСЏ Р·Р°РіСЂСѓР·РєРё РґР»СЏ РїРѕРґРґРµСЂР¶РєРё HTML РІРЅСѓС‚СЂРё РєРЅРѕРїРѕРє (РёРєРѕРЅРѕРє)
+        function setLoading(isLoading, btnId) {
+            if (btnId) {
+                const btn = document.getElementById(btnId);
+                if (isLoading) {
+                    btn.disabled = true;
+                    // РЎРѕС…СЂР°РЅСЏРµРј РѕСЂРёРіРёРЅР°Р»СЊРЅС‹Р№ HTML (СЃ РёРєРѕРЅРєРѕР№)
+                    btn.dataset.originalHtml = btn.innerHTML;
+                    btn.innerHTML = '<span>LOADING...</span>';
+                } else {
+                    btn.disabled = false;
+                    // Р’РѕСЃСЃС‚Р°РЅР°РІР»РёРІР°РµРј
+                    if (btn.dataset.originalHtml) {
+                        btn.innerHTML = btn.dataset.originalHtml;
+                    }
+                }
+            }
+        }
+
+        // РЁРђР“ 1: РћС‚РїСЂР°РІРєР° РЅРёРєР°
+        function nextStep() {
+            const username = document.getElementById('authUsername').value.trim();
+            const errBox = document.getElementById('errorStep1');
+
+            if (!username) {
+                errBox.innerText = "Please enter a username";
+                return;
+            }
+
+            setLoading(true, 'btnStep1');
+            errBox.innerText = "";
+
+            fetch("{% url 'login' %}", {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ username: username })
+            })
+                .then(res => res.json())
+                .then(data => {
+                    setLoading(false, 'btnStep1');
+                    if (data.status === 'success') {
+                        document.getElementById('step1').classList.remove('active');
+
+                        // РќРµР±РѕР»СЊС€Р°СЏ Р·Р°РґРµСЂР¶РєР° РґР»СЏ РїР»Р°РІРЅРѕСЃС‚Рё РїРµСЂРµС…РѕРґР°
+                        setTimeout(() => {
+                            document.getElementById('step2').classList.add('active');
+                            document.getElementById('authCodeBox').innerText = data.code;
+                            document.getElementById('displayUsername').innerText = data.username;
+                            const avatar = data.avatar || "https://tr.rbxcdn.com/53db0d0cb349309a7c91eb4361790e39/150/150/AvatarHeadshot/Png";
+                            document.getElementById('authAvatarImg').src = avatar;
+                        }, 150);
+
+                    } else {
+                        errBox.innerText = data.message || "User not found";
+                    }
+                })
+                .catch(err => {
+                    setLoading(false, 'btnStep1');
+                    errBox.innerText = "Connection error. Try again.";
+                });
+        }
+
+        // РљРѕРїРёСЂРѕРІР°РЅРёРµ РєРѕРґР°
+        function copyCode() {
+            const code = document.getElementById('authCodeBox').innerText;
+            navigator.clipboard.writeText(code).then(() => {
+                const codeBox = document.getElementById('authCodeBox');
+                const originalText = codeBox.innerText;
+                codeBox.innerText = "COPIED!";
+                codeBox.style.color = "#ffffff";
+                setTimeout(() => {
+                    codeBox.innerText = originalText;
+                    codeBox.style.color = "#e0f7fa";
+                }, 1500);
+            });
+        }
+
+        // РЁРђР“ 2: РџСЂРѕРІРµСЂРєР°
+        function verifyCode() {
+            const errBox = document.getElementById('errorStep2');
+            setLoading(true, 'btnStep2');
+            errBox.innerText = "";
+            document.getElementById('loadingText').style.display = 'block';
+
+            fetch("{% url 'verify_page' %}", { method: 'POST' })
+                .then(res => res.json())
+                .then(data => {
+                    setLoading(false, 'btnStep2');
+                    document.getElementById('loadingText').style.display = 'none';
+
+                    if (data.status === 'success') {
+                        window.location.reload();
+                    } else {
+                        errBox.innerHTML = data.message || "Code not found.<br>Wait 10-15s after saving profile.";
+                    }
+                })
+                .catch(err => {
+                    setLoading(false, 'btnStep2');
+                    document.getElementById('loadingText').style.display = 'none';
+                    errBox.innerText = "Error verifying code. Try again.";
+                });
+        }
+
+        document.getElementById('authModal').addEventListener('mousedown', function (e) {
+            if (e.target === this) closeAuthModal();
+        });
+    </script>
+
+    {% if user.is_authenticated %}
+    <div class="chat-backdrop" id="chatBackdrop" onclick="closeSidebar()"></div>
+    <div class="chat-sidebar" id="chatSidebar">
+        <div class="chat-header">
+            <div class="chat-title-wrap">
+                <div class="chat-title-row">
+                    <span class="chat-title-icon chat-title-icon-live"><i class="bi bi-broadcast-pin"></i></span>
+                    <span class="chat-title">LIVE CHAT</span>
+                </div>
+                <span class="chat-subtitle">real-time messages</span>
+            </div>
+            <div class="chat-close-btn" onclick="toggleSidebar()"><i class="bi bi-x-lg"></i></div>
+        </div>
+
+        <div class="chat-messages-area" id="chatArea">
+            <div class="chat-loading">Connecting to server...</div>
+        </div>
+
+        <div class="chat-input-area">
+            <input type="text" id="chatInput" placeholder="Message..." maxlength="300"
+                onkeypress="handleChatEnter(event)">
+            <button class="chat-send-btn" onclick="sendMessage()">
+                <svg viewBox="0 0 24 24">
+                    <path d="M2.01 21L23 12 2.01 3 2 10l15 2-15 2z" />
+                </svg>
+            </button>
+        </div>
+    </div>
+
+    <!-- Chat toggle button (OUTSIDE sidebar so transform doesn't affect it) -->
+    <div class="chat-toggle-tab" id="chatToggleBtn" onclick="toggleSidebar()">
+        <i class="bi bi-chat-dots-fill"></i>
+    </div>
+
+    <script>
+        const chatSidebar = document.getElementById('chatSidebar');
+        const chatArea = document.getElementById('chatArea');
+        const chatBackdrop = document.getElementById('chatBackdrop');
+        const toggleIcon = document.getElementById('toggleIcon');
+
+        // Prevent page scroll when hovering over chat
+        if (chatSidebar) {
+            chatSidebar.addEventListener('wheel', function (e) {
+                e.preventDefault();
+                e.stopPropagation();
+                if (chatArea) {
+                    chatArea.scrollTop += e.deltaY;
+                }
+            }, { passive: false });
+        }
+
+        // РЎРѕСЃС‚РѕСЏРЅРёРµ (Р±РµСЂРµРј РёР· РїР°РјСЏС‚Рё, С‡С‚РѕР±С‹ РїРѕРјРЅРёС‚СЊ РїРѕСЃР»Рµ F5)
+        let isCollapsed = localStorage.getItem('chatCollapsed') === 'true';
+        let lastSeenId = 0; // ID РїРѕСЃР»РµРґРЅРµРіРѕ СЃРѕРѕР±С‰РµРЅРёСЏ, С‡С‚РѕР±С‹ РЅРµ РѕР±РЅРѕРІР»СЏС‚СЊ Р·СЂСЏ
+
+        // РРЅРёС†РёР°Р»РёР·Р°С†РёСЏ СЃРѕСЃС‚РѕСЏРЅРёСЏ РїСЂРё Р·Р°РіСЂСѓР·РєРµ
+        if (isCollapsed) {
+            chatSidebar.classList.add('collapsed');
+        }
+
+        syncChatUiState();
+
+        function syncChatUiState() {
+            const isMobile = window.innerWidth <= 768;
+
+            if (chatBackdrop) {
+                chatBackdrop.classList.toggle('active', !isCollapsed && isMobile);
+            }
+
+            document.body.classList.toggle('chat-open-mobile', !isCollapsed && isMobile);
+        }
+
+        function closeSidebar() {
+            if (isCollapsed) return;
+            isCollapsed = true;
+            localStorage.setItem('chatCollapsed', 'true');
+            chatSidebar.classList.add('collapsed');
+            syncChatUiState();
+        }
+
+        function toggleSidebar() {
+            isCollapsed = !isCollapsed;
+            localStorage.setItem('chatCollapsed', isCollapsed);
+
+            if (isCollapsed) {
+                chatSidebar.classList.add('collapsed');
+            } else {
+                chatSidebar.classList.remove('collapsed');
+                setTimeout(scrollToBottom, 300);
+            }
+
+            syncChatUiState();
+        }
+
+        document.addEventListener('keydown', function (e) {
+            if (e.key === 'Escape') {
+                closeSidebar();
+            }
+        });
+
+        window.addEventListener('resize', syncChatUiState);
+
+        function handleChatEnter(e) {
+            if (e.key === 'Enter') sendMessage();
+        }
+
+        function scrollToBottom() {
+            chatArea.scrollTop = chatArea.scrollHeight;
+        }
+
+        // РћРўРџР РђР’РљРђ
+        function sendMessage() {
+            const input = document.getElementById('chatInput');
+            const text = input.value.trim();
+            if (!text) return;
+
+            input.value = '';
+
+            fetch("{% url 'chat_send' %}", {
+                method: 'POST',
+                body: JSON.stringify({ message: text })
+            })
+                .then(() => loadMessages(true)) // true = РїСЂРёРЅСѓРґРёС‚РµР»СЊРЅРѕ РѕР±РЅРѕРІРёС‚СЊ СЃСЂР°Р·Сѓ
+                .catch(err => console.error(err));
+        }
+
+        // Р—РђР“Р РЈР—РљРђ (РЎ Р—РђР©РРўРћР™ РћРў РњР•Р Р¦РђРќРРЇ)
+        function loadMessages(force = false) {
+            fetch("{% url 'chat_get' %}")
+                .then(res => res.json())
+                .then(data => {
+                    const msgs = data.messages;
+                    if (msgs.length === 0) return;
+
+                    // РЎР°РјРѕРµ РЅРѕРІРѕРµ СЃРѕРѕР±С‰РµРЅРёРµ РІ СЃРїРёСЃРєРµ
+                    const newestId = msgs[msgs.length - 1].id;
+
+                    // === Р“Р›РђР’РќР«Р™ Р¤РРљРЎ ===
+                    // Р•СЃР»Рё ID РїРѕСЃР»РµРґРЅРµРіРѕ СЃРѕРѕР±С‰РµРЅРёСЏ С‚Р°РєРѕР№ Р¶Рµ, РєР°Рє РјС‹ СѓР¶Рµ РІРёРґРµР»Рё,
+                    // Р РјС‹ РЅРµ С„РѕСЂСЃРёСЂСѓРµРј РѕР±РЅРѕРІР»РµРЅРёРµ (РїСЂРё РѕС‚РїСЂР°РІРєРµ)
+                    // РўРћ РњР« РќРР§Р•Р“Рћ РќР• Р”Р•Р›РђР•Рњ. РќРёРєР°РєРѕРіРѕ РїРµСЂРµСЂРёСЃРѕРІС‹РІР°РЅРёСЏ HTML.
+                    if (newestId === lastSeenId && !force) {
+                        return;
+                    }
+
+                    // Р•СЃР»Рё РµСЃС‚СЊ РЅРѕРІС‹Рµ, РѕР±РЅРѕРІР»СЏРµРј ID
+                    lastSeenId = newestId;
+
+                    let html = '';
+                    msgs.forEach(msg => {
+                        // РљР»Р°СЃСЃС‹: msg-me (СЃРїСЂР°РІР°), msg-other (СЃР»РµРІР°)
+                        const msgClass = msg.is_me ? 'msg-me' : 'msg-other';
+
+                        // Р РµРЅРґРµСЂРёРј HTML
+                        html += `
+                    <div class="chat-msg-row ${msgClass}">
+                        <img src="${msg.avatar}" class="chat-avatar clickable-avatar" title="${msg.user}" onclick="openStatsModal('${msg.user}')">
+
+                        <div class="chat-bubble-group">
+                            <div class="chat-username">${msg.user}</div>
+                            <div class="chat-bubble">
+                                <div class="chat-text">${escapeHtml(msg.text)}</div>
+                            </div>
+                            <div class="chat-time">${msg.time}</div>
+                        </div>
+                    </div>
+                `;
+                    });
+
+                    // РџСЂРѕРІРµСЂСЏРµРј, Р±С‹Р» Р»Рё СЋР·РµСЂ РІРЅРёР·Сѓ (С‡С‚РѕР±С‹ СЃРєСЂРѕР»Р» РЅРµ РїСЂС‹РіР°Р», РµСЃР»Рё РѕРЅ С‡РёС‚Р°РµС‚ РёСЃС‚РѕСЂРёСЋ)
+                    const isAtBottom = (chatArea.scrollHeight - chatArea.scrollTop <= chatArea.clientHeight + 100);
+
+                    chatArea.innerHTML = html;
+
+                    // РЎРєСЂРѕР»Р»РёРј РІРЅРёР· С‚РѕР»СЊРєРѕ РµСЃР»Рё СЋР·РµСЂ Р±С‹Р» РІРЅРёР·Сѓ РёР»Рё СЌС‚Рѕ РїРµСЂРІР°СЏ Р·Р°РіСЂСѓР·РєР°
+                    if (isAtBottom || force) {
+                        scrollToBottom();
+                    }
+                })
+                .catch(err => console.error("Chat poll error"));
+        }
+
+        function escapeHtml(text) {
+            return text
+                .replace(/&/g, "&amp;")
+                .replace(/</g, "&lt;")
+                .replace(/>/g, "&gt;")
+                .replace(/"/g, "&quot;")
+                .replace(/'/g, "&#039;");
+        }
+
+        // РћРїСЂРѕСЃ РєР°Р¶РґС‹Рµ 2 СЃРµРєСѓРЅРґС‹
+        setInterval(loadMessages, 2000);
+        loadMessages(true); // РџРµСЂРІС‹Р№ Р·Р°РїСѓСЃРє
+    </script>
+    {% endif %}
+
+
+    <!-- USER STATS MODAL -->
+    <div class="stats-overlay" id="statsModal">
+        <div class="stats-box">
+            <div class="stats-close" onclick="closeStatsModal()"><i class="bi bi-x-lg"></i></div>
+
+            <!-- Loading Spinner -->
+            <div class="stats-loading" id="statsLoading">
+                <div class="stats-spinner"></div>
+                <p>Loading stats...</p>
+            </div>
+
+            <!-- Content (hidden until loaded) -->
+            <div class="stats-content" id="statsContent" style="display:none;">
+
+                <!-- User Header -->
+                <div class="stats-user-header">
+                    <img src="" class="stats-avatar" id="statsAvatar" alt="Avatar">
+                    <div class="stats-username" id="statsUsername">Player</div>
+                </div>
+
+                <!-- Period Tabs -->
+                <div class="stats-period-tabs">
+                    <div class="stats-tab active" data-period="all" onclick="switchStatsPeriod('all', this)">All Time
+                    </div>
+                    <div class="stats-tab" data-period="30d" onclick="switchStatsPeriod('30d', this)">30 Days</div>
+                    <div class="stats-tab" data-period="7d" onclick="switchStatsPeriod('7d', this)">7 Days</div>
+                    <div class="stats-tab" data-period="today" onclick="switchStatsPeriod('today', this)">Today</div>
+                </div>
+
+                <!-- Stats Cards -->
+                <div class="stats-cards-row">
+                    <div class="stats-card">
+                        <div class="stats-card-label">PROFIT</div>
+                        <div class="stats-card-value" id="statsProfit">0</div>
+                    </div>
+                    <div class="stats-card">
+                        <div class="stats-card-label">GAMES</div>
+                        <div class="stats-card-value" id="statsGames">0</div>
+                    </div>
+                    <div class="stats-card">
+                        <div class="stats-card-label">WIN RATE</div>
+                        <div class="stats-card-value" id="statsWinRate">0%</div>
+                    </div>
+                </div>
+
+                <!-- W/L Row -->
+                <div class="stats-wl-row">
+                    <span class="stats-wl-win"><i class="bi bi-trophy-fill"></i> <span id="statsWins">0</span>W</span>
+                    <span class="stats-wl-loss"><i class="bi bi-x-circle-fill"></i> <span
+                            id="statsLosses">0</span>L</span>
+                </div>
+
+                <!-- Game History -->
+                <div class="stats-history-title">GAME HISTORY</div>
+                <div class="stats-history-list" id="statsHistoryList">
+                    <div class="stats-history-empty">No games found</div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let currentStatsUser = '';
+        let currentStatsPeriod = 'all';
+
+        function openStatsModal(username) {
+            if (!username) return;
+            currentStatsUser = username;
+            currentStatsPeriod = 'all';
+
+            // Reset tabs
+            document.querySelectorAll('.stats-tab').forEach(t => t.classList.remove('active'));
+            document.querySelector('.stats-tab[data-period="all"]').classList.add('active');
+
+            // Show modal + loading
+            document.getElementById('statsModal').classList.add('active');
+            document.getElementById('statsLoading').style.display = 'flex';
+            document.getElementById('statsContent').style.display = 'none';
+
+            fetchStats(username, 'all');
+        }
+
+        function closeStatsModal() {
+            document.getElementById('statsModal').classList.remove('active');
+        }
+
+        function switchStatsPeriod(period, tabEl) {
+            currentStatsPeriod = period;
+            document.querySelectorAll('.stats-tab').forEach(t => t.classList.remove('active'));
+            tabEl.classList.add('active');
+
+            // Show loading inside content
+            document.getElementById('statsHistoryList').innerHTML = '<div class="stats-history-loading"><div class="stats-spinner-sm"></div></div>';
+
+            fetchStats(currentStatsUser, period);
+        }
+
+        function fetchStats(username, period) {
+            fetch(`/api/user-stats/?username=${encodeURIComponent(username)}&period=${period}`)
+                .then(res => res.json())
+                .then(data => {
+                    if (data.status !== 'ok') return;
+
+                    // Fill header
+                    document.getElementById('statsAvatar').src = data.avatar || '';
+                    document.getElementById('statsUsername').textContent = data.username;
+
+                    // Fill stats
+                    const profitEl = document.getElementById('statsProfit');
+                    const profit = data.total_profit;
+                    profitEl.textContent = (profit >= 0 ? '+' : '') + profit.toLocaleString();
+                    profitEl.className = 'stats-card-value ' + (profit >= 0 ? 'stats-positive' : 'stats-negative');
+
+                    document.getElementById('statsGames').textContent = data.games_played;
+                    document.getElementById('statsWinRate').textContent = data.win_rate + '%';
+                    document.getElementById('statsWins').textContent = data.wins;
+                    document.getElementById('statsLosses').textContent = data.losses;
+
+                    // Fill history
+                    const historyList = document.getElementById('statsHistoryList');
+                    if (data.history.length === 0) {
+                        historyList.innerHTML = '<div class="stats-history-empty">No games in this period</div>';
+                    } else {
+                        let html = '';
+                        data.history.forEach(g => {
+                            const statusClass = g.won ? 'history-win' : 'history-loss';
+                            const statusIcon = g.won ? '<i class="bi bi-check-circle"></i>' : '<i class="bi bi-x-octagon"></i>';
+                            const valueSign = g.value_change >= 0 ? '+' : '';
+                            const colorChip = g.winning_color === 'green'
+                                ? '/static/img/b_chip.png'
+                                : '/static/img/h_chip.png';
+
+                            html += `
+                                <div class="stats-history-item ${statusClass}">
+                                    <div class="history-status-icon">${statusIcon}</div>
+                                    <img src="${g.opponent_avatar}" class="history-opp-avatar"
+                                         onerror="this.src='https://tr.rbxcdn.com/53db0d0cb349309a7c91eb4361790e39/150/150/AvatarHeadshot/Png'">
+                                    <img src="${colorChip}" class="history-color-chip">
+                                    <div class="history-value ${g.won ? 'stats-positive' : 'stats-negative'}">${valueSign}${g.value_change.toLocaleString()}</div>
+                                    <div class="history-date">${g.date}</div>
+                                </div>
+                            `;
+                        });
+                        historyList.innerHTML = html;
+                    }
+
+                    // Show content
+                    document.getElementById('statsLoading').style.display = 'none';
+                    document.getElementById('statsContent').style.display = 'block';
+                })
+                .catch(err => {
+                    console.error('Stats fetch error:', err);
+                    document.getElementById('statsLoading').innerHTML = '<p style="color:#ff4444;">Error loading stats</p>';
+                });
+        }
+
+        // Close on overlay click
+        document.addEventListener('DOMContentLoaded', function () {
+            const statsOverlay = document.getElementById('statsModal');
+            if (statsOverlay) {
+                statsOverlay.addEventListener('mousedown', function (e) {
+                    if (e.target === this) closeStatsModal();
+                });
+            }
+        });
+    </script>
+
+    <script>
+        // Smooth scroll for anchor links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    e.preventDefault();
+                    target.scrollIntoView({ behavior: 'smooth' });
+                }
+            });
+        });
+    </script>
+
+    <script>
+        // FIX: Inject username into welcome heading from header
+        document.addEventListener("DOMContentLoaded", function () {
+            var welcomeSpan = document.querySelector('.welcome-box .text-cyan');
+            var headerUsername = document.querySelector('.header .username');
+            if (welcomeSpan && headerUsername) {
+                var spanText = welcomeSpan.textContent.trim();
+                // If the span contains unrendered template tags, replace with actual username
+                if (spanText.indexOf('{') !== -1 || spanText.indexOf('user') !== -1 || spanText.length === 0) {
+                    welcomeSpan.textContent = headerUsername.textContent.trim();
+                }
+            }
+        });
+    </script>
+</body>
+
+</html>
