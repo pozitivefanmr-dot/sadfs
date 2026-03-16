@@ -4060,9 +4060,8 @@ input[type=range].snow-range-v2::-moz-range-thumb {
 
 /* КРУГ ПРЕДМЕТА (УВЕЛИЧЕН) */
 .game-item-circle {
-    width: 65px;
-    /* Было 60 */
-    height: 65px;
+    width: 80px;
+    height: 80px;
     border-radius: 50%;
     background: radial-gradient(circle, #1a2522 0%, #050a08 100%);
     border: 2px solid #333;
@@ -4075,13 +4074,16 @@ input[type=range].snow-range-v2::-moz-range-thumb {
     overflow: hidden;
 }
 
-/* КАРТИНКА (УВЕЛИЧЕНА) */
+.game-item-circle:hover {
+    border-color: rgba(0, 255, 157, 0.3);
+    transform: scale(1.05);
+}
+
+/* КАРТИНКА ВНУТРИ КРУГА */
 .game-item-img {
     width: 90%;
-    /* Чуть больше 100%, чтобы заполнить края */
     height: 90%;
     object-fit: cover;
-    /* Зум */
 }
 
 
@@ -8009,21 +8011,19 @@ input[type=range].snow-range::-webkit-slider-thumb {
 
 .game-vs-badge {
     flex-shrink: 0;
-    width: 32px;
-    height: 32px;
-    border-radius: 50%;
-    background: rgba(255, 255, 255, 0.03);
-    border: 1px solid rgba(255, 255, 255, 0.06);
     display: flex;
     align-items: center;
     justify-content: center;
+    padding: 0 4px;
 }
 
 .game-vs-badge span {
-    font-size: 0.6rem;
+    font-family: 'Montserrat', sans-serif;
+    font-size: 0.75rem;
     font-weight: 900;
-    color: rgba(255, 255, 255, 0.15);
-    letter-spacing: 1px;
+    color: rgba(255, 255, 255, 0.2);
+    letter-spacing: 2px;
+    transform: skew(-8deg);
 }
 
 /* Result chip */
@@ -8790,12 +8790,11 @@ input[type=range].snow-range::-webkit-slider-thumb {
     }
 
     .game-vs-badge {
-        width: 28px;
-        height: 28px;
+        padding: 0 2px;
     }
 
     .game-vs-badge span {
-        font-size: 0.5rem;
+        font-size: 0.55rem;
     }
 
     .game-card-result {
