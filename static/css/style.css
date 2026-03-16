@@ -12626,7 +12626,7 @@ input[type=range].snow-range::-webkit-slider-thumb {
    CHAT TAGS (PREFIX BADGES)
    ============================================ */
 .chat-tag {
-    font-size: 0.85rem;
+    font-size: 0.7rem;
     font-weight: 800;
     letter-spacing: 0.5px;
     margin-left: 4px;
