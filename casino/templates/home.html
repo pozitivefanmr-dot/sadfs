@@ -107,20 +107,29 @@
         {% else %}
         <div class="welcome-hero">
             <div class="welcome-hero-glow"></div>
+            <div class="welcome-hero-particles">
+                <span></span><span></span><span></span><span></span><span></span>
+            </div>
             <div class="welcome-hero-content">
-                <div class="hero-game-badge">
-                    <i class="bi bi-controller"></i>
-                    <div class="hero-game-badge-text">
-                        <span class="hero-game-badge-title">ROBLOX MM2</span>
-                        <span class="hero-game-badge-sub">Murder Mystery 2</span>
+                <div class="hero-game-badge" onclick="openAuthModal()" style="cursor:pointer;">
+                    <div class="hero-game-badge-icon">
+                        <i class="bi bi-crosshair"></i>
                     </div>
+                    <div class="hero-game-badge-text">
+                        <span class="hero-game-badge-title">MURDER MYSTERY 2</span>
+                        <span class="hero-game-badge-sub">Roblox MM2 Trading & Flipping</span>
+                    </div>
+                    <i class="bi bi-arrow-right hero-game-badge-arrow"></i>
                 </div>
-                <h1 class="welcome-hero-title">MM2 <span>FLIPPING</span></h1>
-                <p class="welcome-hero-desc">The #1 platform for Murder Mystery 2 coinflip battles. Flip your items,
-                    double your inventory.</p>
-                <div class="btn-login" onclick="openAuthModal()"
-                    style="cursor:pointer; display:inline-block; margin-top: 18px;">
-                    START PLAYING
+                <h1 class="welcome-hero-title">MURDER MYSTERY <span>COINFLIP</span></h1>
+                <p class="welcome-hero-desc">Stake your MM2 items in 1v1 coinflip duels. Fair odds, instant results, real inventory prizes.</p>
+                <div class="welcome-hero-actions">
+                    <div class="btn-hero-primary" onclick="openAuthModal()" style="cursor:pointer;">
+                        <i class="bi bi-play-fill"></i> START PLAYING
+                    </div>
+                    <a href="{% url 'coinflip' %}" class="btn-hero-secondary">
+                        <i class="bi bi-eye"></i> WATCH GAMES
+                    </a>
                 </div>
             </div>
         </div>
@@ -130,23 +139,33 @@
     {% if not user.is_authenticated %}
 
     <div class="hero-features-row">
-        <div class="hero-feature-card hero-feature-card--instant">
-            <div class="hero-feature-topline">Live Results</div>
-            <div class="hero-feature-icon"><i class="bi bi-lightning-charge-fill"></i></div>
-            <div class="hero-feature-title">Instant Flips</div>
-            <div class="hero-feature-desc">Results in seconds, no waiting</div>
-        </div>
-        <div class="hero-feature-card hero-feature-card--fair">
-            <div class="hero-feature-topline">Trusted System</div>
-            <div class="hero-feature-icon"><i class="bi bi-shield-check"></i></div>
+        <a href="{% url 'coinflip' %}" class="hero-feature-card hero-feature-card--instant">
+            <div class="hero-feature-icon"><i class="bi bi-coin"></i></div>
+            <div class="hero-feature-title">Coinflip Duels</div>
+            <div class="hero-feature-desc">Pick green or red, stake your MM2 items, flip — winner takes the entire pot</div>
+            <div class="hero-feature-arrow"><i class="bi bi-arrow-right"></i></div>
+            <div class="hero-feature-glow"></div>
+        </a>
+        <div class="hero-feature-card hero-feature-card--fair" onclick="openAuthModal()" style="cursor:pointer;">
+            <div class="hero-feature-icon"><i class="bi bi-shield-lock-fill"></i></div>
             <div class="hero-feature-title">Provably Fair</div>
-            <div class="hero-feature-desc">Verified random.org results</div>
+            <div class="hero-feature-desc">Results powered by random.org — every game gets a SHA-256 hash for proof</div>
+            <div class="hero-feature-arrow"><i class="bi bi-arrow-right"></i></div>
+            <div class="hero-feature-glow"></div>
         </div>
-        <div class="hero-feature-card hero-feature-card--players">
-            <div class="hero-feature-topline">Daily Action</div>
-            <div class="hero-feature-icon"><i class="bi bi-people-fill"></i></div>
-            <div class="hero-feature-title">500+ Players</div>
-            <div class="hero-feature-desc">Active community daily</div>
+        <div class="hero-feature-card hero-feature-card--trade" onclick="openAuthModal()" style="cursor:pointer;">
+            <div class="hero-feature-icon"><i class="bi bi-box-arrow-in-down-right"></i></div>
+            <div class="hero-feature-title">Deposit & Withdraw</div>
+            <div class="hero-feature-desc">Send items to our Roblox bot, play instantly, cash out whenever you want</div>
+            <div class="hero-feature-arrow"><i class="bi bi-arrow-right"></i></div>
+            <div class="hero-feature-glow"></div>
+        </div>
+        <div class="hero-feature-card hero-feature-card--giveaway" onclick="openAuthModal()" style="cursor:pointer;">
+            <div class="hero-feature-icon"><i class="bi bi-gift"></i></div>
+            <div class="hero-feature-title">Daily Giveaways</div>
+            <div class="hero-feature-desc">Players drop free items daily — just join and wait for the winner draw</div>
+            <div class="hero-feature-arrow"><i class="bi bi-arrow-right"></i></div>
+            <div class="hero-feature-glow"></div>
         </div>
     </div>
     {% endif %}

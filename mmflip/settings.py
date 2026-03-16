@@ -13,9 +13,78 @@ https://docs.djangoproject.com/en/5.2/ref/settings/
 import os
 import dj_database_url
 from pathlib import Path
+from dotenv import load_dotenv
+from urllib.parse import quote_plus
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
+
+# Загружаем переменные из .env (для локальной разработки)
+load_dotenv(BASE_DIR / '.env')
+
+
+def _get_postgres_url():
+    """Собирает URL для PostgreSQL из переменных окружения."""
+    database_url = (
+        os.environ.get('DATABASE_PUBLIC_URL', '').strip()
+        or os.environ.get('DATABASE_URL', '').strip()
+    )
+
+    if not database_url:
+        pg_database = os.environ.get('PGDATABASE', '').strip()
+        pg_user = os.environ.get('PGUSER', '').strip()
+        pg_password = os.environ.get('PGPASSWORD', '').strip()
+        pg_host = os.environ.get('PGHOST', '').strip()
+        pg_port = os.environ.get('PGPORT', '5432').strip()
+
+        if all([pg_database, pg_user, pg_password, pg_host]):
+            database_url = (
+                f"postgresql://{quote_plus(pg_user)}:{quote_plus(pg_password)}"
+                f"@{pg_host}:{pg_port}/{quote_plus(pg_database)}"
+            )
+
+    return database_url
+
+
+def _get_sqlite_config():
+    """Конфиг для локальной SQLite."""
+    return dj_database_url.parse(
+        f'sqlite:///{BASE_DIR / "db.sqlite3"}',
+        conn_max_age=600,
+    )
+
+
+def _get_postgres_config(database_url):
+    """Конфиг для Railway PostgreSQL."""
+    return dj_database_url.parse(
+        database_url,
+        conn_max_age=600,
+        ssl_require=os.environ.get('DB_SSL_REQUIRE', 'true').lower() in ('true', '1', 'yes'),
+    )
+
+
+def build_database_config():
+    postgres_url = _get_postgres_url()
+
+    # USE_LOCAL_DB=true → всегда SQLite (для оффлайн-разработки)
+    use_local = os.environ.get('USE_LOCAL_DB', 'false').lower() in ('true', '1', 'yes')
+
+    if use_local:
+        databases = {'default': _get_sqlite_config()}
+        # Если есть PostgreSQL URL — добавляем как второй алиас для синхронизации
+        if postgres_url:
+            databases['remote'] = _get_postgres_config(postgres_url)
+        return databases
+
+    # По умолчанию — PostgreSQL (Railway), если URL есть
+    if postgres_url:
+        databases = {'default': _get_postgres_config(postgres_url)}
+        # SQLite доступна как 'local' алиас для синхронизации
+        databases['local'] = _get_sqlite_config()
+        return databases
+
+    # Fallback: только SQLite
+    return {'default': _get_sqlite_config()}
 
 
 # Quick-start development settings - unsuitable for production
@@ -87,14 +156,14 @@ WSGI_APPLICATION = 'mmflip.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/5.2/ref/settings/#databases
 
-# Database — Railway предоставляет DATABASE_URL для PostgreSQL
-# Локально используется SQLite
-DATABASES = {
-    'default': dj_database_url.config(
-        default=f'sqlite:///{BASE_DIR / "db.sqlite3"}',
-        conn_max_age=600,
-    )
-}
+# Database — Railway/PostgreSQL через DATABASE_PUBLIC_URL / DATABASE_URL / PG* переменные
+# USE_LOCAL_DB=true → default=SQLite, remote=PostgreSQL
+# USE_LOCAL_DB=false → default=PostgreSQL, local=SQLite
+# Синхронизация: python manage.py syncdb --direction pull|push
+DATABASES = build_database_config()
+
+# Разрешаем миграции только на default БД
+DATABASE_ROUTERS = []
 
 
 # Password validation

@@ -71,6 +71,15 @@ class ChatMessage(models.Model):
         return f"{self.user.username}: {self.message[:20]}"
 
 
+class UserChatPrefix(models.Model):
+    user = models.OneToOneField(User, on_delete=models.CASCADE, related_name='chat_prefix')
+    prefix = models.CharField(max_length=30, default='', blank=True)
+    color = models.CharField(max_length=7, default='#00ff9d', blank=True)  # hex color
+
+    def __str__(self):
+        return f"{self.user.username}: ({self.prefix})"
+
+
 class Giveaway(models.Model):
     creator = models.CharField(max_length=100)
     item_id = models.IntegerField()  # ID предмета UserItem

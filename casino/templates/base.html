@@ -1,4 +1,4 @@
-{% load static %}
+﻿{% load static %}
 <!DOCTYPE html>
 <html lang="ru">
 
@@ -656,12 +656,17 @@
         <div class="chat-header">
             <div class="chat-title-wrap">
                 <div class="chat-title-row">
-                    <span class="chat-title-icon chat-title-icon-live"><i class="bi bi-broadcast-pin"></i></span>
+                    <span class="chat-title-icon chat-title-icon-live"><i class="bi bi-megaphone-fill"></i></span>
                     <span class="chat-title">LIVE CHAT</span>
                 </div>
                 <span class="chat-subtitle">real-time messages</span>
             </div>
-            <div class="chat-close-btn" onclick="toggleSidebar()"><i class="bi bi-x-lg"></i></div>
+            <div class="chat-header-actions">
+                <div class="chat-prefix-btn" onclick="openPrefixModal()" title="Prefixes">
+                    <i class="bi bi-tag-fill"></i>
+                </div>
+                <div class="chat-close-btn" onclick="toggleSidebar()"><i class="bi bi-x-lg"></i></div>
+            </div>
         </div>
 
         <div class="chat-messages-area" id="chatArea">
@@ -682,6 +687,41 @@
     <!-- Chat toggle button (OUTSIDE sidebar so transform doesn't affect it) -->
     <div class="chat-toggle-tab" id="chatToggleBtn" onclick="toggleSidebar()">
         <i class="bi bi-chat-dots-fill"></i>
+    </div>
+
+    <!-- PREFIX MODAL -->
+    <div class="prefix-modal-overlay" id="prefixModal">
+        <div class="prefix-modal">
+            <div class="prefix-modal-header">
+                <div class="prefix-modal-title"><i class="bi bi-tag-fill"></i> PREFIXES</div>
+                <div class="prefix-modal-close" onclick="closePrefixModal()"><i class="bi bi-x-lg"></i></div>
+            </div>
+
+            <div class="prefix-modal-games-info" id="prefixGamesInfo">
+                <span class="prefix-games-icon"><i class="bi bi-controller"></i></span>
+                <span>Games played: <strong id="prefixGamesCount">0</strong></span>
+            </div>
+
+            <div class="prefix-modal-preview" id="prefixPreview">
+                <span class="prefix-preview-label">Preview:</span>
+                <span class="prefix-preview-name">Username</span>
+                <span class="prefix-preview-tag" id="prefixPreviewTag"></span>
+            </div>
+
+            <div class="prefix-section-title">SELECT PREFIX</div>
+            <div class="prefix-list" id="prefixList">
+                <!-- filled by JS -->
+            </div>
+
+            <div class="prefix-section-title">SELECT COLOR</div>
+            <div class="prefix-color-grid" id="prefixColorGrid">
+                <!-- filled by JS -->
+            </div>
+
+            <button class="prefix-save-btn" id="prefixSaveBtn" onclick="savePrefix()">
+                <i class="bi bi-check-lg"></i> SAVE PREFIX
+            </button>
+        </div>
     </div>
 
     <script>
@@ -802,14 +842,17 @@
                     msgs.forEach(msg => {
                         // РљР»Р°СЃСЃС‹: msg-me (СЃРїСЂР°РІР°), msg-other (СЃР»РµРІР°)
                         const msgClass = msg.is_me ? 'msg-me' : 'msg-other';
+                        // Prefix tag
+                        const prefixHtml = msg.prefix
+                            ? `<span class="chat-tag" style="color: ${msg.prefix_color}">(${escapeHtml(msg.prefix)})</span>`
+                            : '';
 
-                        // Р РµРЅРґРµСЂРёРј HTML
                         html += `
                     <div class="chat-msg-row ${msgClass}">
                         <img src="${msg.avatar}" class="chat-avatar clickable-avatar" title="${msg.user}" onclick="openStatsModal('${msg.user}')">
 
                         <div class="chat-bubble-group">
-                            <div class="chat-username">${msg.user}</div>
+                            <div class="chat-username">${msg.user} ${prefixHtml}</div>
                             <div class="chat-bubble">
                                 <div class="chat-text">${escapeHtml(msg.text)}</div>
                             </div>
@@ -843,7 +886,133 @@
 
         // РћРїСЂРѕСЃ РєР°Р¶РґС‹Рµ 2 СЃРµРєСѓРЅРґС‹
         setInterval(loadMessages, 2000);
-        loadMessages(true); // РџРµСЂРІС‹Р№ Р·Р°РїСѓСЃРє
+        loadMessages(true);
+    </script>
+
+    <script>
+        /* === PREFIX MODAL === */
+        let selectedPrefix = '';
+        let selectedColor = '#00ff9d';
+
+        function openPrefixModal() {
+            document.getElementById('prefixModal').classList.add('active');
+            loadPrefixes();
+        }
+
+        function closePrefixModal() {
+            document.getElementById('prefixModal').classList.remove('active');
+        }
+
+        document.getElementById('prefixModal').addEventListener('mousedown', function(e) {
+            if (e.target === this) closePrefixModal();
+        });
+
+        function loadPrefixes() {
+            fetch("{% url 'chat_prefixes' %}")
+                .then(r => r.json())
+                .then(data => {
+                    if (data.status !== 'ok') return;
+
+                    selectedPrefix = data.current_prefix || '';
+                    selectedColor = data.current_color || '#00ff9d';
+
+                    document.getElementById('prefixGamesCount').textContent = data.games_count;
+
+                    const previewName = document.querySelector('.prefix-preview-name');
+                    const headerUser = document.querySelector('.header .username');
+                    if (headerUser) previewName.textContent = headerUser.textContent.trim();
+
+                    updatePreview();
+
+                    const list = document.getElementById('prefixList');
+                    let html = '';
+                    html += `<div class="prefix-item ${selectedPrefix === '' ? 'active' : ''}" onclick="selectPrefix('', this)">
+                        <span class="prefix-item-name">None</span>
+                        <span class="prefix-item-req">Free</span>
+                    </div>`;
+
+                    data.prefixes.forEach(p => {
+                        const locked = !p.unlocked;
+                        const activeClass = selectedPrefix === p.name ? 'active' : '';
+                        const lockedClass = locked ? 'locked' : '';
+                        html += `<div class="prefix-item ${activeClass} ${lockedClass}" 
+                            ${locked ? '' : `onclick="selectPrefix('${p.name}', this)"`}>
+                            <span class="prefix-item-name">${p.name}</span>
+                            <span class="prefix-item-req">${locked ? '<i class="bi bi-lock-fill"></i> ' : '<i class="bi bi-unlock-fill"></i> '}${p.required_games >= 999999 ? p.description : p.required_games + '+ games'}</span>
+                        </div>`;
+                    });
+                    list.innerHTML = html;
+
+                    const grid = document.getElementById('prefixColorGrid');
+                    let colorHtml = '';
+                    data.colors.forEach(c => {
+                        const activeClass = selectedColor === c ? 'active' : '';
+                        colorHtml += `<div class="prefix-color-dot ${activeClass}" 
+                            style="background: ${c}; box-shadow: 0 0 8px ${c}40;"
+                            onclick="selectColor('${c}', this)"></div>`;
+                    });
+                    grid.innerHTML = colorHtml;
+                });
+        }
+
+        function selectPrefix(name, el) {
+            selectedPrefix = name;
+            document.querySelectorAll('.prefix-item').forEach(i => i.classList.remove('active'));
+            if (el) el.classList.add('active');
+            updatePreview();
+        }
+
+        function selectColor(color, el) {
+            selectedColor = color;
+            document.querySelectorAll('.prefix-color-dot').forEach(d => d.classList.remove('active'));
+            if (el) el.classList.add('active');
+            updatePreview();
+        }
+
+        function updatePreview() {
+            const tag = document.getElementById('prefixPreviewTag');
+            if (selectedPrefix) {
+                tag.textContent = `(${selectedPrefix})`;
+                tag.style.color = selectedColor;
+                tag.style.display = 'inline';
+            } else {
+                tag.style.display = 'none';
+            }
+        }
+
+        function savePrefix() {
+            const btn = document.getElementById('prefixSaveBtn');
+            btn.disabled = true;
+            btn.innerHTML = '<i class="bi bi-hourglass-split"></i> SAVING...';
+
+            fetch("{% url 'chat_prefix_set' %}", {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ prefix: selectedPrefix, color: selectedColor })
+            })
+            .then(r => r.json())
+            .then(data => {
+                if (data.status === 'ok') {
+                    btn.innerHTML = '<i class="bi bi-check-lg"></i> SAVED!';
+                    setTimeout(() => {
+                        btn.innerHTML = '<i class="bi bi-check-lg"></i> SAVE PREFIX';
+                        btn.disabled = false;
+                        closePrefixModal();
+                        loadMessages(true);
+                    }, 800);
+                } else {
+                    btn.innerHTML = '<i class="bi bi-x-lg"></i> ' + (data.message || 'Error');
+                    setTimeout(() => {
+                        btn.innerHTML = '<i class="bi bi-check-lg"></i> SAVE PREFIX';
+                        btn.disabled = false;
+                    }, 1500);
+                }
+            })
+            .catch(() => {
+                btn.innerHTML = '<i class="bi bi-check-lg"></i> SAVE PREFIX';
+                btn.disabled = false;
+            });
+        }
     </script>
     {% endif %}
 

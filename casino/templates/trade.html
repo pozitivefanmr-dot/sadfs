@@ -1,90 +1,312 @@
 {% extends 'base.html' %}
 {% load static %}
+{% load custom_filters %}
 {% block content %}
 
 {% include 'header.html' %}
 
-<div class="container">
-    <div class="text-center" style="margin-bottom: 60px;">
-        {% if mode == 'admin' %}
-            <h1 class="trade-page-title text-gradient">GLOBAL LOGS</h1>
-            <p class="trade-page-desc">System monitor & incoming trades.</p>
-        {% else %}
-            <h1 class="trade-page-title text-gradient">GAME HISTORY</h1>
-            <p class="trade-page-desc">Your recent wins and losses.</p>
-        {% endif %}
+<div class="container history-page">
+
+    <!-- PAGE HERO -->
+    <div class="history-hero">
+        <div class="history-hero-icon">
+            <i class="bi bi-clock-history"></i>
+        </div>
+        <h1 class="history-hero-title">HISTORY</h1>
+        <p class="history-hero-sub">Your complete activity log</p>
     </div>
 
     {% if mode == 'admin' %}
-        <div class="history-list-container">
-            {% for trade in logs %}
-                <div class="log-card">
-                    <div class="log-header">
-                        <div class="log-users">
-                            <span class="text-yellow">👤 {{ trade.sender_name }}</span>
-                            <span class="log-arrow">➜</span>
-                            <span class="text-cyan">🤖 {{ trade.bot_name }}</span>
-                        </div>
-                        <span class="log-date">{{ trade.created_at|date:"M d, H:i" }}</span>
-                    </div>
-                    <div class="log-items-grid">
-                        {% for item in trade.items %}
-                            <span class="log-item-tag">{{ item }}</span>
-                        {% endfor %}
-                    </div>
+        <!-- ADMIN: Global Logs -->
+        <div class="history-section">
+            <div class="history-section-header">
+                <div class="history-section-icon" style="--accent: 255, 230, 0;">
+                    <i class="bi bi-shield-lock-fill"></i>
                 </div>
-            {% empty %}
-                <div class="empty-history">
-                    <div class="empty-icon">📂</div>
-                    <p>No trade logs found.</p>
+                <div>
+                    <h2 class="history-section-title">GLOBAL LOGS</h2>
+                    <p class="history-section-sub">System monitor & incoming trades</p>
                 </div>
-            {% endfor %}
-        </div>
-
-    {% else %}
-        <div class="history-wrapper">
-
-            <div class="history-grid-header">
-                <span class="col-left">PLAYERS</span>
-                <span class="col-center">RESULT</span>
-                <span class="col-right">BET</span> <span class="col-right">TIME</span>
             </div>
-
-            <div class="history-list">
-                {% for game in logs %}
-                    <div class="history-card {% if game.winner == user.username %}win-card{% else %}lose-card{% endif %}">
-
-                        <div class="hist-col col-left hist-players">
-                            <span class="p-name {% if game.player1 == user.username %}me{% endif %}">{{ game.player1 }}</span>
-                            <span class="vs-badge">VS</span>
-                            <span class="p-name {% if game.player2 == user.username %}me{% endif %}">{{ game.player2 }}</span>
+            <div class="history-section-body">
+                {% for trade in logs %}
+                    <div class="log-card-new">
+                        <div class="log-card-left">
+                            <span class="log-sender"><i class="bi bi-person-fill"></i> {{ trade.sender_name }}</span>
+                            <span class="log-arrow-icon"><i class="bi bi-arrow-right-short"></i></span>
+                            <span class="log-bot"><i class="bi bi-robot"></i> {{ trade.bot_name }}</span>
                         </div>
-
-                        <div class="hist-col col-center">
-                            {% if game.winner == user.username %}
-                                <div class="badge-win">VICTORY</div>
-                            {% else %}
-                                <div class="badge-lose">DEFEAT</div>
-                            {% endif %}
+                        <div class="log-card-items">
+                            {% for item in trade.items %}
+                                <span class="log-item-pill">{{ item }}</span>
+                            {% endfor %}
                         </div>
-
-                        <div class="hist-col col-right hist-bet">
-                            <span>{{ game.value1|add:game.value2 }}</span>
-                            <img src="{% static 'img/sv_coin.png' %}" class="tiny-coin-icon">
-                        </div>
-
-                        <div class="hist-col col-right hist-date">
-                            {{ game.created_at|date:"M d, H:i" }}
-                        </div>
+                        <div class="log-card-date"><i class="bi bi-clock"></i> {{ trade.created_at|date:"M d, H:i" }}</div>
                     </div>
                 {% empty %}
-                    <div class="empty-history">
-                        <div class="empty-icon">📜</div>
-                        <p>No games played yet.<br><a href="{% url 'coinflip' %}" class="text-green">Start a game!</a></p>
+                    <div class="history-empty-state">
+                        <div class="history-empty-icon"><i class="bi bi-inbox"></i></div>
+                        <p>No trade logs found.</p>
                     </div>
                 {% endfor %}
             </div>
         </div>
+
+    {% else %}
+
+        <!-- TAB NAVIGATION -->
+        <div class="history-tabs">
+            <button class="history-tab active" onclick="switchHistoryTab('games', this)">
+                <i class="bi bi-dpad-fill"></i> <span>GAMES</span>
+            </button>
+            <button class="history-tab" onclick="switchHistoryTab('deposits', this)">
+                <i class="bi bi-download"></i> <span>DEPOSITS</span>
+            </button>
+            <button class="history-tab" onclick="switchHistoryTab('withdrawals', this)">
+                <i class="bi bi-upload"></i> <span>WITHDRAWALS</span>
+            </button>
+        </div>
+
+        <!-- GAMES TAB -->
+        <div class="history-tab-content active" id="tab-games">
+            <div class="history-section">
+                <div class="history-section-header">
+                    <div class="history-section-icon" style="--accent: 0, 255, 157;">
+                        <i class="bi bi-dpad-fill"></i>
+                    </div>
+                    <div>
+                        <h2 class="history-section-title">GAME HISTORY</h2>
+                        <p class="history-section-sub">Your recent coinflip results</p>
+                    </div>
+                    <div class="history-section-count">{{ logs|length }} games</div>
+                </div>
+                <div class="history-section-body">
+                    {% for game in logs %}
+                        <div class="game-card {% if game.winner == user.username %}game-card--win{% else %}game-card--loss{% endif %}">
+                            <div class="game-card-glow"></div>
+
+                            <!-- Players with avatars -->
+                            <div class="game-card-players">
+                                <div class="game-player {% if game.player1 == user.username %}game-player--me{% endif %}">
+                                    <div class="game-avatar-wrap {% if game.winner == game.player1 %}game-avatar--winner{% endif %}">
+                                        <img src="{% if game_avatars|get_item:game.player1 %}{{ game_avatars|get_item:game.player1 }}{% else %}{{ default_avatar }}{% endif %}" class="game-avatar" alt="">
+                                        {% if game.winner == game.player1 %}
+                                            <div class="game-avatar-crown"><i class="bi bi-trophy-fill"></i></div>
+                                        {% endif %}
+                                    </div>
+                                    <span class="game-player-name">{{ game.player1 }}</span>
+                                </div>
+
+                                <div class="game-vs-badge">
+                                    <span>VS</span>
+                                </div>
+
+                                <div class="game-player {% if game.player2 == user.username %}game-player--me{% endif %}">
+                                    <div class="game-avatar-wrap {% if game.winner == game.player2 %}game-avatar--winner{% endif %}">
+                                        <img src="{% if game_avatars|get_item:game.player2 %}{{ game_avatars|get_item:game.player2 }}{% else %}{{ default_avatar }}{% endif %}" class="game-avatar" alt="">
+                                        {% if game.winner == game.player2 %}
+                                            <div class="game-avatar-crown"><i class="bi bi-trophy-fill"></i></div>
+                                        {% endif %}
+                                    </div>
+                                    <span class="game-player-name">{{ game.player2 }}</span>
+                                </div>
+                            </div>
+
+                            <!-- Skin images from both sides -->
+                            <div class="game-card-skins">
+                                {% for item in game.items1 %}
+                                    <div class="skin-thumb" title="{{ item.name }}">
+                                        {% if item.image %}
+                                            <img src="{{ item.image }}" alt="{{ item.name }}">
+                                        {% else %}
+                                            <div class="skin-thumb-placeholder"><i class="bi bi-gem"></i></div>
+                                        {% endif %}
+                                    </div>
+                                {% endfor %}
+                                {% for item in game.items2 %}
+                                    <div class="skin-thumb" title="{{ item.name }}">
+                                        {% if item.image %}
+                                            <img src="{{ item.image }}" alt="{{ item.name }}">
+                                        {% else %}
+                                            <div class="skin-thumb-placeholder"><i class="bi bi-gem"></i></div>
+                                        {% endif %}
+                                    </div>
+                                {% endfor %}
+                            </div>
+
+                            <!-- Result -->
+                            <div class="game-card-result">
+                                {% if game.winner == user.username %}
+                                    <div class="result-chip result-chip--win">
+                                        <i class="bi bi-trophy-fill"></i>
+                                        <span>WIN</span>
+                                    </div>
+                                {% else %}
+                                    <div class="result-chip result-chip--loss">
+                                        <i class="bi bi-x-octagon-fill"></i>
+                                        <span>LOSS</span>
+                                    </div>
+                                {% endif %}
+                            </div>
+
+                            <!-- Bet + Time -->
+                            <div class="game-card-meta">
+                                <div class="game-bet-amount">
+                                    <img src="{% static 'img/sv_coin.png' %}" class="game-coin-icon" alt="">
+                                    <span>{{ game.value1|add:game.value2 }}</span>
+                                </div>
+                                <div class="game-card-time">
+                                    <i class="bi bi-clock"></i> {{ game.created_at|date:"M d, H:i" }}
+                                </div>
+                            </div>
+                        </div>
+                    {% empty %}
+                        <div class="history-empty-state">
+                            <div class="history-empty-icon"><i class="bi bi-dpad"></i></div>
+                            <p>No games played yet</p>
+                            <a href="{% url 'coinflip' %}" class="history-empty-btn">
+                                <i class="bi bi-play-fill"></i> Play Now
+                            </a>
+                        </div>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+
+        <!-- DEPOSITS TAB -->
+        <div class="history-tab-content" id="tab-deposits">
+            <div class="history-section">
+                <div class="history-section-header">
+                    <div class="history-section-icon" style="--accent: 0, 229, 255;">
+                        <i class="bi bi-download"></i>
+                    </div>
+                    <div>
+                        <h2 class="history-section-title">DEPOSIT HISTORY</h2>
+                        <p class="history-section-sub">Items sent to bots</p>
+                    </div>
+                    <div class="history-section-count">{{ deposit_logs|length }} deposits</div>
+                </div>
+                <div class="history-section-body">
+                    {% for dep in deposit_logs %}
+                        <div class="transfer-card deposit-card">
+                            <div class="transfer-card-glow"></div>
+                            <div class="transfer-card-left">
+                                <div class="transfer-avatar-group">
+                                    <div class="transfer-avatar transfer-avatar--user">
+                                        <img src="{{ avatar_url }}" alt="">
+                                    </div>
+                                    <div class="transfer-direction">
+                                        <i class="bi bi-arrow-right-short"></i>
+                                    </div>
+                                    <div class="transfer-avatar transfer-avatar--bot">
+                                        <img src="{% if bot_avatars|get_item:dep.bot_name %}{{ bot_avatars|get_item:dep.bot_name }}{% else %}{{ default_avatar }}{% endif %}" alt="">
+                                        <div class="transfer-bot-badge"><i class="bi bi-robot"></i></div>
+                                    </div>
+                                </div>
+                                <div class="transfer-card-info">
+                                    <div class="transfer-card-title">
+                                        Deposit to <span class="transfer-highlight transfer-highlight--cyan">{{ dep.bot_name }}</span>
+                                    </div>
+                                    <div class="transfer-skin-list">
+                                        {% for item in dep.items %}
+                                            <div class="transfer-skin-item">
+                                                {% if item.image %}
+                                                    <img src="{{ item.image }}" class="transfer-skin-img" alt="{{ item.name }}">
+                                                {% else %}
+                                                    <div class="transfer-skin-placeholder"><i class="bi bi-gem"></i></div>
+                                                {% endif %}
+                                                <span class="transfer-skin-name">{{ item.name }}</span>
+                                            </div>
+                                        {% endfor %}
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="transfer-card-time">
+                                <i class="bi bi-clock"></i> {{ dep.created_at|date:"M d, H:i" }}
+                            </div>
+                        </div>
+                    {% empty %}
+                        <div class="history-empty-state">
+                            <div class="history-empty-icon"><i class="bi bi-box-arrow-in-down"></i></div>
+                            <p>No deposits yet</p>
+                        </div>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+
+        <!-- WITHDRAWALS TAB -->
+        <div class="history-tab-content" id="tab-withdrawals">
+            <div class="history-section">
+                <div class="history-section-header">
+                    <div class="history-section-icon" style="--accent: 192, 132, 252;">
+                        <i class="bi bi-upload"></i>
+                    </div>
+                    <div>
+                        <h2 class="history-section-title">WITHDRAWAL HISTORY</h2>
+                        <p class="history-section-sub">Items withdrawn from your balance</p>
+                    </div>
+                    <div class="history-section-count">{{ withdraw_logs|length }} withdrawals</div>
+                </div>
+                <div class="history-section-body">
+                    {% for wd in withdraw_logs %}
+                        <div class="transfer-card withdraw-card">
+                            <div class="transfer-card-glow"></div>
+                            <div class="transfer-card-left">
+                                {% if wd.image %}
+                                    <div class="wd-skin-preview">
+                                        <img src="{{ wd.image }}" alt="{{ wd.item_name }}">
+                                        <div class="wd-skin-glow"></div>
+                                    </div>
+                                {% else %}
+                                    <div class="transfer-wd-icon">
+                                        {% if wd.is_completed %}
+                                            <i class="bi bi-patch-check-fill"></i>
+                                        {% else %}
+                                            <i class="bi bi-hourglass-split"></i>
+                                        {% endif %}
+                                    </div>
+                                {% endif %}
+                                <div class="transfer-card-info">
+                                    <div class="transfer-card-title">
+                                        {{ wd.item_name }}
+                                        {% if wd.amount > 1 %}
+                                            <span class="transfer-qty">x{{ wd.amount }}</span>
+                                        {% endif %}
+                                    </div>
+                                    <div class="transfer-card-status">
+                                        {% if wd.is_completed %}
+                                            <span class="wd-chip wd-chip--done"><i class="bi bi-check2-all"></i> Completed</span>
+                                        {% else %}
+                                            <span class="wd-chip wd-chip--pending"><i class="bi bi-clock-fill"></i> Pending</span>
+                                        {% endif %}
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="transfer-card-time">
+                                <i class="bi bi-clock"></i> {{ wd.created_at|date:"M d, H:i" }}
+                            </div>
+                        </div>
+                    {% empty %}
+                        <div class="history-empty-state">
+                            <div class="history-empty-icon"><i class="bi bi-box-arrow-up"></i></div>
+                            <p>No withdrawals yet</p>
+                        </div>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+
     {% endif %}
 </div>
+
+<script>
+function switchHistoryTab(tab, btn) {
+    document.querySelectorAll('.history-tab').forEach(t => t.classList.remove('active'));
+    document.querySelectorAll('.history-tab-content').forEach(c => c.classList.remove('active'));
+    btn.classList.add('active');
+    document.getElementById('tab-' + tab).classList.add('active');
+}
+</script>
+
 {% endblock %}

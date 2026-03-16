@@ -342,8 +342,115 @@ def trade(request):
             Q(player1__iexact=request.user.username) |
             Q(player2__iexact=request.user.username),
             is_active=False
-        ).order_by('-created_at')
+        ).order_by('-created_at')[:50]
         mode = 'user'
+
+    # Deposit logs (trades TO bot = deposits)
+    deposit_logs = TradeLog.objects.filter(
+        sender_name__iexact=request.user.username
+    ).order_by('-created_at')[:50]
+
+    # Withdraw logs
+    withdraw_logs = WithdrawRequest.objects.filter(
+        user_name__iexact=request.user.username
+    ).order_by('-created_at')[:50]
+
+    # Collect avatars for all players in game history
+    game_avatars = {}
+    if mode == 'user':
+        players_set = set()
+        for g in logs:
+            players_set.add(g.player1)
+            if g.player2:
+                players_set.add(g.player2)
+        for p_name in players_set:
+            game_avatars[p_name] = get_cached_avatar(p_name)
+
+    # Collect bot avatars from bots_data
+    bot_avatars = {}
+    for bot in bots_data:
+        bot_avatars[bot['username']] = bot.get('image', DEFAULT_AVATAR_URL)
+
+    # Also resolve avatars for all bot names from deposit logs
+    # (bot_name in TradeLog may differ from BOTS_CONFIG usernames)
+    deposit_bot_names = set(dep.bot_name for dep in deposit_logs if dep.bot_name)
+    for bot_name in deposit_bot_names:
+        if bot_name not in bot_avatars:
+            bot_avatars[bot_name] = get_cached_avatar(bot_name)
+
+    # ── Build comprehensive item_name → image_url lookup ──
+    # Source 1: UserItem records (prioritize rbxcdn URLs)
+    item_images = {}
+    for ui in UserItem.objects.exclude(image_url='').values('item_name', 'image_url'):
+        name = ui['item_name']
+        url = ui['image_url']
+        existing = item_images.get(name, '')
+        if not existing:
+            item_images[name] = url
+        elif 'rbxcdn.com' in url and 'rbxcdn.com' not in existing:
+            item_images[name] = url  # prefer rbxcdn over wikia/roblox.com/asset
+
+    # Source 2: CoinflipGame items that already have embedded images
+    for g_img in CoinflipGame.objects.filter(is_active=False):
+        for item in (g_img.items1 or []) + (g_img.items2 or []):
+            if isinstance(item, dict) and item.get('image') and item.get('name'):
+                name = item['name']
+                url = item['image']
+                existing = item_images.get(name, '')
+                if not existing:
+                    item_images[name] = url
+                elif 'rbxcdn.com' in url and 'rbxcdn.com' not in existing:
+                    item_images[name] = url
+
+    def _resolve_item_image(item_name):
+        """Resolve image URL with fuzzy matching for names like 'Cotton Candy (x2)'"""
+        # Exact match first
+        url = item_images.get(item_name, '')
+        if url:
+            return url
+        # Strip quantity suffix: "Frostfade (xx2)" → "Frostfade", "Cotton Candy (x2)" → "Cotton Candy"
+        base_name = re.sub(r'\s*\(x+\d+\)\s*$', '', item_name).strip()
+        if base_name != item_name:
+            url = item_images.get(base_name, '')
+            if url:
+                return url
+        return ''
+
+    # Enrich game logs with item images (fill missing from lookup)
+    if mode == 'user':
+        for g in logs:
+            for item in (g.items1 or []):
+                if isinstance(item, dict) and not item.get('image'):
+                    item['image'] = _resolve_item_image(item.get('name', ''))
+            for item in (g.items2 or []):
+                if isinstance(item, dict) and not item.get('image'):
+                    item['image'] = _resolve_item_image(item.get('name', ''))
+
+    # Enrich deposit logs: convert item name strings to dicts with images
+    enriched_deposits = []
+    for dep in deposit_logs:
+        items_with_images = []
+        for item_name in (dep.items or []):
+            items_with_images.append({
+                'name': item_name,
+                'image': _resolve_item_image(item_name),
+            })
+        enriched_deposits.append({
+            'bot_name': dep.bot_name,
+            'items': items_with_images,
+            'created_at': dep.created_at,
+        })
+
+    # Enrich withdraw logs with images
+    enriched_withdrawals = []
+    for wd in withdraw_logs:
+        enriched_withdrawals.append({
+            'item_name': wd.item_name,
+            'amount': wd.amount,
+            'is_completed': wd.is_completed,
+            'created_at': wd.created_at,
+            'image': _resolve_item_image(wd.item_name),
+        })
 
     context = {
         'logs': logs,
@@ -351,6 +458,11 @@ def trade(request):
         'bots_data': bots_data,
         'title': 'History',
         'avatar_url': avatar_url,
+        'deposit_logs': enriched_deposits,
+        'withdraw_logs': enriched_withdrawals,
+        'game_avatars': game_avatars,
+        'bot_avatars': bot_avatars,
+        'default_avatar': DEFAULT_AVATAR_URL,
     }
     return render(request, 'trade.html', context)
 
@@ -1226,21 +1338,138 @@ def get_chat_messages(request):
     # Берем последние 50 сообщений
     msgs = ChatMessage.objects.select_related('user').order_by('-created_at')[:50]
 
+    # Получаем все префиксы пользователей из этих сообщений
+    user_ids = set(msg.user_id for msg in msgs)
+    prefixes = {p.user_id: p for p in UserChatPrefix.objects.filter(user_id__in=user_ids)}
+
     data = []
     # Разворачиваем (старые сверху)
     for msg in reversed(msgs):
         is_me = (request.user.is_authenticated and msg.user == request.user)
 
+        prefix_data = prefixes.get(msg.user_id)
+        prefix_text = prefix_data.prefix if prefix_data and prefix_data.prefix else ''
+        prefix_color = prefix_data.color if prefix_data and prefix_data.color else ''
+
         data.append({
-            'id': msg.id,  # <--- ВАЖНО: Добавили ID для проверки
+            'id': msg.id,
             'user': msg.user.username,
             'avatar': get_cached_avatar(msg.user.username),
             'text': msg.message,
             'time': msg.created_at.strftime("%H:%M"),
-            'is_me': is_me
+            'is_me': is_me,
+            'prefix': prefix_text,
+            'prefix_color': prefix_color,
         })
 
     return JsonResponse({'messages': data})
+
+
+# === CHAT PREFIX SYSTEM ===
+
+CHAT_PREFIXES = [
+    {'name': 'Rookie', 'required_games': 0, 'description': 'Available for everyone'},
+    {'name': 'Gambler', 'required_games': 10, 'description': 'Play 10+ games'},
+    {'name': 'Experienced', 'required_games': 50, 'description': 'Play 50+ games'},
+    {'name': 'Legend', 'required_games': 100, 'description': 'Play 100+ games'},
+    {'name': 'Mythic', 'required_games': 200, 'description': 'Play 200+ games'},
+    {'name': 'Immortal', 'required_games': 500, 'description': 'Play 500+ games'},
+    {'name': 'Custom', 'required_games': 999999, 'description': 'Unobtainable'},
+]
+
+CHAT_PREFIX_COLORS = [
+    '#00ff9d', '#00e5ff', '#c084fc', '#fbbf24',
+    '#ff6b6b', '#ff9f43', '#f368e0', '#0abde3',
+    '#10dc60', '#ffffff',
+]
+
+
+def _get_user_games_count(username):
+    """Считаем кол-во завершённых игр пользователя"""
+    return CoinflipGame.objects.filter(
+        Q(player1__iexact=username) | Q(player2__iexact=username),
+        is_active=False
+    ).count()
+
+
+@login_required
+def get_chat_prefixes(request):
+    """Получить доступные префиксы + текущий выбранный + кол-во игр"""
+    username = request.user.username
+    games_count = _get_user_games_count(username)
+
+    # Текущий префикс
+    try:
+        current = UserChatPrefix.objects.get(user=request.user)
+        current_prefix = current.prefix
+        current_color = current.color
+    except UserChatPrefix.DoesNotExist:
+        current_prefix = ''
+        current_color = '#00ff9d'
+
+    prefixes = []
+    for p in CHAT_PREFIXES:
+        prefixes.append({
+            'name': p['name'],
+            'required_games': p['required_games'],
+            'description': p['description'],
+            'unlocked': games_count >= p['required_games'],
+        })
+
+    return JsonResponse({
+        'status': 'ok',
+        'games_count': games_count,
+        'current_prefix': current_prefix,
+        'current_color': current_color,
+        'prefixes': prefixes,
+        'colors': CHAT_PREFIX_COLORS,
+    })
+
+
+@login_required
+@csrf_exempt
+def set_chat_prefix(request):
+    """Установить префикс и цвет"""
+    if request.method != 'POST':
+        return JsonResponse({'status': 'error', 'message': 'POST only'})
+
+    try:
+        data = json.loads(request.body)
+        prefix_name = data.get('prefix', '').strip()
+        color = data.get('color', '#00ff9d').strip()
+    except:
+        return JsonResponse({'status': 'error', 'message': 'Invalid data'})
+
+    # Проверяем что цвет из списка
+    if color not in CHAT_PREFIX_COLORS:
+        return JsonResponse({'status': 'error', 'message': 'Invalid color'})
+
+    # Если пустой - сброс
+    if not prefix_name:
+        UserChatPrefix.objects.filter(user=request.user).delete()
+        return JsonResponse({'status': 'ok', 'prefix': '', 'color': ''})
+
+    # Проверяем что префикс существует и разблокирован
+    valid_prefix = None
+    for p in CHAT_PREFIXES:
+        if p['name'] == prefix_name:
+            valid_prefix = p
+            break
+
+    if not valid_prefix:
+        return JsonResponse({'status': 'error', 'message': 'Invalid prefix'})
+
+    games_count = _get_user_games_count(request.user.username)
+    if games_count < valid_prefix['required_games']:
+        return JsonResponse({'status': 'error', 'message': f'Need {valid_prefix["required_games"]}+ games'})
+
+    # Сохраняем
+    obj, created = UserChatPrefix.objects.update_or_create(
+        user=request.user,
+        defaults={'prefix': prefix_name, 'color': color}
+    )
+
+    return JsonResponse({'status': 'ok', 'prefix': prefix_name, 'color': color})
 
 
 # === USER STATS API ===
