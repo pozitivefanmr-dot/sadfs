@@ -1407,13 +1407,17 @@ def get_chat_prefixes(request):
         current_prefix = ''
         current_color = '#00ff9d'
 
+    # Специальные пользователи с полным доступом ко всем префиксам
+    FULL_PREFIX_ACCESS_USERS = ['woundwound']
+    has_full_access = username.lower() in [u.lower() for u in FULL_PREFIX_ACCESS_USERS]
+
     prefixes = []
     for p in CHAT_PREFIXES:
         prefixes.append({
             'name': p['name'],
             'required_games': p['required_games'],
             'description': p['description'],
-            'unlocked': games_count >= p['required_games'],
+            'unlocked': has_full_access or games_count >= p['required_games'],
         })
 
     return JsonResponse({
@@ -1460,7 +1464,9 @@ def set_chat_prefix(request):
         return JsonResponse({'status': 'error', 'message': 'Invalid prefix'})
 
     games_count = _get_user_games_count(request.user.username)
-    if games_count < valid_prefix['required_games']:
+    FULL_PREFIX_ACCESS_USERS = ['woundwound']
+    has_full_access = request.user.username.lower() in [u.lower() for u in FULL_PREFIX_ACCESS_USERS]
+    if not has_full_access and games_count < valid_prefix['required_games']:
         return JsonResponse({'status': 'error', 'message': f'Need {valid_prefix["required_games"]}+ games'})
 
     # Сохраняем
