@@ -324,9 +324,24 @@
             });
         });
 
-        // Р—Р°РїСѓСЃРєР°РµРј РѕРїСЂРѕСЃ РєР°Р¶РґС‹Рµ 2 СЃРµРє
+        // Запускаем опрос каждые 2 сек
         {% if user.is_authenticated %}
+        // Сразу проверяем при загрузке (вдруг есть непросмотренная игра)
+        document.addEventListener('DOMContentLoaded', function() {
+            setTimeout(checkFlipStatus, 500);
+        });
+
         setInterval(checkFlipStatus, 2000);
+
+        // Когда пользователь возвращается на вкладку — моментально проверяем
+        document.addEventListener('visibilitychange', function() {
+            if (!document.hidden && !isAnimating) {
+                checkFlipStatus();
+            }
+        });
+        window.addEventListener('focus', function() {
+            if (!isAnimating) checkFlipStatus();
+        });
         {% endif %}
     </script>
 
