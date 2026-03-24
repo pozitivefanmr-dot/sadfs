@@ -3779,8 +3779,8 @@ input[type=range].snow-range-v2::-moz-range-thumb {
 
 .game-avatar-wrapper {
     position: relative;
-    width: 55px;
-    height: 55px;
+    width: 60px;
+    height: 60px;
 }
 
 .game-avatar {
@@ -3834,31 +3834,24 @@ input[type=range].snow-range-v2::-moz-range-thumb {
 /* КРУГ ПРЕДМЕТА */
 .game-item-circle {
     width: 60px;
-    /* БОЛЬШОЙ РАЗМЕР */
     height: 60px;
     border-radius: 50%;
-    /* Идеальный круг */
     background: radial-gradient(circle, #1a2522 0%, #050a08 100%);
     border: 2px solid #333;
-    /* Обводка */
     display: flex;
     align-items: center;
     justify-content: center;
     position: relative;
-    transition: 0.2s;
+    transition: border-color 0.2s ease, box-shadow 0.2s ease;
     flex-shrink: 0;
-    overflow: hidden;
-    /* Чтобы картинка не вылезала за круг */
 }
 
 /* КАРТИНКА ВНУТРИ КРУГА */
 .game-item-img {
-    width: 100%;
-    height: 100%;
+    width: 90%;
+    height: 90%;
     object-fit: cover;
-    /* Картинка заполняет весь круг */
-    /* Если картинка имеет прозрачный фон (как в MM2), можно использовать contain и padding */
-    /* object-fit: contain; padding: 5px; */
+    border-radius: 50%;
 }
 
 .game-items-count {
@@ -4011,15 +4004,14 @@ input[type=range].snow-range-v2::-moz-range-thumb {
 
 .game-avatar-wrapper {
     position: relative;
-    width: 48px;
-    height: 48px;
+    width: 49px;
+    height: 49px;
 }
 
 .game-avatar {
     width: 100%;
     height: 100%;
-    border-radius: 10px;
-    /* Квадрат с скруглением */
+    border-radius: 12px;
     background: #0f1110;
     border: 2px solid #333;
     object-fit: cover;
@@ -4041,7 +4033,7 @@ input[type=range].snow-range-v2::-moz-range-thumb {
 .game-vs-badge {
     font-family: var(--font-main);
     font-weight: 900;
-    font-size: 1.2rem;
+    font-size: 1.6rem;
     color: #3e4a59;
     transform: skew(-10deg);
 }
@@ -4058,10 +4050,10 @@ input[type=range].snow-range-v2::-moz-range-thumb {
     scrollbar-width: none;
 }
 
-/* КРУГ ПРЕДМЕТА (УВЕЛИЧЕН) */
+/* КРУГ ПРЕДМЕТА */
 .game-item-circle {
-    width: 80px;
-    height: 80px;
+    width: 60px;
+    height: 60px;
     border-radius: 50%;
     background: radial-gradient(circle, #1a2522 0%, #050a08 100%);
     border: 2px solid #333;
@@ -4069,14 +4061,12 @@ input[type=range].snow-range-v2::-moz-range-thumb {
     align-items: center;
     justify-content: center;
     position: relative;
-    transition: 0.2s;
+    transition: border-color 0.2s ease, box-shadow 0.2s ease;
     flex-shrink: 0;
-    overflow: hidden;
 }
 
 .game-item-circle:hover {
-    border-color: rgba(0, 255, 157, 0.3);
-    transform: scale(1.05);
+    border-color: rgba(0, 229, 255, 0.4);
 }
 
 /* КАРТИНКА ВНУТРИ КРУГА */
@@ -4084,6 +4074,7 @@ input[type=range].snow-range-v2::-moz-range-thumb {
     width: 90%;
     height: 90%;
     object-fit: cover;
+    border-radius: 50%;
 }
 
 
@@ -7948,7 +7939,7 @@ input[type=range].snow-range::-webkit-slider-thumb {
     flex-shrink: 0;
 }
 
-.game-avatar {
+.game-card-players .game-avatar {
     width: 40px;
     height: 40px;
     border-radius: 50%;
@@ -7963,7 +7954,7 @@ input[type=range].snow-range::-webkit-slider-thumb {
     box-shadow: 0 0 15px rgba(0, 255, 157, 0.2), 0 0 30px rgba(0, 255, 157, 0.08);
 }
 
-.game-card:hover .game-avatar {
+.game-card-players:hover .game-avatar {
     border-color: rgba(255, 255, 255, 0.15);
 }
 
@@ -8009,15 +8000,19 @@ input[type=range].snow-range::-webkit-slider-thumb {
     font-weight: 800;
 }
 
-.game-vs-badge {
+.game-card-players .game-vs-badge {
     flex-shrink: 0;
     display: flex;
     align-items: center;
     justify-content: center;
     padding: 0 4px;
+    font-size: unset;
+    font-weight: unset;
+    color: unset;
+    transform: none;
 }
 
-.game-vs-badge span {
+.game-card-players .game-vs-badge span {
     font-family: 'Montserrat', sans-serif;
     font-size: 0.75rem;
     font-weight: 900;
@@ -8784,16 +8779,16 @@ input[type=range].snow-range::-webkit-slider-thumb {
         text-align: center;
     }
 
-    .game-avatar {
+    .game-card-players .game-avatar {
         width: 36px;
         height: 36px;
     }
 
-    .game-vs-badge {
+    .game-card-players .game-vs-badge {
         padding: 0 2px;
     }
 
-    .game-vs-badge span {
+    .game-card-players .game-vs-badge span {
         font-size: 0.55rem;
     }
 
@@ -9076,17 +9071,12 @@ input[type=range].snow-range::-webkit-slider-thumb {
     display: flex;
     flex-direction: column;
     gap: 15px;
-    scrollbar-width: thin;
-    scrollbar-color: #333 transparent;
+    scrollbar-width: none;
+    -ms-overflow-style: none;
 }
 
 .chat-messages-area::-webkit-scrollbar {
-    width: 4px;
-}
-
-.chat-messages-area::-webkit-scrollbar-thumb {
-    background: #333;
-    border-radius: 2px;
+    display: none;
 }
 
 /* =================================================================
@@ -9849,19 +9839,14 @@ input[type=range].snow-range::-webkit-slider-thumb {
     display: flex;
     flex-direction: column;
     gap: 16px;
-    scrollbar-width: thin;
-    scrollbar-color: #333 transparent;
+    scrollbar-width: none;
+    -ms-overflow-style: none;
     overscroll-behavior: contain;
     background: linear-gradient(180deg, rgba(255, 255, 255, 0.015), rgba(255, 255, 255, 0));
 }
 
 .chat-messages-area::-webkit-scrollbar {
-    width: 4px;
-}
-
-.chat-messages-area::-webkit-scrollbar-thumb {
-    background: #333;
-    border-radius: 2px;
+    display: none;
 }
 
 /* --- MESSAGE ROWS --- */
@@ -12626,7 +12611,7 @@ input[type=range].snow-range::-webkit-slider-thumb {
    CHAT TAGS (PREFIX BADGES)
    ============================================ */
 .chat-tag {
-    font-size: 0.7rem;
+    font-size: 0.75rem;
     font-weight: 800;
     letter-spacing: 0.5px;
     margin-left: 4px;
@@ -12829,6 +12814,48 @@ input[type=range].snow-range::-webkit-slider-thumb {
     flex-direction: column;
     gap: 4px;
     padding: 0 16px 8px;
+}
+
+/* Custom tag input */
+.prefix-custom-input-wrap {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 0 16px 12px;
+    animation: fadeIn 0.25s ease;
+}
+
+.prefix-custom-input {
+    flex: 1;
+    padding: 10px 14px;
+    border-radius: 10px;
+    border: 1px solid rgba(0, 255, 157, 0.2);
+    background: rgba(0, 255, 157, 0.04);
+    color: #fff;
+    font-family: 'Montserrat', sans-serif;
+    font-size: 0.82rem;
+    font-weight: 700;
+    letter-spacing: 0.3px;
+    outline: none;
+    transition: all 0.2s ease;
+}
+
+.prefix-custom-input::placeholder {
+    color: rgba(255, 255, 255, 0.25);
+    font-weight: 500;
+}
+
+.prefix-custom-input:focus {
+    border-color: rgba(0, 255, 157, 0.45);
+    background: rgba(0, 255, 157, 0.07);
+    box-shadow: 0 0 12px rgba(0, 255, 157, 0.1);
+}
+
+.prefix-custom-counter {
+    font-size: 0.68rem;
+    font-weight: 600;
+    color: rgba(255, 255, 255, 0.3);
+    white-space: nowrap;
 }
 
 .prefix-item {

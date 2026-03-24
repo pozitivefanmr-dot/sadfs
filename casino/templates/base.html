@@ -713,6 +713,11 @@
                 <!-- filled by JS -->
             </div>
 
+            <div class="prefix-custom-input-wrap" id="prefixCustomWrap" style="display:none;">
+                <input type="text" class="prefix-custom-input" id="prefixCustomInput" maxlength="16" placeholder="Enter your tag..." oninput="onCustomInput()">
+                <span class="prefix-custom-counter"><span id="prefixCustomCount">0</span>/16</span>
+            </div>
+
             <div class="prefix-section-title">SELECT COLOR</div>
             <div class="prefix-color-grid" id="prefixColorGrid">
                 <!-- filled by JS -->
@@ -893,6 +898,7 @@
         /* === PREFIX MODAL === */
         let selectedPrefix = '';
         let selectedColor = '#00ff9d';
+        let customText = '';
 
         function openPrefixModal() {
             document.getElementById('prefixModal').classList.add('active');
@@ -915,12 +921,21 @@
 
                     selectedPrefix = data.current_prefix || '';
                     selectedColor = data.current_color || '#00ff9d';
+                    customText = '';
 
                     document.getElementById('prefixGamesCount').textContent = data.games_count;
 
                     const previewName = document.querySelector('.prefix-preview-name');
                     const headerUser = document.querySelector('.header .username');
                     if (headerUser) previewName.textContent = headerUser.textContent.trim();
+
+                    // Проверяем, является ли текущий префикс кастомным (не из стандартных)
+                    const standardNames = data.prefixes.map(p => p.name);
+                    const isCustomCurrent = selectedPrefix && !standardNames.includes(selectedPrefix);
+                    if (isCustomCurrent) {
+                        customText = selectedPrefix;
+                        selectedPrefix = 'Custom';
+                    }
 
                     updatePreview();
 
@@ -935,13 +950,21 @@
                         const locked = !p.unlocked;
                         const activeClass = selectedPrefix === p.name ? 'active' : '';
                         const lockedClass = locked ? 'locked' : '';
+                        const icon = p.name === 'Custom' ? '<i class="bi bi-pencil-fill"></i> ' : '';
                         html += `<div class="prefix-item ${activeClass} ${lockedClass}" 
                             ${locked ? '' : `onclick="selectPrefix('${p.name}', this)"`}>
-                            <span class="prefix-item-name">${p.name}</span>
+                            <span class="prefix-item-name">${icon}${p.name}</span>
                             <span class="prefix-item-req">${locked ? '<i class="bi bi-lock-fill"></i> ' : '<i class="bi bi-unlock-fill"></i> '}${p.required_games >= 999999 ? p.description : p.required_games + '+ games'}</span>
                         </div>`;
                     });
                     list.innerHTML = html;
+
+                    // Показываем/скрываем custom input
+                    toggleCustomInput(selectedPrefix === 'Custom');
+                    if (selectedPrefix === 'Custom' && customText) {
+                        document.getElementById('prefixCustomInput').value = customText;
+                        document.getElementById('prefixCustomCount').textContent = customText.length;
+                    }
 
                     const grid = document.getElementById('prefixColorGrid');
                     let colorHtml = '';
@@ -959,6 +982,23 @@
             selectedPrefix = name;
             document.querySelectorAll('.prefix-item').forEach(i => i.classList.remove('active'));
             if (el) el.classList.add('active');
+            toggleCustomInput(name === 'Custom');
+            if (name !== 'Custom') customText = '';
+            updatePreview();
+        }
+
+        function toggleCustomInput(show) {
+            const wrap = document.getElementById('prefixCustomWrap');
+            wrap.style.display = show ? 'flex' : 'none';
+            if (show) {
+                setTimeout(() => document.getElementById('prefixCustomInput').focus(), 100);
+            }
+        }
+
+        function onCustomInput() {
+            const inp = document.getElementById('prefixCustomInput');
+            customText = inp.value.trim();
+            document.getElementById('prefixCustomCount').textContent = inp.value.length;
             updatePreview();
         }
 
@@ -971,8 +1011,9 @@
 
         function updatePreview() {
             const tag = document.getElementById('prefixPreviewTag');
-            if (selectedPrefix) {
-                tag.textContent = `(${selectedPrefix})`;
+            const displayText = selectedPrefix === 'Custom' ? customText : selectedPrefix;
+            if (displayText) {
+                tag.textContent = `(${displayText})`;
                 tag.style.color = selectedColor;
                 tag.style.display = 'inline';
             } else {
@@ -985,10 +1026,15 @@
             btn.disabled = true;
             btn.innerHTML = '<i class="bi bi-hourglass-split"></i> SAVING...';
 
+            const payload = { prefix: selectedPrefix, color: selectedColor };
+            if (selectedPrefix === 'Custom') {
+                payload.custom_text = customText;
+            }
+
             fetch("{% url 'chat_prefix_set' %}", {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ prefix: selectedPrefix, color: selectedColor })
+                body: JSON.stringify(payload)
             })
             .then(r => r.json())
             .then(data => {

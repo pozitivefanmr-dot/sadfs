@@ -310,6 +310,13 @@ def home(request):
     for name in ga_creators:
         ga_avatars[name] = get_cached_avatar(name)
 
+    # Собираем ID розыгрышей, в которых юзер уже участвует
+    joined_giveaway_ids = []
+    if request.user.is_authenticated:
+        for g in active_giveaways:
+            if request.user.username.lower() in [p.lower() for p in (g.participants or [])]:
+                joined_giveaway_ids.append(g.id)
+
     context = {
         'user': request.user,
         'inventory_items': inventory_items,
@@ -320,6 +327,7 @@ def home(request):
         'recent_games': recent_games,
         'active_giveaways': active_giveaways,
         'ga_avatars': ga_avatars,
+        'joined_giveaway_ids': joined_giveaway_ids,
         'title': 'Dashboard'
     }
     return render(request, 'home.html', context)
@@ -1372,9 +1380,9 @@ CHAT_PREFIXES = [
     {'name': 'Gambler', 'required_games': 10, 'description': 'Play 10+ games'},
     {'name': 'Experienced', 'required_games': 50, 'description': 'Play 50+ games'},
     {'name': 'Legend', 'required_games': 100, 'description': 'Play 100+ games'},
-    {'name': 'Mythic', 'required_games': 200, 'description': 'Play 200+ games'},
+    {'name': 'King', 'required_games': 200, 'description': 'Play 200+ games'},
     {'name': 'Immortal', 'required_games': 500, 'description': 'Play 500+ games'},
-    {'name': 'Custom', 'required_games': 999999, 'description': 'Unobtainable'},
+    {'name': 'Custom', 'required_games': 999999, 'description': 'Your own tag'},
 ]
 
 CHAT_PREFIX_COLORS = [
@@ -1441,6 +1449,7 @@ def set_chat_prefix(request):
         data = json.loads(request.body)
         prefix_name = data.get('prefix', '').strip()
         color = data.get('color', '#00ff9d').strip()
+        custom_text = data.get('custom_text', '').strip()
     except:
         return JsonResponse({'status': 'error', 'message': 'Invalid data'})
 
@@ -1469,13 +1478,24 @@ def set_chat_prefix(request):
     if not has_full_access and games_count < valid_prefix['required_games']:
         return JsonResponse({'status': 'error', 'message': f'Need {valid_prefix["required_games"]}+ games'})
 
+    # Для Custom — используем пользовательский текст
+    if prefix_name == 'Custom':
+        if not custom_text:
+            return JsonResponse({'status': 'error', 'message': 'Enter your custom tag'})
+        if len(custom_text) > 16:
+            return JsonResponse({'status': 'error', 'message': 'Max 16 characters'})
+        # Сохраняем пользовательский текст вместо "Custom"
+        save_prefix = custom_text
+    else:
+        save_prefix = prefix_name
+
     # Сохраняем
     obj, created = UserChatPrefix.objects.update_or_create(
         user=request.user,
-        defaults={'prefix': prefix_name, 'color': color}
+        defaults={'prefix': save_prefix, 'color': color}
     )
 
-    return JsonResponse({'status': 'ok', 'prefix': prefix_name, 'color': color})
+    return JsonResponse({'status': 'ok', 'prefix': save_prefix, 'color': color})
 
 
 # === USER STATS API ===

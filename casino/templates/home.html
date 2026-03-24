@@ -51,9 +51,15 @@
                 <!-- Кнопка справа -->
                 {% if user.is_authenticated %}
                     {% if user.username != ga.creator %}
-                    <button class="btn-ga-join" onclick="joinGiveaway({{ ga.id }}, this)">
-                        JOIN
-                    </button>
+                        {% if ga.id in joined_giveaway_ids %}
+                        <button class="btn-ga-join btn-ga-joined" disabled>
+                            <i class="bi bi-check-lg"></i> JOINED
+                        </button>
+                        {% else %}
+                        <button class="btn-ga-join" onclick="joinGiveaway({{ ga.id }}, this)">
+                            JOIN
+                        </button>
+                        {% endif %}
                     {% else %}
                     <div class="ga-your-badge">YOUR GIVEAWAY</div>
                     {% endif %}
@@ -275,25 +281,7 @@
     </div>
 </div>
 
-<!-- WITHDRAW SUCCESS MODAL -->
-<div class="success-modal-overlay" id="successModal">
-    <div class="success-box">
-        <div class="success-icon-wrapper">
-            <i class="bi bi-check-circle" style="font-size: 80px; color: #00FF88; filter: drop-shadow(0 0 15px rgba(0, 255, 136, 0.5));"></i>
-        </div>
 
-        <h2 class="success-title">WITHDRAWAL READY</h2>
-        <p class="success-desc">
-            Your item is ready for pickup. Join our bot to receive it.
-        </p>
-
-        <a href="https://www.roblox.com/users/5413661688/profile" target="_blank" class="btn-ice-join">
-            <i class="bi bi-person-plus"></i> JOIN BOT
-        </a>
-
-        <div class="close-modal-link" onclick="location.reload()">Close</div>
-    </div>
-</div>
 
 {% if user.is_authenticated %}
 <script>
@@ -328,7 +316,7 @@
             .then(data => {
                 if (data.status === 'success') {
                     closeWithdrawConfirm();
-                    document.getElementById('successModal').classList.add('active');
+                    location.reload();
                 } else {
                     alert("Error: " + data.message);
                     confirmBtn.innerHTML = originalText;
