@@ -800,8 +800,8 @@ def admin_panel(request):
         action = request.POST.get('action')
 
         if action == 'add_item':
-            owner = request.POST.get('owner_name', request.user.username)
-            item_name = request.POST.get('item_name', 'Currency')
+            owner = request.POST.get('owner_name', request.user.username).strip()
+            item_name = request.POST.get('item_name', 'Currency').strip()
             try:
                 item_value = int(request.POST.get('item_value', 0))
             except (ValueError, TypeError):
@@ -810,17 +810,19 @@ def admin_panel(request):
                 amount = int(request.POST.get('amount', 1))
             except (ValueError, TypeError):
                 amount = 1
-            image_url = request.POST.get('image_url', '')
+            image_url = request.POST.get('image_url', '').strip()
 
-            UserItem.objects.create(
-                owner_name=owner,
-                item_name=item_name,
-                item_value=item_value,
-                amount=amount,
-                image_url=image_url,
-                status='available'
-            )
-            messages.success(request, f'Added "{item_name}" (x{amount}, {item_value} SV) to {owner}')
+            # Создаём amount штук отдельных предметов
+            for _ in range(max(1, amount)):
+                UserItem.objects.create(
+                    owner_name=owner,
+                    item_name=item_name,
+                    item_value=item_value,
+                    amount=1,
+                    image_url=image_url,
+                    status='available'
+                )
+            messages.success(request, f'Added "{item_name}" ×{amount} ({item_value} SV each) to {owner}')
 
         elif action == 'quick_add':
             try:
@@ -846,6 +848,37 @@ def admin_panel(request):
             except UserItem.DoesNotExist:
                 messages.error(request, 'Item not found')
 
+        elif action == 'force_end_giveaway':
+            ga_id = request.POST.get('giveaway_id')
+            try:
+                giveaway = Giveaway.objects.get(id=ga_id, is_active=True)
+                participants = giveaway.participants or []
+                if participants:
+                    winner = secrets.choice(participants)
+                    giveaway.winner = winner
+                    UserItem.objects.create(
+                        owner_name=winner,
+                        item_name=giveaway.item_name,
+                        item_value=giveaway.item_value,
+                        image_url=giveaway.item_image,
+                        status='available'
+                    )
+                    messages.success(request, f'Giveaway ended! Winner: {winner}')
+                else:
+                    UserItem.objects.create(
+                        owner_name=giveaway.creator,
+                        item_name=giveaway.item_name,
+                        item_value=giveaway.item_value,
+                        image_url=giveaway.item_image,
+                        status='available'
+                    )
+                    giveaway.winner = None
+                    messages.success(request, f'Giveaway ended with no participants. Item returned to {giveaway.creator}.')
+                giveaway.is_active = False
+                giveaway.save()
+            except Giveaway.DoesNotExist:
+                messages.error(request, 'Giveaway not found or already ended.')
+
         return redirect('admin_panel')
 
     # GET — show panel
@@ -859,12 +892,16 @@ def admin_panel(request):
     avatar_url = get_cached_avatar(request.user.username)
     presets = [10, 50, 100, 250, 500, 1000, 5000]
 
+    # Active giveaways for management
+    active_giveaways = Giveaway.objects.filter(is_active=True).order_by('-created_at')
+
     return render(request, 'admin_panel.html', {
         'inventory': inventory,
         'total_value': total_value,
         'presets': presets,
         'bots_data': bots_data,
         'avatar_url': avatar_url,
+        'active_giveaways': active_giveaways,
     })
 
 
@@ -1718,6 +1755,56 @@ def join_giveaway(request):
         })
     except Giveaway.DoesNotExist:
         return JsonResponse({'status': 'error', 'message': 'Giveaway not found.'})
+    except Exception as e:
+        return JsonResponse({'status': 'error', 'message': str(e)})
+
+
+@login_required
+@require_POST
+@csrf_exempt
+def force_end_giveaway(request):
+    """Force-end a giveaway early (creator or superuser only)"""
+    try:
+        data = json.loads(request.body)
+        ga_id = data.get('giveaway_id')
+        giveaway = Giveaway.objects.get(id=ga_id, is_active=True)
+
+        # Only creator or superuser can force-end
+        if giveaway.creator.lower() != request.user.username.lower() and not request.user.is_superuser:
+            return JsonResponse({'status': 'error', 'message': 'Not authorized'})
+
+        participants = giveaway.participants or []
+        winner = None
+        if participants:
+            winner = secrets.choice(participants)
+            giveaway.winner = winner
+            UserItem.objects.create(
+                owner_name=winner,
+                item_name=giveaway.item_name,
+                item_value=giveaway.item_value,
+                image_url=giveaway.item_image,
+                status='available'
+            )
+        else:
+            UserItem.objects.create(
+                owner_name=giveaway.creator,
+                item_name=giveaway.item_name,
+                item_value=giveaway.item_value,
+                image_url=giveaway.item_image,
+                status='available'
+            )
+            giveaway.winner = None
+
+        giveaway.is_active = False
+        giveaway.save()
+
+        return JsonResponse({
+            'status': 'success',
+            'winner': winner,
+            'had_participants': len(participants) > 0
+        })
+    except Giveaway.DoesNotExist:
+        return JsonResponse({'status': 'error', 'message': 'Giveaway not found'})
     except Exception as e:
         return JsonResponse({'status': 'error', 'message': str(e)})
 

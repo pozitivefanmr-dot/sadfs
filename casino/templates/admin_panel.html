@@ -25,268 +25,360 @@
 </script>
 {% endif %}
 
-<div class="cf-container" style="display: block; max-width: 900px; margin: 0 auto; padding: 30px 16px;">
+<style>
+    .ap {
+        font-family: 'Inter', 'Segoe UI', system-ui, -apple-system, sans-serif;
+        max-width: 960px;
+        margin: 0 auto;
+        padding: 30px 16px;
+        display: block;
+    }
+    .ap * { box-sizing: border-box; }
+    .ap-header {
+        display: flex; align-items: center; gap: 16px;
+        margin-bottom: 36px;
+    }
+    .ap-header-icon {
+        width: 52px; height: 52px; border-radius: 14px;
+        background: linear-gradient(135deg, rgba(168,85,247,0.2), rgba(168,85,247,0.05));
+        border: 1px solid rgba(168,85,247,0.25);
+        display: flex; align-items: center; justify-content: center;
+        font-size: 1.5rem; color: #c084fc;
+    }
+    .ap-header h1 {
+        margin: 0; font-size: 1.5rem; color: #fff;
+        font-weight: 800; letter-spacing: -0.5px;
+    }
+    .ap-header p {
+        margin: 2px 0 0; font-size: 0.78rem; color: #6b7c71;
+        letter-spacing: 0.3px;
+    }
+    .ap-card {
+        background: linear-gradient(165deg, rgba(17,24,20,0.97), rgba(8,12,10,0.99));
+        border: 1px solid rgba(255,255,255,0.05);
+        border-radius: 18px;
+        padding: 26px 28px;
+        margin-bottom: 24px;
+    }
+    .ap-card-title {
+        display: flex; align-items: center; gap: 10px;
+        margin-bottom: 22px;
+        font-size: 0.95rem; font-weight: 700; color: #fff;
+        letter-spacing: 0.3px;
+    }
+    .ap-card-title i { font-size: 1.1rem; }
+    .ap-label {
+        display: block; font-size: 0.68rem; color: #6b7c71;
+        margin-bottom: 6px; text-transform: uppercase;
+        letter-spacing: 0.8px; font-weight: 600;
+    }
+    .ap-input {
+        width: 100%; padding: 11px 14px;
+        background: rgba(0,0,0,0.35);
+        border: 1px solid rgba(255,255,255,0.07);
+        border-radius: 10px;
+        color: #fff; font-size: 0.88rem;
+        font-family: inherit;
+        outline: none; transition: border-color 0.2s;
+    }
+    .ap-input:focus { border-color: rgba(168,85,247,0.4); }
+    .ap-input::placeholder { color: #3d4f45; }
+    .ap-grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin-bottom: 14px; }
+    .ap-grid-3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 14px; margin-bottom: 20px; }
+    .ap-btn-primary {
+        width: 100%; padding: 13px;
+        background: linear-gradient(135deg, #a855f7, #7c3aed);
+        border: none; border-radius: 11px;
+        color: #fff; font-weight: 700; font-size: 0.88rem;
+        font-family: inherit;
+        cursor: pointer; transition: all 0.2s;
+        letter-spacing: 0.5px;
+    }
+    .ap-btn-primary:hover {
+        transform: translateY(-1px);
+        box-shadow: 0 8px 28px rgba(168,85,247,0.3);
+    }
+    .ap-quick-chips { display: flex; flex-wrap: wrap; gap: 10px; }
+    .ap-chip {
+        padding: 10px 22px;
+        background: rgba(0,255,157,0.05);
+        border: 1px solid rgba(0,255,157,0.12);
+        border-radius: 10px;
+        color: #00ff9d; font-weight: 600; font-size: 0.82rem;
+        font-family: inherit;
+        cursor: pointer; transition: all 0.2s;
+    }
+    .ap-chip:hover {
+        background: rgba(0,255,157,0.12);
+        border-color: rgba(0,255,157,0.3);
+        transform: translateY(-1px);
+    }
+    .ap-inv-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+        gap: 10px;
+    }
+    .ap-inv-item {
+        display: flex; align-items: center; gap: 12px;
+        padding: 12px 14px;
+        background: rgba(0,0,0,0.25);
+        border: 1px solid rgba(255,255,255,0.04);
+        border-radius: 11px;
+        transition: border-color 0.2s;
+    }
+    .ap-inv-item:hover { border-color: rgba(168,85,247,0.2); }
+    .ap-inv-img {
+        width: 38px; height: 38px; border-radius: 9px;
+        object-fit: cover;
+    }
+    .ap-inv-placeholder {
+        width: 38px; height: 38px; border-radius: 9px;
+        background: linear-gradient(135deg, rgba(168,85,247,0.15), rgba(168,85,247,0.05));
+        display: flex; align-items: center; justify-content: center;
+        font-size: 0.85rem; color: #c084fc;
+    }
+    .ap-inv-name {
+        color: #fff; font-size: 0.84rem; font-weight: 600;
+        white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+    }
+    .ap-inv-meta { color: #6b7c71; font-size: 0.72rem; }
+    .ap-btn-del {
+        background: rgba(255,75,75,0.08);
+        border: 1px solid rgba(255,75,75,0.12);
+        border-radius: 8px;
+        color: #ff4b4b;
+        width: 32px; height: 32px; min-width: 32px;
+        display: flex; align-items: center; justify-content: center;
+        cursor: pointer; font-size: 0.8rem;
+        transition: all 0.2s;
+    }
+    .ap-btn-del:hover { background: rgba(255,75,75,0.18); }
+    .ap-inv-header {
+        display: flex; align-items: center; justify-content: space-between;
+        margin-bottom: 18px;
+    }
+    .ap-inv-badge {
+        background: rgba(56,189,248,0.08);
+        border: 1px solid rgba(56,189,248,0.15);
+        color: #38bdf8; font-size: 0.68rem;
+        padding: 3px 9px; border-radius: 6px;
+        font-weight: 700; letter-spacing: 0.3px;
+    }
+    .ap-inv-total {
+        color: #6b7c71; font-size: 0.82rem;
+    }
+    .ap-inv-total span { color: #00ff9d; font-weight: 700; }
+    .ap-ga-list { display: flex; flex-direction: column; gap: 10px; }
+    .ap-ga-item {
+        display: flex; align-items: center; gap: 14px;
+        padding: 14px 16px;
+        background: rgba(0,0,0,0.25);
+        border: 1px solid rgba(168,85,247,0.08);
+        border-radius: 12px;
+        transition: border-color 0.2s;
+    }
+    .ap-ga-item:hover { border-color: rgba(168,85,247,0.2); }
+    .ap-ga-img {
+        width: 44px; height: 44px; border-radius: 10px;
+        object-fit: cover; flex-shrink: 0;
+    }
+    .ap-ga-info { flex: 1; min-width: 0; }
+    .ap-ga-name {
+        color: #fff; font-size: 0.85rem; font-weight: 600;
+        white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+    }
+    .ap-ga-meta {
+        color: #6b7c71; font-size: 0.72rem; margin-top: 2px;
+        display: flex; gap: 12px; align-items: center;
+    }
+    .ap-ga-meta span { display: flex; align-items: center; gap: 4px; }
+    .ap-btn-force {
+        padding: 8px 18px;
+        background: rgba(251,191,36,0.08);
+        border: 1px solid rgba(251,191,36,0.2);
+        border-radius: 9px;
+        color: #fbbf24; font-weight: 700; font-size: 0.75rem;
+        font-family: inherit;
+        cursor: pointer; transition: all 0.2s;
+        letter-spacing: 0.5px; white-space: nowrap;
+    }
+    .ap-btn-force:hover {
+        background: rgba(251,191,36,0.15);
+        border-color: rgba(251,191,36,0.4);
+        transform: translateY(-1px);
+    }
+    .ap-empty {
+        text-align: center; padding: 32px; color: #4a5e52;
+    }
+    .ap-empty i {
+        font-size: 2rem; display: block;
+        margin-bottom: 8px; opacity: 0.35;
+    }
+    @media (max-width: 640px) {
+        .ap-grid-2, .ap-grid-3 { grid-template-columns: 1fr; }
+        .ap-inv-grid { grid-template-columns: 1fr; }
+        .ap-card { padding: 20px 18px; }
+    }
+</style>
+
+<div class="ap">
 
     <!-- HEADER -->
-    <div style="display: flex; align-items: center; gap: 14px; margin-bottom: 32px;">
-        <div style="
-            width: 48px; height: 48px; border-radius: 14px;
-            background: linear-gradient(135deg, rgba(0,255,157,0.15), rgba(0,255,157,0.05));
-            border: 1px solid rgba(0,255,157,0.2);
-            display: flex; align-items: center; justify-content: center;
-            font-size: 1.4rem; color: #00ff9d;
-        ">
+    <div class="ap-header">
+        <div class="ap-header-icon">
             <i class="bi bi-shield-lock-fill"></i>
         </div>
         <div>
-            <h1 style="margin: 0; font-size: 1.6rem; color: #fff; font-weight: 700;">Admin Panel</h1>
-            <p style="margin: 0; font-size: 0.8rem; color: #6b7c71;">Manage items & inventory</p>
+            <h1>Admin Panel</h1>
+            <p>Manage items, inventory & giveaways</p>
         </div>
     </div>
 
     <!-- ADD ITEM FORM -->
-    <div style="
-        background: linear-gradient(160deg, rgba(17,24,20,0.95), rgba(10,15,12,0.98));
-        border: 1px solid rgba(0,255,157,0.08);
-        border-radius: 16px;
-        padding: 28px;
-        margin-bottom: 28px;
-    ">
-        <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 22px;">
-            <i class="bi bi-plus-circle-fill" style="color: #00ff9d; font-size: 1.1rem;"></i>
-            <span style="color: #fff; font-weight: 600; font-size: 1.05rem;">Add Item to Inventory</span>
+    <div class="ap-card">
+        <div class="ap-card-title">
+            <i class="bi bi-plus-circle-fill" style="color: #a855f7;"></i>
+            Add Item to Player
         </div>
 
         <form method="POST" action="{% url 'admin_panel' %}">
             {% csrf_token %}
             <input type="hidden" name="action" value="add_item">
 
-            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin-bottom: 14px;">
-                <!-- Owner -->
+            <div class="ap-grid-2">
                 <div>
-                    <label style="display: block; font-size: 0.75rem; color: #6b7c71; margin-bottom: 6px; text-transform: uppercase; letter-spacing: 0.5px;">
-                        Owner (Username)
-                    </label>
-                    <input type="text" name="owner_name" value="{{ user.username }}" required style="
-                        width: 100%; padding: 12px 14px;
-                        background: rgba(0,0,0,0.3);
-                        border: 1px solid rgba(255,255,255,0.08);
-                        border-radius: 10px;
-                        color: #fff;
-                        font-size: 0.9rem;
-                        outline: none;
-                        transition: border-color 0.2s;
-                        box-sizing: border-box;
-                    " onfocus="this.style.borderColor='rgba(0,255,157,0.3)'" onblur="this.style.borderColor='rgba(255,255,255,0.08)'">
+                    <label class="ap-label">Owner (Username)</label>
+                    <input type="text" name="owner_name" value="{{ user.username }}" required class="ap-input">
                 </div>
-
-                <!-- Item Name -->
                 <div>
-                    <label style="display: block; font-size: 0.75rem; color: #6b7c71; margin-bottom: 6px; text-transform: uppercase; letter-spacing: 0.5px;">
-                        Item Name
-                    </label>
-                    <input type="text" name="item_name" placeholder="e.g. Chroma Luger" required style="
-                        width: 100%; padding: 12px 14px;
-                        background: rgba(0,0,0,0.3);
-                        border: 1px solid rgba(255,255,255,0.08);
-                        border-radius: 10px;
-                        color: #fff;
-                        font-size: 0.9rem;
-                        outline: none;
-                        transition: border-color 0.2s;
-                        box-sizing: border-box;
-                    " onfocus="this.style.borderColor='rgba(0,255,157,0.3)'" onblur="this.style.borderColor='rgba(255,255,255,0.08)'">
+                    <label class="ap-label">Item Name</label>
+                    <input type="text" name="item_name" placeholder="e.g. Chroma Luger" required class="ap-input">
                 </div>
             </div>
 
-            <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 14px; margin-bottom: 20px;">
-                <!-- Value -->
+            <div class="ap-grid-3">
                 <div>
-                    <label style="display: block; font-size: 0.75rem; color: #6b7c71; margin-bottom: 6px; text-transform: uppercase; letter-spacing: 0.5px;">
-                        Value (SV)
-                    </label>
-                    <input type="number" name="item_value" placeholder="100" min="1" required style="
-                        width: 100%; padding: 12px 14px;
-                        background: rgba(0,0,0,0.3);
-                        border: 1px solid rgba(255,255,255,0.08);
-                        border-radius: 10px;
-                        color: #fff;
-                        font-size: 0.9rem;
-                        outline: none;
-                        transition: border-color 0.2s;
-                        box-sizing: border-box;
-                    " onfocus="this.style.borderColor='rgba(0,255,157,0.3)'" onblur="this.style.borderColor='rgba(255,255,255,0.08)'">
+                    <label class="ap-label">Value (SV)</label>
+                    <input type="number" name="item_value" placeholder="100" min="1" required class="ap-input">
                 </div>
-
-                <!-- Amount -->
                 <div>
-                    <label style="display: block; font-size: 0.75rem; color: #6b7c71; margin-bottom: 6px; text-transform: uppercase; letter-spacing: 0.5px;">
-                        Amount
-                    </label>
-                    <input type="number" name="amount" value="1" min="1" required style="
-                        width: 100%; padding: 12px 14px;
-                        background: rgba(0,0,0,0.3);
-                        border: 1px solid rgba(255,255,255,0.08);
-                        border-radius: 10px;
-                        color: #fff;
-                        font-size: 0.9rem;
-                        outline: none;
-                        transition: border-color 0.2s;
-                        box-sizing: border-box;
-                    " onfocus="this.style.borderColor='rgba(0,255,157,0.3)'" onblur="this.style.borderColor='rgba(255,255,255,0.08)'">
+                    <label class="ap-label">Amount</label>
+                    <input type="number" name="amount" value="1" min="1" max="50" required class="ap-input">
                 </div>
-
-                <!-- Image URL (optional) -->
                 <div>
-                    <label style="display: block; font-size: 0.75rem; color: #6b7c71; margin-bottom: 6px; text-transform: uppercase; letter-spacing: 0.5px;">
-                        Image URL <span style="opacity: 0.5;">(optional)</span>
-                    </label>
-                    <input type="text" name="image_url" placeholder="https://..." style="
-                        width: 100%; padding: 12px 14px;
-                        background: rgba(0,0,0,0.3);
-                        border: 1px solid rgba(255,255,255,0.08);
-                        border-radius: 10px;
-                        color: #fff;
-                        font-size: 0.9rem;
-                        outline: none;
-                        transition: border-color 0.2s;
-                        box-sizing: border-box;
-                    " onfocus="this.style.borderColor='rgba(0,255,157,0.3)'" onblur="this.style.borderColor='rgba(255,255,255,0.08)'">
+                    <label class="ap-label">Image URL <span style="opacity:0.4">(optional)</span></label>
+                    <input type="text" name="image_url" placeholder="https://..." class="ap-input">
                 </div>
             </div>
 
-            <button type="submit" style="
-                width: 100%; padding: 13px;
-                background: linear-gradient(135deg, #00ff9d, #00cc7d);
-                border: none;
-                border-radius: 10px;
-                color: #000;
-                font-weight: 700;
-                font-size: 0.9rem;
-                cursor: pointer;
-                transition: all 0.2s;
-                letter-spacing: 0.5px;
-            " onmouseover="this.style.transform='translateY(-1px)'; this.style.boxShadow='0 6px 24px rgba(0,255,157,0.25)'"
-               onmouseout="this.style.transform=''; this.style.boxShadow=''">
+            <button type="submit" class="ap-btn-primary">
                 <i class="bi bi-plus-lg"></i> ADD ITEM
             </button>
         </form>
     </div>
 
-    <!-- QUICK ADD (preset buttons) -->
-    <div style="
-        background: linear-gradient(160deg, rgba(17,24,20,0.95), rgba(10,15,12,0.98));
-        border: 1px solid rgba(0,255,157,0.08);
-        border-radius: 16px;
-        padding: 28px;
-        margin-bottom: 28px;
-    ">
-        <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 18px;">
-            <i class="bi bi-lightning-fill" style="color: #fbbf24; font-size: 1.1rem;"></i>
-            <span style="color: #fff; font-weight: 600; font-size: 1.05rem;">Quick Add Currency</span>
-            <span style="color: #6b7c71; font-size: 0.8rem;">(to your account)</span>
+    <!-- QUICK ADD -->
+    <div class="ap-card">
+        <div class="ap-card-title">
+            <i class="bi bi-lightning-fill" style="color: #fbbf24;"></i>
+            Quick Add Currency
+            <span style="color: #6b7c71; font-size: 0.75rem; font-weight: 400;">(to your account)</span>
         </div>
-
-        <div style="display: flex; flex-wrap: wrap; gap: 10px;">
+        <div class="ap-quick-chips">
             {% for preset in presets %}
-            <form method="POST" action="{% url 'admin_panel' %}" style="display: inline;">
+            <form method="POST" action="{% url 'admin_panel' %}" style="display:inline;">
                 {% csrf_token %}
                 <input type="hidden" name="action" value="quick_add">
                 <input type="hidden" name="preset_value" value="{{ preset }}">
-                <button type="submit" style="
-                    padding: 10px 22px;
-                    background: rgba(0,255,157,0.06);
-                    border: 1px solid rgba(0,255,157,0.15);
-                    border-radius: 10px;
-                    color: #00ff9d;
-                    font-weight: 600;
-                    font-size: 0.85rem;
-                    cursor: pointer;
-                    transition: all 0.2s;
-                " onmouseover="this.style.background='rgba(0,255,157,0.12)'; this.style.borderColor='rgba(0,255,157,0.3)'"
-                   onmouseout="this.style.background='rgba(0,255,157,0.06)'; this.style.borderColor='rgba(0,255,157,0.15)'">
-                    +{{ preset }} SV
-                </button>
+                <button type="submit" class="ap-chip">+{{ preset }} SV</button>
             </form>
             {% endfor %}
         </div>
     </div>
 
-    <!-- CURRENT INVENTORY -->
-    <div style="
-        background: linear-gradient(160deg, rgba(17,24,20,0.95), rgba(10,15,12,0.98));
-        border: 1px solid rgba(0,255,157,0.08);
-        border-radius: 16px;
-        padding: 28px;
-    ">
-        <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 18px;">
-            <div style="display: flex; align-items: center; gap: 10px;">
-                <i class="bi bi-bag-fill" style="color: #38bdf8; font-size: 1.1rem;"></i>
-                <span style="color: #fff; font-weight: 600; font-size: 1.05rem;">Your Inventory</span>
-                <span style="
-                    background: rgba(56,189,248,0.1);
-                    border: 1px solid rgba(56,189,248,0.2);
-                    color: #38bdf8;
-                    font-size: 0.7rem;
-                    padding: 2px 8px;
-                    border-radius: 6px;
-                    font-weight: 600;
-                ">{{ inventory|length }} items</span>
+    <!-- ACTIVE GIVEAWAYS -->
+    <div class="ap-card">
+        <div class="ap-card-title">
+            <i class="bi bi-gift-fill" style="color: #f472b6;"></i>
+            Active Giveaways
+            <span class="ap-inv-badge" style="background: rgba(244,114,182,0.08); border-color: rgba(244,114,182,0.15); color: #f472b6;">
+                {{ active_giveaways|length }}
+            </span>
+        </div>
+
+        {% if active_giveaways %}
+        <div class="ap-ga-list">
+            {% for ga in active_giveaways %}
+            <div class="ap-ga-item" id="ga-row-{{ ga.id }}">
+                {% if ga.item_image %}
+                <img src="{{ ga.item_image }}" class="ap-ga-img"
+                    onerror="this.src='https://static.wikia.nocookie.net/murder-mystery-2/images/5/53/Godly_Icon.png'">
+                {% else %}
+                <div class="ap-inv-placeholder" style="width:44px;height:44px;">
+                    <i class="bi bi-gift"></i>
+                </div>
+                {% endif %}
+                <div class="ap-ga-info">
+                    <div class="ap-ga-name">{{ ga.item_name }}</div>
+                    <div class="ap-ga-meta">
+                        <span><i class="bi bi-person"></i> {{ ga.creator }}</span>
+                        <span><img src="{% static 'img/sv_coin.png' %}" style="width:12px;height:12px;"> {{ ga.item_value }}</span>
+                        <span><i class="bi bi-people-fill"></i> {{ ga.participants_count }}</span>
+                    </div>
+                </div>
+                <form method="POST" action="{% url 'admin_panel' %}" style="margin:0;"
+                      onsubmit="return confirm('Force-end this giveaway now?');">
+                    {% csrf_token %}
+                    <input type="hidden" name="action" value="force_end_giveaway">
+                    <input type="hidden" name="giveaway_id" value="{{ ga.id }}">
+                    <button type="submit" class="ap-btn-force">
+                        <i class="bi bi-lightning-fill"></i> END NOW
+                    </button>
+                </form>
             </div>
-            <div style="color: #6b7c71; font-size: 0.85rem;">
-                Total: <span style="color: #00ff9d; font-weight: 600;">{{ total_value }} SV</span>
+            {% endfor %}
+        </div>
+        {% else %}
+        <div class="ap-empty">
+            <i class="bi bi-gift"></i>
+            No active giveaways
+        </div>
+        {% endif %}
+    </div>
+
+    <!-- YOUR INVENTORY -->
+    <div class="ap-card">
+        <div class="ap-inv-header">
+            <div class="ap-card-title" style="margin-bottom:0;">
+                <i class="bi bi-bag-fill" style="color: #38bdf8;"></i>
+                Your Inventory
+                <span class="ap-inv-badge">{{ inventory|length }} items</span>
+            </div>
+            <div class="ap-inv-total">
+                Total: <span>{{ total_value }} SV</span>
             </div>
         </div>
 
         {% if inventory %}
-        <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 10px;">
+        <div class="ap-inv-grid">
             {% for item in inventory %}
-            <div style="
-                display: flex; align-items: center; gap: 12px;
-                padding: 12px 14px;
-                background: rgba(0,0,0,0.25);
-                border: 1px solid rgba(255,255,255,0.05);
-                border-radius: 10px;
-                transition: border-color 0.2s;
-            " onmouseover="this.style.borderColor='rgba(0,255,157,0.15)'"
-               onmouseout="this.style.borderColor='rgba(255,255,255,0.05)'">
+            <div class="ap-inv-item">
                 {% if item.image_url %}
-                <img src="{{ item.image_url }}" alt="" style="width: 36px; height: 36px; border-radius: 8px; object-fit: cover;">
+                <img src="{{ item.image_url }}" class="ap-inv-img" alt="">
                 {% else %}
-                <div style="
-                    width: 36px; height: 36px; border-radius: 8px;
-                    background: linear-gradient(135deg, rgba(0,255,157,0.15), rgba(0,255,157,0.05));
-                    display: flex; align-items: center; justify-content: center;
-                    font-size: 0.85rem; color: #00ff9d;
-                ">
+                <div class="ap-inv-placeholder">
                     <i class="bi bi-box-seam"></i>
                 </div>
                 {% endif %}
-                <div style="flex: 1; min-width: 0;">
-                    <div style="color: #fff; font-size: 0.85rem; font-weight: 500; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">
-                        {{ item.item_name }}
-                    </div>
-                    <div style="color: #6b7c71; font-size: 0.75rem;">
-                        {{ item.item_value }} SV × {{ item.amount }}
-                    </div>
+                <div style="flex:1; min-width:0;">
+                    <div class="ap-inv-name">{{ item.item_name }}</div>
+                    <div class="ap-inv-meta">{{ item.item_value }} SV · #{{ item.id }}</div>
                 </div>
-                <form method="POST" action="{% url 'admin_panel' %}" style="margin: 0;">
+                <form method="POST" action="{% url 'admin_panel' %}" style="margin:0;">
                     {% csrf_token %}
                     <input type="hidden" name="action" value="delete_item">
                     <input type="hidden" name="item_id" value="{{ item.id }}">
-                    <button type="submit" style="
-                        background: rgba(255,75,75,0.1);
-                        border: 1px solid rgba(255,75,75,0.15);
-                        border-radius: 8px;
-                        color: #ff4b4b;
-                        width: 32px; height: 32px;
-                        display: flex; align-items: center; justify-content: center;
-                        cursor: pointer;
-                        font-size: 0.8rem;
-                        transition: all 0.2s;
-                    " onmouseover="this.style.background='rgba(255,75,75,0.2)'"
-                       onmouseout="this.style.background='rgba(255,75,75,0.1)'"
-                       title="Delete item">
+                    <button type="submit" class="ap-btn-del" title="Delete">
                         <i class="bi bi-trash"></i>
                     </button>
                 </form>
@@ -294,8 +386,8 @@
             {% endfor %}
         </div>
         {% else %}
-        <div style="text-align: center; padding: 30px; color: #6b7c71;">
-            <i class="bi bi-inbox" style="font-size: 2rem; display: block; margin-bottom: 8px; opacity: 0.4;"></i>
+        <div class="ap-empty">
+            <i class="bi bi-inbox"></i>
             No items in inventory
         </div>
         {% endif %}

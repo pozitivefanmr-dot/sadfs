@@ -41,11 +41,31 @@ class CoinflipGame(models.Model):
     created_at = models.DateTimeField(default=timezone.now)
 
     # Хелперы для диапазона
+    @staticmethod
+    def _round_step(value):
+        """Определяет шаг округления в зависимости от величины"""
+        if value < 20:
+            return 5
+        elif value < 100:
+            return 5
+        elif value < 500:
+            return 25
+        elif value < 2000:
+            return 50
+        elif value < 10000:
+            return 100
+        else:
+            return 250
+
     def min_join_value(self):
-        return int(self.value1 * 0.8)  # -20%
+        raw = int(self.value1 * 0.8)  # -20%
+        step = self._round_step(raw)
+        return max(1, (raw // step) * step)  # округление вниз
 
     def max_join_value(self):
-        return int(self.value1 * 1.3)  # +30%
+        raw = int(self.value1 * 1.3)  # +30%
+        step = self._round_step(raw)
+        return ((raw + step - 1) // step) * step  # округление вверх
 
     player1_viewed = models.BooleanField(default=False)
     player2_viewed = models.BooleanField(default=False)

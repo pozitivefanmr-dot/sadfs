@@ -61,7 +61,9 @@
                         </button>
                         {% endif %}
                     {% else %}
-                    <div class="ga-your-badge">YOUR GIVEAWAY</div>
+                    <button class="btn-ga-force-end" onclick="forceEndGiveaway({{ ga.id }}, this)">
+                        <i class="bi bi-lightning-fill"></i> END NOW
+                    </button>
                     {% endif %}
                 {% else %}
                 <button class="btn-ga-join btn-ga-login" onclick="openAuthModal()">
@@ -495,6 +497,47 @@
         })
         .catch(() => {
             showGaError('Connection error. Please try again.');
+            btn.innerHTML = originalHTML;
+            btn.disabled = false;
+        });
+    }
+
+    // Force-end your own giveaway
+    function forceEndGiveaway(giveawayId, btn) {
+        if (!confirm('End this giveaway now? A random winner will be selected immediately.')) return;
+
+        const originalHTML = btn.innerHTML;
+        btn.innerHTML = '<i class="bi bi-hourglass-split"></i>';
+        btn.disabled = true;
+
+        fetch("{% url 'force_end_giveaway' %}", {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-CSRFToken': '{{ csrf_token }}'
+            },
+            body: JSON.stringify({ giveaway_id: giveawayId })
+        })
+        .then(r => r.json())
+        .then(data => {
+            if (data.status === 'success') {
+                if (data.had_participants) {
+                    btn.innerHTML = '<i class="bi bi-check-lg"></i> ' + data.winner + ' WON';
+                    btn.style.color = '#00ff9d';
+                    btn.style.borderColor = 'rgba(0,255,157,0.3)';
+                } else {
+                    btn.innerHTML = '<i class="bi bi-arrow-return-left"></i> RETURNED';
+                    btn.style.color = '#fbbf24';
+                }
+                setTimeout(() => location.reload(), 1500);
+            } else {
+                showGaError(data.message || 'Failed to end giveaway');
+                btn.innerHTML = originalHTML;
+                btn.disabled = false;
+            }
+        })
+        .catch(() => {
+            showGaError('Connection error');
             btn.innerHTML = originalHTML;
             btn.disabled = false;
         });
