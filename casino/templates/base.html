@@ -1273,6 +1273,21 @@
             }
         });
     </script>
+    <script>
+    /* Global utility: custom number input step */
+    function stepNum(btn, dir) {
+        const inp = btn.closest('.num-input-wrap').querySelector('input[type="number"]');
+        const min = parseFloat(inp.min) || -Infinity;
+        const max = parseFloat(inp.max) || Infinity;
+        const step = parseFloat(inp.step) || 1;
+        let val = parseFloat(inp.value) || 0;
+        val += step * dir;
+        if (val < min) val = min;
+        if (val > max) val = max;
+        inp.value = val;
+        inp.dispatchEvent(new Event('input'));
+    }
+    </script>
 </body>
 
 </html>

@@ -13,6 +13,7 @@
     --text-muted: #8fa396;
     --border-color: #1a3328;
     --font-main: 'Montserrat', sans-serif;
+    --font-head: 'Montserrat', sans-serif;
     --transition-smooth: all 0.4s cubic-bezier(0.25, 0.8, 0.25, 1);
 }
 
@@ -12260,18 +12261,25 @@ input[type=range].snow-range::-webkit-slider-thumb {
 }
 
 .btn-ga-force-end {
-    padding: 8px 16px;
+    padding: 10px 22px;
     background: rgba(251, 191, 36, 0.08);
     border: 1px solid rgba(251, 191, 36, 0.2);
     border-radius: 10px;
     color: #fbbf24;
-    font-weight: 700;
-    font-size: 0.7rem;
-    letter-spacing: 0.5px;
+    font-family: 'Montserrat', sans-serif;
+    font-weight: 800;
+    font-size: 0.75rem;
+    text-transform: uppercase;
+    letter-spacing: 1px;
     cursor: pointer;
-    transition: all 0.2s;
+    transition: all 0.25s;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 5px;
     white-space: nowrap;
     flex-shrink: 0;
+    box-shadow: 0 4px 16px rgba(251, 191, 36, 0.15);
 }
 
 .btn-ga-force-end:hover {
@@ -13008,4 +13016,59 @@ input[type=range].snow-range::-webkit-slider-thumb {
 .prefix-save-btn:disabled {
     opacity: 0.6;
     cursor: not-allowed;
+}
+
+/* ── Custom number input (hide default spinners) ── */
+input[type="number"]::-webkit-inner-spin-button,
+input[type="number"]::-webkit-outer-spin-button {
+    -webkit-appearance: none;
+    appearance: none;
+    margin: 0;
+}
+input[type="number"] {
+    -moz-appearance: textfield;
+}
+
+.num-input-wrap {
+    position: relative;
+    display: flex;
+    align-items: stretch;
+}
+.num-input-wrap input[type="number"] {
+    flex: 1;
+    padding-right: 44px;
+    min-width: 0;
+}
+.num-input-btns {
+    position: absolute;
+    right: 4px;
+    top: 50%;
+    transform: translateY(-50%);
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+}
+.num-input-btns button {
+    width: 28px;
+    height: 18px;
+    border: none;
+    border-radius: 5px;
+    background: rgba(168, 85, 247, 0.12);
+    color: #c084fc;
+    font-size: 0.65rem;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: background 0.15s;
+    padding: 0;
+    line-height: 1;
+    font-family: 'Montserrat', sans-serif;
+    font-weight: 700;
+}
+.num-input-btns button:hover {
+    background: rgba(168, 85, 247, 0.25);
+}
+.num-input-btns button:active {
+    background: rgba(168, 85, 247, 0.35);
 }

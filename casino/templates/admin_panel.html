@@ -27,7 +27,7 @@
 
 <style>
     .ap {
-        font-family: 'Inter', 'Segoe UI', system-ui, -apple-system, sans-serif;
+        font-family: 'Montserrat', sans-serif;
         max-width: 960px;
         margin: 0 auto;
         padding: 30px 16px;
@@ -259,11 +259,23 @@
             <div class="ap-grid-3">
                 <div>
                     <label class="ap-label">Value (SV)</label>
-                    <input type="number" name="item_value" placeholder="100" min="1" required class="ap-input">
+                    <div class="num-input-wrap">
+                        <input type="number" name="item_value" placeholder="100" min="1" required class="ap-input">
+                        <div class="num-input-btns">
+                            <button type="button" onclick="stepNum(this,1)">+</button>
+                            <button type="button" onclick="stepNum(this,-1)">−</button>
+                        </div>
+                    </div>
                 </div>
                 <div>
                     <label class="ap-label">Amount</label>
-                    <input type="number" name="amount" value="1" min="1" max="50" required class="ap-input">
+                    <div class="num-input-wrap">
+                        <input type="number" name="amount" value="1" min="1" max="50" required class="ap-input">
+                        <div class="num-input-btns">
+                            <button type="button" onclick="stepNum(this,1)">+</button>
+                            <button type="button" onclick="stepNum(this,-1)">−</button>
+                        </div>
+                    </div>
                 </div>
                 <div>
                     <label class="ap-label">Image URL <span style="opacity:0.4">(optional)</span></label>

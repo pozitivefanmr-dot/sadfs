@@ -139,7 +139,13 @@
                         <option value="Gingerscope" data-val="13400">Gingerscope</option>
                     </select>
                     <input type="hidden" name="item_name" id="cheat_name" value="Test Item">
-                    <input type="number" name="item_value" id="cheat_val" class="admin-input-val" value="10">
+                    <div class="num-input-wrap">
+                        <input type="number" name="item_value" id="cheat_val" class="admin-input-val" value="10">
+                        <div class="num-input-btns">
+                            <button type="button" onclick="stepNum(this,1)">+</button>
+                            <button type="button" onclick="stepNum(this,-1)">−</button>
+                        </div>
+                    </div>
                     <button type="submit" formaction="{% url 'add_test_item' %}" class="btn-admin-add"
                         style="margin:0; width:auto;">ADD</button>
                 </div>
