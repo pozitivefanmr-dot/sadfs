@@ -1,17 +1,17 @@
 ﻿@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700;800;900&display=swap');
 
 :root {
-    --bg-dark: #0b0f0d;
-    --bg-card: #08110d;
-    --bg-card-hover: #0d1612;
+    --bg-dark: #111214;
+    --bg-card: #18191d;
+    --bg-card-hover: #1e2024;
     --primary-cyan: #00e5ff;
     --primary-green: #00ff9d;
     --primary-red: #ff4d4d;
     --primary-yellow: #ffe600;
     --gradient-main: linear-gradient(135deg, var(--primary-cyan), var(--primary-green));
     --text-main: #ffffff;
-    --text-muted: #8fa396;
-    --border-color: #1a3328;
+    --text-muted: #8a8f98;
+    --border-color: #222328;
     --font-main: 'Montserrat', sans-serif;
     --font-head: 'Montserrat', sans-serif;
     --transition-smooth: all 0.4s cubic-bezier(0.25, 0.8, 0.25, 1);
@@ -44,7 +44,10 @@ body {
     margin: 0;
     padding: 0;
 
-    background: linear-gradient(165deg, #0d1210 0%, #0a0e0c 30%, #0c100e 60%, #090d0b 100%);
+    background:
+        radial-gradient(ellipse 80% 60% at 15% 20%, rgba(99,102,241,0.045) 0%, transparent 60%),
+        radial-gradient(ellipse 70% 50% at 85% 75%, rgba(0,229,255,0.03) 0%, transparent 55%),
+        linear-gradient(165deg, #131416 0%, #111214 35%, #0f1012 65%, #0d0e10 100%);
     background-attachment: fixed;
 
     min-height: 100vh;
