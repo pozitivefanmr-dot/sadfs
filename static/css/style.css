@@ -1,7 +1,7 @@
 ﻿@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700;800;900&display=swap');
 
 :root {
-    --bg-dark: #020504;
+    --bg-dark: #0b0f0d;
     --bg-card: #08110d;
     --bg-card-hover: #0d1612;
     --primary-cyan: #00e5ff;
@@ -38,16 +38,13 @@ html {
 
 body {
     background-color: var(--bg-dark);
-    /* Цвет на случай, если картинка не прогрузится */
     color: var(--text-main);
     font-family: var(--font-main);
     margin: 0;
     padding: 0;
 
-    /* 1. СТАВИМ ЛЕС НА ФОН */
-    background: url('../img/forest.jpg') no-repeat center center fixed;
-    background-size: cover;
-    /* Картинка растягивается и "стоит" как баннер */
+    background: linear-gradient(165deg, #0d1210 0%, #0a0e0c 30%, #0c100e 60%, #090d0b 100%);
+    background-attachment: fixed;
 
     min-height: 100vh;
     overflow-x: hidden;
@@ -70,20 +67,20 @@ html.no-scroll {
     height: 100vh !important;
 }
 
-/* 2. ЭФФЕКТ ЗАТЕМНЕНИЯ + БЛЮР + ЗЕЛЕНЦА */
+/* 2. Тонкий зелёный оттенок + виньетка */
 body::before {
     content: "";
     position: fixed;
-    /* Фиксируем оверлей, чтобы он не уезжал */
     top: 0;
     left: 0;
     width: 100%;
     height: 100%;
     z-index: -1;
-    background: linear-gradient(to bottom, rgba(2, 15, 8, 0.80), rgba(3, 12, 7, 0.88));
-
-    /* Легкое размытие, чтобы фон не отвлекал от игры */
-    backdrop-filter: blur(3px);
+    background:
+        radial-gradient(ellipse at 20% 0%, rgba(0, 255, 157, 0.03) 0%, transparent 50%),
+        radial-gradient(ellipse at 80% 100%, rgba(0, 255, 157, 0.02) 0%, transparent 50%),
+        radial-gradient(ellipse at center, transparent 40%, rgba(0, 0, 0, 0.3) 100%);
+    pointer-events: none;
 }
 
 h1,
