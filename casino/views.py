@@ -86,7 +86,7 @@ def send_discord_game_log(game):
                 'inline': True
             },
             {
-                'name': '🟡 Player 2 (Joiner)',
+                'name': '� Player 2 (Joiner)',
                 'value': f'**{game.player2}**\n💰 {game.value2} SV\n🎮 {p2_items or "No items"}',
                 'inline': True
             },
