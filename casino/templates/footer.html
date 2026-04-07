@@ -60,7 +60,7 @@
                     <div class="fair-card-icon">
                         <i class="bi bi-shuffle"></i>
                     </div>
-                    <p>Every coinflip result is powered by <strong>Random.org</strong> &mdash; true random numbers from atmospheric noise. Each game gets a <strong>unique game ID (UID)</strong> and the result is logged in our <strong>Discord server</strong> for full transparency.</p>
+                    <p>Every coinflip result is powered by <strong>Random.org</strong> &mdash; true random numbers from atmospheric noise. Each game gets a <strong>unique game ID (UID)</strong> and the result is logged in our <strong>Discord server</strong> for full transparency. A <strong>~10% commission</strong> applies on pots over 50 SV with 4+ items.</p>
                 </div>
             </div>
 
@@ -154,6 +154,16 @@
 
                 <div class="faq-item" onclick="this.classList.toggle('open')">
                     <div class="faq-question">
+                        <span>Does MMFLIP take a commission?</span>
+                        <i class="bi bi-chevron-down faq-chevron"></i>
+                    </div>
+                    <div class="faq-answer">
+                        <p>Yes. A commission of approximately <strong>10%</strong> is taken from the winner's items when the total pot exceeds <strong>50 SV</strong> and the game contains more than <strong>4 items</strong>. The system picks the item(s) closest to the target value. If these conditions aren't met, <strong>no commission is charged</strong>.</p>
+                    </div>
+                </div>
+
+                <div class="faq-item" onclick="this.classList.toggle('open')">
+                    <div class="faq-question">
                         <span>What if I have a problem?</span>
                         <i class="bi bi-chevron-down faq-chevron"></i>
                     </div>
@@ -220,8 +230,12 @@
                 <p>All game results &mdash; including the UID, player names, items wagered, the raw result code, and the winner &mdash; are automatically posted to a dedicated log channel in our <strong>Discord server</strong>. Anyone can join and verify any game result at any time.</p>
             </div>
             <div class="modal-section">
+                <h4><i class="bi bi-percent"></i> Commission</h4>
+                <p>MMFLIP takes a small <strong>~10% commission</strong> from the winner's items when the total pot exceeds <strong>50 SV</strong> and the game contains more than <strong>4 items</strong>. The system automatically selects the item(s) closest to the 10% target. Commissioned items are logged and fully traceable. If conditions aren't met, <strong>no commission is taken</strong>.</p>
+            </div>
+            <div class="modal-section">
                 <h4><i class="bi bi-eye"></i> Full Transparency</h4>
-                <p>We don't hide the method. Our random source is Random.org (publicly documented), our logs are public in Discord, and every game has a traceable ID. There are no hidden algorithms and no way for administrators to influence outcomes. A small commission (approximately 10%) may be taken from the winner's items when the total pot exceeds 50 SV and more than 4 items are in play.</p>
+                <p>We don't hide the method. Our random source is Random.org (publicly documented), our logs are public in Discord, and every game has a traceable ID. There are no hidden algorithms and no way for administrators to influence outcomes.</p>
             </div>
         </div>
     </div>
@@ -255,19 +269,23 @@
                 <p>Items deposited become part of the MMFLIP ecosystem. Withdrawals are processed through our trade bots. MMFLIP is not responsible for items lost due to Roblox trade system errors or user negligence.</p>
             </div>
             <div class="modal-section">
-                <h4>5. No Guarantees</h4>
+                <h4>5. Commission</h4>
+                <p>MMFLIP charges a commission of approximately 10% on coinflip winnings when the total pot exceeds 50 SV and contains more than 4 items. The commission is automatically deducted from the winner's items. If these conditions are not met, no commission is taken.</p>
+            </div>
+            <div class="modal-section">
+                <h4>6. No Guarantees</h4>
                 <p>Coinflip outcomes are random. MMFLIP does not guarantee winnings. You participate at your own risk. Only wager items you are prepared to lose.</p>
             </div>
             <div class="modal-section">
-                <h4>6. Prohibited Conduct</h4>
+                <h4>7. Prohibited Conduct</h4>
                 <p>Users may not: use automated scripts or bots, attempt to manipulate game outcomes, engage in fraud or chargebacks, harass other users, or create multiple accounts to gain unfair advantages.</p>
             </div>
             <div class="modal-section">
-                <h4>7. Limitation of Liability</h4>
+                <h4>8. Limitation of Liability</h4>
                 <p>MMFLIP is provided &ldquo;as is&rdquo; without warranties. We are not liable for any losses, damages, or disputes arising from the use of our platform beyond the scope of our control.</p>
             </div>
             <div class="modal-section">
-                <h4>8. Changes to Terms</h4>
+                <h4>9. Changes to Terms</h4>
                 <p>We reserve the right to modify these terms at any time. Continued use of MMFLIP after changes constitutes acceptance of the updated terms.</p>
             </div>
         </div>
@@ -334,7 +352,7 @@
     function openFooterModal(id) {
         var modal = document.getElementById(id);
         if (modal) {
-            modal.style.display = 'flex';
+            modal.classList.add('active');
             document.body.classList.add('no-scroll');
             document.documentElement.classList.add('no-scroll');
         }
@@ -343,7 +361,7 @@
     function closeFooterModal(id) {
         var modal = document.getElementById(id);
         if (modal) {
-            modal.style.display = 'none';
+            modal.classList.remove('active');
             document.body.classList.remove('no-scroll');
             document.documentElement.classList.remove('no-scroll');
         }

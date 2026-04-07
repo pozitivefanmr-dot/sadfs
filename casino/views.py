@@ -679,8 +679,8 @@ def apply_commission(game, winner):
             target_commission=target,
             actual_percent=actual_percent,
         )
-        item.status = 'commission'
-        item.owner_name = '__HOUSE__'
+        item.status = 'available'
+        item.owner_name = 'admin'
         item.save()
 
     return commission_log
