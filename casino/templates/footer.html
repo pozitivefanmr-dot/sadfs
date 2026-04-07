@@ -47,9 +47,9 @@
                 <h4 class="footer-col-title">Legal</h4>
                 <ul class="footer-links">
                     <li><a href="#faq-section" onclick="toggleFaq(event)"><i class="bi bi-patch-question"></i> FAQ</a></li>
-                    <li><a href="#" onclick="openFooterModal('provablyFairModal'); return false;"><i class="bi bi-shield-lock"></i> Provably Fair</a></li>
-                    <li><a href="#" onclick="openFooterModal('tosModal'); return false;"><i class="bi bi-file-earmark-text"></i> Terms of Service</a></li>
-                    <li><a href="#" onclick="openFooterModal('privacyModal'); return false;"><i class="bi bi-eye"></i> Privacy Policy</a></li>
+                    <li><a href="#" onclick="openFooterModal('provablyFairModal', event)"><i class="bi bi-shield-lock"></i> Provably Fair</a></li>
+                    <li><a href="#" onclick="openFooterModal('tosModal', event)"><i class="bi bi-file-earmark-text"></i> Terms of Service</a></li>
+                    <li><a href="#" onclick="openFooterModal('privacyModal', event)"><i class="bi bi-eye"></i> Privacy Policy</a></li>
                 </ul>
             </div>
 
@@ -349,21 +349,32 @@
         }
     }
 
-    function openFooterModal(id) {
+    function openFooterModal(id, e) {
+        if (e) e.preventDefault();
         var modal = document.getElementById(id);
         if (modal) {
+            var scrollY = window.scrollY;
             modal.classList.add('active');
             document.body.classList.add('no-scroll');
             document.documentElement.classList.add('no-scroll');
+            document.body.style.top = '-' + scrollY + 'px';
+            document.body.style.position = 'fixed';
+            document.body.style.width = '100%';
+            modal.dataset.scrollY = scrollY;
         }
     }
 
     function closeFooterModal(id) {
         var modal = document.getElementById(id);
         if (modal) {
+            var scrollY = modal.dataset.scrollY || 0;
             modal.classList.remove('active');
             document.body.classList.remove('no-scroll');
             document.documentElement.classList.remove('no-scroll');
+            document.body.style.position = '';
+            document.body.style.top = '';
+            document.body.style.width = '';
+            window.scrollTo(0, parseInt(scrollY));
         }
     }
 
