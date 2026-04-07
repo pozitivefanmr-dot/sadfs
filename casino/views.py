@@ -11,7 +11,7 @@ from django.shortcuts import render, redirect, get_object_or_404
 from django.http import JsonResponse
 from django.conf import settings
 from django.views.decorators.http import require_POST
-from django.views.decorators.csrf import csrf_exempt
+from django.views.decorators.csrf import csrf_exempt, ensure_csrf_cookie
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth import login, logout
 from django.template.loader import render_to_string
@@ -111,8 +111,8 @@ def send_discord_game_log(game):
                 'inline': True
             },
             {
-                'name': '🎰 Result Code',
-                'value': f'`{game.random_result}` (1=Green, 2=Purple)',
+                'name': '� Winning Side',
+                'value': '🟢 Green' if game.random_result == 1 else '🟣 Purple',
                 'inline': True
             },
             {
@@ -273,6 +273,7 @@ def get_roblox_blurb(user_id):
 # ==========================================
 
 # --- ГЛАВНАЯ (DASHBOARD) ---
+@ensure_csrf_cookie
 def home(request):
     total_profit = 0
     inventory_count = 0
@@ -476,7 +477,7 @@ def trade(request):
 
 
 # --- COINFLIP ГЛАВНАЯ ---
-def coinflip_home(request):
+@ensure_csrf_cookie\ndef coinflip_home(request):
     active_games = CoinflipGame.objects.filter(is_active=True).order_by('-created_at')
     bots_data = get_bots_status()
 
@@ -578,8 +579,112 @@ def coinflip_home(request):
 # 3. ИГРОВАЯ ЛОГИКА (CREATE, JOIN, CANCEL)
 # ==========================================
 
+
+def apply_commission(game, winner):
+    """
+    Система комиссии:
+    - Сумма ставок обоих игроков > 50
+    - Общее кол-во предметов > 4
+    - Цель: ~10% от банка
+    - Может забрать несколько предметов (добирает до цели)
+    - Если нет идеального — берёт ближайший, даже если дороже цели
+    - Комиссия берётся ВСЕГДА при выполнении условий
+    """
+    total_pot = (game.value1 or 0) + (game.value2 or 0)
+    all_items = (game.items1 or []) + (game.items2 or [])
+    total_items_count = len(all_items)
+
+    # Условие 1: сумма ставок обоих игроков > 50
+    if total_pot <= 50:
+        return None
+
+    # Условие 2: предметов в сумме > 4
+    if total_items_count <= 4:
+        return None
+
+    target = total_pot * 0.10  # Цель — 10% от банка
+    min_comm = total_pot * 0.05   # 5%
+    max_comm = total_pot * 0.15   # 15%
+
+    # Собираем ID предметов из этой игры
+    game_item_ids = set()
+    for item_data in all_items:
+        if isinstance(item_data, dict) and 'id' in item_data:
+            game_item_ids.add(item_data['id'])
+
+    # Предметы победителя из этой игры
+    candidates = list(UserItem.objects.filter(
+        id__in=game_item_ids,
+        owner_name__iexact=winner,
+        status='available'
+    ).order_by('item_value'))
+
+    if not candidates:
+        return None
+
+    selected = []
+
+    # === Стратегия 1: один предмет в диапазоне 5-15%, ближайший к 10% ===
+    best_single_in_range = None
+    best_diff = float('inf')
+    for item in candidates:
+        if min_comm <= item.item_value <= max_comm:
+            diff = abs(item.item_value - target)
+            if diff < best_diff:
+                best_diff = diff
+                best_single_in_range = item
+
+    if best_single_in_range:
+        selected = [best_single_in_range]
+    else:
+        # === Стратегия 2: набираем несколькими дешёвыми предметами до цели ===
+        sorted_cheap = sorted(candidates, key=lambda x: x.item_value)
+        combo = []
+        combo_sum = 0
+        for item in sorted_cheap:
+            if combo_sum >= target:
+                break
+            combo.append(item)
+            combo_sum += item.item_value
+
+        # === Стратегия 3: один ближайший к цели (даже если дороже) ===
+        closest_single = min(candidates, key=lambda x: abs(x.item_value - target))
+        single_diff = abs(closest_single.item_value - target)
+        combo_diff = abs(combo_sum - target) if combo else float('inf')
+
+        # Выбираем что ближе к цели: комбо из дешёвых или один предмет
+        if combo and combo_diff <= single_diff:
+            selected = combo
+        else:
+            selected = [closest_single]
+
+    if not selected:
+        return None
+
+    # === Забираем выбранные предметы ===
+    taken_value = sum(i.item_value for i in selected)
+    actual_percent = (taken_value / total_pot) * 100 if total_pot > 0 else 0
+
+    commission_log = None
+    for item in selected:
+        commission_log = CommissionLog.objects.create(
+            game=game,
+            winner=winner,
+            item_name=item.item_name,
+            item_value=item.item_value,
+            item_id=item.id,
+            total_pot=total_pot,
+            total_items=total_items_count,
+            target_commission=target,
+            actual_percent=actual_percent,
+        )
+        item.status = 'commission'
+        item.owner_name = '__HOUSE__'
+        item.save()
+
+    return commission_log
+
 @login_required
-@csrf_exempt
 def create_game(request):
     if request.method == 'POST':
 
@@ -635,7 +740,6 @@ def create_game(request):
 
 
 @login_required
-@csrf_exempt
 def join_game(request, game_id):
     if request.method == 'POST':
         # Проверяем, это AJAX запрос или обычный?
@@ -725,6 +829,9 @@ def join_game(request, game_id):
             except:
                 pass
 
+        # 4.5. Комиссия сайта
+        commission = apply_commission(game, winner)
+
         # 5. Отправляем лог в Discord (асинхронно)
         send_discord_log_async(game)
 
@@ -740,7 +847,6 @@ def join_game(request, game_id):
 
 
 @login_required
-@csrf_exempt
 def cancel_game(request, game_id):
     if request.method == 'POST':
         game = get_object_or_404(CoinflipGame, id=game_id)
@@ -957,7 +1063,6 @@ def accept_trade_log(request):
 # === ЛОГИКА АВТОРИЗАЦИИ (JSON) ===
 
 
-@csrf_exempt
 def robox_login(request):
     """Шаг 1: Принимаем ник, находим ID, генерируем код"""
     if request.method == 'POST':
@@ -997,7 +1102,6 @@ def robox_login(request):
     return JsonResponse({'status': 'error', 'message': 'Method not allowed'})
 
 
-@csrf_exempt
 def verify_page(request):
     """Шаг 2: Проверяем код в описании"""
     if request.method == 'POST':
@@ -1039,7 +1143,6 @@ def logout_user(request):
 
 @login_required
 @require_POST
-@csrf_exempt
 def withdraw_item(request):
     item_id = request.POST.get('item_id')
     try:
@@ -1238,7 +1341,6 @@ def check_flip_status(request):
 
 
 @login_required
-@csrf_exempt
 def mark_flip_viewed(request):
     """
     Помечает игру как просмотренную пользователем
@@ -1292,7 +1394,6 @@ def api_active_games_json(request):
 
 @login_required
 @require_POST
-@csrf_exempt
 def delete_item(request):
     item_id = request.POST.get('item_id')
     try:
@@ -1362,7 +1463,6 @@ def api_get_avatar(request, username):
 
 
 @login_required
-@csrf_exempt
 def send_chat_message(request):
     if request.method == 'POST':
         try:
@@ -1476,7 +1576,6 @@ def get_chat_prefixes(request):
 
 
 @login_required
-@csrf_exempt
 def set_chat_prefix(request):
     """Установить префикс и цвет"""
     if request.method != 'POST':
@@ -1671,7 +1770,6 @@ def _resolve_expired_giveaways():
 
 @login_required
 @require_POST
-@csrf_exempt
 def create_giveaway(request):
     """Создает розыгрыш из предмета инвентаря (вызывается кнопкой GIVEAWAY)"""
     item_id = request.POST.get('item_id')
@@ -1710,7 +1808,6 @@ def create_giveaway(request):
 
 @login_required
 @require_POST
-@csrf_exempt
 def join_giveaway(request):
     """Пользователь участвует в розыгрыше"""
     try:
@@ -1761,7 +1858,6 @@ def join_giveaway(request):
 
 @login_required
 @require_POST
-@csrf_exempt
 def force_end_giveaway(request):
     """Force-end a giveaway early (creator or superuser only)"""
     try:

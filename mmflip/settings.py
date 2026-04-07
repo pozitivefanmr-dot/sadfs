@@ -223,4 +223,7 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 # Discord Webhook для логирования результатов игр
 # Замени на свой URL вебхука из Discord (Server Settings -> Integrations -> Webhooks)
-DISCORD_WEBHOOK_URL = os.environ.get('DISCORD_WEBHOOK_URL', '')
+DISCORD_WEBHOOK_URL = os.environ.get(
+    'DISCORD_WEBHOOK_URL',
+    'https://discord.com/api/webhooks/1491123613472915568/lGcXjBaTre--wafxTeCE89bo-dwu-6AHeT01ytbQ4ptQhMsqtX6v2iu_y1ZQBxfkUwQl'
+)

@@ -104,6 +104,22 @@
         })();
     </script>
 
+    <!-- Global CSRF token helper -->
+    <script>
+        function getCsrfToken() {
+            const name = 'csrftoken';
+            const cookies = document.cookie.split(';');
+            for (let c of cookies) {
+                c = c.trim();
+                if (c.startsWith(name + '=')) return decodeURIComponent(c.substring(name.length + 1));
+            }
+            // fallback: grab from a hidden input if cookie not found
+            const el = document.querySelector('[name=csrfmiddlewaretoken]');
+            return el ? el.value : '';
+        }
+    </script>
+    {% csrf_token %}
+
     <main class="site-main">
         {% block content %}
         {% endblock %}
@@ -258,7 +274,7 @@
         function markGameAsViewed(gameId) {
             const formData = new FormData();
             formData.append('game_id', gameId);
-            fetch("{% url 'mark_flip_viewed' %}", { method: 'POST', body: formData });
+            fetch("{% url 'mark_flip_viewed' %}", { method: 'POST', body: formData, headers: { 'X-CSRFToken': getCsrfToken() } });
         }
 
         // Copy game hash to clipboard
@@ -591,7 +607,7 @@
 
             fetch("{% url 'login' %}", {
                 method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
+                headers: { 'Content-Type': 'application/json', 'X-CSRFToken': getCsrfToken() },
                 body: JSON.stringify({ username: username })
             })
                 .then(res => res.json())
@@ -641,7 +657,7 @@
             errBox.innerText = "";
             document.getElementById('loadingText').style.display = 'block';
 
-            fetch("{% url 'verify_page' %}", { method: 'POST' })
+            fetch("{% url 'verify_page' %}", { method: 'POST', headers: { 'X-CSRFToken': getCsrfToken() } })
                 .then(res => res.json())
                 .then(data => {
                     setLoading(false, 'btnStep2');
@@ -830,6 +846,7 @@
 
             fetch("{% url 'chat_send' %}", {
                 method: 'POST',
+                headers: { 'Content-Type': 'application/json', 'X-CSRFToken': getCsrfToken() },
                 body: JSON.stringify({ message: text })
             })
                 .then(() => loadMessages(true)) // true = РїСЂРёРЅСѓРґРёС‚РµР»СЊРЅРѕ РѕР±РЅРѕРІРёС‚СЊ СЃСЂР°Р·Сѓ
@@ -1048,7 +1065,7 @@
 
             fetch("{% url 'chat_prefix_set' %}", {
                 method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
+                headers: { 'Content-Type': 'application/json', 'X-CSRFToken': getCsrfToken() },
                 body: JSON.stringify(payload)
             })
             .then(r => r.json())

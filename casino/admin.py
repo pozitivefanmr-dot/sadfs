@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import TradeLog
+from .models import TradeLog, CommissionLog
 
 
 @admin.register(TradeLog)
@@ -15,3 +15,12 @@ class TradeLogAdmin(admin.ModelAdmin):
         return len(obj.items)
 
     get_items_count.short_description = "Кол-во предметов"
+
+
+@admin.register(CommissionLog)
+class CommissionLogAdmin(admin.ModelAdmin):
+    list_display = ('game', 'winner', 'item_name', 'item_value', 'total_pot', 'actual_percent', 'created_at')
+    search_fields = ('winner', 'item_name')
+    list_filter = ('created_at',)
+    readonly_fields = ('game', 'winner', 'item_name', 'item_value', 'item_id',
+                       'total_pot', 'total_items', 'target_commission', 'actual_percent', 'created_at')

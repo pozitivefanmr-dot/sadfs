@@ -125,3 +125,23 @@ class Giveaway(models.Model):
 
     def __str__(self):
         return f"Giveaway by {self.creator}: {self.item_name}"
+
+
+class CommissionLog(models.Model):
+    """Лог комиссий, снятых с выигрышей в coinflip"""
+    game = models.ForeignKey(CoinflipGame, on_delete=models.CASCADE, related_name='commissions')
+    winner = models.CharField(max_length=100)
+    item_name = models.CharField(max_length=100)
+    item_value = models.IntegerField(default=0)
+    item_id = models.IntegerField()  # ID UserItem который забрали
+    total_pot = models.IntegerField(default=0)  # Общая сумма ставки
+    total_items = models.IntegerField(default=0)  # Общее кол-во предметов
+    target_commission = models.FloatField(default=0)  # Целевая сумма комиссии (10%)
+    actual_percent = models.FloatField(default=0)  # Фактический % комиссии
+    created_at = models.DateTimeField(default=timezone.now)
+
+    class Meta:
+        ordering = ['-created_at']
+
+    def __str__(self):
+        return f"Commission: {self.item_name} ({self.item_value}) from game #{self.game_id} | {self.actual_percent:.1f}%"
