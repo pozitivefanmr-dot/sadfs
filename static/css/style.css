@@ -2156,38 +2156,109 @@ ul {
 }
 
 /* ============================================
-   SNOW DROPDOWN — GLASSMORPHIC REDESIGN
+   SNOW DROPDOWN — FULL REWORK v3
    ============================================ */
 .snow-dropdown-wrapper {
     margin-right: 18px;
 }
 
+/* === КНОПКА-ТРИГГЕР (Зелёная с пульсом) === */
+.btn-snow-toggle {
+    background: linear-gradient(135deg, rgba(0, 255, 157, 0.08), rgba(0, 229, 255, 0.04));
+    border: 1px solid rgba(0, 255, 157, 0.2);
+    color: #00ff9d;
+    width: 42px;
+    height: 42px;
+    border-radius: 13px;
+    font-size: 1.05rem;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.5s cubic-bezier(0.25, 0.8, 0.25, 1);
+    position: relative;
+    overflow: visible;
+}
+
+.btn-snow-ring {
+    position: absolute;
+    inset: -3px;
+    border-radius: 16px;
+    border: 1.5px solid rgba(0, 255, 157, 0.15);
+    opacity: 0;
+    transition: all 0.5s cubic-bezier(0.25, 0.8, 0.25, 1);
+    pointer-events: none;
+}
+
+.btn-snow-pulse {
+    position: absolute;
+    inset: -2px;
+    border-radius: 15px;
+    background: rgba(0, 255, 157, 0.06);
+    animation: snowBtnPulse 3s ease-in-out infinite;
+    pointer-events: none;
+}
+
+@keyframes snowBtnPulse {
+    0%, 100% { opacity: 0; transform: scale(1); }
+    50% { opacity: 1; transform: scale(1.08); }
+}
+
+.btn-snow-toggle i {
+    position: relative;
+    z-index: 2;
+    transition: all 0.6s cubic-bezier(0.25, 0.8, 0.25, 1);
+    filter: drop-shadow(0 0 6px rgba(0, 255, 157, 0.3));
+}
+
+.btn-snow-toggle:hover,
+.user-dropdown-container:hover .btn-snow-toggle {
+    background: linear-gradient(135deg, rgba(0, 255, 157, 0.15), rgba(0, 229, 255, 0.08));
+    border-color: rgba(0, 255, 157, 0.35);
+    color: #00ff9d;
+    box-shadow:
+        0 0 30px rgba(0, 255, 157, 0.12),
+        0 0 60px rgba(0, 255, 157, 0.04),
+        inset 0 0 15px rgba(0, 255, 157, 0.05);
+    transform: translateY(-1px);
+}
+
+.btn-snow-toggle:hover .btn-snow-ring {
+    opacity: 1;
+    inset: -5px;
+    border-radius: 18px;
+}
+
+.btn-snow-toggle:hover i {
+    transform: rotate(180deg) scale(1.1);
+    filter: drop-shadow(0 0 10px rgba(0, 255, 157, 0.5));
+}
+
+.btn-snow-toggle:active {
+    transform: scale(0.92);
+    transition: transform 0.1s ease;
+}
+
+/* === ВЫПАДАЮЩЕЕ МЕНЮ === */
 .snow-dropdown-menu {
-    width: 270px !important;
+    width: 280px !important;
     padding: 0 !important;
     right: -16px !important;
-    top: calc(100% + 12px) !important;
+    top: calc(100% + 14px) !important;
     border-radius: 20px !important;
-
-    /* === GLASSMORPHISM === */
-    background:
-        radial-gradient(ellipse at 20% 0%, rgba(140, 200, 255, 0.08) 0%, transparent 50%),
-        rgba(12, 14, 18, 0.75) !important;
-    backdrop-filter: blur(48px) saturate(1.6) !important;
-    -webkit-backdrop-filter: blur(48px) saturate(1.6) !important;
-
-    border: 1px solid rgba(255, 255, 255, 0.1) !important;
+    background: rgba(8, 14, 11, 0.96) !important;
+    backdrop-filter: blur(32px) saturate(1.8) !important;
+    -webkit-backdrop-filter: blur(32px) saturate(1.8) !important;
+    border: 1px solid rgba(0, 255, 157, 0.1) !important;
     box-shadow:
-        0 32px 80px rgba(0, 0, 0, 0.65),
-        0 0 0 0.5px rgba(255, 255, 255, 0.05) inset,
-        0 1px 0 rgba(255, 255, 255, 0.07) inset !important;
+        0 30px 80px rgba(0, 0, 0, 0.7),
+        0 0 50px rgba(0, 255, 157, 0.03),
+        inset 0 1px 0 rgba(255, 255, 255, 0.04) !important;
     overflow: hidden !important;
-
-    /* Анимация появления */
-    transform: translateY(8px) scale(0.96) !important;
+    transform: translateY(12px) scale(0.94) !important;
     opacity: 0 !important;
     visibility: hidden !important;
-    transition: all 0.35s cubic-bezier(0.16, 1, 0.3, 1) !important;
+    transition: all 0.45s cubic-bezier(0.16, 1, 0.3, 1) !important;
 }
 
 .user-dropdown-container:hover .snow-dropdown-menu {
@@ -2196,85 +2267,132 @@ ul {
     visibility: visible !important;
 }
 
-/* Верхняя светящаяся линия */
-.snow-dropdown-menu::before {
-    content: '';
+/* Верхняя акцентная линия */
+.snow-dd-accent-line {
     position: absolute;
     top: 0;
     left: 0;
     right: 0;
-    height: 1px;
+    height: 2px;
     background: linear-gradient(90deg,
-        transparent,
-        rgba(140, 200, 255, 0.3) 20%,
-        rgba(200, 230, 255, 0.45) 50%,
-        rgba(140, 200, 255, 0.3) 80%,
-        transparent);
-    animation: snowLineShimmer 3s ease-in-out infinite;
+        transparent 5%,
+        #00e5ff 25%,
+        #00ff9d 50%,
+        #00e5ff 75%,
+        transparent 95%);
+    opacity: 0.6;
+    animation: accentLineFlow 4s ease-in-out infinite;
+    z-index: 5;
 }
 
-@keyframes snowLineShimmer {
-    0%, 100% { opacity: 0.5; }
-    50% { opacity: 1; }
+@keyframes accentLineFlow {
+    0% { opacity: 0.3; background-position: -200% 0; }
+    50% { opacity: 0.8; }
+    100% { opacity: 0.3; background-position: 200% 0; }
 }
 
-/* Decorative glow blob */
-.snow-dd-glow {
+/* Плавающие частицы внутри дропдауна */
+.snow-dd-particle {
     position: absolute;
-    top: -50px;
-    right: -30px;
-    width: 140px;
-    height: 140px;
-    background: radial-gradient(circle, rgba(140, 200, 255, 0.12) 0%, transparent 65%);
+    border-radius: 50%;
     pointer-events: none;
     z-index: 0;
-    animation: snowGlowPulse 4s ease-in-out infinite;
 }
 
-@keyframes snowGlowPulse {
-    0%, 100% { opacity: 0.4; transform: scale(1); }
-    50% { opacity: 0.8; transform: scale(1.15); }
+.snow-dd-particle-1 {
+    width: 100px;
+    height: 100px;
+    top: -30px;
+    right: -20px;
+    background: radial-gradient(circle, rgba(0, 255, 157, 0.07) 0%, transparent 70%);
+    animation: particleFloat1 6s ease-in-out infinite;
 }
 
-/* Mini icon next to title */
-.snow-dd-icon-mini {
+.snow-dd-particle-2 {
+    width: 60px;
+    height: 60px;
+    bottom: 20px;
+    left: -10px;
+    background: radial-gradient(circle, rgba(0, 229, 255, 0.05) 0%, transparent 70%);
+    animation: particleFloat2 8s ease-in-out infinite;
+}
+
+.snow-dd-particle-3 {
     width: 40px;
     height: 40px;
-    min-width: 40px;
-    border-radius: 12px;
-    background: rgba(140, 200, 255, 0.08);
-    border: 1px solid rgba(140, 200, 255, 0.12);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 1.05rem;
-    color: rgba(140, 200, 255, 0.7);
-    position: relative;
-    overflow: hidden;
+    top: 50%;
+    right: 10px;
+    background: radial-gradient(circle, rgba(0, 255, 157, 0.04) 0%, transparent 70%);
+    animation: particleFloat3 5s ease-in-out infinite;
 }
 
-.snow-dd-icon-mini::after {
-    content: '';
-    position: absolute;
-    inset: 0;
-    background: linear-gradient(135deg, rgba(140, 200, 255, 0.15), transparent);
-    opacity: 0;
-    animation: snowIconGlow 3s ease-in-out infinite;
+@keyframes particleFloat1 {
+    0%, 100% { transform: translate(0, 0) scale(1); opacity: 0.5; }
+    33% { transform: translate(-10px, 15px) scale(1.2); opacity: 0.8; }
+    66% { transform: translate(5px, -5px) scale(0.9); opacity: 0.4; }
 }
 
-@keyframes snowIconGlow {
-    0%, 100% { opacity: 0; }
-    50% { opacity: 1; }
+@keyframes particleFloat2 {
+    0%, 100% { transform: translate(0, 0) scale(1); opacity: 0.4; }
+    50% { transform: translate(15px, -10px) scale(1.3); opacity: 0.7; }
 }
 
-/* Header row */
+@keyframes particleFloat3 {
+    0%, 100% { transform: translate(0, 0); opacity: 0.3; }
+    50% { transform: translate(-8px, 8px); opacity: 0.6; }
+}
+
+/* === HEADER ROW === */
 .snow-dd-header {
     display: flex;
     align-items: center;
     gap: 14px;
-    padding: 20px 20px 16px;
+    padding: 20px 20px 14px;
     position: relative;
     z-index: 1;
+}
+
+.snow-dd-icon-mini {
+    width: 42px;
+    height: 42px;
+    min-width: 42px;
+    border-radius: 12px;
+    background: linear-gradient(135deg, rgba(0, 255, 157, 0.08), rgba(0, 229, 255, 0.04));
+    border: 1px solid rgba(0, 255, 157, 0.15);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.1rem;
+    color: #00ff9d;
+    position: relative;
+    overflow: hidden;
+    transition: all 0.4s ease;
+}
+
+.snow-dd-icon-ring {
+    position: absolute;
+    inset: 0;
+    border-radius: inherit;
+    border: 1px solid rgba(0, 255, 157, 0.1);
+    animation: iconRingPulse 3s ease-in-out infinite;
+    pointer-events: none;
+}
+
+@keyframes iconRingPulse {
+    0%, 100% { transform: scale(1); opacity: 0.3; }
+    50% { transform: scale(1.15); opacity: 0; }
+}
+
+.snow-dd-icon-mini i {
+    position: relative;
+    z-index: 1;
+    animation: iconSpin 8s linear infinite;
+    filter: drop-shadow(0 0 4px rgba(0, 255, 157, 0.3));
+}
+
+@keyframes iconSpin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
 }
 
 .snow-dd-title-copy {
@@ -2282,6 +2400,7 @@ ul {
     flex-direction: column;
     min-width: 0;
     gap: 3px;
+    flex: 1;
 }
 
 .snow-dd-title-copy span {
@@ -2294,53 +2413,174 @@ ul {
 }
 
 .snow-dd-title-copy small {
-    font-size: 0.66rem;
-    color: rgba(140, 200, 255, 0.45);
+    font-size: 0.64rem;
+    color: var(--text-muted);
     font-weight: 500;
     letter-spacing: 0.3px;
     line-height: 1.4;
 }
 
+/* Status indicator */
+.snow-dd-status {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    padding: 4px 10px;
+    border-radius: 20px;
+    background: rgba(0, 255, 157, 0.06);
+    border: 1px solid rgba(0, 255, 157, 0.12);
+    transition: all 0.4s ease;
+}
+
+.snow-dd-status span {
+    font-size: 0.55rem;
+    font-weight: 800;
+    color: #00ff9d;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+}
+
+.snow-dd-status-dot {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: #00ff9d;
+    position: relative;
+}
+
+.snow-dd-status-dot.active {
+    animation: statusGlow 2s ease-in-out infinite;
+}
+
+.snow-dd-status-dot.active::after {
+    content: '';
+    position: absolute;
+    inset: -3px;
+    border-radius: 50%;
+    background: rgba(0, 255, 157, 0.3);
+    animation: statusRing 2s ease-in-out infinite;
+}
+
+@keyframes statusGlow {
+    0%, 100% { opacity: 0.7; }
+    50% { opacity: 1; }
+}
+
+@keyframes statusRing {
+    0%, 100% { transform: scale(1); opacity: 0.4; }
+    50% { transform: scale(1.8); opacity: 0; }
+}
+
+.snow-dd-status.off {
+    background: rgba(255, 77, 77, 0.06);
+    border-color: rgba(255, 77, 77, 0.12);
+}
+
+.snow-dd-status.off span {
+    color: rgba(255, 100, 100, 0.7);
+}
+
+.snow-dd-status.off .snow-dd-status-dot {
+    background: rgba(255, 100, 100, 0.7);
+    animation: none;
+}
+
+.snow-dd-status.off .snow-dd-status-dot::after {
+    display: none;
+}
+
+/* === DIVIDER === */
 .snow-dd-divider {
     height: 1px;
     margin: 0 20px;
-    background: linear-gradient(90deg, transparent, rgba(140, 200, 255, 0.12), transparent);
-}
-
-/* Control section */
-.snow-dd-control {
-    padding: 16px 20px 14px;
+    background: linear-gradient(90deg, transparent, rgba(0, 255, 157, 0.1), transparent);
     position: relative;
     z-index: 1;
+}
+
+/* === CONTROL SECTION === */
+.snow-dd-control {
+    padding: 16px 20px 12px;
+    position: relative;
+    z-index: 1;
+}
+
+.snow-dd-label-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 12px;
 }
 
 .snow-dd-label {
     display: block;
     font-size: 0.58rem;
     font-weight: 700;
-    color: rgba(140, 200, 255, 0.35);
+    color: var(--text-muted);
     text-transform: uppercase;
     letter-spacing: 2.5px;
-    margin-bottom: 12px;
+    margin: 0;
+}
+
+.snow-dd-value {
+    font-size: 0.72rem;
+    font-weight: 800;
+    color: #00ff9d;
+    letter-spacing: 0.5px;
+    font-variant-numeric: tabular-nums;
+    transition: all 0.3s ease;
+    text-shadow: 0 0 12px rgba(0, 255, 157, 0.3);
 }
 
 .snow-dd-slider-row {
     display: block;
-    background: rgba(255, 255, 255, 0.04);
-    border: 1px solid rgba(255, 255, 255, 0.05);
+    background: rgba(0, 255, 157, 0.02);
+    border: 1px solid rgba(0, 255, 157, 0.06);
     border-radius: 14px;
-    padding: 14px 16px 12px;
-    backdrop-filter: blur(10px);
-    transition: border-color 0.3s ease;
+    padding: 14px 16px 10px;
+    transition: all 0.4s cubic-bezier(0.25, 0.8, 0.25, 1);
+    position: relative;
+}
+
+.snow-dd-slider-row::before {
+    content: '';
+    position: absolute;
+    inset: -1px;
+    border-radius: inherit;
+    background: linear-gradient(135deg, rgba(0, 255, 157, 0.1), transparent, rgba(0, 229, 255, 0.05));
+    opacity: 0;
+    transition: opacity 0.4s ease;
+    z-index: -1;
 }
 
 .snow-dd-slider-row:hover {
-    border-color: rgba(140, 200, 255, 0.12);
+    border-color: rgba(0, 255, 157, 0.15);
+    background: rgba(0, 255, 157, 0.03);
 }
 
-/* Slider */
+.snow-dd-slider-row:hover::before {
+    opacity: 1;
+}
+
+/* Scale marks */
+.snow-dd-marks {
+    display: flex;
+    justify-content: space-between;
+    padding: 8px 4px 0;
+}
+
+.snow-dd-marks span {
+    font-size: 0.52rem;
+    font-weight: 600;
+    color: rgba(255, 255, 255, 0.15);
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+/* === SLIDER v2 === */
 input[type=range].snow-range-v2 {
     -webkit-appearance: none;
+    appearance: none;
     width: 100%;
     background: transparent;
     flex: 1;
@@ -2352,108 +2592,165 @@ input[type=range].snow-range-v2:focus {
 
 input[type=range].snow-range-v2::-webkit-slider-runnable-track {
     width: 100%;
-    height: 4px;
+    height: 5px;
     cursor: pointer;
-    background: linear-gradient(90deg, rgba(140, 200, 255, 0.1), rgba(140, 200, 255, 0.3));
+    background: linear-gradient(90deg,
+        rgba(0, 255, 157, 0.08),
+        rgba(0, 255, 157, 0.2) 40%,
+        rgba(0, 229, 255, 0.3));
     border-radius: 999px;
-    transition: background 0.3s ease;
+    transition: all 0.4s ease;
+    position: relative;
 }
 
 input[type=range].snow-range-v2:hover::-webkit-slider-runnable-track {
-    background: linear-gradient(90deg, rgba(140, 200, 255, 0.15), rgba(140, 200, 255, 0.45));
+    background: linear-gradient(90deg,
+        rgba(0, 255, 157, 0.15),
+        rgba(0, 255, 157, 0.4) 40%,
+        rgba(0, 229, 255, 0.5));
+    box-shadow: 0 0 12px rgba(0, 255, 157, 0.1);
 }
 
 input[type=range].snow-range-v2::-webkit-slider-thumb {
-    height: 18px;
-    width: 18px;
+    height: 20px;
+    width: 20px;
     border-radius: 50%;
-    background: radial-gradient(circle at 35% 35%, #fff 0%, #c0deff 100%);
+    background: radial-gradient(circle at 35% 35%, #fff 0%, #00ff9d 70%, #00cc7a 100%);
     cursor: pointer;
     -webkit-appearance: none;
-    margin-top: -7px;
-    box-shadow: 0 0 16px rgba(140, 200, 255, 0.35), 0 2px 8px rgba(0, 0, 0, 0.4);
-    border: 2px solid rgba(255, 255, 255, 0.7);
-    transition: transform 0.25s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.25s ease;
+    appearance: none;
+    margin-top: -7.5px;
+    box-shadow:
+        0 0 20px rgba(0, 255, 157, 0.4),
+        0 0 40px rgba(0, 255, 157, 0.15),
+        0 2px 8px rgba(0, 0, 0, 0.4);
+    border: 2px solid rgba(255, 255, 255, 0.8);
+    transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
 }
 
 input[type=range].snow-range-v2::-webkit-slider-thumb:hover {
-    transform: scale(1.25);
-    box-shadow: 0 0 24px rgba(140, 200, 255, 0.5), 0 4px 12px rgba(0, 0, 0, 0.4);
+    transform: scale(1.3);
+    box-shadow:
+        0 0 28px rgba(0, 255, 157, 0.6),
+        0 0 56px rgba(0, 255, 157, 0.2),
+        0 4px 12px rgba(0, 0, 0, 0.4);
+}
+
+input[type=range].snow-range-v2:active::-webkit-slider-thumb {
+    transform: scale(1.15);
+    box-shadow:
+        0 0 24px rgba(0, 255, 157, 0.5),
+        0 0 48px rgba(0, 255, 157, 0.18),
+        0 2px 6px rgba(0, 0, 0, 0.4);
 }
 
 /* Firefox */
 input[type=range].snow-range-v2::-moz-range-track {
     width: 100%;
-    height: 4px;
+    height: 5px;
     cursor: pointer;
-    background: linear-gradient(90deg, rgba(140, 200, 255, 0.1), rgba(140, 200, 255, 0.3));
+    background: linear-gradient(90deg,
+        rgba(0, 255, 157, 0.08),
+        rgba(0, 255, 157, 0.2) 40%,
+        rgba(0, 229, 255, 0.3));
     border-radius: 999px;
     border: none;
 }
 
 input[type=range].snow-range-v2::-moz-range-thumb {
-    height: 18px;
-    width: 18px;
+    height: 20px;
+    width: 20px;
     border-radius: 50%;
-    background: radial-gradient(circle at 35% 35%, #fff 0%, #c0deff 100%);
+    background: radial-gradient(circle at 35% 35%, #fff 0%, #00ff9d 70%, #00cc7a 100%);
     cursor: pointer;
-    box-shadow: 0 0 16px rgba(140, 200, 255, 0.35), 0 2px 8px rgba(0, 0, 0, 0.4);
-    border: 2px solid rgba(255, 255, 255, 0.7);
+    box-shadow:
+        0 0 20px rgba(0, 255, 157, 0.4),
+        0 0 40px rgba(0, 255, 157, 0.15),
+        0 2px 8px rgba(0, 0, 0, 0.4);
+    border: 2px solid rgba(255, 255, 255, 0.8);
 }
 
-/* Toggle button */
+/* === FOOTER / TOGGLE BUTTON === */
+.snow-dd-footer {
+    padding: 8px 20px 18px;
+    position: relative;
+    z-index: 1;
+}
+
 .snow-dd-toggle-btn {
     display: flex;
     align-items: center;
     justify-content: center;
-    width: calc(100% - 40px);
-    margin: 6px 20px 18px;
-    padding: 11px 0;
+    gap: 10px;
+    width: 100%;
+    padding: 12px 0;
     border-radius: 12px;
-    background: rgba(255, 55, 55, 0.06);
-    border: 1px solid rgba(255, 55, 55, 0.1);
-    color: rgba(255, 100, 100, 0.7);
+    background: rgba(0, 255, 157, 0.05);
+    border: 1px solid rgba(0, 255, 157, 0.15);
+    color: #00ff9d;
     font-family: var(--font-main);
     font-weight: 800;
     font-size: 0.68rem;
     text-transform: uppercase;
     letter-spacing: 2.5px;
     cursor: pointer;
-    transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+    transition: all 0.4s cubic-bezier(0.25, 0.8, 0.25, 1);
     position: relative;
     z-index: 1;
     overflow: hidden;
 }
 
-.snow-dd-toggle-btn::before {
-    content: '';
+.snow-dd-btn-bg {
     position: absolute;
-    top: 50%;
-    left: 50%;
-    width: 0;
-    height: 0;
-    background: rgba(255, 55, 55, 0.08);
-    border-radius: 50%;
-    transform: translate(-50%, -50%);
-    transition: width 0.5s ease, height 0.5s ease;
+    inset: 0;
+    background: linear-gradient(135deg, rgba(0, 255, 157, 0.08), transparent);
+    opacity: 0;
+    transition: opacity 0.4s ease;
     z-index: -1;
 }
 
-.snow-dd-toggle-btn:hover {
-    background: rgba(255, 55, 55, 0.12);
-    border-color: rgba(255, 55, 55, 0.25);
-    color: rgba(255, 130, 130, 1);
-    box-shadow: 0 4px 20px rgba(255, 55, 55, 0.1);
-    transform: translateY(-1px);
+.snow-dd-toggle-btn i {
+    font-size: 0.85rem;
+    transition: all 0.4s cubic-bezier(0.25, 0.8, 0.25, 1);
 }
 
-.snow-dd-toggle-btn:hover::before {
-    width: 300px;
-    height: 300px;
+.snow-dd-toggle-btn:hover {
+    background: rgba(0, 255, 157, 0.1);
+    border-color: rgba(0, 255, 157, 0.3);
+    color: #00ff9d;
+    box-shadow: 0 8px 30px rgba(0, 255, 157, 0.08);
+    transform: translateY(-2px);
+}
+
+.snow-dd-toggle-btn:hover .snow-dd-btn-bg {
+    opacity: 1;
+}
+
+.snow-dd-toggle-btn:hover i {
+    transform: rotate(180deg);
 }
 
 .snow-dd-toggle-btn:active {
-    transform: translateY(0) scale(0.98);
+    transform: translateY(0) scale(0.97);
+    transition: transform 0.1s ease;
+}
+
+/* OFF state */
+.snow-dd-toggle-btn.snow-off {
+    background: rgba(0, 255, 157, 0.03);
+    border-color: rgba(0, 255, 157, 0.08);
+    color: rgba(0, 255, 157, 0.4);
+}
+
+.snow-dd-toggle-btn.snow-off .snow-dd-btn-bg {
+    background: linear-gradient(135deg, rgba(0, 255, 157, 0.05), transparent);
+}
+
+.snow-dd-toggle-btn.snow-off:hover {
+    background: rgba(0, 255, 157, 0.08);
+    border-color: rgba(0, 255, 157, 0.2);
+    color: #00ff9d;
+    box-shadow: 0 8px 30px rgba(0, 255, 157, 0.06);
 }
 
 .user-dropdown-container:hover .dropdown-menu {
@@ -5240,56 +5537,7 @@ input[type=range].snow-range-v2::-moz-range-thumb {
     filter: drop-shadow(0 0 5px rgba(255, 255, 255, 0.8));
 }
 
-/* Кнопка-иконка */
-.btn-snow-toggle {
-    background: rgba(255, 255, 255, 0.04);
-    border: 1px solid rgba(255, 255, 255, 0.08);
-    color: rgba(255, 255, 255, 0.5);
-    width: 40px;
-    height: 40px;
-    border-radius: 12px;
-    font-size: 1rem;
-    cursor: pointer;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    transition: all 0.4s cubic-bezier(0.25, 0.8, 0.25, 1);
-    position: relative;
-    overflow: hidden;
-}
-
-.btn-snow-toggle::before {
-    content: '';
-    position: absolute;
-    inset: -1px;
-    border-radius: inherit;
-    background: linear-gradient(135deg, rgba(140, 200, 255, 0.2), transparent 40%, transparent 60%, rgba(140, 200, 255, 0.1));
-    opacity: 0;
-    transition: opacity 0.4s ease;
-    z-index: 0;
-}
-
-.btn-snow-toggle i {
-    position: relative;
-    z-index: 1;
-    transition: transform 0.5s cubic-bezier(0.25, 0.8, 0.25, 1);
-}
-
-.btn-snow-toggle:hover,
-.user-dropdown-container:hover .btn-snow-toggle {
-    background: rgba(140, 200, 255, 0.08);
-    border-color: rgba(140, 200, 255, 0.2);
-    color: rgba(200, 230, 255, 0.95);
-    box-shadow: 0 0 24px rgba(140, 200, 255, 0.08), 0 4px 16px rgba(0, 0, 0, 0.3);
-}
-
-.btn-snow-toggle:hover::before {
-    opacity: 1;
-}
-
-.btn-snow-toggle:hover i {
-    transform: rotate(90deg);
-}
+/* Кнопка-иконка — стили перенесены в основной блок snow dropdown */
 
 /* Стилизация ползунка (Range Input) */
 input[type=range].snow-range {

@@ -17,21 +17,32 @@
 
             <!-- Premium Snow Dropdown -->
             <div class="user-dropdown-container snow-dropdown-wrapper">
-                <div class="btn-snow-toggle">
+                <div class="btn-snow-toggle" id="snowToggleBtn">
+                    <div class="btn-snow-ring"></div>
+                    <div class="btn-snow-pulse"></div>
                     <i class="bi bi-snow3"></i>
                 </div>
                 <div class="dropdown-menu snow-dropdown-menu">
-                    <!-- Decorative top glow -->
-                    <div class="snow-dd-glow"></div>
+                    <!-- Top accent line -->
+                    <div class="snow-dd-accent-line"></div>
+                    <!-- Floating particles -->
+                    <div class="snow-dd-particle snow-dd-particle-1"></div>
+                    <div class="snow-dd-particle snow-dd-particle-2"></div>
+                    <div class="snow-dd-particle snow-dd-particle-3"></div>
 
                     <!-- Header row -->
                     <div class="snow-dd-header">
                         <div class="snow-dd-icon-mini">
                             <i class="bi bi-snow3"></i>
+                            <div class="snow-dd-icon-ring"></div>
                         </div>
                         <div class="snow-dd-title-copy">
                             <span>Snow Effect</span>
-                            <small>Winter particle system</small>
+                            <small>Particle system control</small>
+                        </div>
+                        <div class="snow-dd-status" id="snowStatusDot">
+                            <div class="snow-dd-status-dot active"></div>
+                            <span>ON</span>
                         </div>
                     </div>
 
@@ -39,17 +50,31 @@
 
                     <!-- Intensity control -->
                     <div class="snow-dd-control">
-                        <label class="snow-dd-label">Intensity</label>
+                        <div class="snow-dd-label-row">
+                            <label class="snow-dd-label">Intensity</label>
+                            <span class="snow-dd-value" id="snowValueDisplay">50%</span>
+                        </div>
                         <div class="snow-dd-slider-row">
                             <input type="range" class="snow-range-v2" id="snowRange" min="0" max="100" value="50"
                                 oninput="updateSnowSettings(this.value)">
                         </div>
+                        <div class="snow-dd-marks">
+                            <span>Low</span>
+                            <span>Med</span>
+                            <span>High</span>
+                        </div>
                     </div>
 
+                    <div class="snow-dd-divider"></div>
+
                     <!-- Toggle button -->
-                    <button type="button" class="snow-dd-toggle-btn" onclick="toggleSnowEffect()">
-                        <span id="snowToggleBtnText">TURN OFF</span>
-                    </button>
+                    <div class="snow-dd-footer">
+                        <button type="button" class="snow-dd-toggle-btn" onclick="toggleSnowEffect()">
+                            <div class="snow-dd-btn-bg"></div>
+                            <i class="bi bi-power" id="snowToggleIcon"></i>
+                            <span id="snowToggleBtnText">DISABLE</span>
+                        </button>
+                    </div>
                 </div>
             </div>
             {% if user.is_authenticated %}

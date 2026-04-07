@@ -1,4 +1,4 @@
-﻿{% load static %}
+{% load static %}
 <!DOCTYPE html>
 <html lang="ru">
 
@@ -402,53 +402,62 @@
         }
 
         function updateSnowSettings(val) {
-            // 1. РЎРѕС…СЂР°РЅСЏРµРј
             localStorage.setItem('snowDensity', val);
-
-            // 2. РћС‡РёС‰Р°РµРј С‚РµРєСѓС‰РёР№ С‚Р°Р№РјРµСЂ
             if (snowInterval) clearInterval(snowInterval);
-
-            // 3. Р›РѕРіРёРєР° РїРѕР»Р·СѓРЅРєР°
-            // 0 = Р’С‹РєР»
-            // 100 = РњР°РєСЃРёРјСѓРј (РѕС‡РµРЅСЊ С‡Р°СЃС‚Рѕ)
 
             val = parseInt(val);
 
-            // Update UI if available
-            const statusText = document.getElementById('snowStatusText');
-            const toggleBtnText = document.getElementById('snowToggleBtnText');
+            // Update percentage display
+            const display = document.getElementById('snowValueDisplay');
+            if (display) display.textContent = val + '%';
 
             if (val === 0) {
                 document.querySelectorAll('.snowflake').forEach(el => el.remove());
-                if (statusText) { statusText.innerText = "OFF"; statusText.style.color = "#ff4d4d"; }
-                if (toggleBtnText) { toggleBtnText.innerText = "TURN ON"; toggleBtnText.parentElement.style.color = "#00ff9d"; }
                 return;
-            } else {
-                if (statusText) { statusText.innerText = "ON"; statusText.style.color = "#00ff9d"; }
-                if (toggleBtnText) { toggleBtnText.innerText = "TURN OFF"; toggleBtnText.parentElement.style.color = ""; }
             }
 
             const minDelay = 15;
             const maxDelay = 2000;
-            const t = val / 100; // 0..1
+            const t = val / 100;
             const delay = maxDelay * Math.pow(minDelay / maxDelay, t);
 
             snowInterval = setInterval(createSnowflake, delay);
         }
 
         let previousSnowValue = 50;
+
         function toggleSnowEffect() {
             const slider = document.getElementById('snowRange');
+            const btn = document.querySelector('.snow-dd-toggle-btn');
+            const btnText = document.getElementById('snowToggleBtnText');
+            const statusEl = document.getElementById('snowStatusDot');
+            const statusDot = statusEl ? statusEl.querySelector('.snow-dd-status-dot') : null;
+            const statusText = statusEl ? statusEl.querySelector('span') : null;
+            const toggleIcon = document.getElementById('snowToggleIcon');
             if (!slider) return;
 
             let currentVal = parseInt(slider.value);
             if (currentVal > 0) {
+                // Turn OFF
                 previousSnowValue = currentVal;
                 slider.value = 0;
                 updateSnowSettings(0);
+                if (btn) btn.classList.add('snow-off');
+                if (btnText) btnText.textContent = 'ENABLE';
+                if (toggleIcon) toggleIcon.className = 'bi bi-power';
+                if (statusEl) statusEl.classList.add('off');
+                if (statusDot) statusDot.classList.remove('active');
+                if (statusText) statusText.textContent = 'OFF';
             } else {
+                // Turn ON
                 slider.value = previousSnowValue || 50;
                 updateSnowSettings(slider.value);
+                if (btn) btn.classList.remove('snow-off');
+                if (btnText) btnText.textContent = 'DISABLE';
+                if (toggleIcon) toggleIcon.className = 'bi bi-power';
+                if (statusEl) statusEl.classList.remove('off');
+                if (statusDot) statusDot.classList.add('active');
+                if (statusText) statusText.textContent = 'ON';
             }
         }
     </script>
