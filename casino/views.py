@@ -477,7 +477,8 @@ def trade(request):
 
 
 # --- COINFLIP ГЛАВНАЯ ---
-@ensure_csrf_cookie\ndef coinflip_home(request):
+@ensure_csrf_cookie
+def coinflip_home(request):
     active_games = CoinflipGame.objects.filter(is_active=True).order_by('-created_at')
     bots_data = get_bots_status()
 
