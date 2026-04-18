@@ -1,7 +1,8 @@
+{% load static %}
 <header class="header">
     <div class="nav">
         <a href="{% url 'home' %}" class="logo">
-            MM<span>FLIP</span>
+            <img src="{% static 'img/logo.png' %}" alt="MMFLIP" class="logo-img">
         </a>
 
         <div class="nav-links">
@@ -157,7 +158,9 @@
 <div class="mobile-nav-overlay" id="mobileNav">
     <!-- Header with logo and close -->
     <div class="mobile-nav-header">
-        <a href="{% url 'home' %}" class="logo" style="font-size: 1.4rem;">MM<span>FLIP</span></a>
+        <a href="{% url 'home' %}" class="logo">
+            <img src="{% static 'img/logo.png' %}" alt="MMFLIP" class="logo-img" style="height: 34px;">
+        </a>
         <div class="mobile-close-btn" onclick="toggleMobileMenu()">
             <i class="bi bi-x-lg"></i>
         </div>

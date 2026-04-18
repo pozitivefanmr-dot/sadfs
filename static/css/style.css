@@ -397,7 +397,7 @@ ul {
 .header {
     background: linear-gradient(180deg, rgba(8, 14, 10, 0.92) 0%, rgba(8, 14, 10, 0.85) 100%);
     border-bottom: 1px solid rgba(0, 255, 157, 0.06);
-    padding: 16px 0;
+    padding: 14px 0;
     position: sticky;
     top: 0;
     z-index: 1000;
@@ -421,10 +421,20 @@ ul {
     color: #fff;
     letter-spacing: 3px;
     transition: 0.3s;
+    display: flex;
+    align-items: center;
+    text-decoration: none;
 }
 
 .logo:hover {
-    filter: drop-shadow(0 0 12px rgba(0, 255, 157, 0.4));
+    filter: drop-shadow(0 0 6px rgba(0, 255, 157, 0.2));
+}
+
+.logo-img {
+    height: 42px;
+    width: auto;
+    object-fit: contain;
+    display: block;
 }
 
 .logo span {

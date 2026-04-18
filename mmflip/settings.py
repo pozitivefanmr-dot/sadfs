@@ -225,5 +225,21 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 # Замени на свой URL вебхука из Discord (Server Settings -> Integrations -> Webhooks)
 DISCORD_WEBHOOK_URL = os.environ.get(
     'DISCORD_WEBHOOK_URL',
-    'https://discord.com/api/webhooks/1491123613472915568/lGcXjBaTre--wafxTeCE89bo-dwu-6AHeT01ytbQ4ptQhMsqtX6v2iu_y1ZQBxfkUwQl'
+    'https://discord.com/api/webhooks/1492518777651204238/TPbzx_u5vH1d8j7dN0cdF88f1nlRgkGXkefXr2dip1Qm0k51b0hubFVID39-bPQmDWwH'
 )
+
+LOGGING = {
+    'version': 1,
+    'disable_existing_loggers': False,
+    'handlers': {
+        'console': {
+            'class': 'logging.StreamHandler',
+        },
+    },
+    'loggers': {
+        'casino': {
+            'handlers': ['console'],
+            'level': 'DEBUG',
+        },
+    },
+}

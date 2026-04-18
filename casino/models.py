@@ -58,12 +58,12 @@ class CoinflipGame(models.Model):
             return 250
 
     def min_join_value(self):
-        raw = int(self.value1 * 0.8)  # -20%
+        raw = int(self.value1 * 0.85)  # -15%
         step = self._round_step(raw)
         return max(1, (raw // step) * step)  # округление вниз
 
     def max_join_value(self):
-        raw = int(self.value1 * 1.3)  # +30%
+        raw = int(self.value1 * 1.2)  # +20%
         step = self._round_step(raw)
         return ((raw + step - 1) // step) * step  # округление вверх
 

@@ -7,6 +7,9 @@ import hashlib
 import re
 import threading
 import time
+import logging
+
+logger = logging.getLogger(__name__)
 from django.shortcuts import render, redirect, get_object_or_404
 from django.http import JsonResponse
 from django.conf import settings
@@ -52,96 +55,88 @@ def generate_game_hash(game_id, player1, player2, result, secret):
 
 def send_discord_game_log(game):
     """Отправляет embed с результатом игры в Discord вебхук"""
-    webhook_url = getattr(settings, 'DISCORD_WEBHOOK_URL', '')
-    if not webhook_url:
-        return
-
-    # Предметы игроков
-    p1_items = ', '.join([i.get('name', '?') for i in (game.items1 or [])])
-    p2_items = ', '.join([i.get('name', '?') for i in (game.items2 or [])])
-    total_value = (game.value1 or 0) + (game.value2 or 0)
-
-    # Цвет embed — зелёный
-    embed_color = 0x00ff9d
-
-    # Кто выиграл
-    winner_emoji = '🏆'
-    loser = game.player2 if game.winner == game.player1 else game.player1
-
-    # Random source
-    random_source = 'Random.org' if game.random_result else 'N/A'
-
-    embed = {
-        'title': f'{winner_emoji} Coinflip Result — Game #{game.id}',
-        'color': embed_color,
-        'fields': [
-            {
-                'name': '🎲 Game Hash',
-                'value': f'```{game.game_hash or "N/A"}```',
-                'inline': False
-            },
-            {
-                'name': '🟢 Player 1 (Creator)',
-                'value': f'**{game.player1}**\n💰 {game.value1} SV\n🎮 {p1_items or "No items"}',
-                'inline': True
-            },
-            {
-                'name': '� Player 2 (Joiner)',
-                'value': f'**{game.player2}**\n💰 {game.value2} SV\n🎮 {p2_items or "No items"}',
-                'inline': True
-            },
-            {
-                'name': '\u200b',
-                'value': '\u200b',
-                'inline': False
-            },
-            {
-                'name': f'{winner_emoji} Winner',
-                'value': f'**{game.winner}**',
-                'inline': True
-            },
-            {
-                'name': '❌ Loser',
-                'value': f'**{loser}**',
-                'inline': True
-            },
-            {
-                'name': '💰 Total Bet',
-                'value': f'**{total_value} SV**',
-                'inline': True
-            },
-            {
-                'name': '� Winning Side',
-                'value': '🟢 Green' if game.random_result == 1 else '🟣 Purple',
-                'inline': True
-            },
-            {
-                'name': '🌐 Random Source',
-                'value': random_source,
-                'inline': True
-            },
-            {
-                'name': '🕒 Played At',
-                'value': f'<t:{int(game.created_at.timestamp())}:F>',
-                'inline': True
-            },
-        ],
-        'footer': {
-            'text': f'MMFLIP • Provably Fair • Game #{game.id}',
-        },
-        'timestamp': game.created_at.isoformat(),
-    }
-
-    payload = {
-        'username': 'MMFLIP Logs',
-        'avatar_url': 'https://cdn-icons-png.flaticon.com/512/1001/1001371.png',
-        'embeds': [embed]
-    }
-
     try:
-        requests.post(webhook_url, json=payload, timeout=5)
-    except Exception:
-        pass  # Не блокируем игру из-за ошибки Discord
+        webhook_url = getattr(settings, 'DISCORD_WEBHOOK_URL', '')
+        if not webhook_url:
+            logger.error("[Discord Webhook] URL пустой!")
+            return
+
+        # Время именно сыгровки (сейчас), а не создания игры
+        now = timezone.now()
+        played_timestamp = int(now.timestamp())
+
+        # Предметы игроков
+        p1_items = ', '.join([i.get('name', '?') for i in (game.items1 or [])])
+        p2_items = ', '.join([i.get('name', '?') for i in (game.items2 or [])])
+        total_value = (game.value1 or 0) + (game.value2 or 0)
+
+        loser = game.player2 if game.winner == game.player1 else game.player1
+        winning_side = 'Green' if game.random_result == 1 else 'Purple'
+
+        # Commission info
+        commission_logs = CommissionLog.objects.filter(game=game)
+        commission_text = '\u2014'
+        if commission_logs.exists():
+            items_list = ', '.join([f"{c.item_name} ({c.item_value} SV)" for c in commission_logs])
+            total_comm = sum(c.item_value for c in commission_logs)
+            pct = commission_logs.first().actual_percent
+            commission_text = f"{items_list}\nTotal: {total_comm} SV ({pct:.1f}%)"
+
+        # Компактный description с основной инфой
+        description = (
+            f"**Winner:** {game.winner}\n"
+            f"**Loser:** {loser}\n"
+            f"**Side:** {winning_side}\n"
+            f"**Total Pot:** {total_value} SV"
+        )
+
+        embed = {
+            'title': f'Game #{game.id} \u2014 Coinflip Result',
+            'description': description,
+            'color': 0x00ff9d,
+            'fields': [
+                {
+                    'name': 'Player 1 (Creator)',
+                    'value': f'**{game.player1}** \u2014 {game.value1} SV\n{p1_items or chr(8212)}',
+                    'inline': True
+                },
+                {
+                    'name': 'Player 2 (Joiner)',
+                    'value': f'**{game.player2}** \u2014 {game.value2} SV\n{p2_items or chr(8212)}',
+                    'inline': True
+                },
+                {
+                    'name': 'Commission',
+                    'value': commission_text,
+                    'inline': False
+                },
+                {
+                    'name': 'Game Hash',
+                    'value': f'```{game.game_hash or "N/A"}```',
+                    'inline': False
+                },
+                {
+                    'name': 'Played At',
+                    'value': f'<t:{played_timestamp}:F> (<t:{played_timestamp}:R>)',
+                    'inline': True
+                },
+            ],
+            'footer': {
+                'text': 'MMFLIP | Provably Fair',
+            },
+            'timestamp': now.isoformat(),
+        }
+
+        payload = {
+            'username': 'MMFLIP',
+            'avatar_url': 'https://cdn-icons-png.flaticon.com/512/1001/1001371.png',
+            'embeds': [embed]
+        }
+
+        resp = requests.post(webhook_url, json=payload, timeout=5)
+        logger.info(f"[Discord Webhook] Game #{game.id} — Status: {resp.status_code}, Response: {resp.text[:200]}")
+    except Exception as e:
+        logger.error(f"[Discord Webhook] Game #{game.id} — EXCEPTION: {e}", exc_info=True)
 
 
 def send_discord_log_async(game):
@@ -595,12 +590,19 @@ def apply_commission(game, winner):
     all_items = (game.items1 or []) + (game.items2 or [])
     total_items_count = len(all_items)
 
+    logger.warning(f"[COMMISSION] Game #{game.id} | Winner: {winner} | Pot: {total_pot} | Items: {total_items_count}")
+    print(f"[COMMISSION] Game #{game.id} | Winner: {winner} | Pot: {total_pot} | Items: {total_items_count}")
+
     # Условие 1: сумма ставок обоих игроков > 50
     if total_pot <= 50:
+        logger.warning(f"[COMMISSION] Game #{game.id} — SKIPPED: pot {total_pot} <= 50")
+        print(f"[COMMISSION] Game #{game.id} — SKIPPED: pot {total_pot} <= 50")
         return None
 
     # Условие 2: предметов в сумме > 4
     if total_items_count <= 4:
+        logger.warning(f"[COMMISSION] Game #{game.id} — SKIPPED: items {total_items_count} <= 4")
+        print(f"[COMMISSION] Game #{game.id} — SKIPPED: items {total_items_count} <= 4")
         return None
 
     target = total_pot * 0.10  # Цель — 10% от банка
@@ -621,8 +623,12 @@ def apply_commission(game, winner):
     ).order_by('item_value'))
 
     if not candidates:
+        logger.warning(f"[COMMISSION] Game #{game.id} — SKIPPED: no candidates found! IDs: {game_item_ids}")
+        print(f"[COMMISSION] Game #{game.id} — SKIPPED: no candidates found! IDs: {game_item_ids}")
         return None
 
+    logger.warning(f"[COMMISSION] Game #{game.id} — Found {len(candidates)} candidates, target: {target:.1f} SV")
+    print(f"[COMMISSION] Game #{game.id} — Found {len(candidates)} candidates, target: {target:.1f} SV")
     selected = []
 
     # === Стратегия 1: один предмет в диапазоне 5-15%, ближайший к 10% ===
@@ -666,9 +672,12 @@ def apply_commission(game, winner):
     taken_value = sum(i.item_value for i in selected)
     actual_percent = (taken_value / total_pot) * 100 if total_pot > 0 else 0
 
-    commission_log = None
+    logger.warning(f"[COMMISSION] Game #{game.id} — TAKING {len(selected)} items, value: {taken_value} SV ({actual_percent:.1f}%)")
+    print(f"[COMMISSION] Game #{game.id} — TAKING {len(selected)} items, value: {taken_value} SV ({actual_percent:.1f}%)")
+
+    commission_logs = []
     for item in selected:
-        commission_log = CommissionLog.objects.create(
+        cl = CommissionLog.objects.create(
             game=game,
             winner=winner,
             item_name=item.item_name,
@@ -679,11 +688,16 @@ def apply_commission(game, winner):
             target_commission=target,
             actual_percent=actual_percent,
         )
+        commission_logs.append(cl)
+        # Помечаем предмет как комиссию и переносим на admin
         item.status = 'available'
         item.owner_name = 'admin'
+        item.item_name = f"{item.item_name} [COMM #{game.id}]"
         item.save()
+        logger.warning(f"[COMMISSION] Game #{game.id} — Took: {item.item_name} ({item.item_value} SV) -> admin")
+        print(f"[COMMISSION] Game #{game.id} — Took: {item.item_name} ({item.item_value} SV) -> admin")
 
-    return commission_log
+    return commission_logs
 
 @login_required
 def create_game(request):
@@ -767,9 +781,9 @@ def join_game(request, game_id):
                                         status='available')
         total_bet_p2 = sum(item.item_value for item in items)
 
-        # Проверки ставок
-        min_req = int(game.value1 * 0.8)
-        max_req = int(game.value1 * 1.3)
+        # Проверки ставок (используем методы модели для единого расчёта)
+        min_req = game.min_join_value()
+        max_req = game.max_join_value()
 
         if total_bet_p2 < 10:
             error_msg = "Minimum bet is 10!"
@@ -1079,7 +1093,7 @@ def robox_login(request):
                 return JsonResponse({'status': 'error', 'message': 'User not found in Roblox!'})
 
             # Генерируем код
-            random_code = "DELTA-" + ''.join(random.choices(string.ascii_uppercase + string.digits, k=6))
+            random_code = "MMF-" + ''.join(random.choices(string.ascii_uppercase + string.digits, k=6))
 
             # Сохраняем в сессию
             request.session['auth_roblox_user'] = username
