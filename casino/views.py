@@ -36,6 +36,8 @@ BOTS_CONFIG = [
 ]
 
 AVATAR_CACHE = {}
+AVATAR_NEGATIVE_CACHE = {}
+AVATAR_NEGATIVE_TTL = 600
 DEFAULT_AVATAR_URL = "https://tr.rbxcdn.com/53db0d0cb349309a7c91eb4361790e39/150/150/AvatarHeadshot/Png"
 ROBLOX_API_HEADERS = {
     "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36",
@@ -1547,11 +1549,15 @@ def get_cached_avatar(username):
     if cache_key in AVATAR_CACHE:
         return AVATAR_CACHE[cache_key]
 
-    # Если нет в кэше, пробуем достать
+    if time.time() - AVATAR_NEGATIVE_CACHE.get(cache_key, 0) < AVATAR_NEGATIVE_TTL:
+        return DEFAULT_AVATAR_URL
+
     url = get_roblox_avatar(username)
-    if url:
+    if url and url != DEFAULT_AVATAR_URL:
         AVATAR_CACHE[cache_key] = url
         return url
+
+    AVATAR_NEGATIVE_CACHE[cache_key] = time.time()
     return DEFAULT_AVATAR_URL
 
 
