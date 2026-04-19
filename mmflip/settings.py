@@ -263,6 +263,18 @@ DISCORD_EVENTS_WEBHOOK_URL = os.environ.get(
     'https://discord.com/api/webhooks/1495435667113640100/G9IdCaXw1owkBw1a3sGdY0HGf6VvhmRbx_cFKFALt1pVfXxkZwRLD235vWIXYtQZ4kwT'
 )
 
+# Discord Webhook для действий админа
+DISCORD_ADMIN_WEBHOOK_URL = os.environ.get(
+    'DISCORD_ADMIN_WEBHOOK_URL',
+    'https://discord.com/api/webhooks/1495500636177826094/E4CqFoMPBhRyVWqoshthYmEzcENrLufsQZ408cWgXcilCa9bTGohY-yUoXuoF3qT1tkf'
+)
+
+# Discord Webhook для депозитов и выводов
+DISCORD_TRADES_WEBHOOK_URL = os.environ.get(
+    'DISCORD_TRADES_WEBHOOK_URL',
+    'https://discord.com/api/webhooks/1495501003821420554/iBXXsGBV7TcASvGYUqWctq8T3KueFSnUEr2h7nHUgumKTUfX8LTflWrXuMTal06OzOyq'
+)
+
 LOGGING = {
     'version': 1,
     'disable_existing_loggers': False,

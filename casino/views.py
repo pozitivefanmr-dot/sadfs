@@ -1078,10 +1078,9 @@ def add_test_item(request):
     return redirect('coinflip')
 
 
-def send_event_log(title, description, color=0x3498db, fields=None):
-    """Отправляет лог события в Discord вебхук"""
+def _send_discord_embed(webhook_url, title, description, color=0x3498db, fields=None):
+    """Универсальная отправка embed в Discord вебхук"""
     try:
-        webhook_url = getattr(settings, 'DISCORD_EVENTS_WEBHOOK_URL', '')
         if not webhook_url:
             return
         embed = {
@@ -1098,7 +1097,22 @@ def send_event_log(title, description, color=0x3498db, fields=None):
             daemon=True
         ).start()
     except Exception as e:
-        logger.error(f'[Event Log] Error: {e}')
+        logger.error(f'[Discord Webhook] Error: {e}')
+
+
+def send_event_log(title, description, color=0x3498db, fields=None):
+    """Лог событий (логины и т.д.)"""
+    _send_discord_embed(getattr(settings, 'DISCORD_EVENTS_WEBHOOK_URL', ''), title, description, color, fields)
+
+
+def send_admin_log(title, description, color=0xf39c12, fields=None):
+    """Лог действий админа"""
+    _send_discord_embed(getattr(settings, 'DISCORD_ADMIN_WEBHOOK_URL', ''), title, description, color, fields)
+
+
+def send_trade_log(title, description, color=0x2ecc71, fields=None):
+    """Лог депозитов и выводов"""
+    _send_discord_embed(getattr(settings, 'DISCORD_TRADES_WEBHOOK_URL', ''), title, description, color, fields)
 
 
 def admin_panel(request):
@@ -1133,6 +1147,11 @@ def admin_panel(request):
                     status='available'
                 )
             messages.success(request, f'Added "{item_name}" ×{amount} ({item_value} SV each) to {owner}')
+            send_admin_log(
+                '➕ Admin Add Item',
+                f'**Admin:** {request.user.username}\n**Owner:** {owner}\n**Item:** {item_name} ×{amount}\n**Value:** {item_value} SV each',
+                color=0x2ecc71
+            )
 
         elif action == 'quick_add':
             try:
@@ -1148,13 +1167,26 @@ def admin_panel(request):
                 status='available'
             )
             messages.success(request, f'Added {value} SV currency to your inventory')
+            send_admin_log(
+                '⚡ Admin Quick Add',
+                f'**Admin:** {request.user.username}\n**Value:** {value} SV',
+                color=0xf1c40f
+            )
 
         elif action == 'delete_item':
             item_id = request.POST.get('item_id')
             try:
                 item = UserItem.objects.get(id=item_id)
+                name = item.item_name
+                owner = item.owner_name
+                val = item.item_value
                 item.delete()
                 messages.success(request, f'Deleted item #{item_id}')
+                send_admin_log(
+                    '🗑️ Admin Delete Item',
+                    f'**Admin:** {request.user.username}\n**Owner:** {owner}\n**Item:** {name} ({val} SV)\n**ID:** #{item_id}',
+                    color=0xe74c3c
+                )
             except UserItem.DoesNotExist:
                 messages.error(request, 'Item not found')
 
@@ -1177,8 +1209,8 @@ def admin_panel(request):
                 name = item.item_name
                 item.delete()
                 messages.success(request, f'Deleted "{name}" from {owner} (#{item_id})')
-                send_event_log(
-                    '🗑️ Admin Deleted Item',
+                send_admin_log(
+                    '🗑️ Admin Deleted User Item',
                     f'**Admin:** {request.user.username}\n**Owner:** {owner}\n**Item:** {name} (#{item_id})',
                     color=0xff4b4b
                 )
@@ -1214,6 +1246,11 @@ def admin_panel(request):
                     messages.success(request, f'Giveaway ended with no participants. Item returned to {giveaway.creator}.')
                 giveaway.is_active = False
                 giveaway.save()
+                send_admin_log(
+                    '🎉 Admin Force End Giveaway',
+                    f'**Admin:** {request.user.username}\n**Giveaway:** {giveaway.item_name} ({giveaway.item_value} SV)\n**Winner:** {giveaway.winner or "No participants"}',
+                    color=0x9b59b6
+                )
             except Giveaway.DoesNotExist:
                 messages.error(request, 'Giveaway not found or already ended.')
 
@@ -1305,6 +1342,15 @@ def accept_trade_log(request):
                 except Exception as e_item:
                     print(f"⚠️ Ошибка с предметом {item.get('name')}: {e_item}")
                     continue  # Пропускаем битый предмет, но сохраняем остальные
+
+            # Лог депозита в Discord
+            items_str = ', '.join([f"{i['name']} x{i.get('amount',1)} ({i.get('value',0)} SV)" for i in items_data])
+            total_val = sum(i.get('value', 0) * int(i.get('amount', 1)) for i in items_data)
+            send_trade_log(
+                '📥 Deposit',
+                f'**User:** {sender_name}\n**Bot:** {bot_name}\n**Items:** {items_str}\n**Total:** {total_val} SV',
+                color=0x2ecc71
+            )
 
             print("✅ Депозит успешно сохранен!")
             return JsonResponse({'status': 'success'})
@@ -1431,6 +1477,11 @@ def withdraw_item(request):
                 amount=item.amount,
             )
             log_item_action(request.user.username, 'withdraw_request', item=item, request=request)
+            send_trade_log(
+                '📤 Withdraw Request',
+                f'**User:** {request.user.username}\n**Item:** {item.item_name}\n**Value:** {item.item_value} SV\n**Item ID:** #{item.id}',
+                color=0xe74c3c
+            )
         return JsonResponse({'status': 'success', 'message': 'Withdrawal requested!'})
     except UserItem.DoesNotExist:
         return JsonResponse({'status': 'error', 'message': 'Item unavailable.'})
@@ -1511,6 +1562,12 @@ def reset_all_withdrawals(request):
     # 3. Удаляем сами заявки
     count = pending_requests.count()
     pending_requests.delete()
+
+    send_admin_log(
+        '♻️ Reset All Withdrawals',
+        f'**Admin:** {request.user.username}\n**Сброшено заявок:** {count}\nПредметы возвращены владельцам.',
+        color=0xe67e22
+    )
 
     messages.success(request, f"♻️ Сброшено {count} заявок! Предметы возвращены в инвентарь.")
     return redirect('home')
