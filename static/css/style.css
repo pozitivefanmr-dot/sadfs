@@ -13706,40 +13706,70 @@ input[type="number"] {
     overflow: visible !important;
 }
 
-/* Holographic gradient ring frame */
+/* Top shimmer line — animated traveling highlight */
 .flip-overlay .flip-result-box::before {
     content: '' !important;
     position: absolute !important;
-    inset: -2px !important;
-    border-radius: 34px !important;
-    padding: 2px !important;
-    background: conic-gradient(from 0deg,
-        transparent 0%, rgba(255,255,255,0.4) 12%, transparent 24%,
-        transparent 50%, rgba(255,255,255,0.3) 62%, transparent 74%, transparent 100%) !important;
-    -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0) !important;
-    -webkit-mask-composite: xor !important;
-            mask-composite: exclude !important;
-    animation: epicRingSpin 6s linear infinite !important;
-    opacity: 0.55;
-    z-index: 0 !important;
-    height: auto !important;
+    top: 0 !important;
+    left: 0 !important;
+    right: 0 !important;
+    bottom: auto !important;
+    height: 1.5px !important;
     width: auto !important;
-    top: -2px !important; left: -2px !important; right: -2px !important; bottom: -2px !important;
+    border-radius: 0 !important;
+    padding: 0 !important;
+    background: linear-gradient(90deg,
+        transparent 0%,
+        rgba(255,255,255,0.6) 50%,
+        transparent 100%) !important;
+    background-size: 50% 100% !important;
+    background-repeat: no-repeat !important;
+    animation: epicTopShimmer 3.2s ease-in-out infinite !important;
+    z-index: 3 !important;
+    opacity: 1 !important;
+    -webkit-mask: none !important;
+            mask: none !important;
 }
-@keyframes epicRingSpin { to { transform: rotate(360deg); } }
+@keyframes epicTopShimmer {
+    0%   { background-position: -50% 0; }
+    100% { background-position: 150% 0; }
+}
 
 .flip-overlay .flip-result-box.result-win::before {
-    background: conic-gradient(from 0deg,
-        transparent 0%, #00ff9d 12%, transparent 24%,
-        transparent 50%, #00e5ff 62%, transparent 74%, transparent 100%) !important;
-    opacity: 0.85;
+    background: linear-gradient(90deg,
+        transparent 0%,
+        rgba(0,255,157,0.85) 50%,
+        transparent 100%) !important;
+    background-size: 50% 100% !important;
+    background-repeat: no-repeat !important;
+    box-shadow: 0 0 20px rgba(0,255,157,0.6) !important;
 }
 .flip-overlay .flip-result-box.result-lose::before {
-    background: conic-gradient(from 0deg,
-        transparent 0%, #ff4d4d 12%, transparent 24%,
-        transparent 50%, #ff8a3d 62%, transparent 74%, transparent 100%) !important;
-    opacity: 0.7;
+    background: linear-gradient(90deg,
+        transparent 0%,
+        rgba(255,77,77,0.85) 50%,
+        transparent 100%) !important;
+    background-size: 50% 100% !important;
+    background-repeat: no-repeat !important;
+    box-shadow: 0 0 20px rgba(255,77,77,0.5) !important;
 }
+
+/* Corner accents — L-shaped brackets in each corner */
+.flip-overlay .flip-result-box .corner-accent {
+    position: absolute;
+    width: 28px;
+    height: 28px;
+    border: 2px solid currentColor;
+    pointer-events: none;
+    opacity: 0.65;
+}
+.flip-overlay .flip-result-box .corner-accent.tl { top: 14px;    left: 14px;    border-right: none; border-bottom: none; border-radius: 8px 0 0 0; }
+.flip-overlay .flip-result-box .corner-accent.tr { top: 14px;    right: 14px;   border-left: none;  border-bottom: none; border-radius: 0 8px 0 0; }
+.flip-overlay .flip-result-box .corner-accent.bl { bottom: 14px; left: 14px;    border-right: none; border-top: none;    border-radius: 0 0 0 8px; }
+.flip-overlay .flip-result-box .corner-accent.br { bottom: 14px; right: 14px;   border-left: none;  border-top: none;    border-radius: 0 0 8px 0; }
+
+.flip-overlay .flip-result-box.result-win  .corner-accent { color: #00ff9d; filter: drop-shadow(0 0 8px rgba(0,255,157,0.6)); }
+.flip-overlay .flip-result-box.result-lose .corner-accent { color: #ff4d4d; filter: drop-shadow(0 0 8px rgba(255,77,77,0.5)); }
 
 /* Light beams behind icon (win only) */
 .flip-overlay .flip-result-box.result-win::after {
