@@ -5341,20 +5341,14 @@ input[type=range].snow-range-v2::-moz-range-thumb {
 /* Используем GRID вместо Flex для идеального центрирования */
 .nav {
     display: grid;
-    /* Три колонки:
-       1. Левая (лого) занимает всё доступное место
-       2. Центральная (меню) занимает ровно столько, сколько нужно тексту
-       3. Правая (профиль) занимает всё доступное место
-    */
     grid-template-columns: 1fr auto 1fr;
+    column-gap: 32px;
     align-items: center;
     padding: 0 40px;
-    /* Твои отступы */
     width: 100%;
-    max-width: 1400px;
+    max-width: 1500px;
     margin: 0 auto;
     position: relative;
-    /* Сбрасываем старые позиционирования */
 }
 
 /* Логотип прижимаем влево */
@@ -5377,8 +5371,16 @@ input[type=range].snow-range-v2::-moz-range-thumb {
     display: flex;
     align-items: center;
     justify-content: flex-end;
+    gap: 10px;
     width: 100%;
-    /* Занимает всю правую часть */
+}
+
+/* Promote breakpoint earlier so squeezed nav collapses to burger before overlap */
+@media (max-width: 1200px) {
+    .nav-links { gap: 2px; }
+    .nav-link { padding: 9px 10px; font-size: 0.78rem; letter-spacing: 0.8px; }
+    .nav-link i { font-size: 0.92rem; }
+    .desktop-auth { gap: 8px; }
 }
 
 /* Фикс для блока с аватаркой */
@@ -5413,10 +5415,9 @@ input[type=range].snow-range-v2::-moz-range-thumb {
 }
 
 /* АДАПТИВ ДЛЯ ЭТОГО ГРИДА */
-@media (max-width: 1024px) {
+@media (max-width: 1080px) {
     .nav {
         display: flex;
-        /* На мобилках возвращаем флекс */
         justify-content: space-between;
     }
 
