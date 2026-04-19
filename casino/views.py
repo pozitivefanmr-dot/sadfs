@@ -1218,6 +1218,32 @@ def admin_panel(request):
                 messages.error(request, 'Item not found')
             return redirect('admin_panel')
 
+        elif action == 'reset_user_withdrawals':
+            target = request.POST.get('target_username', '').strip()
+            if not target:
+                messages.error(request, 'Username required')
+                return redirect('admin_panel')
+            try:
+                with transaction.atomic():
+                    pending = WithdrawRequest.objects.select_for_update().filter(
+                        user_name__iexact=target, is_completed=False
+                    )
+                    count = pending.count()
+                    UserItem.objects.filter(
+                        owner_name__iexact=target, status='withdrawing'
+                    ).update(status='available')
+                    pending.delete()
+                messages.success(request, f'♻️ Reset {count} pending withdrawal(s) for {target}')
+                send_admin_log(
+                    '♻️ Reset User Withdrawals',
+                    f'**Admin:** {request.user.username}\n**Target:** {target}\n**Reset:** {count} request(s)',
+                    color=0xe67e22
+                )
+            except Exception as e:
+                logger.warning('reset_user_withdrawals failed: %s', e)
+                messages.error(request, 'Failed to reset withdrawals')
+            return redirect('admin_panel')
+
         elif action == 'force_end_giveaway':
             ga_id = request.POST.get('giveaway_id')
             try:
@@ -1276,7 +1302,11 @@ def admin_panel(request):
     lookup_games = []
     lookup_total = 0
     lookup_roblox_id = None
+    lookup_pending_withdrawals = []
     if lookup_username:
+        lookup_pending_withdrawals = WithdrawRequest.objects.filter(
+            user_name__iexact=lookup_username, is_completed=False
+        ).order_by('-created_at')
         lookup_inventory = UserItem.objects.filter(
             owner_name__iexact=lookup_username,
             status='available'
@@ -1299,6 +1329,7 @@ def admin_panel(request):
         'lookup_games': lookup_games,
         'lookup_total': lookup_total,
         'lookup_roblox_id': lookup_roblox_id,
+        'lookup_pending_withdrawals': lookup_pending_withdrawals,
     })
 
 

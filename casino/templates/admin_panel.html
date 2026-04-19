@@ -278,6 +278,24 @@
             </div>
         </div>
 
+        <div style="display:flex; align-items:center; gap:12px; margin:8px 0 16px; padding:10px 14px; background:rgba(230,126,34,0.06); border:1px solid rgba(230,126,34,0.18); border-radius:10px;">
+            <i class="bi bi-arrow-counterclockwise" style="color:#e67e22; font-size:18px;"></i>
+            <div style="flex:1; color:#d4dae5; font-size:0.85rem;">
+                Pending withdrawals: <b style="color:#e67e22;">{{ lookup_pending_withdrawals|length }}</b>
+            </div>
+            {% if lookup_pending_withdrawals %}
+            <form method="POST" action="{% url 'admin_panel' %}" style="margin:0;"
+                  onsubmit="return confirm('Reset all pending withdrawals for {{ lookup_username }}? Items will return to inventory.');">
+                {% csrf_token %}
+                <input type="hidden" name="action" value="reset_user_withdrawals">
+                <input type="hidden" name="target_username" value="{{ lookup_username }}">
+                <button type="submit" style="padding:8px 14px; background:linear-gradient(135deg,#e67e22,#d35400); color:#fff; border:none; border-radius:8px; font-weight:700; cursor:pointer; font-size:0.8rem;">
+                    <i class="bi bi-arrow-counterclockwise"></i> Reset Withdrawals
+                </button>
+            </form>
+            {% endif %}
+        </div>
+
         {% if lookup_inventory %}
         <div class="ap-inv-grid">
             {% for item in lookup_inventory %}
