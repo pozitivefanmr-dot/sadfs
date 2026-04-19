@@ -15,7 +15,7 @@
             {% endif %}
         </div>
 
-        <div class="game-vs-badge">VS</div>
+        <div class="game-vs-badge" data-i18n="cf.vs">VS</div>
 
         <div class="game-avatar-wrapper">
             {% if game.player2 %}
@@ -70,7 +70,7 @@
 
 <div class="game-actions-section">
 
-    <div class="room-price-label">TOTAL BET</div>
+    <div class="room-price-label" data-i18n="cf.totalBet">TOTAL BET</div>
 
     <div class="room-price-val">
         <img src="{% static 'img/sv_coin.png' %}" class="coin-icon">
@@ -82,18 +82,19 @@
         {% if user.username|lower == game.player1|lower %}
         <form method="POST" action="{% url 'cancel_game' game.id %}" class="cancel-btn-compact-form">
             {% csrf_token %}
-            <button type="submit" class="cancel-btn-compact">CANCEL</button>
+            <button type="submit" class="cancel-btn-compact" data-i18n="cf.cancel">CANCEL</button>
         </form>
         {% elif not game.player2 %}
         <button type="button" class="join-btn-compact"
-            onclick="openJoinModal('{{ game.id }}', {{ game.value1 }}, {{ game.min_join_value }}, {{ game.max_join_value }}, '{{ game.player1 }}')">
+            onclick="openJoinModal('{{ game.id }}', {{ game.value1 }}, {{ game.min_join_value }}, {{ game.max_join_value }}, '{{ game.player1 }}')"
+            data-i18n="cf.join">
             JOIN
         </button>
         {% else %}
-        <button class="join-btn-compact" style="background:#555; color:#aaa; cursor:default;">WATCH</button>
+        <button class="join-btn-compact" style="background:#555; color:#aaa; cursor:default;" data-i18n="cf.watch">WATCH</button>
         {% endif %}
         {% else %}
-        <button type="button" class="join-btn-compact" onclick="openAuthModal()" style="font-size: 0.7rem;">LOGIN TO JOIN</button>
+        <button type="button" class="join-btn-compact" onclick="openAuthModal()" style="font-size: 0.7rem;" data-i18n="cf.loginToJoin">LOGIN TO JOIN</button>
         {% endif %}
     </div>
 </div>

@@ -84,52 +84,53 @@ def send_discord_game_log(game):
 
         # Компактный description с основной инфой
         description = (
-            f"**Winner:** {game.winner}\n"
-            f"**Loser:** {loser}\n"
-            f"**Side:** {winning_side}\n"
-            f"**Total Pot:** {total_value} SV"
+            f"🏆 **Winner:** {game.winner}\n"
+            f"💀 **Loser:** {loser}\n"
+            f"🎯 **Side:** {winning_side}\n"
+            f"💰 **Total Pot:** {total_value} SV"
         )
 
         embed = {
-            'title': f'Game #{game.id} \u2014 Coinflip Result',
+            'title': f'🪙 Game #{game.id} — Coinflip Result',
             'description': description,
             'color': 0x00ff9d,
             'fields': [
                 {
-                    'name': 'Player 1 (Creator)',
-                    'value': f'**{game.player1}** \u2014 {game.value1} SV\n{p1_items or chr(8212)}',
+                    'name': '🟢 Player 1 (Creator)',
+                    'value': f'**{game.player1}** — {game.value1} SV\n{p1_items or chr(8212)}',
                     'inline': True
                 },
                 {
-                    'name': 'Player 2 (Joiner)',
-                    'value': f'**{game.player2}** \u2014 {game.value2} SV\n{p2_items or chr(8212)}',
+                    'name': '🟣 Player 2 (Joiner)',
+                    'value': f'**{game.player2}** — {game.value2} SV\n{p2_items or chr(8212)}',
                     'inline': True
                 },
                 {
-                    'name': 'Commission',
+                    'name': '🏦 Commission',
                     'value': commission_text,
                     'inline': False
                 },
                 {
-                    'name': 'Game Hash',
+                    'name': '🔒 Game Hash',
                     'value': f'```{game.game_hash or "N/A"}```',
                     'inline': False
                 },
                 {
-                    'name': 'Played At',
+                    'name': '🕐 Played At',
                     'value': f'<t:{played_timestamp}:F> (<t:{played_timestamp}:R>)',
                     'inline': True
                 },
             ],
             'footer': {
-                'text': 'MMFLIP | Provably Fair',
+                'text': '⚡ MMFLIP | Provably Fair',
+                'icon_url': f'https://{settings.ALLOWED_HOSTS[0]}/static/img/logo.png' if settings.ALLOWED_HOSTS and settings.ALLOWED_HOSTS[0] != '*' else '',
             },
             'timestamp': now.isoformat(),
         }
 
         payload = {
-            'username': 'MMFLIP',
-            'avatar_url': 'https://cdn-icons-png.flaticon.com/512/1001/1001371.png',
+            'username': 'MMFLIP Logs',
+            'avatar_url': f'https://{settings.ALLOWED_HOSTS[0]}/static/img/logo.png' if settings.ALLOWED_HOSTS and settings.ALLOWED_HOSTS[0] != '*' else 'https://cdn-icons-png.flaticon.com/512/1001/1001371.png',
             'embeds': [embed]
         }
 
@@ -1963,3 +1964,50 @@ def api_active_giveaways(request):
         'active': data,
         'finished': finished_data
     })
+
+
+# ==========================================
+# SEO: robots.txt & sitemap.xml
+# ==========================================
+
+def robots_txt(request):
+    """Serve robots.txt for search engine crawlers."""
+    lines = [
+        "User-agent: *",
+        "Allow: /",
+        "Disallow: /admin/",
+        "Disallow: /admin-panel/",
+        "Disallow: /api/",
+        "Disallow: /trade-log/",
+        "Disallow: /withdraw/",
+        "Disallow: /reset-withdraws/",
+        "",
+        f"Sitemap: https://{request.get_host()}/sitemap.xml",
+    ]
+    from django.http import HttpResponse
+    return HttpResponse("\n".join(lines), content_type="text/plain")
+
+
+def sitemap_xml(request):
+    """Serve sitemap.xml for search engines."""
+    from django.http import HttpResponse
+    from django.utils import timezone
+    host = f"https://{request.get_host()}"
+    today = timezone.now().strftime("%Y-%m-%d")
+    urls = [
+        {"loc": f"{host}/", "priority": "1.0", "changefreq": "daily", "lastmod": today},
+        {"loc": f"{host}/coinflip/", "priority": "0.9", "changefreq": "hourly", "lastmod": today},
+        {"loc": f"{host}/trade/", "priority": "0.7", "changefreq": "daily", "lastmod": today},
+        {"loc": f"{host}/login/", "priority": "0.5", "changefreq": "monthly", "lastmod": today},
+    ]
+    xml_lines = ['<?xml version="1.0" encoding="UTF-8"?>']
+    xml_lines.append('<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">')
+    for u in urls:
+        xml_lines.append("  <url>")
+        xml_lines.append(f"    <loc>{u['loc']}</loc>")
+        xml_lines.append(f"    <lastmod>{u['lastmod']}</lastmod>")
+        xml_lines.append(f"    <changefreq>{u['changefreq']}</changefreq>")
+        xml_lines.append(f"    <priority>{u['priority']}</priority>")
+        xml_lines.append("  </url>")
+    xml_lines.append("</urlset>")
+    return HttpResponse("\n".join(xml_lines), content_type="application/xml")

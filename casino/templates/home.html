@@ -2,6 +2,9 @@
 {% load static %}
 {% load custom_filters %}
 
+{% block seo_title %}MMFLIP | #1 MM2 Coinflip Gambling Site — Murder Mystery 2{% endblock %}
+{% block seo_description %}MMFLIP is the best MM2 coinflip gambling site. Flip your Murder Mystery 2 items in provably fair 50/50 games. Win godlies, ancients, vintages and more!{% endblock %}
+
 {% block content %}
 
 {% include 'header.html' %}
@@ -12,7 +15,7 @@
     <!-- ====== GIVEAWAY SECTION (ВЫШЕ ВСЕГО) ====== -->
     <div class="box-card giveaway-section-card" id="giveawaySectionCard">
         <div class="box-title" style="border-left-color: #a855f7 !important;">
-            <span><i class="bi bi-gift" style="color: #c084fc; margin-right: 8px;"></i>ACTIVE GIVEAWAYS</span>
+            <span><i class="bi bi-gift" style="color: #c084fc; margin-right: 8px;"></i><span data-i18n="home.giveawaysTitle">ACTIVE GIVEAWAYS</span></span>
             <span class="ga-count-badge" id="gaCountBadge">{{ active_giveaways|length }}</span>
         </div>
 
@@ -21,7 +24,7 @@
             <div class="ga-card{% if forloop.counter > 3 %} ga-card-hidden{% endif %}" data-ga-id="{{ ga.id }}" data-ends-at="{{ ga.ends_at|date:'c' }}">
                 <!-- Картинка -->
                 <div class="ga-card-img">
-                    <img src="{{ ga.item_image }}" alt="{{ ga.item_name }}"
+                    <img src="{{ ga.item_image }}" alt="{{ ga.item_name }}" loading="lazy" decoding="async"
                         onerror="this.src='https://static.wikia.nocookie.net/murder-mystery-2/images/5/53/Godly_Icon.png'">
                 </div>
 
@@ -53,29 +56,29 @@
                     {% if user.username != ga.creator %}
                         {% if ga.id in joined_giveaway_ids %}
                         <button class="btn-ga-join btn-ga-joined" disabled>
-                            <i class="bi bi-check-lg"></i> JOINED
+                            <i class="bi bi-check-lg"></i> <span data-i18n="home.ga.joined">JOINED</span>
                         </button>
                         {% else %}
                         <button class="btn-ga-join" onclick="joinGiveaway({{ ga.id }}, this)">
-                            JOIN
+                            <span data-i18n="home.ga.join">JOIN</span>
                         </button>
                         {% endif %}
                     {% else %}
                     <button class="btn-ga-force-end" onclick="forceEndGiveaway({{ ga.id }}, this)">
-                        <i class="bi bi-lightning-fill"></i> END NOW
+                        <i class="bi bi-lightning-fill"></i> <span data-i18n="home.ga.endNow">END NOW</span>
                     </button>
                     {% endif %}
                 {% else %}
                 <button class="btn-ga-join btn-ga-login" onclick="openAuthModal()">
-                    <i class="bi bi-box-arrow-in-right"></i> LOGIN
+                    <i class="bi bi-box-arrow-in-right"></i> <span data-i18n="home.ga.loginBtn">LOGIN</span>
                 </button>
                 {% endif %}
             </div>
             {% empty %}
             <div class="ga-empty">
                 <i class="bi bi-gift" style="font-size: 2rem; color: #c084fc; margin-bottom: 10px;"></i>
-                <p>No active giveaways right now.</p>
-                <p class="text-muted" style="font-size: 0.8rem;">Click <strong>GIVEAWAY</strong> on any item in your inventory to start one!</p>
+                <p data-i18n="home.noGiveaways">No active giveaways right now.</p>
+                <p class="text-muted" style="font-size: 0.8rem;" data-i18n-html="home.gaEmptyHint">Click <strong>GIVEAWAY</strong> on any item in your inventory to start one!</p>
             </div>
             {% endfor %}
 
@@ -84,7 +87,7 @@
                 <span class="ga-show-more-dots">
                     <span></span><span></span><span></span>
                 </span>
-                <span class="ga-show-more-text">SHOW {{ active_giveaways|length|add:"-3" }} MORE</span>
+                <span class="ga-show-more-text"><span data-i18n="home.ga.showMoreWord">SHOW</span> {{ active_giveaways|length|add:"-3" }} <span data-i18n="home.ga.moreWord">MORE</span></span>
             </button>
             {% endif %}
         </div>
@@ -107,9 +110,9 @@
             </div>
 
             <div>
-                <h1 class="text-white" style="margin-bottom: 5px;">WELCOME BACK, <span class="text-cyan">{{
+                <h1 class="text-white" style="margin-bottom: 5px;"><span data-i18n="home.welcomeBack">WELCOME BACK,</span> <span class="text-cyan">{{
                         user.username }}</span></h1>
-                <p class="text-muted">Manage your inventory and view statistics.</p>
+                <p class="text-muted" data-i18n="home.manageDesc">Manage your inventory and view statistics.</p>
             </div>
         </div>
         {% else %}
@@ -124,19 +127,19 @@
                         <i class="bi bi-crosshair"></i>
                     </div>
                     <div class="hero-game-badge-text">
-                        <span class="hero-game-badge-title">MURDER MYSTERY 2</span>
-                        <span class="hero-game-badge-sub">Roblox MM2 Trading & Flipping</span>
+                        <span class="hero-game-badge-title" data-i18n="home.heroBadgeTitle">MURDER MYSTERY 2</span>
+                        <span class="hero-game-badge-sub" data-i18n="home.heroBadgeSub">Roblox MM2 Trading & Flipping</span>
                     </div>
                     <i class="bi bi-arrow-right hero-game-badge-arrow"></i>
                 </div>
-                <h1 class="welcome-hero-title">MURDER MYSTERY <span>COINFLIP</span></h1>
-                <p class="welcome-hero-desc">Stake your MM2 items in 1v1 coinflip duels. Fair odds, instant results, real inventory prizes.</p>
+                <h1 class="welcome-hero-title"><span data-i18n="home.heroTitlePre">MURDER MYSTERY</span> <span data-i18n="home.heroTitleAcc">COINFLIP</span></h1>
+                <p class="welcome-hero-desc" data-i18n="home.heroDesc">Stake your MM2 items in 1v1 coinflip duels. Fair odds, instant results, real inventory prizes.</p>
                 <div class="welcome-hero-actions">
                     <div class="btn-hero-primary" onclick="openAuthModal()" style="cursor:pointer;">
-                        <i class="bi bi-play-fill"></i> START PLAYING
+                        <i class="bi bi-play-fill"></i> <span data-i18n="home.heroStart">START PLAYING</span>
                     </div>
                     <a href="{% url 'coinflip' %}" class="btn-hero-secondary">
-                        <i class="bi bi-eye"></i> WATCH GAMES
+                        <i class="bi bi-eye"></i> <span data-i18n="home.heroWatch">WATCH GAMES</span>
                     </a>
                 </div>
             </div>
@@ -149,29 +152,29 @@
     <div class="hero-features-row">
         <a href="{% url 'coinflip' %}" class="hero-feature-card hero-feature-card--instant">
             <div class="hero-feature-icon"><i class="bi bi-coin"></i></div>
-            <div class="hero-feature-title">Coinflip Duels</div>
-            <div class="hero-feature-desc">Pick green or red, stake your MM2 items, flip — winner takes the entire pot</div>
+            <div class="hero-feature-title" data-i18n="home.feat1Title">Coinflip Duels</div>
+            <div class="hero-feature-desc" data-i18n="home.feat1Desc">Pick green or red, stake your MM2 items, flip — winner takes the entire pot</div>
             <div class="hero-feature-arrow"><i class="bi bi-arrow-right"></i></div>
             <div class="hero-feature-glow"></div>
         </a>
         <div class="hero-feature-card hero-feature-card--fair" onclick="openAuthModal()" style="cursor:pointer;">
             <div class="hero-feature-icon"><i class="bi bi-shield-lock-fill"></i></div>
-            <div class="hero-feature-title">Provably Fair</div>
-            <div class="hero-feature-desc">Results powered by random.org — every game gets a SHA-256 hash for proof</div>
+            <div class="hero-feature-title" data-i18n="home.feat2Title">Provably Fair</div>
+            <div class="hero-feature-desc" data-i18n="home.feat2Desc">Results powered by random.org — every game gets a SHA-256 hash for proof</div>
             <div class="hero-feature-arrow"><i class="bi bi-arrow-right"></i></div>
             <div class="hero-feature-glow"></div>
         </div>
         <div class="hero-feature-card hero-feature-card--trade" onclick="openAuthModal()" style="cursor:pointer;">
             <div class="hero-feature-icon"><i class="bi bi-box-arrow-in-down-right"></i></div>
-            <div class="hero-feature-title">Deposit & Withdraw</div>
-            <div class="hero-feature-desc">Send items to our Roblox bot, play instantly, cash out whenever you want</div>
+            <div class="hero-feature-title" data-i18n="home.feat3Title">Deposit & Withdraw</div>
+            <div class="hero-feature-desc" data-i18n="home.feat3Desc">Send items to our Roblox bot, play instantly, cash out whenever you want</div>
             <div class="hero-feature-arrow"><i class="bi bi-arrow-right"></i></div>
             <div class="hero-feature-glow"></div>
         </div>
         <div class="hero-feature-card hero-feature-card--giveaway" onclick="openAuthModal()" style="cursor:pointer;">
             <div class="hero-feature-icon"><i class="bi bi-gift"></i></div>
-            <div class="hero-feature-title">Daily Giveaways</div>
-            <div class="hero-feature-desc">Players drop free items daily — just join and wait for the winner draw</div>
+            <div class="hero-feature-title" data-i18n="home.feat4Title">Daily Giveaways</div>
+            <div class="hero-feature-desc" data-i18n="home.feat4Desc">Players drop free items daily — just join and wait for the winner draw</div>
             <div class="hero-feature-arrow"><i class="bi bi-arrow-right"></i></div>
             <div class="hero-feature-glow"></div>
         </div>
@@ -186,12 +189,12 @@
                 <i class="bi bi-gem"></i>
             </div>
             <div class="stat-card__body">
-                <h3>NET WORTH</h3>
+                <h3 data-i18n="home.netWorth">NET WORTH</h3>
                 <div class="stat-card__value-row">
                     <img src="{% static 'img/sv_coin.png' %}" class="stat-coin-icon" alt="SV">
                     <div class="value-glow" id="net-worth-value">{{ total_profit|default:0 }}</div>
                 </div>
-                <div class="stat-card__subtitle">Supreme Values</div>
+                <div class="stat-card__subtitle" data-i18n="home.supremeValues">Supreme Values</div>
             </div>
             <div class="stat-card__bar">
                 <div class="stat-card__bar-fill stat-card__bar-fill--green"></div>
@@ -202,11 +205,11 @@
                 <i class="bi bi-box-seam-fill"></i>
             </div>
             <div class="stat-card__body">
-                <h3>TOTAL ITEMS</h3>
+                <h3 data-i18n="home.totalItems">TOTAL ITEMS</h3>
                 <div class="stat-card__value-row">
                     <div class="value-glow value-glow--blue" id="total-items-value">{{ inventory_count|default:0 }}</div>
                 </div>
-                <div class="stat-card__subtitle">In your inventory</div>
+                <div class="stat-card__subtitle" data-i18n="home.inInventory">In your inventory</div>
             </div>
             <div class="stat-card__bar">
                 <div class="stat-card__bar-fill stat-card__bar-fill--blue"></div>
@@ -217,8 +220,8 @@
     <!-- ИНВЕНТАРЬ -->
     <div class="box-card">
         <div class="box-title">
-            <span>YOUR INVENTORY</span>
-            <span class="home-value">MM2 VALUE: <img src="{% static 'img/sv_coin.png' %}" class="coin-icon home-coin"
+            <span data-i18n="home.inventoryTitle">YOUR INVENTORY</span>
+            <span class="home-value"><span data-i18n="home.mm2Value">MM2 VALUE:</span> <img src="{% static 'img/sv_coin.png' %}" class="coin-icon home-coin"
                     alt="SV"> </span>
         </div>
 
@@ -228,10 +231,10 @@
                 <!-- ОВЕРЛЕЙ С КНОПКАМИ -->
                 <div class="item-overlay">
                     <button class="btn-item-action btn-withdraw" onclick="openWithdrawConfirm('{{ item.id }}')">
-                        <i class="bi bi-send-fill"></i> WITHDRAW
+                        <i class="bi bi-send-fill"></i> <span data-i18n="home.withdrawBtn">WITHDRAW</span>
                     </button>
                     <button class="btn-item-action btn-giveaway" onclick="openGiveawayModal('{{ item.id }}', this)">
-                        <i class="bi bi-gift"></i> GIVEAWAY
+                        <i class="bi bi-gift"></i> <span data-i18n="home.giveawayBtn">GIVEAWAY</span>
                     </button>
                 </div>
 
@@ -239,7 +242,7 @@
                 <!-- Картинка оружия -->
                 <div class="dashboard-item-img">
                     <!-- Используем item.image_url -->
-                    <img src="{{ item.image_url }}" alt="Weapon"
+                    <img src="{{ item.image_url }}" alt="{{ item.item_name }}" loading="lazy" decoding="async"
                         onerror="this.src='https://static.wikia.nocookie.net/murder-mystery-2/images/5/53/Godly_Icon.png'">
                 </div>
                 <div class="item-title" title="{{ item.item_name }}">{{ item.item_name }}</div>
@@ -251,10 +254,10 @@
             {% empty %}
             <div class="empty-inventory-container">
                 <div class="empty-inv-icon"><i class="bi bi-box-seam"></i></div>
-                <h3 class="empty-inv-title">No Items Yet</h3>
-                <p class="empty-inv-desc">Trade with one of our bots to deposit your MM2 items and start flipping.</p>
+                <h3 class="empty-inv-title" data-i18n="home.noItems">No Items Yet</h3>
+                <p class="empty-inv-desc" data-i18n="home.noItemsDesc">Trade with one of our bots to deposit your MM2 items and start flipping.</p>
                 <button class="ice-deposit-btn" onclick="openBotModal('DEPOSIT')">
-                    <i class="bi bi-plus-circle"></i> DEPOSIT ITEMS
+                    <i class="bi bi-plus-circle"></i> <span data-i18n="home.depositBtn">DEPOSIT ITEMS</span>
                 </button>
             </div>
             {% endfor %}
@@ -269,15 +272,15 @@
         <div class="withdraw-icon-wrap">
             <i class="bi bi-send-fill"></i>
         </div>
-        <h3 class="withdraw-title">CONFIRM WITHDRAWAL</h3>
-        <p class="withdraw-desc">
+        <h3 class="withdraw-title" data-i18n="home.confirmWithdrawTitle">CONFIRM WITHDRAWAL</h3>
+        <p class="withdraw-desc" data-i18n-html="home.confirmWithdrawDesc">
             You are about to withdraw this item.<br>
             It will be sent to the <span class="text-cyan">trade bot</span> for pickup.
         </p>
         <div class="withdraw-actions">
-            <button class="btn-cancel-withdraw" onclick="closeWithdrawConfirm()">CANCEL</button>
+            <button class="btn-cancel-withdraw" onclick="closeWithdrawConfirm()" data-i18n="cf.cancel">CANCEL</button>
             <button class="btn-confirm-withdraw" onclick="processWithdraw()">
-                <i class="bi bi-check-lg"></i> CONFIRM
+                <i class="bi bi-check-lg"></i> <span data-i18n="home.confirmWithdrawBtn">CONFIRM</span>
             </button>
         </div>
     </div>
@@ -287,6 +290,7 @@
 
 {% if user.is_authenticated %}
 <script>
+    function _tr(k, f) { return (window.I18N && window.I18N.t) ? window.I18N.t(k) : f; }
     let withdrawItemId = null;
 
     function openWithdrawConfirm(itemId) {
@@ -304,7 +308,7 @@
 
         const confirmBtn = document.querySelector('.btn-confirm-withdraw');
         const originalText = confirmBtn.innerHTML;
-        confirmBtn.innerHTML = '<i class="bi bi-hourglass-split"></i> PROCESSING...';
+        confirmBtn.innerHTML = '<i class="bi bi-hourglass-split"></i> ' + _tr('home.processing', 'PROCESSING...');
 
         const formData = new FormData();
         formData.append('item_id', withdrawItemId);
@@ -344,6 +348,7 @@
 {% endif %}
 
 <script>
+    if (typeof _tr === 'undefined') { function _tr(k, f) { return (window.I18N && window.I18N.t) ? window.I18N.t(k) : f; } }
     // Переменные
     let giveawayItemId = null;
     let giveawayItemBtn = null;
@@ -420,7 +425,7 @@
             const diff = Math.max(0, Math.floor((endsAt - now) / 1000));
 
             if (diff <= 0) {
-                el.querySelector('.ga-timer-text').textContent = 'ENDED';
+                el.querySelector('.ga-timer-text').textContent = _tr('home.ga.ended', 'ENDED');
                 el.closest('.ga-card')?.classList.add('ga-card--ended');
                 return;
             }
@@ -448,10 +453,10 @@
         });
         const textEl = btn.querySelector('.ga-show-more-text');
         if (gaExpanded) {
-            textEl.textContent = 'SHOW LESS';
+            textEl.textContent = _tr('home.ga.showLess', 'SHOW LESS');
             btn.classList.add('ga-show-more-expanded');
         } else {
-            textEl.textContent = 'SHOW ' + hiddenCards.length + ' MORE';
+            textEl.textContent = _tr('home.ga.showMoreWord', 'SHOW') + ' ' + hiddenCards.length + ' ' + _tr('home.ga.moreWord', 'MORE');
             btn.classList.remove('ga-show-more-expanded');
         }
     }
@@ -504,7 +509,7 @@
 
     // Force-end your own giveaway
     function forceEndGiveaway(giveawayId, btn) {
-        if (!confirm('End this giveaway now? A random winner will be selected immediately.')) return;
+        if (!confirm(_tr('home.ga.endConfirm', 'End this giveaway now? A random winner will be selected immediately.'))) return;
 
         const originalHTML = btn.innerHTML;
         btn.innerHTML = '<i class="bi bi-hourglass-split"></i>';
@@ -640,9 +645,9 @@
         <div class="ga-error-icon-wrap">
             <i class="bi bi-shield-lock"></i>
         </div>
-        <h3 class="ga-error-title">ACCESS DENIED</h3>
+        <h3 class="ga-error-title" data-i18n="home.accessDenied">ACCESS DENIED</h3>
         <p class="ga-error-desc" id="gaErrorMessage">Error</p>
-        <button class="btn-ga-error-close" onclick="closeGaErrorModal()">GOT IT</button>
+        <button class="btn-ga-error-close" onclick="closeGaErrorModal()" data-i18n="home.gotIt">GOT IT</button>
     </div>
 </div>
 
@@ -651,17 +656,17 @@
         <div class="giveaway-icon-wrap">
             <i class="bi bi-gift"></i>
         </div>
-        <h3 class="giveaway-title">START A GIVEAWAY?</h3>
-        <p class="giveaway-desc">
+        <h3 class="giveaway-title" data-i18n="home.startGiveawayTitle">START A GIVEAWAY?</h3>
+        <p class="giveaway-desc" data-i18n-html="home.startGiveawayDesc">
             This item will be raffled to the community.<br>
             A random winner will be selected in <span class="text-purple">24 hours</span>.<br>
             This action <strong>cannot be undone</strong>.
         </p>
 
         <div class="giveaway-actions">
-            <button class="btn-cancel-giveaway" onclick="closeGiveawayModal()">CANCEL</button>
+            <button class="btn-cancel-giveaway" onclick="closeGiveawayModal()" data-i18n="cf.cancel">CANCEL</button>
             <button class="btn-confirm-giveaway" onclick="processGiveaway()">
-                <i class="bi bi-gift"></i> START GIVEAWAY
+                <i class="bi bi-gift"></i> <span data-i18n="home.startGiveawayBtn">START GIVEAWAY</span>
             </button>
         </div>
     </div>

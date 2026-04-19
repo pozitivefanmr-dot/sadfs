@@ -1,15 +1,74 @@
 {% load static %}
 <!DOCTYPE html>
-<html lang="ru">
+<html lang="en">
 
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>MMFLIP | Murder Mystery 2 Coinflip</title>
+
+    <!-- SEO: Title & Description -->
+    <title>{% block seo_title %}MMFLIP | MM2 Coinflip Gambling — Flip Murder Mystery 2 Items{% endblock %}</title>
+    <meta name="description" content="{% block seo_description %}MMFLIP is the #1 MM2 coinflip site. Gamble your Murder Mystery 2 items in fair 50/50 coinflip games. Trade, bet and win MM2 godlies, ancients, vintages and more!{% endblock %}">
+    <meta name="author" content="MMFLIP">
+    <meta name="robots" content="index, follow">
+    <link rel="canonical" href="{% block canonical_url %}https://{{ request.get_host }}{{ request.path }}{% endblock %}">
+
+    <!-- Performance: preconnect -->
+    <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
+    <link rel="dns-prefetch" href="https://cdn.jsdelivr.net">
+    <link rel="preconnect" href="https://tr.rbxcdn.com" crossorigin>
+    <link rel="dns-prefetch" href="https://tr.rbxcdn.com">
+
+    <!-- Open Graph (Facebook, Discord, Telegram) -->
+    <meta property="og:type" content="website">
+    <meta property="og:site_name" content="MMFLIP">
+    <meta property="og:title" content="{% block og_title %}MMFLIP — MM2 Coinflip Gambling{% endblock %}">
+    <meta property="og:description" content="{% block og_description %}Flip your Murder Mystery 2 items in fair 50/50 coinflip games. The best MM2 gambling site!{% endblock %}">
+    <meta property="og:image" content="{% block og_image %}https://{{ request.get_host }}{% static 'img/logo.png' %}{% endblock %}">
+    <meta property="og:url" content="https://{{ request.get_host }}{{ request.path }}">
+    <meta property="og:locale" content="en_US">
+
+    <!-- Twitter Card -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="MMFLIP — MM2 Coinflip Gambling">
+    <meta name="twitter:description" content="Flip your Murder Mystery 2 items in fair 50/50 coinflip games.">
+    <meta name="twitter:image" content="https://{{ request.get_host }}{% static 'img/logo.png' %}">
+
+    <!-- Theme -->
+    <meta name="theme-color" content="#00ff9d">
+    <meta name="msapplication-TileColor" content="#060908">
+
+    <!-- JSON-LD Structured Data -->
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@graph": [
+            {
+                "@type": "WebSite",
+                "@id": "https://{{ request.get_host }}/#website",
+                "name": "MMFLIP",
+                "url": "https://{{ request.get_host }}",
+                "description": "The #1 MM2 coinflip gambling site. Flip Murder Mystery 2 items in fair 50/50 games.",
+                "inLanguage": "en",
+                "publisher": { "@id": "https://{{ request.get_host }}/#organization" }
+            },
+            {
+                "@type": "Organization",
+                "@id": "https://{{ request.get_host }}/#organization",
+                "name": "MMFLIP",
+                "url": "https://{{ request.get_host }}",
+                "logo": "https://{{ request.get_host }}{% static 'img/logo.png' %}"
+            }
+        ]
+    }
+    </script>
+    {% block extra_structured_data %}{% endblock %}
+
     <link rel="icon" type="image/png" sizes="64x64" href="{% static 'img/favicon.png' %}">
     <link rel="apple-touch-icon" sizes="180x180" href="{% static 'img/logo.png' %}">
-    <link rel="stylesheet" href="{% static 'css/style.css' %}?v={% now 'U' %}">
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+    <script src="{% static 'js/i18n.js' %}" defer></script>
 </head>
 
 <body>
@@ -147,12 +206,12 @@
                 <i class="bi bi-trophy-fill"></i>
             </div>
             <!-- Main title -->
-            <div class="result-title" id="globalWinnerText">YOU WON!</div>
+            <div class="result-title" id="globalWinnerText" data-i18n="flip.youWon">YOU WON!</div>
             <!-- Subtitle -->
-            <div class="result-subtitle" id="resultSubtitle">Lucky one!</div>
+            <div class="result-subtitle" id="resultSubtitle" data-i18n="flip.luckyOne">Lucky one!</div>
             <!-- Bet -->
             <div class="result-bet-row">
-                <span class="result-bet-label">TOTAL BET</span>
+                <span class="result-bet-label" data-i18n="flip.totalBet">TOTAL BET</span>
                 <div class="result-bet-amount">
                     <span class="result-bet-value" id="globalBetText">0</span>
                     <img src="{% static 'img/sv_coin.png' %}" class="result-coin-img" alt="SV">
@@ -164,7 +223,7 @@
                 <span id="globalHashValue">—</span>
             </div>
             <!-- Close -->
-            <button class="btn-close-flip" onclick="closeGlobalFlip()">CLOSE</button>
+            <button class="btn-close-flip" onclick="closeGlobalFlip()" data-i18n="flip.close">CLOSE</button>
         </div>
     </div>
 
@@ -173,6 +232,8 @@
         let flipTimeouts = [];
         let flipSkipped = false;
         let flipCurrentData = null;
+
+        function _tr(k, f) { return (window.I18N && window.I18N.t) ? window.I18N.t(k) : f; }
 
         function checkFlipStatus() {
             if (isAnimating) return;
@@ -225,13 +286,13 @@
 
             if (iWon) {
                 resultBox.classList.add('result-win');
-                winnerText.innerText = 'YOU WON!';
-                subtitle.innerText = 'Lucky one!';
+                winnerText.innerText = _tr('flip.youWon', 'YOU WON!');
+                subtitle.innerText = _tr('flip.luckyOne', 'Lucky one!');
                 iconEl.innerHTML = '<i class="bi bi-trophy-fill"></i>';
             } else {
                 resultBox.classList.add('result-lose');
-                winnerText.innerText = 'YOU LOST';
-                subtitle.innerText = 'Loser :(';
+                winnerText.innerText = _tr('flip.youLost', 'YOU LOST');
+                subtitle.innerText = _tr('flip.loser', 'Loser :(');
                 iconEl.innerHTML = '<i class="bi bi-heartbreak-fill"></i>';
             }
             document.getElementById('globalBetText').innerText = data.total_bet;
@@ -438,6 +499,7 @@
             const toggleIcon = document.getElementById('snowToggleIcon');
             if (!slider) return;
 
+            const tr = (k, f) => (window.I18N && window.I18N.t) ? window.I18N.t(k) : f;
             let currentVal = parseInt(slider.value);
             if (currentVal > 0) {
                 // Turn OFF
@@ -445,21 +507,21 @@
                 slider.value = 0;
                 updateSnowSettings(0);
                 if (btn) btn.classList.add('snow-off');
-                if (btnText) btnText.textContent = 'ENABLE';
+                if (btnText) { btnText.setAttribute('data-i18n-dynamic', 'snow.enable'); btnText.textContent = tr('snow.enable', 'ENABLE'); }
                 if (toggleIcon) toggleIcon.className = 'bi bi-power';
                 if (statusEl) statusEl.classList.add('off');
                 if (statusDot) statusDot.classList.remove('active');
-                if (statusText) statusText.textContent = 'OFF';
+                if (statusText) { statusText.setAttribute('data-i18n', 'snow.off'); statusText.textContent = tr('snow.off', 'OFF'); }
             } else {
                 // Turn ON
                 slider.value = previousSnowValue || 50;
                 updateSnowSettings(slider.value);
                 if (btn) btn.classList.remove('snow-off');
-                if (btnText) btnText.textContent = 'DISABLE';
+                if (btnText) { btnText.setAttribute('data-i18n-dynamic', 'snow.disable'); btnText.textContent = tr('snow.disable', 'DISABLE'); }
                 if (toggleIcon) toggleIcon.className = 'bi bi-power';
                 if (statusEl) statusEl.classList.remove('off');
                 if (statusDot) statusDot.classList.add('active');
-                if (statusText) statusText.textContent = 'ON';
+                if (statusText) { statusText.setAttribute('data-i18n', 'snow.on'); statusText.textContent = tr('snow.on', 'ON'); }
             }
         }
     </script>
@@ -467,7 +529,7 @@
     <div class="items-view-overlay" id="itemsViewModal">
         <div class="items-view-box">
             <div class="items-view-header">
-                <h3>GAME ITEMS</h3>
+                <h3 data-i18n="cf.gameItems">GAME ITEMS</h3>
                 <div class="items-view-close" onclick="closeItemsModal()"><i class="bi bi-x-lg"></i></div>
             </div>
 
@@ -514,30 +576,31 @@
             </div>
 
             <div class="auth-step active" id="step1">
-                <div class="auth-title">ROBLOX LOGIN</div>
-                <p class="text-muted-ice" style="text-align: center; font-size: 1rem;">Enter your Roblox username to
+                <div class="auth-title" data-i18n="auth.step1Title">ROBLOX LOGIN</div>
+                <p class="text-muted-ice" style="text-align: center; font-size: 1rem;" data-i18n="auth.step1Desc">Enter your Roblox username to
                     start.</p>
 
                 <input type="text" id="authUsername" class="auth-input" placeholder="Username..."
+                    data-i18n-attr="placeholder:auth.usernamePh"
                     onkeypress="handleEnter(event, nextStep)">
                 <div class="auth-error" id="errorStep1"></div>
 
                 <button class="auth-btn" onclick="nextStep()" id="btnStep1">
-                    <span>NEXT STEP</span>
+                    <span data-i18n="auth.nextStep">NEXT STEP</span>
                     <i class="bi bi-arrow-right" style="font-size: 1.2rem;"></i>
                 </button>
             </div>
 
             <div class="auth-step" id="step2">
-                <div class="auth-title">VERIFICATION</div>
+                <div class="auth-title" data-i18n="auth.verifyTitle">VERIFICATION</div>
 
                 <div class="auth-avatar">
                     <img src="" id="authAvatarImg" alt="Avatar">
                 </div>
-                <p class="text-muted-ice" style="text-align: center; margin: 10px 0; font-size: 1.1rem;">Hello, <b
+                <p class="text-muted-ice" style="text-align: center; margin: 10px 0; font-size: 1.1rem;"><span data-i18n="auth.helloLead">Hello,</span> <b
                         class="text-white-ice" id="displayUsername">User</b>!</p>
 
-                <p style="font-size: 0.95rem; color: #80deea; text-align: center; opacity: 0.8;">Paste this code into
+                <p style="font-size: 0.95rem; color: #80deea; text-align: center; opacity: 0.8;" data-i18n-html="auth.pasteCodeHtml">Paste this code into
                     your Roblox <b>About</b> section:</p>
 
                 <div class="code-display-wrapper" onclick="copyCode()">
@@ -547,13 +610,13 @@
                 </div>
 
                 <div class="auth-error" id="errorStep2"></div>
-                <div class="auth-loading" id="loadingText">Checking profile for code...</div>
+                <div class="auth-loading" id="loadingText" data-i18n="auth.checking">Checking profile for code...</div>
 
                 <button class="auth-btn" onclick="verifyCode()" id="btnStep2">
                     <i class="bi bi-check-lg" style="font-size: 1.2rem;"></i>
-                    <span>I PASTED THE CODE</span>
+                    <span data-i18n="auth.pasted">I PASTED THE CODE</span>
                 </button>
-                <div class="cancel-link" onclick="resetAuth()">Cancel / Back</div>
+                <div class="cancel-link" onclick="resetAuth()" data-i18n="auth.cancel">Cancel / Back</div>
             </div>
         </div>
     </div>
@@ -609,7 +672,7 @@
             const errBox = document.getElementById('errorStep1');
 
             if (!username) {
-                errBox.innerText = "Please enter a username";
+                errBox.innerText = _tr('auth.enterUsername', 'Please enter a username');
                 return;
             }
 
@@ -637,12 +700,12 @@
                         }, 150);
 
                     } else {
-                        errBox.innerText = data.message || "User not found";
+                        errBox.innerText = data.message || _tr('auth.userNotFound', 'User not found');
                     }
                 })
                 .catch(err => {
                     setLoading(false, 'btnStep1');
-                    errBox.innerText = "Connection error. Try again.";
+                    errBox.innerText = _tr('auth.connectionError', 'Connection error. Try again.');
                 });
         }
 
@@ -677,13 +740,13 @@
                     if (data.status === 'success') {
                         window.location.reload();
                     } else {
-                        errBox.innerHTML = data.message || "Code not found.<br>Wait 10-15s after saving profile.";
+                        errBox.innerHTML = data.message || _tr('auth.codeNotFound', 'Code not found.<br>Wait 10-15s after saving profile.');
                     }
                 })
                 .catch(err => {
                     setLoading(false, 'btnStep2');
                     document.getElementById('loadingText').style.display = 'none';
-                    errBox.innerText = "Error verifying code. Try again.";
+                    errBox.innerText = _tr('auth.verifyError', 'Error verifying code. Try again.');
                 });
         }
 
@@ -699,9 +762,9 @@
             <div class="chat-title-wrap">
                 <div class="chat-title-row">
                     <span class="chat-title-icon chat-title-icon-live"><i class="bi bi-megaphone-fill"></i></span>
-                    <span class="chat-title">LIVE CHAT</span>
+                    <span class="chat-title" data-i18n="chat.title">LIVE CHAT</span>
                 </div>
-                <span class="chat-subtitle">real-time messages</span>
+                <span class="chat-subtitle" data-i18n="chat.subtitle">real-time messages</span>
             </div>
             <div class="chat-header-actions">
                 <div class="chat-prefix-btn" onclick="openPrefixModal()" title="Prefixes">
@@ -712,11 +775,12 @@
         </div>
 
         <div class="chat-messages-area" id="chatArea">
-            <div class="chat-loading">Connecting to server...</div>
+            <div class="chat-loading" data-i18n="chat.connecting">Connecting to server...</div>
         </div>
 
         <div class="chat-input-area">
             <input type="text" id="chatInput" placeholder="Message..." maxlength="300"
+                data-i18n-attr="placeholder:chat.placeholder"
                 onkeypress="handleChatEnter(event)">
             <button class="chat-send-btn" onclick="sendMessage()">
                 <svg viewBox="0 0 24 24">
@@ -735,22 +799,22 @@
     <div class="prefix-modal-overlay" id="prefixModal">
         <div class="prefix-modal">
             <div class="prefix-modal-header">
-                <div class="prefix-modal-title"><i class="bi bi-tag-fill"></i> PREFIXES</div>
+                <div class="prefix-modal-title"><i class="bi bi-tag-fill"></i> <span data-i18n="prefix.title">PREFIXES</span></div>
                 <div class="prefix-modal-close" onclick="closePrefixModal()"><i class="bi bi-x-lg"></i></div>
             </div>
 
             <div class="prefix-modal-games-info" id="prefixGamesInfo">
                 <span class="prefix-games-icon"><i class="bi bi-controller"></i></span>
-                <span>Games played: <strong id="prefixGamesCount">0</strong></span>
+                <span><span data-i18n="prefix.gamesPlayed">Games played:</span> <strong id="prefixGamesCount">0</strong></span>
             </div>
 
             <div class="prefix-modal-preview" id="prefixPreview">
-                <span class="prefix-preview-label">Preview:</span>
+                <span class="prefix-preview-label" data-i18n="prefix.preview">Preview:</span>
                 <span class="prefix-preview-name">Username</span>
                 <span class="prefix-preview-tag" id="prefixPreviewTag"></span>
             </div>
 
-            <div class="prefix-section-title">SELECT PREFIX</div>
+            <div class="prefix-section-title" data-i18n="prefix.selectPrefix">SELECT PREFIX</div>
             <div class="prefix-list" id="prefixList">
                 <!-- filled by JS -->
             </div>
@@ -760,13 +824,13 @@
                 <span class="prefix-custom-counter"><span id="prefixCustomCount">0</span>/16</span>
             </div>
 
-            <div class="prefix-section-title">SELECT COLOR</div>
+            <div class="prefix-section-title" data-i18n="prefix.selectColor">SELECT COLOR</div>
             <div class="prefix-color-grid" id="prefixColorGrid">
                 <!-- filled by JS -->
             </div>
 
             <button class="prefix-save-btn" id="prefixSaveBtn" onclick="savePrefix()">
-                <i class="bi bi-check-lg"></i> SAVE PREFIX
+                <i class="bi bi-check-lg"></i> <span data-i18n="prefix.save">SAVE PREFIX</span>
             </button>
         </div>
     </div>
@@ -1066,8 +1130,9 @@
 
         function savePrefix() {
             const btn = document.getElementById('prefixSaveBtn');
+            const _saveTxt = '<i class="bi bi-check-lg"></i> ' + _tr('prefix.save', 'SAVE PREFIX');
             btn.disabled = true;
-            btn.innerHTML = '<i class="bi bi-hourglass-split"></i> SAVING...';
+            btn.innerHTML = '<i class="bi bi-hourglass-split"></i> ' + _tr('prefix.saving', 'SAVING...');
 
             const payload = { prefix: selectedPrefix, color: selectedColor };
             if (selectedPrefix === 'Custom') {
@@ -1082,9 +1147,9 @@
             .then(r => r.json())
             .then(data => {
                 if (data.status === 'ok') {
-                    btn.innerHTML = '<i class="bi bi-check-lg"></i> SAVED!';
+                    btn.innerHTML = '<i class="bi bi-check-lg"></i> ' + _tr('prefix.saved', 'SAVED!');
                     setTimeout(() => {
-                        btn.innerHTML = '<i class="bi bi-check-lg"></i> SAVE PREFIX';
+                        btn.innerHTML = _saveTxt;
                         btn.disabled = false;
                         closePrefixModal();
                         loadMessages(true);
@@ -1092,13 +1157,13 @@
                 } else {
                     btn.innerHTML = '<i class="bi bi-x-lg"></i> ' + (data.message || 'Error');
                     setTimeout(() => {
-                        btn.innerHTML = '<i class="bi bi-check-lg"></i> SAVE PREFIX';
+                        btn.innerHTML = _saveTxt;
                         btn.disabled = false;
                     }, 1500);
                 }
             })
             .catch(() => {
-                btn.innerHTML = '<i class="bi bi-check-lg"></i> SAVE PREFIX';
+                btn.innerHTML = _saveTxt;
                 btn.disabled = false;
             });
         }
@@ -1114,7 +1179,7 @@
             <!-- Loading Spinner -->
             <div class="stats-loading" id="statsLoading">
                 <div class="stats-spinner"></div>
-                <p>Loading stats...</p>
+                <p data-i18n="stats.loading">Loading stats...</p>
             </div>
 
             <!-- Content (hidden until loaded) -->
@@ -1123,30 +1188,30 @@
                 <!-- User Header -->
                 <div class="stats-user-header">
                     <img src="" class="stats-avatar" id="statsAvatar" alt="Avatar">
-                    <div class="stats-username" id="statsUsername">Player</div>
+                    <div class="stats-username" id="statsUsername" data-i18n="stats.player">Player</div>
                 </div>
 
                 <!-- Period Tabs -->
                 <div class="stats-period-tabs">
-                    <div class="stats-tab active" data-period="all" onclick="switchStatsPeriod('all', this)">All Time
+                    <div class="stats-tab active" data-period="all" onclick="switchStatsPeriod('all', this)" data-i18n="stats.allTime">All Time
                     </div>
-                    <div class="stats-tab" data-period="30d" onclick="switchStatsPeriod('30d', this)">30 Days</div>
-                    <div class="stats-tab" data-period="7d" onclick="switchStatsPeriod('7d', this)">7 Days</div>
-                    <div class="stats-tab" data-period="today" onclick="switchStatsPeriod('today', this)">Today</div>
+                    <div class="stats-tab" data-period="30d" onclick="switchStatsPeriod('30d', this)" data-i18n="stats.30days">30 Days</div>
+                    <div class="stats-tab" data-period="7d" onclick="switchStatsPeriod('7d', this)" data-i18n="stats.7days">7 Days</div>
+                    <div class="stats-tab" data-period="today" onclick="switchStatsPeriod('today', this)" data-i18n="stats.today">Today</div>
                 </div>
 
                 <!-- Stats Cards -->
                 <div class="stats-cards-row">
                     <div class="stats-card">
-                        <div class="stats-card-label">PROFIT</div>
+                        <div class="stats-card-label" data-i18n="stats.profit">PROFIT</div>
                         <div class="stats-card-value" id="statsProfit">0</div>
                     </div>
                     <div class="stats-card">
-                        <div class="stats-card-label">GAMES</div>
+                        <div class="stats-card-label" data-i18n="stats.games">GAMES</div>
                         <div class="stats-card-value" id="statsGames">0</div>
                     </div>
                     <div class="stats-card">
-                        <div class="stats-card-label">WIN RATE</div>
+                        <div class="stats-card-label" data-i18n="stats.winRate">WIN RATE</div>
                         <div class="stats-card-value" id="statsWinRate">0%</div>
                     </div>
                 </div>
@@ -1159,9 +1224,9 @@
                 </div>
 
                 <!-- Game History -->
-                <div class="stats-history-title">GAME HISTORY</div>
+                <div class="stats-history-title" data-i18n="stats.gameHistory">GAME HISTORY</div>
                 <div class="stats-history-list" id="statsHistoryList">
-                    <div class="stats-history-empty">No games found</div>
+                    <div class="stats-history-empty" data-i18n="stats.noGames">No games found</div>
                 </div>
 
             </div>
@@ -1228,7 +1293,7 @@
                     // Fill history
                     const historyList = document.getElementById('statsHistoryList');
                     if (data.history.length === 0) {
-                        historyList.innerHTML = '<div class="stats-history-empty">No games in this period</div>';
+                        historyList.innerHTML = '<div class="stats-history-empty">' + _tr('stats.noGamesInPeriod', 'No games in this period') + '</div>';
                     } else {
                         let html = '';
                         data.history.forEach(g => {
@@ -1259,7 +1324,7 @@
                 })
                 .catch(err => {
                     console.error('Stats fetch error:', err);
-                    document.getElementById('statsLoading').innerHTML = '<p style="color:#ff4444;">Error loading stats</p>';
+                    document.getElementById('statsLoading').innerHTML = '<p style="color:#ff4444;">' + _tr('stats.error', 'Error loading stats') + '</p>';
                 });
         }
 

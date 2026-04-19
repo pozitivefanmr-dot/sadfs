@@ -1,6 +1,12 @@
 {% extends 'base.html' %}
 {% load static %}
 {% load custom_filters %}
+
+{% block seo_title %}MMFLIP | Trade MM2 Items — Deposit & Withdraw{% endblock %}
+{% block seo_description %}Trade your Murder Mystery 2 items on MMFLIP. Deposit and withdraw MM2 godlies, ancients, vintages safely.{% endblock %}
+{% block og_title %}MMFLIP — Trade MM2 Items{% endblock %}
+{% block og_description %}Deposit and withdraw MM2 items safely on MMFLIP.{% endblock %}
+
 {% block content %}
 
 {% include 'header.html' %}
@@ -12,8 +18,8 @@
         <div class="history-hero-icon">
             <i class="bi bi-clock-history"></i>
         </div>
-        <h1 class="history-hero-title">HISTORY</h1>
-        <p class="history-hero-sub">Your complete activity log</p>
+        <h1 class="history-hero-title" data-i18n="trade.heroTitle">HISTORY</h1>
+        <p class="history-hero-sub" data-i18n="trade.heroSub">Your complete activity log</p>
     </div>
 
     {% if mode == 'admin' %}
@@ -24,8 +30,8 @@
                     <i class="bi bi-shield-lock-fill"></i>
                 </div>
                 <div>
-                    <h2 class="history-section-title">GLOBAL LOGS</h2>
-                    <p class="history-section-sub">System monitor & incoming trades</p>
+                    <h2 class="history-section-title" data-i18n="trade.globalLogs">GLOBAL LOGS</h2>
+                    <p class="history-section-sub" data-i18n="trade.globalLogsSub">System monitor & incoming trades</p>
                 </div>
             </div>
             <div class="history-section-body">
@@ -46,7 +52,7 @@
                 {% empty %}
                     <div class="history-empty-state">
                         <div class="history-empty-icon"><i class="bi bi-inbox"></i></div>
-                        <p>No trade logs found.</p>
+                        <p data-i18n="trade.noTradeLogs">No trade logs found.</p>
                     </div>
                 {% endfor %}
             </div>
@@ -57,13 +63,13 @@
         <!-- TAB NAVIGATION -->
         <div class="history-tabs">
             <button class="history-tab active" onclick="switchHistoryTab('games', this)">
-                <i class="bi bi-dpad-fill"></i> <span>GAMES</span>
+                <i class="bi bi-dpad-fill"></i> <span data-i18n="trade.tabGames">GAMES</span>
             </button>
             <button class="history-tab" onclick="switchHistoryTab('deposits', this)">
-                <i class="bi bi-download"></i> <span>DEPOSITS</span>
+                <i class="bi bi-download"></i> <span data-i18n="trade.tabDeposits">DEPOSITS</span>
             </button>
             <button class="history-tab" onclick="switchHistoryTab('withdrawals', this)">
-                <i class="bi bi-upload"></i> <span>WITHDRAWALS</span>
+                <i class="bi bi-upload"></i> <span data-i18n="trade.tabWithdrawals">WITHDRAWALS</span>
             </button>
         </div>
 
@@ -75,10 +81,10 @@
                         <i class="bi bi-dpad-fill"></i>
                     </div>
                     <div>
-                        <h2 class="history-section-title">GAME HISTORY</h2>
-                        <p class="history-section-sub">Your recent coinflip results</p>
+                        <h2 class="history-section-title" data-i18n="trade.gameHistory">GAME HISTORY</h2>
+                        <p class="history-section-sub" data-i18n="trade.gameHistorySub">Your recent coinflip results</p>
                     </div>
-                    <div class="history-section-count">{{ logs|length }} games</div>
+                    <div class="history-section-count">{{ logs|length }} <span data-i18n="trade.games">games</span></div>
                 </div>
                 <div class="history-section-body">
                     {% for game in logs %}
@@ -98,7 +104,7 @@
                                 </div>
 
                                 <div class="game-vs-badge">
-                                    <span>VS</span>
+                                    <span data-i18n="trade.vs">VS</span>
                                 </div>
 
                                 <div class="game-player {% if game.player2 == user.username %}game-player--me{% endif %}">
@@ -139,12 +145,12 @@
                                 {% if game.winner == user.username %}
                                     <div class="result-chip result-chip--win">
                                         <i class="bi bi-trophy-fill"></i>
-                                        <span>WIN</span>
+                                        <span data-i18n="trade.win">WIN</span>
                                     </div>
                                 {% else %}
                                     <div class="result-chip result-chip--loss">
                                         <i class="bi bi-x-octagon-fill"></i>
-                                        <span>LOSS</span>
+                                        <span data-i18n="trade.loss">LOSS</span>
                                     </div>
                                 {% endif %}
                             </div>
@@ -163,9 +169,9 @@
                     {% empty %}
                         <div class="history-empty-state">
                             <div class="history-empty-icon"><i class="bi bi-dpad"></i></div>
-                            <p>No games played yet</p>
+                            <p data-i18n="trade.noGames">No games played yet</p>
                             <a href="{% url 'coinflip' %}" class="history-empty-btn">
-                                <i class="bi bi-play-fill"></i> Play Now
+                                <i class="bi bi-play-fill"></i> <span data-i18n="trade.playNow">Play Now</span>
                             </a>
                         </div>
                     {% endfor %}
@@ -181,10 +187,10 @@
                         <i class="bi bi-download"></i>
                     </div>
                     <div>
-                        <h2 class="history-section-title">DEPOSIT HISTORY</h2>
-                        <p class="history-section-sub">Items sent to bots</p>
+                        <h2 class="history-section-title" data-i18n="trade.depositHistory">DEPOSIT HISTORY</h2>
+                        <p class="history-section-sub" data-i18n="trade.depositHistorySub">Items sent to bots</p>
                     </div>
-                    <div class="history-section-count">{{ deposit_logs|length }} deposits</div>
+                    <div class="history-section-count">{{ deposit_logs|length }} <span data-i18n="trade.deposits">deposits</span></div>
                 </div>
                 <div class="history-section-body">
                     {% for dep in deposit_logs %}
@@ -205,7 +211,7 @@
                                 </div>
                                 <div class="transfer-card-info">
                                     <div class="transfer-card-title">
-                                        Deposit to <span class="transfer-highlight transfer-highlight--cyan">{{ dep.bot_name }}</span>
+                                        <span data-i18n="trade.depositTo">Deposit to</span> <span class="transfer-highlight transfer-highlight--cyan">{{ dep.bot_name }}</span>
                                     </div>
                                     <div class="transfer-skin-list">
                                         {% for item in dep.items %}
@@ -228,7 +234,7 @@
                     {% empty %}
                         <div class="history-empty-state">
                             <div class="history-empty-icon"><i class="bi bi-box-arrow-in-down"></i></div>
-                            <p>No deposits yet</p>
+                            <p data-i18n="trade.noDeposits">No deposits yet</p>
                         </div>
                     {% endfor %}
                 </div>
@@ -243,10 +249,10 @@
                         <i class="bi bi-upload"></i>
                     </div>
                     <div>
-                        <h2 class="history-section-title">WITHDRAWAL HISTORY</h2>
-                        <p class="history-section-sub">Items withdrawn from your balance</p>
+                        <h2 class="history-section-title" data-i18n="trade.withdrawalHistory">WITHDRAWAL HISTORY</h2>
+                        <p class="history-section-sub" data-i18n="trade.withdrawalHistorySub">Items withdrawn from your balance</p>
                     </div>
-                    <div class="history-section-count">{{ withdraw_logs|length }} withdrawals</div>
+                    <div class="history-section-count">{{ withdraw_logs|length }} <span data-i18n="trade.withdrawals">withdrawals</span></div>
                 </div>
                 <div class="history-section-body">
                     {% for wd in withdraw_logs %}
@@ -276,9 +282,9 @@
                                     </div>
                                     <div class="transfer-card-status">
                                         {% if wd.is_completed %}
-                                            <span class="wd-chip wd-chip--done"><i class="bi bi-check2-all"></i> Completed</span>
+                                            <span class="wd-chip wd-chip--done"><i class="bi bi-check2-all"></i> <span data-i18n="trade.completed">Completed</span></span>
                                         {% else %}
-                                            <span class="wd-chip wd-chip--pending"><i class="bi bi-clock-fill"></i> Pending</span>
+                                            <span class="wd-chip wd-chip--pending"><i class="bi bi-clock-fill"></i> <span data-i18n="trade.pending">Pending</span></span>
                                         {% endif %}
                                     </div>
                                 </div>
@@ -290,7 +296,7 @@
                     {% empty %}
                         <div class="history-empty-state">
                             <div class="history-empty-icon"><i class="bi bi-box-arrow-up"></i></div>
-                            <p>No withdrawals yet</p>
+                            <p data-i18n="trade.noWithdrawals">No withdrawals yet</p>
                         </div>
                     {% endfor %}
                 </div>

@@ -12,61 +12,61 @@
                 <a href="{% url 'home' %}" class="footer-logo">
                     MM<span>FLIP</span>
                 </a>
-                <p class="footer-brand-desc">
+                <p class="footer-brand-desc" data-i18n="footer.brandDesc">
                     The #1 platform for Murder Mystery 2 coinflip battles.
                     Flip your items, double your inventory &mdash; instantly and fairly.
                 </p>
                 <div class="footer-trust-badges">
                     <div class="trust-badge">
                         <i class="bi bi-shield-check"></i>
-                        <span>Provably Fair</span>
+                        <span data-i18n="footer.trust.fair">Provably Fair</span>
                     </div>
                     <div class="trust-badge">
                         <i class="bi bi-fingerprint"></i>
-                        <span>Unique Game ID</span>
+                        <span data-i18n="footer.trust.uid">Unique Game ID</span>
                     </div>
                     <div class="trust-badge">
                         <i class="bi bi-lock"></i>
-                        <span>Secure</span>
+                        <span data-i18n="footer.trust.secure">Secure</span>
                     </div>
                 </div>
             </div>
 
             <!-- COLUMN 2: Quick Links -->
             <div class="footer-col">
-                <h4 class="footer-col-title">Navigation</h4>
+                <h4 class="footer-col-title" data-i18n="footer.nav">Navigation</h4>
                 <ul class="footer-links">
-                    <li><a href="{% url 'home' %}"><i class="bi bi-grid"></i> Dashboard</a></li>
-                    <li><a href="{% url 'coinflip' %}"><i class="bi bi-coin"></i> Coinflip</a></li>
-                    <li><a href="{% url 'trade' %}"><i class="bi bi-clock-history"></i> History</a></li>
+                    <li><a href="{% url 'home' %}"><i class="bi bi-grid"></i> <span data-i18n="nav.dashboard">Dashboard</span></a></li>
+                    <li><a href="{% url 'coinflip' %}"><i class="bi bi-coin"></i> <span data-i18n="nav.coinflip">Coinflip</span></a></li>
+                    <li><a href="{% url 'trade' %}"><i class="bi bi-clock-history"></i> <span data-i18n="nav.history">History</span></a></li>
                 </ul>
             </div>
 
             <!-- COLUMN 3: Legal -->
             <div class="footer-col">
-                <h4 class="footer-col-title">Legal</h4>
+                <h4 class="footer-col-title" data-i18n="footer.legal">Legal</h4>
                 <ul class="footer-links">
-                    <li><a href="#faq-section" onclick="toggleFaq(event)"><i class="bi bi-patch-question"></i> FAQ</a></li>
-                    <li><a href="#" onclick="openFooterModal('provablyFairModal', event)"><i class="bi bi-shield-lock"></i> Provably Fair</a></li>
-                    <li><a href="#" onclick="openFooterModal('tosModal', event)"><i class="bi bi-file-earmark-text"></i> Terms of Service</a></li>
-                    <li><a href="#" onclick="openFooterModal('privacyModal', event)"><i class="bi bi-eye"></i> Privacy Policy</a></li>
+                    <li><a href="#faq-section" onclick="toggleFaq(event)"><i class="bi bi-patch-question"></i> <span data-i18n="footer.faq">FAQ</span></a></li>
+                    <li><a href="#" onclick="openFooterModal('provablyFairModal', event)"><i class="bi bi-shield-lock"></i> <span data-i18n="footer.pfair">Provably Fair</span></a></li>
+                    <li><a href="#" onclick="openFooterModal('tosModal', event)"><i class="bi bi-file-earmark-text"></i> <span data-i18n="footer.tos">Terms of Service</span></a></li>
+                    <li><a href="#" onclick="openFooterModal('privacyModal', event)"><i class="bi bi-eye"></i> <span data-i18n="footer.privacy">Privacy Policy</span></a></li>
                 </ul>
             </div>
 
             <!-- COLUMN 4: How It Works -->
             <div class="footer-col footer-fair-col">
-                <h4 class="footer-col-title">How It Works</h4>
+                <h4 class="footer-col-title" data-i18n="footer.howItWorks">How It Works</h4>
                 <div class="footer-fair-card">
                     <div class="fair-card-icon">
                         <i class="bi bi-shuffle"></i>
                     </div>
-                    <p>Every coinflip result is powered by <strong>Random.org</strong> &mdash; true random numbers from atmospheric noise. Each game gets a <strong>unique game ID (UID)</strong> and the result is logged in our <strong>Discord server</strong> for full transparency. A <strong>~10% commission</strong> applies on pots over 50 SV with 4+ items.</p>
+                    <p data-i18n-html="footer.howItWorksBody">Every coinflip result is powered by <strong>Random.org</strong> &mdash; true random numbers from atmospheric noise. Each game gets a <strong>unique game ID (UID)</strong> and the result is logged in our <strong>Discord server</strong> for full transparency. A <strong>~10% commission</strong> applies on pots over 50 SV with 4+ items.</p>
                 </div>
             </div>
 
             <!-- COLUMN 5: Community -->
             <div class="footer-col footer-socials-col">
-                <h4 class="footer-col-title">Community</h4>
+                <h4 class="footer-col-title" data-i18n="footer.community">Community</h4>
                 <div class="footer-social-links">
                     <a href="#" target="_blank" class="footer-social-btn discord">
                         <div class="social-icon-wrap">
@@ -74,7 +74,7 @@
                         </div>
                         <div class="social-text">
                             <span class="social-name">Discord</span>
-                            <span class="social-sub">Join our server</span>
+                            <span class="social-sub" data-i18n="footer.discordSub">Join our server</span>
                         </div>
                         <i class="bi bi-arrow-up-right social-arrow"></i>
                     </a>
@@ -84,7 +84,7 @@
                         </div>
                         <div class="social-text">
                             <span class="social-name">Telegram</span>
-                            <span class="social-sub">Follow updates</span>
+                            <span class="social-sub" data-i18n="footer.telegramSub">Follow updates</span>
                         </div>
                         <i class="bi bi-arrow-up-right social-arrow"></i>
                     </a>
@@ -99,76 +99,76 @@
         <div class="footer-container footer-faq-container">
             <h3 class="faq-main-title">
                 <i class="bi bi-question-circle"></i>
-                Frequently Asked Questions
+                <span data-i18n="footer.faqTitle">Frequently Asked Questions</span>
             </h3>
             <div class="faq-grid">
                 <div class="faq-item" onclick="this.classList.toggle('open')">
                     <div class="faq-question">
-                        <span>What is MMFLIP?</span>
+                        <span data-i18n="faq.q1">What is MMFLIP?</span>
                         <i class="bi bi-chevron-down faq-chevron"></i>
                     </div>
                     <div class="faq-answer">
-                        <p>MMFLIP is a coinflip platform for Roblox Murder Mystery 2 items. You deposit your MM2 weapons, create or join coinflip games, and the winner takes all items from both sides.</p>
+                        <p data-i18n-html="faq.a1">MMFLIP is a coinflip platform for Roblox Murder Mystery 2 items. You deposit your MM2 weapons, create or join coinflip games, and the winner takes all items from both sides.</p>
                     </div>
                 </div>
 
                 <div class="faq-item" onclick="this.classList.toggle('open')">
                     <div class="faq-question">
-                        <span>Is it truly random?</span>
+                        <span data-i18n="faq.q2">Is it truly random?</span>
                         <i class="bi bi-chevron-down faq-chevron"></i>
                     </div>
                     <div class="faq-answer">
-                        <p>Yes! Every game outcome is generated using <strong>Random.org</strong> &mdash; a service that produces true random numbers from atmospheric noise, not computer algorithms. If Random.org is momentarily unavailable, we fall back to Python's cryptographically secure <strong>secrets</strong> module. Each game receives a unique ID (UID) and the result is logged in our Discord for verification.</p>
+                        <p data-i18n-html="faq.a2">Yes! Every game outcome is generated using <strong>Random.org</strong> &mdash; a service that produces true random numbers from atmospheric noise, not computer algorithms. If Random.org is momentarily unavailable, we fall back to Python's cryptographically secure <strong>secrets</strong> module. Each game receives a unique ID (UID) and the result is logged in our Discord for verification.</p>
                     </div>
                 </div>
 
                 <div class="faq-item" onclick="this.classList.toggle('open')">
                     <div class="faq-question">
-                        <span>How do I deposit items?</span>
+                        <span data-i18n="faq.q3">How do I deposit items?</span>
                         <i class="bi bi-chevron-down faq-chevron"></i>
                     </div>
                     <div class="faq-answer">
-                        <p>Click the <strong>Deposit</strong> button in the header, select one of our trade bots, join their game in Roblox, and trade your MM2 items to the bot. They'll appear in your inventory within seconds.</p>
+                        <p data-i18n-html="faq.a3">Click the <strong>Deposit</strong> button in the header, select one of our trade bots, join their game in Roblox, and trade your MM2 items to the bot. They'll appear in your inventory within seconds.</p>
                     </div>
                 </div>
 
                 <div class="faq-item" onclick="this.classList.toggle('open')">
                     <div class="faq-question">
-                        <span>How do I withdraw winnings?</span>
+                        <span data-i18n="faq.q4">How do I withdraw winnings?</span>
                         <i class="bi bi-chevron-down faq-chevron"></i>
                     </div>
                     <div class="faq-answer">
-                        <p>Go to your Dashboard, hover over the item you want, and click <strong>Withdraw</strong>. Then join the trade bot in Roblox to receive your items.</p>
+                        <p data-i18n-html="faq.a4">Go to your Dashboard, hover over the item you want, and click <strong>Withdraw</strong>. Then join the trade bot in Roblox to receive your items.</p>
                     </div>
                 </div>
 
                 <div class="faq-item" onclick="this.classList.toggle('open')">
                     <div class="faq-question">
-                        <span>Can I verify game results?</span>
+                        <span data-i18n="faq.q5">Can I verify game results?</span>
                         <i class="bi bi-chevron-down faq-chevron"></i>
                     </div>
                     <div class="faq-answer">
-                        <p>Yes. Every game has a <strong>unique UID</strong> and stores the raw result code (1 or 2) from Random.org. All outcomes are automatically posted to our Discord log channel with full details &mdash; players, items, result code, and winner. You can cross-reference any game at any time.</p>
+                        <p data-i18n-html="faq.a5">Yes. Every game has a <strong>unique UID</strong> and stores the raw result code (1 or 2) from Random.org. All outcomes are automatically posted to our Discord log channel with full details &mdash; players, items, result code, and winner. You can cross-reference any game at any time.</p>
                     </div>
                 </div>
 
                 <div class="faq-item" onclick="this.classList.toggle('open')">
                     <div class="faq-question">
-                        <span>Does MMFLIP take a commission?</span>
+                        <span data-i18n="faq.q6">Does MMFLIP take a commission?</span>
                         <i class="bi bi-chevron-down faq-chevron"></i>
                     </div>
                     <div class="faq-answer">
-                        <p>Yes. A commission of approximately <strong>10%</strong> is taken from the winner's items when the total pot exceeds <strong>50 SV</strong> and the game contains more than <strong>4 items</strong>. The system picks the item(s) closest to the target value. If these conditions aren't met, <strong>no commission is charged</strong>.</p>
+                        <p data-i18n-html="faq.a6">Yes. A commission of approximately <strong>10%</strong> is taken from the winner's items when the total pot exceeds <strong>50 SV</strong> and the game contains more than <strong>4 items</strong>. The system picks the item(s) closest to the target value. If these conditions aren't met, <strong>no commission is charged</strong>.</p>
                     </div>
                 </div>
 
                 <div class="faq-item" onclick="this.classList.toggle('open')">
                     <div class="faq-question">
-                        <span>What if I have a problem?</span>
+                        <span data-i18n="faq.q7">What if I have a problem?</span>
                         <i class="bi bi-chevron-down faq-chevron"></i>
                     </div>
                     <div class="faq-answer">
-                        <p>Reach out via the global chat, open a ticket in our Discord, or message us on Telegram. We resolve all disputes quickly and fairly.</p>
+                        <p data-i18n-html="faq.a7">Reach out via the global chat, open a ticket in our Discord, or message us on Telegram. We resolve all disputes quickly and fairly.</p>
                     </div>
                 </div>
             </div>
@@ -179,19 +179,19 @@
     <div class="footer-bottom">
         <div class="footer-container footer-bottom-inner">
             <div class="footer-copyright">
-                &copy; 2025 &mdash; 2026 <span class="footer-copyright-brand">MMFLIP</span>. All rights reserved.
+                &copy; 2025 &mdash; 2026 <span class="footer-copyright-brand">MMFLIP</span>. <span data-i18n="footer.copyright">All rights reserved.</span>
             </div>
             <div class="footer-bottom-info">
                 <span class="footer-badge-inline">
-                    <i class="bi bi-fingerprint"></i> Unique Game UID
+                    <i class="bi bi-fingerprint"></i> <span data-i18n="footer.badge.uid">Unique Game UID</span>
                 </span>
                 <span class="footer-separator">|</span>
                 <span class="footer-badge-inline">
-                    <i class="bi bi-controller"></i> Roblox MM2
+                    <i class="bi bi-controller"></i> <span data-i18n="footer.badge.roblox">Roblox MM2</span>
                 </span>
                 <span class="footer-separator">|</span>
                 <span class="footer-badge-inline">
-                    <i class="bi bi-journal-text"></i> Discord Logs
+                    <i class="bi bi-journal-text"></i> <span data-i18n="footer.badge.logs">Discord Logs</span>
                 </span>
             </div>
         </div>
@@ -206,36 +206,36 @@
         <div class="footer-modal-close" onclick="closeFooterModal('provablyFairModal')"><i class="bi bi-x-lg"></i></div>
         <div class="footer-modal-header">
             <div class="footer-modal-icon"><i class="bi bi-shield-lock"></i></div>
-            <h2>Provably Fair</h2>
+            <h2 data-i18n="modal.pf.title">Provably Fair</h2>
         </div>
         <div class="footer-modal-body">
             <div class="modal-section">
-                <h4><i class="bi bi-shuffle"></i> How Results Are Generated</h4>
-                <p>Every coinflip outcome on MMFLIP is determined using the <strong>Random.org</strong> API &mdash; a service that generates true random numbers from <strong>atmospheric noise</strong>, not pseudo-random algorithms. This means the result is physically unpredictable and cannot be reproduced or influenced by software.</p>
+                <h4><i class="bi bi-shuffle"></i> <span data-i18n="modal.pf.howTitle">How Results Are Generated</span></h4>
+                <p data-i18n-html="modal.pf.howBody">Every coinflip outcome on MMFLIP is determined using the <strong>Random.org</strong> API &mdash; a service that generates true random numbers from <strong>atmospheric noise</strong>, not pseudo-random algorithms. This means the result is physically unpredictable and cannot be reproduced or influenced by software.</p>
             </div>
             <div class="modal-section">
-                <h4><i class="bi bi-cloud-check"></i> Atmospheric Noise (Random.org)</h4>
-                <p>Random.org samples atmospheric noise &mdash; tiny electrical fluctuations in the atmosphere &mdash; and converts them into random numbers. This method is <strong>fundamentally different</strong> from computer-generated pseudo-randomness. The numbers are truly unpredictable and pass all statistical randomness tests (NIST, Diehard, TestU01).</p>
+                <h4><i class="bi bi-cloud-check"></i> <span data-i18n="modal.pf.noiseTitle">Atmospheric Noise (Random.org)</span></h4>
+                <p data-i18n-html="modal.pf.noiseBody">Random.org samples atmospheric noise &mdash; tiny electrical fluctuations in the atmosphere &mdash; and converts them into random numbers. This method is <strong>fundamentally different</strong> from computer-generated pseudo-randomness. The numbers are truly unpredictable and pass all statistical randomness tests (NIST, Diehard, TestU01).</p>
             </div>
             <div class="modal-section">
-                <h4><i class="bi bi-shield-lock"></i> Secure Fallback</h4>
-                <p>In the rare event that the Random.org API is temporarily unavailable, the system falls back to Python's <strong>secrets</strong> module &mdash; a cryptographically secure random number generator designed specifically for security-sensitive applications. Either way, the outcome is never predictable.</p>
+                <h4><i class="bi bi-shield-lock"></i> <span data-i18n="modal.pf.fallbackTitle">Secure Fallback</span></h4>
+                <p data-i18n-html="modal.pf.fallbackBody">In the rare event that the Random.org API is temporarily unavailable, the system falls back to Python's <strong>secrets</strong> module &mdash; a cryptographically secure random number generator designed specifically for security-sensitive applications. Either way, the outcome is never predictable.</p>
             </div>
             <div class="modal-section">
-                <h4><i class="bi bi-fingerprint"></i> Unique Game ID</h4>
-                <p>Each coinflip game is assigned a <strong>unique identifier (UID)</strong> the moment it is created. This ID is permanently linked to both players, all wagered items, the random result code (1 or 2), and the winner. It serves as an immutable reference for any game.</p>
+                <h4><i class="bi bi-fingerprint"></i> <span data-i18n="modal.pf.uidTitle">Unique Game ID</span></h4>
+                <p data-i18n-html="modal.pf.uidBody">Each coinflip game is assigned a <strong>unique identifier (UID)</strong> the moment it is created. This ID is permanently linked to both players, all wagered items, the random result code (1 or 2), and the winner. It serves as an immutable reference for any game.</p>
             </div>
             <div class="modal-section">
-                <h4><i class="bi bi-discord"></i> Discord Logging</h4>
-                <p>All game results &mdash; including the UID, player names, items wagered, the raw result code, and the winner &mdash; are automatically posted to a dedicated log channel in our <strong>Discord server</strong>. Anyone can join and verify any game result at any time.</p>
+                <h4><i class="bi bi-discord"></i> <span data-i18n="modal.pf.discordTitle">Discord Logging</span></h4>
+                <p data-i18n-html="modal.pf.discordBody">All game results &mdash; including the UID, player names, items wagered, the raw result code, and the winner &mdash; are automatically posted to a dedicated log channel in our <strong>Discord server</strong>. Anyone can join and verify any game result at any time.</p>
             </div>
             <div class="modal-section">
-                <h4><i class="bi bi-percent"></i> Commission</h4>
-                <p>MMFLIP takes a small <strong>~10% commission</strong> from the winner's items when the total pot exceeds <strong>50 SV</strong> and the game contains more than <strong>4 items</strong>. The system automatically selects the item(s) closest to the 10% target. Commissioned items are logged and fully traceable. If conditions aren't met, <strong>no commission is taken</strong>.</p>
+                <h4><i class="bi bi-percent"></i> <span data-i18n="modal.pf.commissionTitle">Commission</span></h4>
+                <p data-i18n-html="modal.pf.commissionBody">MMFLIP takes a small <strong>~10% commission</strong> from the winner's items when the total pot exceeds <strong>50 SV</strong> and the game contains more than <strong>4 items</strong>. The system automatically selects the item(s) closest to the 10% target. Commissioned items are logged and fully traceable. If conditions aren't met, <strong>no commission is taken</strong>.</p>
             </div>
             <div class="modal-section">
-                <h4><i class="bi bi-eye"></i> Full Transparency</h4>
-                <p>We don't hide the method. Our random source is Random.org (publicly documented), our logs are public in Discord, and every game has a traceable ID. There are no hidden algorithms and no way for administrators to influence outcomes.</p>
+                <h4><i class="bi bi-eye"></i> <span data-i18n="modal.pf.transparencyTitle">Full Transparency</span></h4>
+                <p data-i18n-html="modal.pf.transparencyBody">We don't hide the method. Our random source is Random.org (publicly documented), our logs are public in Discord, and every game has a traceable ID. There are no hidden algorithms and no way for administrators to influence outcomes.</p>
             </div>
         </div>
     </div>
@@ -249,44 +249,44 @@
         <div class="footer-modal-close" onclick="closeFooterModal('tosModal')"><i class="bi bi-x-lg"></i></div>
         <div class="footer-modal-header">
             <div class="footer-modal-icon tos"><i class="bi bi-file-earmark-text"></i></div>
-            <h2>Terms of Service</h2>
+            <h2 data-i18n="modal.tos.title">Terms of Service</h2>
         </div>
         <div class="footer-modal-body">
             <div class="modal-section">
-                <h4>1. Acceptance of Terms</h4>
-                <p>By accessing or using MMFLIP, you agree to be bound by these Terms of Service. If you do not agree, you must discontinue use immediately.</p>
+                <h4 data-i18n="modal.tos.1title">1. Acceptance of Terms</h4>
+                <p data-i18n="modal.tos.1body">By accessing or using MMFLIP, you agree to be bound by these Terms of Service. If you do not agree, you must discontinue use immediately.</p>
             </div>
             <div class="modal-section">
-                <h4>2. Eligibility</h4>
-                <p>You must have a valid Roblox account to use MMFLIP. You are solely responsible for maintaining the security of your account credentials. MMFLIP is not affiliated with Roblox Corporation.</p>
+                <h4 data-i18n="modal.tos.2title">2. Eligibility</h4>
+                <p data-i18n="modal.tos.2body">You must have a valid Roblox account to use MMFLIP. You are solely responsible for maintaining the security of your account credentials. MMFLIP is not affiliated with Roblox Corporation.</p>
             </div>
             <div class="modal-section">
-                <h4>3. Fair Play</h4>
-                <p>All games on MMFLIP are provably fair. Attempting to exploit, cheat, or manipulate the system in any way will result in immediate account termination and forfeiture of all items.</p>
+                <h4 data-i18n="modal.tos.3title">3. Fair Play</h4>
+                <p data-i18n="modal.tos.3body">All games on MMFLIP are provably fair. Attempting to exploit, cheat, or manipulate the system in any way will result in immediate account termination and forfeiture of all items.</p>
             </div>
             <div class="modal-section">
-                <h4>4. Item Deposits &amp; Withdrawals</h4>
-                <p>Items deposited become part of the MMFLIP ecosystem. Withdrawals are processed through our trade bots. MMFLIP is not responsible for items lost due to Roblox trade system errors or user negligence.</p>
+                <h4 data-i18n="modal.tos.4title">4. Item Deposits &amp; Withdrawals</h4>
+                <p data-i18n="modal.tos.4body">Items deposited become part of the MMFLIP ecosystem. Withdrawals are processed through our trade bots. MMFLIP is not responsible for items lost due to Roblox trade system errors or user negligence.</p>
             </div>
             <div class="modal-section">
-                <h4>5. Commission</h4>
-                <p>MMFLIP charges a commission of approximately 10% on coinflip winnings when the total pot exceeds 50 SV and contains more than 4 items. The commission is automatically deducted from the winner's items. If these conditions are not met, no commission is taken.</p>
+                <h4 data-i18n="modal.tos.5title">5. Commission</h4>
+                <p data-i18n="modal.tos.5body">MMFLIP charges a commission of approximately 10% on coinflip winnings when the total pot exceeds 50 SV and contains more than 4 items. The commission is automatically deducted from the winner's items. If these conditions are not met, no commission is taken.</p>
             </div>
             <div class="modal-section">
-                <h4>6. No Guarantees</h4>
-                <p>Coinflip outcomes are random. MMFLIP does not guarantee winnings. You participate at your own risk. Only wager items you are prepared to lose.</p>
+                <h4 data-i18n="modal.tos.6title">6. No Guarantees</h4>
+                <p data-i18n="modal.tos.6body">Coinflip outcomes are random. MMFLIP does not guarantee winnings. You participate at your own risk. Only wager items you are prepared to lose.</p>
             </div>
             <div class="modal-section">
-                <h4>7. Prohibited Conduct</h4>
-                <p>Users may not: use automated scripts or bots, attempt to manipulate game outcomes, engage in fraud or chargebacks, harass other users, or create multiple accounts to gain unfair advantages.</p>
+                <h4 data-i18n="modal.tos.7title">7. Prohibited Conduct</h4>
+                <p data-i18n="modal.tos.7body">Users may not: use automated scripts or bots, attempt to manipulate game outcomes, engage in fraud or chargebacks, harass other users, or create multiple accounts to gain unfair advantages.</p>
             </div>
             <div class="modal-section">
-                <h4>8. Limitation of Liability</h4>
-                <p>MMFLIP is provided &ldquo;as is&rdquo; without warranties. We are not liable for any losses, damages, or disputes arising from the use of our platform beyond the scope of our control.</p>
+                <h4 data-i18n="modal.tos.8title">8. Limitation of Liability</h4>
+                <p data-i18n="modal.tos.8body">MMFLIP is provided &ldquo;as is&rdquo; without warranties. We are not liable for any losses, damages, or disputes arising from the use of our platform beyond the scope of our control.</p>
             </div>
             <div class="modal-section">
-                <h4>9. Changes to Terms</h4>
-                <p>We reserve the right to modify these terms at any time. Continued use of MMFLIP after changes constitutes acceptance of the updated terms.</p>
+                <h4 data-i18n="modal.tos.9title">9. Changes to Terms</h4>
+                <p data-i18n="modal.tos.9body">We reserve the right to modify these terms at any time. Continued use of MMFLIP after changes constitutes acceptance of the updated terms.</p>
             </div>
         </div>
     </div>
@@ -300,36 +300,36 @@
         <div class="footer-modal-close" onclick="closeFooterModal('privacyModal')"><i class="bi bi-x-lg"></i></div>
         <div class="footer-modal-header">
             <div class="footer-modal-icon privacy"><i class="bi bi-eye"></i></div>
-            <h2>Privacy Policy</h2>
+            <h2 data-i18n="modal.pp.title">Privacy Policy</h2>
         </div>
         <div class="footer-modal-body">
             <div class="modal-section">
-                <h4>1. Information We Collect</h4>
-                <p>We collect your Roblox username, avatar URL, and in-game trade data. We do not collect personal information such as email addresses, real names, or payment information.</p>
+                <h4 data-i18n="modal.pp.1title">1. Information We Collect</h4>
+                <p data-i18n="modal.pp.1body">We collect your Roblox username, avatar URL, and in-game trade data. We do not collect personal information such as email addresses, real names, or payment information.</p>
             </div>
             <div class="modal-section">
-                <h4>2. How We Use Your Data</h4>
-                <p>Your data is used solely to operate the platform: authenticate your identity, process trades, track inventory, display game history, and maintain platform integrity.</p>
+                <h4 data-i18n="modal.pp.2title">2. How We Use Your Data</h4>
+                <p data-i18n="modal.pp.2body">Your data is used solely to operate the platform: authenticate your identity, process trades, track inventory, display game history, and maintain platform integrity.</p>
             </div>
             <div class="modal-section">
-                <h4>3. Data Storage</h4>
-                <p>All data is stored securely on our servers. Game logs (UIDs, participants, outcomes) are also published to our Discord server for transparency purposes.</p>
+                <h4 data-i18n="modal.pp.3title">3. Data Storage</h4>
+                <p data-i18n="modal.pp.3body">All data is stored securely on our servers. Game logs (UIDs, participants, outcomes) are also published to our Discord server for transparency purposes.</p>
             </div>
             <div class="modal-section">
-                <h4>4. Third-Party Services</h4>
-                <p>We interact with the Roblox API to verify accounts and retrieve avatar data. We do not sell, share, or distribute your data to any third parties for marketing or advertising purposes.</p>
+                <h4 data-i18n="modal.pp.4title">4. Third-Party Services</h4>
+                <p data-i18n="modal.pp.4body">We interact with the Roblox API to verify accounts and retrieve avatar data. We do not sell, share, or distribute your data to any third parties for marketing or advertising purposes.</p>
             </div>
             <div class="modal-section">
-                <h4>5. Cookies &amp; Local Storage</h4>
-                <p>We use browser local storage to remember your preferences (e.g., chat state, snow settings). No tracking cookies are used.</p>
+                <h4 data-i18n="modal.pp.5title">5. Cookies &amp; Local Storage</h4>
+                <p data-i18n="modal.pp.5body">We use browser local storage to remember your preferences (e.g., chat state, snow settings). No tracking cookies are used.</p>
             </div>
             <div class="modal-section">
-                <h4>6. Your Rights</h4>
-                <p>You may request deletion of your account and associated data at any time by contacting an administrator through Discord or the in-game chat.</p>
+                <h4 data-i18n="modal.pp.6title">6. Your Rights</h4>
+                <p data-i18n="modal.pp.6body">You may request deletion of your account and associated data at any time by contacting an administrator through Discord or the in-game chat.</p>
             </div>
             <div class="modal-section">
-                <h4>7. Changes to This Policy</h4>
-                <p>We may update this Privacy Policy from time to time. We will notify users of significant changes via our Discord server.</p>
+                <h4 data-i18n="modal.pp.7title">7. Changes to This Policy</h4>
+                <p data-i18n="modal.pp.7body">We may update this Privacy Policy from time to time. We will notify users of significant changes via our Discord server.</p>
             </div>
         </div>
     </div>

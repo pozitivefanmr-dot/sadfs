@@ -1,0 +1,8736 @@
+[
+{
+  "model": "auth.user",
+  "fields": {
+    "password": "",
+    "last_login": "2026-03-16T15:52:42.185Z",
+    "is_superuser": false,
+    "username": "woundwound",
+    "first_name": "",
+    "last_name": "",
+    "email": "",
+    "is_staff": false,
+    "is_active": true,
+    "date_joined": "2025-11-24T17:49:36.910Z",
+    "groups": [],
+    "user_permissions": []
+  }
+},
+{
+  "model": "auth.user",
+  "fields": {
+    "password": "",
+    "last_login": "2025-11-24T20:30:44.242Z",
+    "is_superuser": false,
+    "username": "quwexz2718",
+    "first_name": "",
+    "last_name": "",
+    "email": "",
+    "is_staff": false,
+    "is_active": true,
+    "date_joined": "2025-11-24T20:30:44.232Z",
+    "groups": [],
+    "user_permissions": []
+  }
+},
+{
+  "model": "auth.user",
+  "fields": {
+    "password": "pbkdf2_sha256$870000$NC7lUqFEfloIuYybop2vCv$mvEchu9AEkrKgqSY3Eeuj5rsNXcMf3yzNyfqlft271Y=",
+    "last_login": "2026-03-11T17:02:15.051Z",
+    "is_superuser": true,
+    "username": "admin",
+    "first_name": "",
+    "last_name": "",
+    "email": "admin@eu.eu",
+    "is_staff": true,
+    "is_active": true,
+    "date_joined": "2025-11-24T21:26:06.520Z",
+    "groups": [],
+    "user_permissions": []
+  }
+},
+{
+  "model": "auth.user",
+  "fields": {
+    "password": "",
+    "last_login": "2025-12-05T20:33:54.664Z",
+    "is_superuser": false,
+    "username": "xkxlation",
+    "first_name": "",
+    "last_name": "",
+    "email": "",
+    "is_staff": false,
+    "is_active": true,
+    "date_joined": "2025-12-05T20:33:54.655Z",
+    "groups": [],
+    "user_permissions": []
+  }
+},
+{
+  "model": "auth.user",
+  "fields": {
+    "password": "",
+    "last_login": "2025-12-05T21:52:13.314Z",
+    "is_superuser": false,
+    "username": "lastdosebeforedream",
+    "first_name": "",
+    "last_name": "",
+    "email": "",
+    "is_staff": false,
+    "is_active": true,
+    "date_joined": "2025-12-05T21:52:13.305Z",
+    "groups": [],
+    "user_permissions": []
+  }
+},
+{
+  "model": "casino.tradelog",
+  "pk": 1,
+  "fields": {
+    "sender_name": "Unknown",
+    "bot_name": "Bot",
+    "items": [
+      "Lightbringer",
+      "Nightblade",
+      "Red Luger",
+      "Virtual"
+    ],
+    "created_at": "2025-11-24T16:40:15.981Z"
+  }
+},
+{
+  "model": "casino.tradelog",
+  "pk": 2,
+  "fields": {
+    "sender_name": "Unknown",
+    "bot_name": "Bot",
+    "items": [
+      "Elderwood Scythe",
+      "Harvester",
+      "Blaster",
+      "Darkbringer"
+    ],
+    "created_at": "2025-11-24T16:40:33.633Z"
+  }
+},
+{
+  "model": "casino.tradelog",
+  "pk": 3,
+  "fields": {
+    "sender_name": "Unknown",
+    "bot_name": "Bot",
+    "items": [
+      "Harvester",
+      "Elderwood Scythe",
+      "Blaster",
+      "Darkbringer"
+    ],
+    "created_at": "2025-11-24T16:43:06.859Z"
+  }
+},
+{
+  "model": "casino.tradelog",
+  "pk": 4,
+  "fields": {
+    "sender_name": "Unknown",
+    "bot_name": "Bot",
+    "items": [
+      "Moons"
+    ],
+    "created_at": "2025-11-24T16:44:23.801Z"
+  }
+},
+{
+  "model": "casino.tradelog",
+  "pk": 5,
+  "fields": {
+    "sender_name": "Unknown",
+    "bot_name": "Bot",
+    "items": [
+      "Harvester",
+      "Elderwood Scythe",
+      "Cherry",
+      "Moons"
+    ],
+    "created_at": "2025-11-24T16:53:13.982Z"
+  }
+},
+{
+  "model": "casino.tradelog",
+  "pk": 6,
+  "fields": {
+    "sender_name": "Unknown",
+    "bot_name": "Bot",
+    "items": [
+      "Moons (xx2)",
+      "Candy Corn"
+    ],
+    "created_at": "2025-11-24T17:00:47.183Z"
+  }
+},
+{
+  "model": "casino.tradelog",
+  "pk": 7,
+  "fields": {
+    "sender_name": "Unknown",
+    "bot_name": "Bot",
+    "items": [
+      "Chick (x2)",
+      "Cherry (x2)"
+    ],
+    "created_at": "2025-11-24T17:02:11.664Z"
+  }
+},
+{
+  "model": "casino.tradelog",
+  "pk": 8,
+  "fields": {
+    "sender_name": "(woundwound)",
+    "bot_name": "lunesnoire",
+    "items": [
+      "Blue Elite (xx2)"
+    ],
+    "created_at": "2025-11-24T18:28:04.990Z"
+  }
+},
+{
+  "model": "casino.tradelog",
+  "pk": 9,
+  "fields": {
+    "sender_name": "(woundwound)",
+    "bot_name": "lunesnoire",
+    "items": [
+      "Broken (xx3)"
+    ],
+    "created_at": "2025-11-24T18:33:59.334Z"
+  }
+},
+{
+  "model": "casino.tradelog",
+  "pk": 10,
+  "fields": {
+    "sender_name": "(xxx9472)",
+    "bot_name": "lunesnoire",
+    "items": [
+      "Ripper",
+      "Candies (xx2)"
+    ],
+    "created_at": "2025-11-24T18:35:44.595Z"
+  }
+},
+{
+  "model": "casino.tradelog",
+  "pk": 11,
+  "fields": {
+    "sender_name": "woundwound",
+    "bot_name": "lunesnoire",
+    "items": [
+      "Bunnies (xx2)"
+    ],
+    "created_at": "2025-11-24T18:38:29.105Z"
+  }
+},
+{
+  "model": "casino.tradelog",
+  "pk": 12,
+  "fields": {
+    "sender_name": "(woundwound)",
+    "bot_name": "lunesnoire",
+    "items": [
+      "Bunnies (xx2)"
+    ],
+    "created_at": "2025-11-24T18:38:29.106Z"
+  }
+},
+{
+  "model": "casino.tradelog",
+  "pk": 13,
+  "fields": {
+    "sender_name": "(woundwound)",
+    "bot_name": "lunesnoire",
+    "items": [
+      "Bunnies (xx2)"
+    ],
+    "created_at": "2025-11-24T18:38:45.014Z"
+  }
+},
+{
+  "model": "casino.tradelog",
+  "pk": 14,
+  "fields": {
+    "sender_name": "woundwound",
+    "bot_name": "lunesnoire",
+    "items": [
+      "Bunnies (xx2)"
+    ],
+    "created_at": "2025-11-24T18:38:45.024Z"
+  }
+},
+{
+  "model": "casino.tradelog",
+  "pk": 15,
+  "fields": {
+    "sender_name": "woundwound",
+    "bot_name": "lunesnoire",
+    "items": [
+      "Bunnies (xx2)",
+      "Beach"
+    ],
+    "created_at": "2025-11-24T20:05:39.498Z"
+  }
+},
+{
+  "model": "casino.tradelog",
+  "pk": 16,
+  "fields": {
+    "sender_name": "woundwound",
+    "bot_name": "lunesnoire",
+    "items": [
+      "Cursed"
+    ],
+    "created_at": "2025-11-24T20:13:25.412Z"
+  }
+},
+{
+  "model": "casino.tradelog",
+  "pk": 17,
+  "fields": {
+    "sender_name": "woundwound",
+    "bot_name": "lunesnoire",
+    "items": [
+      "Nightsky (xx2)"
+    ],
+    "created_at": "2025-11-24T20:13:44.385Z"
+  }
+},
+{
+  "model": "casino.tradelog",
+  "pk": 18,
+  "fields": {
+    "sender_name": "woundwound",
+    "bot_name": "lunesnoire",
+    "items": [
+      "Overseer (xx2)"
+    ],
+    "created_at": "2025-11-24T20:27:51.386Z"
+  }
+},
+{
+  "model": "casino.tradelog",
+  "pk": 19,
+  "fields": {
+    "sender_name": "woundwound",
+    "bot_name": "lunesnoire",
+    "items": [
+      "Frostfade (xx2)"
+    ],
+    "created_at": "2025-11-24T20:28:09.198Z"
+  }
+},
+{
+  "model": "casino.tradelog",
+  "pk": 20,
+  "fields": {
+    "sender_name": "woundwound",
+    "bot_name": "lunesnoire",
+    "items": [
+      "Cotton Candy (x2)"
+    ],
+    "created_at": "2025-11-24T20:29:37.248Z"
+  }
+},
+{
+  "model": "casino.tradelog",
+  "pk": 21,
+  "fields": {
+    "sender_name": "woundwound",
+    "bot_name": "Bot",
+    "items": [
+      "Gingerscope"
+    ],
+    "created_at": "2025-11-24T21:27:02Z"
+  }
+},
+{
+  "model": "casino.tradelog",
+  "pk": 22,
+  "fields": {
+    "sender_name": "woundwound",
+    "bot_name": "lunesnoire",
+    "items": [
+      "Swirly Axe",
+      "Blaster",
+      "Candleflame",
+      "Darkbringer"
+    ],
+    "created_at": "2025-11-24T21:59:33.288Z"
+  }
+},
+{
+  "model": "casino.tradelog",
+  "pk": 23,
+  "fields": {
+    "sender_name": "lunesnoire",
+    "bot_name": "woundwound",
+    "items": [
+      "Swirly Axe",
+      "Blaster",
+      "Candleflame",
+      "Darkbringer"
+    ],
+    "created_at": "2025-11-25T14:47:51.297Z"
+  }
+},
+{
+  "model": "casino.tradelog",
+  "pk": 24,
+  "fields": {
+    "sender_name": "woundwound",
+    "bot_name": "lunesnoire",
+    "items": [
+      "Swirly Axe",
+      "Blaster",
+      "Candleflame",
+      "Darkbringer"
+    ],
+    "created_at": "2025-11-25T14:48:08.169Z"
+  }
+},
+{
+  "model": "casino.tradelog",
+  "pk": 25,
+  "fields": {
+    "sender_name": "lunesnoire",
+    "bot_name": "woundwound",
+    "items": [
+      "Candleflame"
+    ],
+    "created_at": "2025-11-25T15:11:19.074Z"
+  }
+},
+{
+  "model": "casino.tradelog",
+  "pk": 26,
+  "fields": {
+    "sender_name": "lunesnoire",
+    "bot_name": "woundwound",
+    "items": [
+      "Chroma Candleflame"
+    ],
+    "created_at": "2025-11-25T15:11:19.075Z"
+  }
+},
+{
+  "model": "casino.tradelog",
+  "pk": 27,
+  "fields": {
+    "sender_name": "woundwound",
+    "bot_name": "lunesnoire",
+    "items": [
+      "Chroma Candleflame"
+    ],
+    "created_at": "2025-11-25T15:11:43.620Z"
+  }
+},
+{
+  "model": "casino.tradelog",
+  "pk": 28,
+  "fields": {
+    "sender_name": "woundwound",
+    "bot_name": "lunesnoire",
+    "items": [
+      "Candleflame"
+    ],
+    "created_at": "2025-11-25T15:11:43.633Z"
+  }
+},
+{
+  "model": "casino.tradelog",
+  "pk": 29,
+  "fields": {
+    "sender_name": "lunesnoire",
+    "bot_name": "woundwound",
+    "items": [
+      "Chroma Candleflame"
+    ],
+    "created_at": "2025-11-25T15:14:03.355Z"
+  }
+},
+{
+  "model": "casino.tradelog",
+  "pk": 30,
+  "fields": {
+    "sender_name": "woundwound",
+    "bot_name": "lunesnoire",
+    "items": [
+      "Chroma Candleflame"
+    ],
+    "created_at": "2025-11-25T15:14:21.226Z"
+  }
+},
+{
+  "model": "casino.tradelog",
+  "pk": 31,
+  "fields": {
+    "sender_name": "woundwound",
+    "bot_name": "lunesnoire",
+    "items": [
+      "Chroma Candleflame"
+    ],
+    "created_at": "2025-11-25T15:14:21.226Z"
+  }
+},
+{
+  "model": "casino.tradelog",
+  "pk": 32,
+  "fields": {
+    "sender_name": "woundwound",
+    "bot_name": "roblox_user_5413661688",
+    "items": [
+      "Swirly Axe",
+      "Blaster",
+      "Candleflame",
+      "Darkbringer"
+    ],
+    "created_at": "2025-11-26T17:21:20.535Z"
+  }
+},
+{
+  "model": "casino.tradelog",
+  "pk": 33,
+  "fields": {
+    "sender_name": "xkxlation",
+    "bot_name": "roblox_user_5413661688",
+    "items": [],
+    "created_at": "2025-11-27T22:01:22.134Z"
+  }
+},
+{
+  "model": "casino.tradelog",
+  "pk": 34,
+  "fields": {
+    "sender_name": "xkxlation",
+    "bot_name": "roblox_user_5413661688",
+    "items": [],
+    "created_at": "2025-11-27T22:01:22.135Z"
+  }
+},
+{
+  "model": "casino.tradelog",
+  "pk": 35,
+  "fields": {
+    "sender_name": "xkxlation",
+    "bot_name": "roblox_user_5413661688",
+    "items": [
+      "Frostbite"
+    ],
+    "created_at": "2025-11-27T22:04:19.945Z"
+  }
+},
+{
+  "model": "casino.tradelog",
+  "pk": 36,
+  "fields": {
+    "sender_name": "woundwound",
+    "bot_name": "roblox_user_5413661688",
+    "items": [
+      "Swirly Axe"
+    ],
+    "created_at": "2025-11-28T16:50:27.308Z"
+  }
+},
+{
+  "model": "casino.tradelog",
+  "pk": 37,
+  "fields": {
+    "sender_name": "woundwound",
+    "bot_name": "roblox_user_5413661688",
+    "items": [
+      "Swirly Axe"
+    ],
+    "created_at": "2025-11-28T16:56:03.600Z"
+  }
+},
+{
+  "model": "casino.tradelog",
+  "pk": 38,
+  "fields": {
+    "sender_name": "woundwound",
+    "bot_name": "roblox_user_5413661688",
+    "items": [
+      "Swirly Axe"
+    ],
+    "created_at": "2025-11-28T16:56:04.100Z"
+  }
+},
+{
+  "model": "casino.tradelog",
+  "pk": 39,
+  "fields": {
+    "sender_name": "woundwound",
+    "bot_name": "roblox_user_5413661688",
+    "items": [
+      "Swirly Axe"
+    ],
+    "created_at": "2025-11-28T17:20:02.100Z"
+  }
+},
+{
+  "model": "casino.tradelog",
+  "pk": 40,
+  "fields": {
+    "sender_name": "woundwound",
+    "bot_name": "roblox_user_5413661688",
+    "items": [
+      "Swirly Axe"
+    ],
+    "created_at": "2025-11-28T17:20:02.101Z"
+  }
+},
+{
+  "model": "casino.tradelog",
+  "pk": 41,
+  "fields": {
+    "sender_name": "woundwound",
+    "bot_name": "roblox_user_5413661688",
+    "items": [
+      "Swirly Axe"
+    ],
+    "created_at": "2025-11-28T17:21:32.638Z"
+  }
+},
+{
+  "model": "casino.tradelog",
+  "pk": 42,
+  "fields": {
+    "sender_name": "woundwound",
+    "bot_name": "roblox_user_5413661688",
+    "items": [
+      "Swirly Axe"
+    ],
+    "created_at": "2025-11-28T17:27:11.334Z"
+  }
+},
+{
+  "model": "casino.tradelog",
+  "pk": 43,
+  "fields": {
+    "sender_name": "woundwound",
+    "bot_name": "roblox_user_5413661688",
+    "items": [
+      "Swirly Axe"
+    ],
+    "created_at": "2025-11-28T17:27:11.349Z"
+  }
+},
+{
+  "model": "casino.tradelog",
+  "pk": 44,
+  "fields": {
+    "sender_name": "woundwound",
+    "bot_name": "roblox_user_5413661688",
+    "items": [
+      "Swirly Axe"
+    ],
+    "created_at": "2025-11-28T17:28:44.477Z"
+  }
+},
+{
+  "model": "casino.tradelog",
+  "pk": 45,
+  "fields": {
+    "sender_name": "woundwound",
+    "bot_name": "roblox_user_5413661688",
+    "items": [
+      "Swirly Axe"
+    ],
+    "created_at": "2025-11-28T17:38:21.739Z"
+  }
+},
+{
+  "model": "casino.tradelog",
+  "pk": 46,
+  "fields": {
+    "sender_name": "woundwound",
+    "bot_name": "roblox_user_5413661688",
+    "items": [
+      "Swirly Axe"
+    ],
+    "created_at": "2025-11-28T17:41:33.831Z"
+  }
+},
+{
+  "model": "casino.tradelog",
+  "pk": 47,
+  "fields": {
+    "sender_name": "woundwound",
+    "bot_name": "roblox_user_5413661688",
+    "items": [
+      "Swirly Axe"
+    ],
+    "created_at": "2025-11-28T17:41:34.642Z"
+  }
+},
+{
+  "model": "casino.tradelog",
+  "pk": 48,
+  "fields": {
+    "sender_name": "woundwound",
+    "bot_name": "roblox_user_5413661688",
+    "items": [
+      "Swirly Axe"
+    ],
+    "created_at": "2025-11-28T17:47:51.250Z"
+  }
+},
+{
+  "model": "casino.tradelog",
+  "pk": 49,
+  "fields": {
+    "sender_name": "woundwound",
+    "bot_name": "roblox_user_5413661688",
+    "items": [
+      "Swirly Axe"
+    ],
+    "created_at": "2025-11-28T17:48:40.950Z"
+  }
+},
+{
+  "model": "casino.tradelog",
+  "pk": 50,
+  "fields": {
+    "sender_name": "woundwound",
+    "bot_name": "roblox_user_5413661688",
+    "items": [
+      "Chroma Candleflame"
+    ],
+    "created_at": "2025-11-28T18:09:21.521Z"
+  }
+},
+{
+  "model": "casino.tradelog",
+  "pk": 51,
+  "fields": {
+    "sender_name": "woundwound",
+    "bot_name": "roblox_user_5413661688",
+    "items": [
+      "Cotton Candy"
+    ],
+    "created_at": "2025-11-28T18:13:31.539Z"
+  }
+},
+{
+  "model": "casino.tradelog",
+  "pk": 52,
+  "fields": {
+    "sender_name": "woundwound",
+    "bot_name": "roblox_user_5413661688",
+    "items": [
+      "Cotton Candy"
+    ],
+    "created_at": "2025-11-28T18:42:13.002Z"
+  }
+},
+{
+  "model": "casino.tradelog",
+  "pk": 53,
+  "fields": {
+    "sender_name": "woundwound",
+    "bot_name": "roblox_user_5413661688",
+    "items": [
+      "Cotton Candy"
+    ],
+    "created_at": "2025-11-28T18:42:13.027Z"
+  }
+},
+{
+  "model": "casino.tradelog",
+  "pk": 54,
+  "fields": {
+    "sender_name": "woundwound",
+    "bot_name": "roblox_user_5413661688",
+    "items": [
+      "Cotton Candy",
+      "Chroma Candleflame"
+    ],
+    "created_at": "2025-11-28T18:50:35.939Z"
+  }
+},
+{
+  "model": "casino.tradelog",
+  "pk": 55,
+  "fields": {
+    "sender_name": "woundwound",
+    "bot_name": "roblox_user_5413661688",
+    "items": [
+      "Cotton Candy",
+      "Chroma Candleflame"
+    ],
+    "created_at": "2025-11-28T18:50:35.940Z"
+  }
+},
+{
+  "model": "casino.tradelog",
+  "pk": 56,
+  "fields": {
+    "sender_name": "woundwound",
+    "bot_name": "roblox_user_5413661688",
+    "items": [
+      "Blaster"
+    ],
+    "created_at": "2025-11-28T20:09:20.984Z"
+  }
+},
+{
+  "model": "casino.tradelog",
+  "pk": 57,
+  "fields": {
+    "sender_name": "woundwound",
+    "bot_name": "roblox_user_5413661688",
+    "items": [
+      "Cotton Candy"
+    ],
+    "created_at": "2025-11-28T20:11:35.936Z"
+  }
+},
+{
+  "model": "casino.tradelog",
+  "pk": 58,
+  "fields": {
+    "sender_name": "woundwound",
+    "bot_name": "roblox_user_5413661688",
+    "items": [
+      "Cotton Candy"
+    ],
+    "created_at": "2025-11-28T20:18:59.139Z"
+  }
+},
+{
+  "model": "casino.tradelog",
+  "pk": 59,
+  "fields": {
+    "sender_name": "woundwound",
+    "bot_name": "roblox_user_5413661688",
+    "items": [
+      "Cotton Candy"
+    ],
+    "created_at": "2025-11-28T20:18:59.155Z"
+  }
+},
+{
+  "model": "casino.tradelog",
+  "pk": 60,
+  "fields": {
+    "sender_name": "woundwound",
+    "bot_name": "roblox_user_5413661688",
+    "items": [
+      "Cotton Candy",
+      "Blaster"
+    ],
+    "created_at": "2025-11-28T20:20:35.651Z"
+  }
+},
+{
+  "model": "casino.tradelog",
+  "pk": 61,
+  "fields": {
+    "sender_name": "(woundwound)",
+    "bot_name": "roblox_user_5413661688",
+    "items": [
+      "Cotton Candy"
+    ],
+    "created_at": "2025-11-28T22:25:09.068Z"
+  }
+},
+{
+  "model": "casino.tradelog",
+  "pk": 62,
+  "fields": {
+    "sender_name": "(woundwound)",
+    "bot_name": "roblox_user_5413661688",
+    "items": [
+      "Cotton Candy"
+    ],
+    "created_at": "2025-11-28T22:27:58.341Z"
+  }
+},
+{
+  "model": "casino.tradelog",
+  "pk": 63,
+  "fields": {
+    "sender_name": "(woundwound)",
+    "bot_name": "roblox_user_5413661688",
+    "items": [
+      "Cotton Candy"
+    ],
+    "created_at": "2025-11-28T22:31:56.299Z"
+  }
+},
+{
+  "model": "casino.tradelog",
+  "pk": 64,
+  "fields": {
+    "sender_name": "(woundwound)",
+    "bot_name": "roblox_user_5413661688",
+    "items": [
+      "Cotton Candy"
+    ],
+    "created_at": "2025-11-28T22:31:56.843Z"
+  }
+},
+{
+  "model": "casino.tradelog",
+  "pk": 65,
+  "fields": {
+    "sender_name": "(woundwound)",
+    "bot_name": "roblox_user_5413661688",
+    "items": [
+      "Cotton Candy"
+    ],
+    "created_at": "2025-11-28T22:38:31.149Z"
+  }
+},
+{
+  "model": "casino.tradelog",
+  "pk": 66,
+  "fields": {
+    "sender_name": "woundwound",
+    "bot_name": "roblox_user_5413661688",
+    "items": [
+      "Swirly Axe"
+    ],
+    "created_at": "2025-11-28T22:54:50.902Z"
+  }
+},
+{
+  "model": "casino.tradelog",
+  "pk": 67,
+  "fields": {
+    "sender_name": "woundwound",
+    "bot_name": "roblox_user_5413661688",
+    "items": [
+      "Blaster"
+    ],
+    "created_at": "2025-11-28T22:56:11.088Z"
+  }
+},
+{
+  "model": "casino.tradelog",
+  "pk": 68,
+  "fields": {
+    "sender_name": "woundwound",
+    "bot_name": "roblox_user_5413661688",
+    "items": [
+      "Cotton Candy"
+    ],
+    "created_at": "2025-11-28T22:57:46.611Z"
+  }
+},
+{
+  "model": "casino.tradelog",
+  "pk": 69,
+  "fields": {
+    "sender_name": "woundwound",
+    "bot_name": "roblox_user_5413661688",
+    "items": [
+      "Blaster"
+    ],
+    "created_at": "2025-11-28T23:01:50.731Z"
+  }
+},
+{
+  "model": "casino.tradelog",
+  "pk": 70,
+  "fields": {
+    "sender_name": "woundwound",
+    "bot_name": "roblox_user_5413661688",
+    "items": [
+      "Blaster"
+    ],
+    "created_at": "2025-11-28T23:06:55.609Z"
+  }
+},
+{
+  "model": "casino.tradelog",
+  "pk": 71,
+  "fields": {
+    "sender_name": "woundwound",
+    "bot_name": "roblox_user_5413661688",
+    "items": [
+      "Cotton Candy"
+    ],
+    "created_at": "2025-11-28T23:07:50.381Z"
+  }
+},
+{
+  "model": "casino.tradelog",
+  "pk": 72,
+  "fields": {
+    "sender_name": "woundwound",
+    "bot_name": "roblox_user_5413661688",
+    "items": [
+      "Swirly Axe",
+      "Chroma Candleflame",
+      "Cotton Candy"
+    ],
+    "created_at": "2025-11-28T23:22:14.500Z"
+  }
+},
+{
+  "model": "casino.tradelog",
+  "pk": 73,
+  "fields": {
+    "sender_name": "woundwound",
+    "bot_name": "roblox_user_5413661688",
+    "items": [
+      "Swirly Axe",
+      "Chroma Candleflame",
+      "Cotton Candy"
+    ],
+    "created_at": "2025-11-28T23:22:14.554Z"
+  }
+},
+{
+  "model": "casino.tradelog",
+  "pk": 74,
+  "fields": {
+    "sender_name": "woundwound",
+    "bot_name": "roblox_user_5413661688",
+    "items": [
+      "Chroma Candleflame"
+    ],
+    "created_at": "2025-11-28T23:42:19.790Z"
+  }
+},
+{
+  "model": "casino.tradelog",
+  "pk": 75,
+  "fields": {
+    "sender_name": "woundwound",
+    "bot_name": "roblox_user_5413661688",
+    "items": [
+      "Swirly Axe"
+    ],
+    "created_at": "2025-11-29T10:06:49.694Z"
+  }
+},
+{
+  "model": "casino.tradelog",
+  "pk": 76,
+  "fields": {
+    "sender_name": "woundwound",
+    "bot_name": "roblox_user_5413661688",
+    "items": [
+      "Swirly Axe"
+    ],
+    "created_at": "2025-11-29T10:30:15.869Z"
+  }
+},
+{
+  "model": "casino.tradelog",
+  "pk": 77,
+  "fields": {
+    "sender_name": "woundwound",
+    "bot_name": "roblox_user_5413661688",
+    "items": [
+      "Swirly Axe"
+    ],
+    "created_at": "2025-11-29T10:30:15.869Z"
+  }
+},
+{
+  "model": "casino.tradelog",
+  "pk": 78,
+  "fields": {
+    "sender_name": "woundwound",
+    "bot_name": "roblox_user_5413661688",
+    "items": [
+      "Swirly Axe",
+      "Chroma Candleflame"
+    ],
+    "created_at": "2025-11-29T10:31:19.640Z"
+  }
+},
+{
+  "model": "casino.tradelog",
+  "pk": 79,
+  "fields": {
+    "sender_name": "woundwound",
+    "bot_name": "roblox_user_5413661688",
+    "items": [
+      "Swirly Axe",
+      "Chroma Candleflame"
+    ],
+    "created_at": "2025-11-29T10:31:19.641Z"
+  }
+},
+{
+  "model": "casino.tradelog",
+  "pk": 80,
+  "fields": {
+    "sender_name": "woundwound",
+    "bot_name": "roblox_user_5413661688",
+    "items": [
+      "Swirly Axe",
+      "Blaster",
+      "Chroma Candleflame",
+      "Cotton Candy"
+    ],
+    "created_at": "2025-11-29T10:33:18.726Z"
+  }
+},
+{
+  "model": "casino.tradelog",
+  "pk": 81,
+  "fields": {
+    "sender_name": "woundwound",
+    "bot_name": "roblox_user_5413661688",
+    "items": [
+      "Swirly Axe",
+      "Blaster",
+      "Chroma Candleflame",
+      "Cotton Candy"
+    ],
+    "created_at": "2025-11-29T10:33:18.727Z"
+  }
+},
+{
+  "model": "casino.tradelog",
+  "pk": 82,
+  "fields": {
+    "sender_name": "woundwound",
+    "bot_name": "roblox_user_5413661688",
+    "items": [],
+    "created_at": "2025-11-29T12:44:59.006Z"
+  }
+},
+{
+  "model": "casino.tradelog",
+  "pk": 83,
+  "fields": {
+    "sender_name": "woundwound",
+    "bot_name": "roblox_user_5413661688",
+    "items": [
+      "Swirly Axe"
+    ],
+    "created_at": "2025-11-29T12:45:15.713Z"
+  }
+},
+{
+  "model": "casino.tradelog",
+  "pk": 84,
+  "fields": {
+    "sender_name": "(woundwound)",
+    "bot_name": "roblox_user_5413661688",
+    "items": [],
+    "created_at": "2025-11-29T12:59:14.790Z"
+  }
+},
+{
+  "model": "casino.tradelog",
+  "pk": 85,
+  "fields": {
+    "sender_name": "(woundwound)",
+    "bot_name": "roblox_user_5413661688",
+    "items": [
+      "Swirly Axe"
+    ],
+    "created_at": "2025-11-29T12:59:28.534Z"
+  }
+},
+{
+  "model": "casino.tradelog",
+  "pk": 86,
+  "fields": {
+    "sender_name": "(woundwound)",
+    "bot_name": "roblox_user_5413661688",
+    "items": [],
+    "created_at": "2025-11-29T13:30:01.145Z"
+  }
+},
+{
+  "model": "casino.tradelog",
+  "pk": 87,
+  "fields": {
+    "sender_name": "woundwound",
+    "bot_name": "roblox_user_5413661688",
+    "items": [
+      "Swirly Axe"
+    ],
+    "created_at": "2025-11-29T13:30:22.709Z"
+  }
+},
+{
+  "model": "casino.tradelog",
+  "pk": 88,
+  "fields": {
+    "sender_name": "woundwound",
+    "bot_name": "roblox_user_5413661688",
+    "items": [
+      "Swirly Axe"
+    ],
+    "created_at": "2025-11-29T13:30:22.712Z"
+  }
+},
+{
+  "model": "casino.tradelog",
+  "pk": 89,
+  "fields": {
+    "sender_name": "woundwound",
+    "bot_name": "roblox_user_5413661688",
+    "items": [
+      "Swirly Axe"
+    ],
+    "created_at": "2025-11-29T13:30:22.710Z"
+  }
+},
+{
+  "model": "casino.tradelog",
+  "pk": 90,
+  "fields": {
+    "sender_name": "(woundwound)",
+    "bot_name": "roblox_user_5413661688",
+    "items": [
+      "Swirly Axe"
+    ],
+    "created_at": "2025-11-29T13:30:22.711Z"
+  }
+},
+{
+  "model": "casino.tradelog",
+  "pk": 91,
+  "fields": {
+    "sender_name": "woundwound",
+    "bot_name": "roblox_user_5413661688",
+    "items": [
+      "Swirly Axe",
+      "Blaster",
+      "Chroma Candleflame"
+    ],
+    "created_at": "2025-11-29T13:39:56.137Z"
+  }
+},
+{
+  "model": "casino.tradelog",
+  "pk": 92,
+  "fields": {
+    "sender_name": "woundwound",
+    "bot_name": "roblox_user_5413661688",
+    "items": [
+      "Cotton Candy"
+    ],
+    "created_at": "2025-11-29T13:40:36.183Z"
+  }
+},
+{
+  "model": "casino.tradelog",
+  "pk": 93,
+  "fields": {
+    "sender_name": "woundwound",
+    "bot_name": "roblox_user_5413661688",
+    "items": [
+      "Cotton Candy"
+    ],
+    "created_at": "2025-11-29T13:46:25.322Z"
+  }
+},
+{
+  "model": "casino.tradelog",
+  "pk": 94,
+  "fields": {
+    "sender_name": "woundwound",
+    "bot_name": "roblox_user_5413661688",
+    "items": [
+      "Cotton Candy"
+    ],
+    "created_at": "2025-11-29T13:46:25.323Z"
+  }
+},
+{
+  "model": "casino.tradelog",
+  "pk": 95,
+  "fields": {
+    "sender_name": "woundwound",
+    "bot_name": "roblox_user_5413661688",
+    "items": [
+      "Cotton Candy"
+    ],
+    "created_at": "2025-11-29T13:47:34.689Z"
+  }
+},
+{
+  "model": "casino.tradelog",
+  "pk": 96,
+  "fields": {
+    "sender_name": "woundwound",
+    "bot_name": "roblox_user_5413661688",
+    "items": [
+      "Cotton Candy"
+    ],
+    "created_at": "2025-11-29T13:49:35.491Z"
+  }
+},
+{
+  "model": "casino.tradelog",
+  "pk": 97,
+  "fields": {
+    "sender_name": "woundwound",
+    "bot_name": "roblox_user_5413661688",
+    "items": [
+      "Cotton Candy"
+    ],
+    "created_at": "2025-11-29T14:02:54.254Z"
+  }
+},
+{
+  "model": "casino.tradelog",
+  "pk": 98,
+  "fields": {
+    "sender_name": "woundwound",
+    "bot_name": "roblox_user_5413661688",
+    "items": [
+      "Swirly Axe",
+      "Blaster",
+      "Chroma Candleflame",
+      "Cotton Candy"
+    ],
+    "created_at": "2025-11-29T14:39:12.255Z"
+  }
+},
+{
+  "model": "casino.tradelog",
+  "pk": 99,
+  "fields": {
+    "sender_name": "woundwound",
+    "bot_name": "roblox_user_5413661688",
+    "items": [
+      "Cotton Candy",
+      "Blaster"
+    ],
+    "created_at": "2025-11-29T19:29:17.964Z"
+  }
+},
+{
+  "model": "casino.tradelog",
+  "pk": 100,
+  "fields": {
+    "sender_name": "woundwound",
+    "bot_name": "roblox_user_5413661688",
+    "items": [
+      "Blaster"
+    ],
+    "created_at": "2025-11-29T22:52:04.743Z"
+  }
+},
+{
+  "model": "casino.tradelog",
+  "pk": 101,
+  "fields": {
+    "sender_name": "woundwound",
+    "bot_name": "roblox_user_5413661688",
+    "items": [
+      "Blaster"
+    ],
+    "created_at": "2025-11-29T22:52:04.744Z"
+  }
+},
+{
+  "model": "casino.tradelog",
+  "pk": 102,
+  "fields": {
+    "sender_name": "woundwound",
+    "bot_name": "roblox_user_5413661688",
+    "items": [
+      "Swirly Axe",
+      "Blaster"
+    ],
+    "created_at": "2025-11-29T22:55:00.934Z"
+  }
+},
+{
+  "model": "casino.tradelog",
+  "pk": 103,
+  "fields": {
+    "sender_name": "woundwound",
+    "bot_name": "roblox_user_5413661688",
+    "items": [
+      "Swirly Axe"
+    ],
+    "created_at": "2025-11-29T23:19:57.965Z"
+  }
+},
+{
+  "model": "casino.tradelog",
+  "pk": 104,
+  "fields": {
+    "sender_name": "woundwound",
+    "bot_name": "roblox_user_5413661688",
+    "items": [],
+    "created_at": "2025-11-29T23:21:12.631Z"
+  }
+},
+{
+  "model": "casino.tradelog",
+  "pk": 105,
+  "fields": {
+    "sender_name": "woundwound",
+    "bot_name": "roblox_user_5413661688",
+    "items": [
+      "Cotton Candy"
+    ],
+    "created_at": "2025-11-29T23:21:27.877Z"
+  }
+},
+{
+  "model": "casino.tradelog",
+  "pk": 106,
+  "fields": {
+    "sender_name": "xkxlation",
+    "bot_name": "roblox_user_5413661688",
+    "items": [
+      "Harvester"
+    ],
+    "created_at": "2025-12-05T20:34:33.378Z"
+  }
+},
+{
+  "model": "casino.tradelog",
+  "pk": 107,
+  "fields": {
+    "sender_name": "Unknown",
+    "bot_name": "roblox_user_5413661688",
+    "items": [],
+    "created_at": "2025-12-05T20:37:38.952Z"
+  }
+},
+{
+  "model": "casino.tradelog",
+  "pk": 108,
+  "fields": {
+    "sender_name": "xkxlation",
+    "bot_name": "roblox_user_5413661688",
+    "items": [],
+    "created_at": "2025-12-05T20:51:11.089Z"
+  }
+},
+{
+  "model": "casino.tradelog",
+  "pk": 109,
+  "fields": {
+    "sender_name": "xkxlation",
+    "bot_name": "roblox_user_5413661688",
+    "items": [
+      "Harvester"
+    ],
+    "created_at": "2025-12-05T20:51:26.739Z"
+  }
+},
+{
+  "model": "casino.tradelog",
+  "pk": 110,
+  "fields": {
+    "sender_name": "xkxlation",
+    "bot_name": "roblox_user_5413661688",
+    "items": [
+      "Candy",
+      "Sugar"
+    ],
+    "created_at": "2025-12-05T20:55:09.444Z"
+  }
+},
+{
+  "model": "casino.tradelog",
+  "pk": 111,
+  "fields": {
+    "sender_name": "lastdosebeforedream",
+    "bot_name": "roblox_user_5413661688",
+    "items": [
+      "Candy",
+      "Sugar"
+    ],
+    "created_at": "2025-12-05T21:52:27.102Z"
+  }
+},
+{
+  "model": "casino.tradelog",
+  "pk": 112,
+  "fields": {
+    "sender_name": "lastdosebeforedream",
+    "bot_name": "roblox_user_5413661688",
+    "items": [
+      "Swirly Axe"
+    ],
+    "created_at": "2025-12-05T21:55:00.291Z"
+  }
+},
+{
+  "model": "casino.tradelog",
+  "pk": 113,
+  "fields": {
+    "sender_name": "lastdosebeforedream",
+    "bot_name": "roblox_user_5413661688",
+    "items": [
+      "Candy"
+    ],
+    "created_at": "2025-12-05T21:59:32.081Z"
+  }
+},
+{
+  "model": "casino.tradelog",
+  "pk": 114,
+  "fields": {
+    "sender_name": "lastdosebeforedream",
+    "bot_name": "roblox_user_5413661688",
+    "items": [
+      "Candy"
+    ],
+    "created_at": "2025-12-05T22:01:31.372Z"
+  }
+},
+{
+  "model": "casino.tradelog",
+  "pk": 115,
+  "fields": {
+    "sender_name": "lastdosebeforedream",
+    "bot_name": "roblox_user_5413661688",
+    "items": [
+      "Candy"
+    ],
+    "created_at": "2025-12-05T22:04:52.038Z"
+  }
+},
+{
+  "model": "casino.tradelog",
+  "pk": 116,
+  "fields": {
+    "sender_name": "Unknown",
+    "bot_name": "roblox_user_5413661688",
+    "items": [
+      "Candy"
+    ],
+    "created_at": "2025-12-05T22:06:27.539Z"
+  }
+},
+{
+  "model": "casino.tradelog",
+  "pk": 117,
+  "fields": {
+    "sender_name": "Unknown",
+    "bot_name": "roblox_user_5413661688",
+    "items": [
+      "Candy"
+    ],
+    "created_at": "2025-12-05T22:06:27.539Z"
+  }
+},
+{
+  "model": "casino.tradelog",
+  "pk": 118,
+  "fields": {
+    "sender_name": "lastdosebeforedream",
+    "bot_name": "roblox_user_5413661688",
+    "items": [
+      "Candy"
+    ],
+    "created_at": "2025-12-05T22:09:40.693Z"
+  }
+},
+{
+  "model": "casino.tradelog",
+  "pk": 119,
+  "fields": {
+    "sender_name": "lastdosebeforedream",
+    "bot_name": "roblox_user_5413661688",
+    "items": [
+      "Candy",
+      "Sugar"
+    ],
+    "created_at": "2025-12-05T22:10:34.934Z"
+  }
+},
+{
+  "model": "casino.tradelog",
+  "pk": 120,
+  "fields": {
+    "sender_name": "Unknown",
+    "bot_name": "roblox_user_5413661688",
+    "items": [],
+    "created_at": "2025-12-05T22:10:59.365Z"
+  }
+},
+{
+  "model": "casino.tradelog",
+  "pk": 121,
+  "fields": {
+    "sender_name": "Unknown",
+    "bot_name": "roblox_user_5413661688",
+    "items": [
+      "Swirly Axe",
+      "Blaster",
+      "Chroma Candleflame",
+      "Darkbringer"
+    ],
+    "created_at": "2025-12-05T22:11:15.276Z"
+  }
+},
+{
+  "model": "casino.tradelog",
+  "pk": 122,
+  "fields": {
+    "sender_name": "lastdosebeforedream",
+    "bot_name": "roblox_user_5413661688",
+    "items": [
+      "Swirly Axe",
+      "Blaster",
+      "Chroma Candleflame",
+      "Darkbringer"
+    ],
+    "created_at": "2025-12-05T22:11:49.720Z"
+  }
+},
+{
+  "model": "casino.tradelog",
+  "pk": 123,
+  "fields": {
+    "sender_name": "lastdosebeforedream",
+    "bot_name": "roblox_user_5413661688",
+    "items": [],
+    "created_at": "2025-12-05T22:12:58.638Z"
+  }
+},
+{
+  "model": "casino.tradelog",
+  "pk": 124,
+  "fields": {
+    "sender_name": "lastdosebeforedream",
+    "bot_name": "roblox_user_5413661688",
+    "items": [
+      "Candy",
+      "Sugar"
+    ],
+    "created_at": "2025-12-05T22:13:16.769Z"
+  }
+},
+{
+  "model": "casino.tradelog",
+  "pk": 125,
+  "fields": {
+    "sender_name": "lastdosebeforedream",
+    "bot_name": "roblox_user_5413661688",
+    "items": [
+      "Candy",
+      "Sugar"
+    ],
+    "created_at": "2025-12-05T22:18:42.580Z"
+  }
+},
+{
+  "model": "casino.tradelog",
+  "pk": 126,
+  "fields": {
+    "sender_name": "lastdosebeforedream",
+    "bot_name": "roblox_user_5413661688",
+    "items": [],
+    "created_at": "2025-12-05T22:19:41.125Z"
+  }
+},
+{
+  "model": "casino.tradelog",
+  "pk": 127,
+  "fields": {
+    "sender_name": "lastdosebeforedream",
+    "bot_name": "roblox_user_5413661688",
+    "items": [
+      "Candy",
+      "Sugar"
+    ],
+    "created_at": "2025-12-05T22:19:58.752Z"
+  }
+},
+{
+  "model": "casino.tradelog",
+  "pk": 128,
+  "fields": {
+    "sender_name": "lastdosebeforedream",
+    "bot_name": "roblox_user_5413661688",
+    "items": [
+      "Candy",
+      "Sugar"
+    ],
+    "created_at": "2025-12-05T22:21:12.240Z"
+  }
+},
+{
+  "model": "casino.tradelog",
+  "pk": 129,
+  "fields": {
+    "sender_name": "lastdosebeforedream",
+    "bot_name": "roblox_user_5413661688",
+    "items": [
+      "Candy",
+      "Sugar"
+    ],
+    "created_at": "2025-12-05T22:23:11.080Z"
+  }
+},
+{
+  "model": "casino.tradelog",
+  "pk": 130,
+  "fields": {
+    "sender_name": "lastdosebeforedream",
+    "bot_name": "roblox_user_5413661688",
+    "items": [
+      "Candy",
+      "Sugar"
+    ],
+    "created_at": "2025-12-05T22:33:25.865Z"
+  }
+},
+{
+  "model": "casino.tradelog",
+  "pk": 131,
+  "fields": {
+    "sender_name": "lastdosebeforedream",
+    "bot_name": "roblox_user_5413661688",
+    "items": [
+      "Candy",
+      "Sugar"
+    ],
+    "created_at": "2025-12-05T22:36:01.180Z"
+  }
+},
+{
+  "model": "casino.tradelog",
+  "pk": 132,
+  "fields": {
+    "sender_name": "lastdosebeforedream",
+    "bot_name": "roblox_user_5413661688",
+    "items": [
+      "Candy",
+      "Sugar"
+    ],
+    "created_at": "2025-12-05T22:36:01.181Z"
+  }
+},
+{
+  "model": "casino.tradelog",
+  "pk": 133,
+  "fields": {
+    "sender_name": "lastdosebeforedream",
+    "bot_name": "roblox_user_5413661688",
+    "items": [
+      "Sugar"
+    ],
+    "created_at": "2025-12-05T22:37:00.444Z"
+  }
+},
+{
+  "model": "casino.tradelog",
+  "pk": 134,
+  "fields": {
+    "sender_name": "lastdosebeforedream",
+    "bot_name": "roblox_user_5413661688",
+    "items": [
+      "Swirly Axe",
+      "Chroma Candleflame"
+    ],
+    "created_at": "2025-12-05T22:38:01.380Z"
+  }
+},
+{
+  "model": "casino.tradelog",
+  "pk": 135,
+  "fields": {
+    "sender_name": "Unknown",
+    "bot_name": "roblox_user_5413661688",
+    "items": [
+      "Candy",
+      "Sugar"
+    ],
+    "created_at": "2025-12-05T22:38:38.986Z"
+  }
+},
+{
+  "model": "casino.tradelog",
+  "pk": 136,
+  "fields": {
+    "sender_name": "lastdosebeforedream",
+    "bot_name": "roblox_user_5413661688",
+    "items": [
+      "Candy",
+      "Sugar"
+    ],
+    "created_at": "2025-12-05T22:39:00.645Z"
+  }
+},
+{
+  "model": "casino.tradelog",
+  "pk": 137,
+  "fields": {
+    "sender_name": "Unknown",
+    "bot_name": "roblox_user_5413661688",
+    "items": [
+      "Candy",
+      "Sugar"
+    ],
+    "created_at": "2025-12-05T22:41:56.721Z"
+  }
+},
+{
+  "model": "casino.tradelog",
+  "pk": 138,
+  "fields": {
+    "sender_name": "lastdosebeforedream",
+    "bot_name": "roblox_user_5413661688",
+    "items": [
+      "Candy",
+      "Sugar"
+    ],
+    "created_at": "2025-12-05T22:42:08.903Z"
+  }
+},
+{
+  "model": "casino.tradelog",
+  "pk": 139,
+  "fields": {
+    "sender_name": "lastdosebeforedream",
+    "bot_name": "roblox_user_5413661688",
+    "items": [
+      "Candy",
+      "Sugar"
+    ],
+    "created_at": "2025-12-05T22:44:14.343Z"
+  }
+},
+{
+  "model": "casino.tradelog",
+  "pk": 140,
+  "fields": {
+    "sender_name": "lastdosebeforedream",
+    "bot_name": "roblox_user_5413661688",
+    "items": [
+      "Candy",
+      "Sugar"
+    ],
+    "created_at": "2025-12-05T22:48:40.551Z"
+  }
+},
+{
+  "model": "casino.tradelog",
+  "pk": 141,
+  "fields": {
+    "sender_name": "lastdosebeforedream",
+    "bot_name": "roblox_user_5413661688",
+    "items": [
+      "Candy",
+      "Sugar"
+    ],
+    "created_at": "2025-12-05T23:06:13.114Z"
+  }
+},
+{
+  "model": "casino.tradelog",
+  "pk": 142,
+  "fields": {
+    "sender_name": "Unknown",
+    "bot_name": "roblox_user_5413661688",
+    "items": [
+      "Sugar"
+    ],
+    "created_at": "2025-12-05T23:08:14.387Z"
+  }
+},
+{
+  "model": "casino.tradelog",
+  "pk": 143,
+  "fields": {
+    "sender_name": "woundwound",
+    "bot_name": "roblox_user_5413661688",
+    "items": [
+      "Frostbite"
+    ],
+    "created_at": "2025-12-07T21:18:47.223Z"
+  }
+},
+{
+  "model": "casino.tradelog",
+  "pk": 144,
+  "fields": {
+    "sender_name": "woundwound",
+    "bot_name": "roblox_user_5413661688",
+    "items": [
+      "Frostbite"
+    ],
+    "created_at": "2025-12-07T21:24:39.052Z"
+  }
+},
+{
+  "model": "casino.tradelog",
+  "pk": 145,
+  "fields": {
+    "sender_name": "woundwound",
+    "bot_name": "roblox_user_5413661688",
+    "items": [
+      "Chroma Fire Bunny",
+      "Frostbite"
+    ],
+    "created_at": "2025-12-08T03:38:20.029Z"
+  }
+},
+{
+  "model": "casino.tradelog",
+  "pk": 146,
+  "fields": {
+    "sender_name": "woundwound",
+    "bot_name": "roblox_user_5413661688",
+    "items": [
+      "Elderwood Scythe",
+      "Lightbringer",
+      "Nightblade",
+      "Red Luger"
+    ],
+    "created_at": "2025-12-13T16:25:30.239Z"
+  }
+},
+{
+  "model": "casino.tradelog",
+  "pk": 147,
+  "fields": {
+    "sender_name": "woundwound",
+    "bot_name": "roblox_user_5413661688",
+    "items": [
+      "Elderwood Scythe",
+      "Lightbringer",
+      "Nightblade",
+      "Red Luger"
+    ],
+    "created_at": "2025-12-13T16:33:32.033Z"
+  }
+},
+{
+  "model": "casino.tradelog",
+  "pk": 148,
+  "fields": {
+    "sender_name": "woundwound",
+    "bot_name": "roblox_user_5413661688",
+    "items": [
+      "Elderwood Scythe",
+      "Lightbringer",
+      "Red Luger",
+      "Nightblade"
+    ],
+    "created_at": "2025-12-13T16:44:25.789Z"
+  }
+},
+{
+  "model": "casino.tradelog",
+  "pk": 149,
+  "fields": {
+    "sender_name": "woundwound",
+    "bot_name": "roblox_user_5413661688",
+    "items": [
+      "Elderwood Scythe",
+      "Lightbringer",
+      "Nightblade"
+    ],
+    "created_at": "2025-12-13T16:56:02.859Z"
+  }
+},
+{
+  "model": "casino.tradelog",
+  "pk": 150,
+  "fields": {
+    "sender_name": "woundwound",
+    "bot_name": "Tharshaywar",
+    "items": [
+      "Frostfade"
+    ],
+    "created_at": "2026-02-26T17:57:50.275Z"
+  }
+},
+{
+  "model": "casino.tradelog",
+  "pk": 151,
+  "fields": {
+    "sender_name": "woundwound",
+    "bot_name": "Tharshaywar",
+    "items": [
+      "Frostfade"
+    ],
+    "created_at": "2026-02-26T18:17:34.640Z"
+  }
+},
+{
+  "model": "casino.tradelog",
+  "pk": 152,
+  "fields": {
+    "sender_name": "woundwound",
+    "bot_name": "Tharshaywar",
+    "items": [
+      "Frostfade"
+    ],
+    "created_at": "2026-02-26T18:29:38.656Z"
+  }
+},
+{
+  "model": "casino.tradelog",
+  "pk": 153,
+  "fields": {
+    "sender_name": "woundwound",
+    "bot_name": "Tharshaywar",
+    "items": [
+      "Frostfade"
+    ],
+    "created_at": "2026-02-26T19:32:16.549Z"
+  }
+},
+{
+  "model": "casino.tradelog",
+  "pk": 154,
+  "fields": {
+    "sender_name": "woundwound",
+    "bot_name": "roblox_user_5413661688",
+    "items": [
+      "Vampire's Edge"
+    ],
+    "created_at": "2026-03-11T18:09:13.431Z"
+  }
+},
+{
+  "model": "casino.useritem",
+  "pk": 1,
+  "fields": {
+    "owner_name": "quwexz2718",
+    "item_name": "Overseer (xx2)",
+    "item_value": 0,
+    "amount": 1,
+    "status": "available",
+    "received_at": "2025-11-24T20:27:51.389Z",
+    "image_url": ""
+  }
+},
+{
+  "model": "casino.useritem",
+  "pk": 2,
+  "fields": {
+    "owner_name": "quwexz2718",
+    "item_name": "Frostfade (xx2)",
+    "item_value": 0,
+    "amount": 1,
+    "status": "available",
+    "received_at": "2025-11-24T20:28:09.201Z",
+    "image_url": ""
+  }
+},
+{
+  "model": "casino.useritem",
+  "pk": 3,
+  "fields": {
+    "owner_name": "quwexz2718",
+    "item_name": "Cotton Candy (x2)",
+    "item_value": 0,
+    "amount": 1,
+    "status": "withdrawing",
+    "received_at": "2025-11-24T20:29:37.250Z",
+    "image_url": ""
+  }
+},
+{
+  "model": "casino.useritem",
+  "pk": 5,
+  "fields": {
+    "owner_name": "admin",
+    "item_name": "Blaster",
+    "item_value": 20,
+    "amount": 1,
+    "status": "available",
+    "received_at": "2025-11-24T21:59:33.293Z",
+    "image_url": ""
+  }
+},
+{
+  "model": "casino.useritem",
+  "pk": 6,
+  "fields": {
+    "owner_name": "woundwound",
+    "item_name": "Candleflame",
+    "item_value": 60,
+    "amount": 1,
+    "status": "withdrawing",
+    "received_at": "2025-11-24T21:59:33.295Z",
+    "image_url": ""
+  }
+},
+{
+  "model": "casino.useritem",
+  "pk": 7,
+  "fields": {
+    "owner_name": "admin",
+    "item_name": "Darkbringer",
+    "item_value": 60,
+    "amount": 1,
+    "status": "available",
+    "received_at": "2025-11-24T21:59:33.298Z",
+    "image_url": ""
+  }
+},
+{
+  "model": "casino.useritem",
+  "pk": 8,
+  "fields": {
+    "owner_name": "admin",
+    "item_name": "Gingerscope",
+    "item_value": 13400,
+    "amount": 1,
+    "status": "available",
+    "received_at": "2025-11-24T22:20:04.756Z",
+    "image_url": ""
+  }
+},
+{
+  "model": "casino.useritem",
+  "pk": 9,
+  "fields": {
+    "owner_name": "admin",
+    "item_name": "Test Item",
+    "item_value": 160,
+    "amount": 1,
+    "status": "available",
+    "received_at": "2025-11-24T22:20:13.968Z",
+    "image_url": ""
+  }
+},
+{
+  "model": "casino.useritem",
+  "pk": 12,
+  "fields": {
+    "owner_name": "woundwound",
+    "item_name": "Test Item",
+    "item_value": 10,
+    "amount": 1,
+    "status": "betting",
+    "received_at": "2025-11-24T22:20:44.594Z",
+    "image_url": ""
+  }
+},
+{
+  "model": "casino.useritem",
+  "pk": 13,
+  "fields": {
+    "owner_name": "woundwound",
+    "item_name": "Test Item",
+    "item_value": 10,
+    "amount": 1,
+    "status": "betting",
+    "received_at": "2025-11-24T22:20:47.996Z",
+    "image_url": ""
+  }
+},
+{
+  "model": "casino.useritem",
+  "pk": 15,
+  "fields": {
+    "owner_name": "admin",
+    "item_name": "Gingerscope",
+    "item_value": 13400,
+    "amount": 1,
+    "status": "available",
+    "received_at": "2025-11-24T22:21:42.473Z",
+    "image_url": ""
+  }
+},
+{
+  "model": "casino.useritem",
+  "pk": 16,
+  "fields": {
+    "owner_name": "admin",
+    "item_name": "Test Item",
+    "item_value": 5565465,
+    "amount": 1,
+    "status": "available",
+    "received_at": "2025-11-24T22:30:14.217Z",
+    "image_url": ""
+  }
+},
+{
+  "model": "casino.useritem",
+  "pk": 17,
+  "fields": {
+    "owner_name": "admin",
+    "item_name": "Test Item",
+    "item_value": 10,
+    "amount": 1,
+    "status": "available",
+    "received_at": "2025-11-24T22:30:23.721Z",
+    "image_url": ""
+  }
+},
+{
+  "model": "casino.useritem",
+  "pk": 18,
+  "fields": {
+    "owner_name": "woundwound",
+    "item_name": "Test Item",
+    "item_value": 10,
+    "amount": 1,
+    "status": "available",
+    "received_at": "2025-11-24T22:30:24.560Z",
+    "image_url": ""
+  }
+},
+{
+  "model": "casino.useritem",
+  "pk": 19,
+  "fields": {
+    "owner_name": "woundwound",
+    "item_name": "Test Item",
+    "item_value": 10,
+    "amount": 1,
+    "status": "available",
+    "received_at": "2025-11-24T22:30:24.849Z",
+    "image_url": ""
+  }
+},
+{
+  "model": "casino.useritem",
+  "pk": 20,
+  "fields": {
+    "owner_name": "woundwound",
+    "item_name": "Test Item",
+    "item_value": 10,
+    "amount": 1,
+    "status": "available",
+    "received_at": "2025-11-24T22:30:25.134Z",
+    "image_url": ""
+  }
+},
+{
+  "model": "casino.useritem",
+  "pk": 24,
+  "fields": {
+    "owner_name": "lunesnoire",
+    "item_name": "Swirly Axe",
+    "item_value": 60,
+    "amount": 1,
+    "status": "available",
+    "received_at": "2025-11-25T14:47:51.304Z",
+    "image_url": ""
+  }
+},
+{
+  "model": "casino.useritem",
+  "pk": 25,
+  "fields": {
+    "owner_name": "lunesnoire",
+    "item_name": "Blaster",
+    "item_value": 20,
+    "amount": 1,
+    "status": "available",
+    "received_at": "2025-11-25T14:47:51.306Z",
+    "image_url": ""
+  }
+},
+{
+  "model": "casino.useritem",
+  "pk": 26,
+  "fields": {
+    "owner_name": "lunesnoire",
+    "item_name": "Candleflame",
+    "item_value": 60,
+    "amount": 1,
+    "status": "available",
+    "received_at": "2025-11-25T14:47:51.308Z",
+    "image_url": ""
+  }
+},
+{
+  "model": "casino.useritem",
+  "pk": 27,
+  "fields": {
+    "owner_name": "lunesnoire",
+    "item_name": "Darkbringer",
+    "item_value": 60,
+    "amount": 1,
+    "status": "available",
+    "received_at": "2025-11-25T14:47:51.310Z",
+    "image_url": ""
+  }
+},
+{
+  "model": "casino.useritem",
+  "pk": 28,
+  "fields": {
+    "owner_name": "woundwound",
+    "item_name": "Swirly Axe",
+    "item_value": 60,
+    "amount": 1,
+    "status": "available",
+    "received_at": "2025-11-25T14:48:08.173Z",
+    "image_url": ""
+  }
+},
+{
+  "model": "casino.useritem",
+  "pk": 29,
+  "fields": {
+    "owner_name": "woundwound",
+    "item_name": "Blaster",
+    "item_value": 20,
+    "amount": 1,
+    "status": "betting",
+    "received_at": "2025-11-25T14:48:08.176Z",
+    "image_url": ""
+  }
+},
+{
+  "model": "casino.useritem",
+  "pk": 30,
+  "fields": {
+    "owner_name": "woundwound",
+    "item_name": "Candleflame",
+    "item_value": 60,
+    "amount": 1,
+    "status": "available",
+    "received_at": "2025-11-25T14:48:08.178Z",
+    "image_url": ""
+  }
+},
+{
+  "model": "casino.useritem",
+  "pk": 31,
+  "fields": {
+    "owner_name": "woundwound",
+    "item_name": "Darkbringer",
+    "item_value": 60,
+    "amount": 1,
+    "status": "available",
+    "received_at": "2025-11-25T14:48:08.181Z",
+    "image_url": ""
+  }
+},
+{
+  "model": "casino.useritem",
+  "pk": 32,
+  "fields": {
+    "owner_name": "admin",
+    "item_name": "Gingerscope",
+    "item_value": 13400,
+    "amount": 1,
+    "status": "available",
+    "received_at": "2025-11-25T14:49:01.544Z",
+    "image_url": ""
+  }
+},
+{
+  "model": "casino.useritem",
+  "pk": 33,
+  "fields": {
+    "owner_name": "admin",
+    "item_name": "Test Item",
+    "item_value": 270,
+    "amount": 1,
+    "status": "available",
+    "received_at": "2025-11-25T14:49:16.242Z",
+    "image_url": ""
+  }
+},
+{
+  "model": "casino.useritem",
+  "pk": 34,
+  "fields": {
+    "owner_name": "lunesnoire",
+    "item_name": "Candleflame",
+    "item_value": 60,
+    "amount": 1,
+    "status": "available",
+    "received_at": "2025-11-25T15:11:19.079Z",
+    "image_url": ""
+  }
+},
+{
+  "model": "casino.useritem",
+  "pk": 35,
+  "fields": {
+    "owner_name": "lunesnoire",
+    "item_name": "Chroma Candleflame",
+    "item_value": 70,
+    "amount": 1,
+    "status": "available",
+    "received_at": "2025-11-25T15:11:19.086Z",
+    "image_url": ""
+  }
+},
+{
+  "model": "casino.useritem",
+  "pk": 36,
+  "fields": {
+    "owner_name": "admin",
+    "item_name": "Chroma Candleflame",
+    "item_value": 70,
+    "amount": 1,
+    "status": "available",
+    "received_at": "2025-11-25T15:11:43.623Z",
+    "image_url": ""
+  }
+},
+{
+  "model": "casino.useritem",
+  "pk": 37,
+  "fields": {
+    "owner_name": "admin",
+    "item_name": "Candleflame",
+    "item_value": 60,
+    "amount": 1,
+    "status": "available",
+    "received_at": "2025-11-25T15:11:43.637Z",
+    "image_url": ""
+  }
+},
+{
+  "model": "casino.useritem",
+  "pk": 38,
+  "fields": {
+    "owner_name": "lunesnoire",
+    "item_name": "Chroma Candleflame",
+    "item_value": 70,
+    "amount": 1,
+    "status": "available",
+    "received_at": "2025-11-25T15:14:03.358Z",
+    "image_url": ""
+  }
+},
+{
+  "model": "casino.useritem",
+  "pk": 39,
+  "fields": {
+    "owner_name": "admin",
+    "item_name": "Chroma Candleflame",
+    "item_value": 70,
+    "amount": 1,
+    "status": "available",
+    "received_at": "2025-11-25T15:14:21.229Z",
+    "image_url": ""
+  }
+},
+{
+  "model": "casino.useritem",
+  "pk": 40,
+  "fields": {
+    "owner_name": "admin",
+    "item_name": "Chroma Candleflame",
+    "item_value": 70,
+    "amount": 1,
+    "status": "available",
+    "received_at": "2025-11-25T15:14:21.240Z",
+    "image_url": ""
+  }
+},
+{
+  "model": "casino.useritem",
+  "pk": 41,
+  "fields": {
+    "owner_name": "admin",
+    "item_name": "Test Item",
+    "item_value": 250,
+    "amount": 1,
+    "status": "available",
+    "received_at": "2025-11-26T16:42:27.531Z",
+    "image_url": ""
+  }
+},
+{
+  "model": "casino.useritem",
+  "pk": 42,
+  "fields": {
+    "owner_name": "admin",
+    "item_name": "Test Item",
+    "item_value": 250,
+    "amount": 1,
+    "status": "available",
+    "received_at": "2025-11-26T16:42:33.182Z",
+    "image_url": ""
+  }
+},
+{
+  "model": "casino.useritem",
+  "pk": 44,
+  "fields": {
+    "owner_name": "admin",
+    "item_name": "Blaster",
+    "item_value": 20,
+    "amount": 1,
+    "status": "available",
+    "received_at": "2025-11-26T17:21:20.548Z",
+    "image_url": ""
+  }
+},
+{
+  "model": "casino.useritem",
+  "pk": 45,
+  "fields": {
+    "owner_name": "admin",
+    "item_name": "Candleflame",
+    "item_value": 60,
+    "amount": 1,
+    "status": "available",
+    "received_at": "2025-11-26T17:21:20.550Z",
+    "image_url": ""
+  }
+},
+{
+  "model": "casino.useritem",
+  "pk": 46,
+  "fields": {
+    "owner_name": "admin",
+    "item_name": "Darkbringer",
+    "item_value": 60,
+    "amount": 1,
+    "status": "available",
+    "received_at": "2025-11-26T17:21:20.553Z",
+    "image_url": ""
+  }
+},
+{
+  "model": "casino.useritem",
+  "pk": 48,
+  "fields": {
+    "owner_name": "admin",
+    "item_name": "Test Item",
+    "item_value": 39,
+    "amount": 1,
+    "status": "available",
+    "received_at": "2025-11-27T16:27:12.850Z",
+    "image_url": ""
+  }
+},
+{
+  "model": "casino.useritem",
+  "pk": 49,
+  "fields": {
+    "owner_name": "xkxlation",
+    "item_name": "Frostbite",
+    "item_value": 7,
+    "amount": 1,
+    "status": "available",
+    "received_at": "2025-11-27T22:04:19.948Z",
+    "image_url": ""
+  }
+},
+{
+  "model": "casino.useritem",
+  "pk": 50,
+  "fields": {
+    "owner_name": "admin",
+    "item_name": "Swirly Axe",
+    "item_value": 60,
+    "amount": 1,
+    "status": "available",
+    "received_at": "2025-11-28T16:50:27.315Z",
+    "image_url": ""
+  }
+},
+{
+  "model": "casino.useritem",
+  "pk": 53,
+  "fields": {
+    "owner_name": "admin",
+    "item_name": "Swirly Axe",
+    "item_value": 60,
+    "amount": 1,
+    "status": "available",
+    "received_at": "2025-11-28T17:20:02.170Z",
+    "image_url": ""
+  }
+},
+{
+  "model": "casino.useritem",
+  "pk": 54,
+  "fields": {
+    "owner_name": "admin",
+    "item_name": "Swirly Axe",
+    "item_value": 60,
+    "amount": 1,
+    "status": "available",
+    "received_at": "2025-11-28T17:20:02.187Z",
+    "image_url": ""
+  }
+},
+{
+  "model": "casino.useritem",
+  "pk": 58,
+  "fields": {
+    "owner_name": "admin",
+    "item_name": "Swirly Axe",
+    "item_value": 60,
+    "amount": 1,
+    "status": "available",
+    "received_at": "2025-11-28T17:28:44.481Z",
+    "image_url": ""
+  }
+},
+{
+  "model": "casino.useritem",
+  "pk": 59,
+  "fields": {
+    "owner_name": "admin",
+    "item_name": "Swirly Axe",
+    "item_value": 60,
+    "amount": 1,
+    "status": "available",
+    "received_at": "2025-11-28T17:38:21.743Z",
+    "image_url": ""
+  }
+},
+{
+  "model": "casino.useritem",
+  "pk": 78,
+  "fields": {
+    "owner_name": "(woundwound)",
+    "item_name": "Cotton Candy",
+    "item_value": 10,
+    "amount": 1,
+    "status": "available",
+    "received_at": "2025-11-28T22:25:09.075Z",
+    "image_url": ""
+  }
+},
+{
+  "model": "casino.useritem",
+  "pk": 79,
+  "fields": {
+    "owner_name": "(woundwound)",
+    "item_name": "Cotton Candy",
+    "item_value": 10,
+    "amount": 1,
+    "status": "available",
+    "received_at": "2025-11-28T22:27:58.345Z",
+    "image_url": ""
+  }
+},
+{
+  "model": "casino.useritem",
+  "pk": 80,
+  "fields": {
+    "owner_name": "(woundwound)",
+    "item_name": "Cotton Candy",
+    "item_value": 10,
+    "amount": 1,
+    "status": "available",
+    "received_at": "2025-11-28T22:31:56.303Z",
+    "image_url": ""
+  }
+},
+{
+  "model": "casino.useritem",
+  "pk": 81,
+  "fields": {
+    "owner_name": "(woundwound)",
+    "item_name": "Cotton Candy",
+    "item_value": 10,
+    "amount": 1,
+    "status": "available",
+    "received_at": "2025-11-28T22:31:56.847Z",
+    "image_url": ""
+  }
+},
+{
+  "model": "casino.useritem",
+  "pk": 82,
+  "fields": {
+    "owner_name": "(woundwound)",
+    "item_name": "Cotton Candy",
+    "item_value": 10,
+    "amount": 1,
+    "status": "available",
+    "received_at": "2025-11-28T22:38:31.153Z",
+    "image_url": ""
+  }
+},
+{
+  "model": "casino.useritem",
+  "pk": 83,
+  "fields": {
+    "owner_name": "admin",
+    "item_name": "Swirly Axe",
+    "item_value": 60,
+    "amount": 1,
+    "status": "available",
+    "received_at": "2025-11-28T22:54:50.906Z",
+    "image_url": ""
+  }
+},
+{
+  "model": "casino.useritem",
+  "pk": 90,
+  "fields": {
+    "owner_name": "lastdosebeforedream",
+    "item_name": "Chroma Candleflame",
+    "item_value": 0,
+    "amount": 1,
+    "status": "available",
+    "received_at": "2025-11-28T23:22:14.506Z",
+    "image_url": ""
+  }
+},
+{
+  "model": "casino.useritem",
+  "pk": 91,
+  "fields": {
+    "owner_name": "admin",
+    "item_name": "Cotton Candy",
+    "item_value": 0,
+    "amount": 3,
+    "status": "available",
+    "received_at": "2025-11-28T23:22:14.508Z",
+    "image_url": ""
+  }
+},
+{
+  "model": "casino.useritem",
+  "pk": 95,
+  "fields": {
+    "owner_name": "lastdosebeforedream",
+    "item_name": "Chroma Candleflame",
+    "item_value": 70,
+    "amount": 1,
+    "status": "available",
+    "received_at": "2025-11-28T23:42:19.793Z",
+    "image_url": ""
+  }
+},
+{
+  "model": "casino.useritem",
+  "pk": 97,
+  "fields": {
+    "owner_name": "lastdosebeforedream",
+    "item_name": "Swirly Axe",
+    "item_value": 60,
+    "amount": 1,
+    "status": "available",
+    "received_at": "2025-11-29T10:30:15.872Z",
+    "image_url": ""
+  }
+},
+{
+  "model": "casino.useritem",
+  "pk": 102,
+  "fields": {
+    "owner_name": "lastdosebeforedream",
+    "item_name": "Chroma Candleflame",
+    "item_value": 70,
+    "amount": 1,
+    "status": "available",
+    "received_at": "2025-11-29T10:31:19.662Z",
+    "image_url": ""
+  }
+},
+{
+  "model": "casino.useritem",
+  "pk": 107,
+  "fields": {
+    "owner_name": "admin",
+    "item_name": "Swirly Axe",
+    "item_value": 60,
+    "amount": 1,
+    "status": "available",
+    "received_at": "2025-11-29T10:33:18.827Z",
+    "image_url": ""
+  }
+},
+{
+  "model": "casino.useritem",
+  "pk": 112,
+  "fields": {
+    "owner_name": "(woundwound)",
+    "item_name": "Swirly Axe",
+    "item_value": 60,
+    "amount": 1,
+    "status": "available",
+    "received_at": "2025-11-29T12:59:28.538Z",
+    "image_url": ""
+  }
+},
+{
+  "model": "casino.useritem",
+  "pk": 113,
+  "fields": {
+    "owner_name": "admin",
+    "item_name": "Swirly Axe",
+    "item_value": 60,
+    "amount": 1,
+    "status": "available",
+    "received_at": "2025-11-29T13:30:22.714Z",
+    "image_url": ""
+  }
+},
+{
+  "model": "casino.useritem",
+  "pk": 116,
+  "fields": {
+    "owner_name": "(woundwound)",
+    "item_name": "Swirly Axe",
+    "item_value": 60,
+    "amount": 1,
+    "status": "available",
+    "received_at": "2025-11-29T13:30:22.757Z",
+    "image_url": ""
+  }
+},
+{
+  "model": "casino.useritem",
+  "pk": 117,
+  "fields": {
+    "owner_name": "lastdosebeforedream",
+    "item_name": "Swirly Axe",
+    "item_value": 60,
+    "amount": 1,
+    "status": "available",
+    "received_at": "2025-11-29T13:39:56.140Z",
+    "image_url": ""
+  }
+},
+{
+  "model": "casino.useritem",
+  "pk": 118,
+  "fields": {
+    "owner_name": "lastdosebeforedream",
+    "item_name": "Blaster",
+    "item_value": 20,
+    "amount": 1,
+    "status": "available",
+    "received_at": "2025-11-29T13:39:56.143Z",
+    "image_url": ""
+  }
+},
+{
+  "model": "casino.useritem",
+  "pk": 119,
+  "fields": {
+    "owner_name": "lastdosebeforedream",
+    "item_name": "Chroma Candleflame",
+    "item_value": 70,
+    "amount": 1,
+    "status": "available",
+    "received_at": "2025-11-29T13:39:56.145Z",
+    "image_url": ""
+  }
+},
+{
+  "model": "casino.useritem",
+  "pk": 121,
+  "fields": {
+    "owner_name": "admin",
+    "item_name": "Cotton Candy",
+    "item_value": 10,
+    "amount": 1,
+    "status": "available",
+    "received_at": "2025-11-29T13:46:25.326Z",
+    "image_url": ""
+  }
+},
+{
+  "model": "casino.useritem",
+  "pk": 122,
+  "fields": {
+    "owner_name": "admin",
+    "item_name": "Cotton Candy",
+    "item_value": 10,
+    "amount": 1,
+    "status": "available",
+    "received_at": "2025-11-29T13:46:25.328Z",
+    "image_url": ""
+  }
+},
+{
+  "model": "casino.useritem",
+  "pk": 132,
+  "fields": {
+    "owner_name": "admin",
+    "item_name": "Cotton Candy",
+    "item_value": 10,
+    "amount": 1,
+    "status": "available",
+    "received_at": "2025-11-29T13:49:35.502Z",
+    "image_url": ""
+  }
+},
+{
+  "model": "casino.useritem",
+  "pk": 134,
+  "fields": {
+    "owner_name": "lastdosebeforedream",
+    "item_name": "Cotton Candy",
+    "item_value": 10,
+    "amount": 1,
+    "status": "available",
+    "received_at": "2025-11-29T14:02:54.256Z",
+    "image_url": ""
+  }
+},
+{
+  "model": "casino.useritem",
+  "pk": 138,
+  "fields": {
+    "owner_name": "lastdosebeforedream",
+    "item_name": "Swirly Axe",
+    "item_value": 60,
+    "amount": 1,
+    "status": "available",
+    "received_at": "2025-11-29T14:39:12.259Z",
+    "image_url": ""
+  }
+},
+{
+  "model": "casino.useritem",
+  "pk": 152,
+  "fields": {
+    "owner_name": "woundwound",
+    "item_name": "Swirly Axe",
+    "item_value": 60,
+    "amount": 1,
+    "status": "available",
+    "received_at": "2025-11-29T23:19:59.346Z",
+    "image_url": "https://tr.rbxcdn.com/180DAY-86d80271e4ddea89b54f641d1feaae5e/420/420/Model/Png/noFilter"
+  }
+},
+{
+  "model": "casino.useritem",
+  "pk": 153,
+  "fields": {
+    "owner_name": "woundwound",
+    "item_name": "Cotton Candy",
+    "item_value": 10,
+    "amount": 1,
+    "status": "withdrawing",
+    "received_at": "2025-11-29T23:21:28.433Z",
+    "image_url": "https://tr.rbxcdn.com/180DAY-4eb1c7b513dc42c9ef510aedb7734421/420/420/Model/Png/noFilter"
+  }
+},
+{
+  "model": "casino.useritem",
+  "pk": 154,
+  "fields": {
+    "owner_name": "woundwound",
+    "item_name": "Cotton Candy",
+    "item_value": 10,
+    "amount": 1,
+    "status": "available",
+    "received_at": "2025-11-29T23:21:28.435Z",
+    "image_url": "https://tr.rbxcdn.com/180DAY-4eb1c7b513dc42c9ef510aedb7734421/420/420/Model/Png/noFilter"
+  }
+},
+{
+  "model": "casino.useritem",
+  "pk": 155,
+  "fields": {
+    "owner_name": "woundwound",
+    "item_name": "Cotton Candy",
+    "item_value": 10,
+    "amount": 1,
+    "status": "available",
+    "received_at": "2025-11-29T23:21:28.437Z",
+    "image_url": "https://tr.rbxcdn.com/180DAY-4eb1c7b513dc42c9ef510aedb7734421/420/420/Model/Png/noFilter"
+  }
+},
+{
+  "model": "casino.useritem",
+  "pk": 156,
+  "fields": {
+    "owner_name": "admin",
+    "item_name": "Test Item",
+    "item_value": 430,
+    "amount": 1,
+    "status": "available",
+    "received_at": "2025-12-05T18:41:20.882Z",
+    "image_url": ""
+  }
+},
+{
+  "model": "casino.useritem",
+  "pk": 161,
+  "fields": {
+    "owner_name": "xkxlation",
+    "item_name": "Candy",
+    "item_value": 170,
+    "amount": 1,
+    "status": "available",
+    "received_at": "2025-12-05T20:55:09.987Z",
+    "image_url": "https://tr.rbxcdn.com/180DAY-fcda95a147064698c53196f44c9ca833/420/420/Model/Png/noFilter"
+  }
+},
+{
+  "model": "casino.useritem",
+  "pk": 162,
+  "fields": {
+    "owner_name": "xkxlation",
+    "item_name": "Candy",
+    "item_value": 170,
+    "amount": 1,
+    "status": "withdrawing",
+    "received_at": "2025-12-05T20:55:09.989Z",
+    "image_url": "https://tr.rbxcdn.com/180DAY-fcda95a147064698c53196f44c9ca833/420/420/Model/Png/noFilter"
+  }
+},
+{
+  "model": "casino.useritem",
+  "pk": 163,
+  "fields": {
+    "owner_name": "xkxlation",
+    "item_name": "Candy",
+    "item_value": 170,
+    "amount": 1,
+    "status": "withdrawing",
+    "received_at": "2025-12-05T20:55:09.990Z",
+    "image_url": "https://tr.rbxcdn.com/180DAY-fcda95a147064698c53196f44c9ca833/420/420/Model/Png/noFilter"
+  }
+},
+{
+  "model": "casino.useritem",
+  "pk": 164,
+  "fields": {
+    "owner_name": "xkxlation",
+    "item_name": "Candy",
+    "item_value": 170,
+    "amount": 1,
+    "status": "available",
+    "received_at": "2025-12-05T20:55:09.993Z",
+    "image_url": "https://tr.rbxcdn.com/180DAY-fcda95a147064698c53196f44c9ca833/420/420/Model/Png/noFilter"
+  }
+},
+{
+  "model": "casino.useritem",
+  "pk": 165,
+  "fields": {
+    "owner_name": "xkxlation",
+    "item_name": "Candy",
+    "item_value": 170,
+    "amount": 1,
+    "status": "withdrawing",
+    "received_at": "2025-12-05T20:55:09.995Z",
+    "image_url": "https://tr.rbxcdn.com/180DAY-fcda95a147064698c53196f44c9ca833/420/420/Model/Png/noFilter"
+  }
+},
+{
+  "model": "casino.useritem",
+  "pk": 166,
+  "fields": {
+    "owner_name": "xkxlation",
+    "item_name": "Sugar",
+    "item_value": 70,
+    "amount": 1,
+    "status": "withdrawing",
+    "received_at": "2025-12-05T20:55:10.568Z",
+    "image_url": "https://static.wikia.nocookie.net/murder-mystery-2/images/5/53/Godly_Icon.png"
+  }
+},
+{
+  "model": "casino.useritem",
+  "pk": 167,
+  "fields": {
+    "owner_name": "xkxlation",
+    "item_name": "Sugar",
+    "item_value": 70,
+    "amount": 1,
+    "status": "withdrawing",
+    "received_at": "2025-12-05T20:55:10.573Z",
+    "image_url": "https://static.wikia.nocookie.net/murder-mystery-2/images/5/53/Godly_Icon.png"
+  }
+},
+{
+  "model": "casino.useritem",
+  "pk": 168,
+  "fields": {
+    "owner_name": "xkxlation",
+    "item_name": "Sugar",
+    "item_value": 70,
+    "amount": 1,
+    "status": "withdrawing",
+    "received_at": "2025-12-05T20:55:10.575Z",
+    "image_url": "https://static.wikia.nocookie.net/murder-mystery-2/images/5/53/Godly_Icon.png"
+  }
+},
+{
+  "model": "casino.useritem",
+  "pk": 169,
+  "fields": {
+    "owner_name": "xkxlation",
+    "item_name": "Sugar",
+    "item_value": 70,
+    "amount": 1,
+    "status": "withdrawing",
+    "received_at": "2025-12-05T20:55:10.577Z",
+    "image_url": "https://static.wikia.nocookie.net/murder-mystery-2/images/5/53/Godly_Icon.png"
+  }
+},
+{
+  "model": "casino.useritem",
+  "pk": 170,
+  "fields": {
+    "owner_name": "xkxlation",
+    "item_name": "Sugar",
+    "item_value": 70,
+    "amount": 1,
+    "status": "withdrawing",
+    "received_at": "2025-12-05T20:55:10.579Z",
+    "image_url": "https://static.wikia.nocookie.net/murder-mystery-2/images/5/53/Godly_Icon.png"
+  }
+},
+{
+  "model": "casino.useritem",
+  "pk": 171,
+  "fields": {
+    "owner_name": "xkxlation",
+    "item_name": "Sugar",
+    "item_value": 70,
+    "amount": 1,
+    "status": "withdrawing",
+    "received_at": "2025-12-05T20:55:10.580Z",
+    "image_url": "https://static.wikia.nocookie.net/murder-mystery-2/images/5/53/Godly_Icon.png"
+  }
+},
+{
+  "model": "casino.useritem",
+  "pk": 172,
+  "fields": {
+    "owner_name": "xkxlation",
+    "item_name": "Sugar",
+    "item_value": 70,
+    "amount": 1,
+    "status": "available",
+    "received_at": "2025-12-05T20:55:10.582Z",
+    "image_url": "https://static.wikia.nocookie.net/murder-mystery-2/images/5/53/Godly_Icon.png"
+  }
+},
+{
+  "model": "casino.useritem",
+  "pk": 173,
+  "fields": {
+    "owner_name": "xkxlation",
+    "item_name": "Sugar",
+    "item_value": 70,
+    "amount": 1,
+    "status": "withdrawing",
+    "received_at": "2025-12-05T20:55:10.585Z",
+    "image_url": "https://static.wikia.nocookie.net/murder-mystery-2/images/5/53/Godly_Icon.png"
+  }
+},
+{
+  "model": "casino.useritem",
+  "pk": 174,
+  "fields": {
+    "owner_name": "xkxlation",
+    "item_name": "Sugar",
+    "item_value": 70,
+    "amount": 1,
+    "status": "withdrawing",
+    "received_at": "2025-12-05T20:55:10.587Z",
+    "image_url": "https://static.wikia.nocookie.net/murder-mystery-2/images/5/53/Godly_Icon.png"
+  }
+},
+{
+  "model": "casino.useritem",
+  "pk": 175,
+  "fields": {
+    "owner_name": "xkxlation",
+    "item_name": "Sugar",
+    "item_value": 70,
+    "amount": 1,
+    "status": "available",
+    "received_at": "2025-12-05T20:55:10.589Z",
+    "image_url": "https://static.wikia.nocookie.net/murder-mystery-2/images/5/53/Godly_Icon.png"
+  }
+},
+{
+  "model": "casino.useritem",
+  "pk": 184,
+  "fields": {
+    "owner_name": "lastdosebeforedream",
+    "item_name": "Sugar",
+    "item_value": 70,
+    "amount": 1,
+    "status": "available",
+    "received_at": "2025-12-05T21:52:27.120Z",
+    "image_url": "https://static.wikia.nocookie.net/murder-mystery-2/images/5/53/Godly_Icon.png"
+  }
+},
+{
+  "model": "casino.useritem",
+  "pk": 190,
+  "fields": {
+    "owner_name": "admin",
+    "item_name": "Sugar",
+    "item_value": 70,
+    "amount": 1,
+    "status": "available",
+    "received_at": "2025-12-05T21:52:27.131Z",
+    "image_url": "https://static.wikia.nocookie.net/murder-mystery-2/images/5/53/Godly_Icon.png"
+  }
+},
+{
+  "model": "casino.useritem",
+  "pk": 191,
+  "fields": {
+    "owner_name": "lastdosebeforedream",
+    "item_name": "Swirly Axe",
+    "item_value": 60,
+    "amount": 1,
+    "status": "available",
+    "received_at": "2025-12-05T21:55:00.294Z",
+    "image_url": "https://static.wikia.nocookie.net/murder-mystery-2/images/5/53/Godly_Icon.png"
+  }
+},
+{
+  "model": "casino.useritem",
+  "pk": 193,
+  "fields": {
+    "owner_name": "lastdosebeforedream",
+    "item_name": "Candy",
+    "item_value": 170,
+    "amount": 1,
+    "status": "available",
+    "received_at": "2025-12-05T22:01:31.375Z",
+    "image_url": "https://static.wikia.nocookie.net/murder-mystery-2/images/5/53/Godly_Icon.png"
+  }
+},
+{
+  "model": "casino.useritem",
+  "pk": 195,
+  "fields": {
+    "owner_name": "Unknown",
+    "item_name": "Candy",
+    "item_value": 170,
+    "amount": 1,
+    "status": "available",
+    "received_at": "2025-12-05T22:06:28.202Z",
+    "image_url": "https://tr.rbxcdn.com/180DAY-fcda95a147064698c53196f44c9ca833/420/420/Model/Png/noFilter"
+  }
+},
+{
+  "model": "casino.useritem",
+  "pk": 196,
+  "fields": {
+    "owner_name": "Unknown",
+    "item_name": "Candy",
+    "item_value": 170,
+    "amount": 1,
+    "status": "available",
+    "received_at": "2025-12-05T22:06:28.234Z",
+    "image_url": "https://tr.rbxcdn.com/180DAY-fcda95a147064698c53196f44c9ca833/420/420/Model/Png/noFilter"
+  }
+},
+{
+  "model": "casino.useritem",
+  "pk": 200,
+  "fields": {
+    "owner_name": "lastdosebeforedream",
+    "item_name": "Sugar",
+    "item_value": 70,
+    "amount": 1,
+    "status": "available",
+    "received_at": "2025-12-05T22:10:36.084Z",
+    "image_url": "https://static.wikia.nocookie.net/murder-mystery-2/images/5/53/Godly_Icon.png"
+  }
+},
+{
+  "model": "casino.useritem",
+  "pk": 201,
+  "fields": {
+    "owner_name": "Unknown",
+    "item_name": "Swirly Axe",
+    "item_value": 60,
+    "amount": 1,
+    "status": "available",
+    "received_at": "2025-12-05T22:11:15.912Z",
+    "image_url": "https://tr.rbxcdn.com/180DAY-86d80271e4ddea89b54f641d1feaae5e/420/420/Model/Png/noFilter"
+  }
+},
+{
+  "model": "casino.useritem",
+  "pk": 202,
+  "fields": {
+    "owner_name": "Unknown",
+    "item_name": "Blaster",
+    "item_value": 20,
+    "amount": 1,
+    "status": "available",
+    "received_at": "2025-12-05T22:11:16.446Z",
+    "image_url": "https://tr.rbxcdn.com/180DAY-af014b1bc4ad46deba8dc9201194537c/420/420/Model/Png/noFilter"
+  }
+},
+{
+  "model": "casino.useritem",
+  "pk": 203,
+  "fields": {
+    "owner_name": "Unknown",
+    "item_name": "Chroma Candleflame",
+    "item_value": 70,
+    "amount": 1,
+    "status": "available",
+    "received_at": "2025-12-05T22:11:16.448Z",
+    "image_url": "http://www.roblox.com/asset/?id=7806149582&bust=1889"
+  }
+},
+{
+  "model": "casino.useritem",
+  "pk": 204,
+  "fields": {
+    "owner_name": "Unknown",
+    "item_name": "Darkbringer",
+    "item_value": 60,
+    "amount": 1,
+    "status": "available",
+    "received_at": "2025-12-05T22:11:16.451Z",
+    "image_url": "http://www.roblox.com/asset/?id=4751387674&bust=1005"
+  }
+},
+{
+  "model": "casino.useritem",
+  "pk": 205,
+  "fields": {
+    "owner_name": "woundwound",
+    "item_name": "Swirly Axe",
+    "item_value": 60,
+    "amount": 1,
+    "status": "available",
+    "received_at": "2025-12-05T22:11:50.237Z",
+    "image_url": "https://tr.rbxcdn.com/180DAY-86d80271e4ddea89b54f641d1feaae5e/420/420/Model/Png/noFilter"
+  }
+},
+{
+  "model": "casino.useritem",
+  "pk": 206,
+  "fields": {
+    "owner_name": "woundwound",
+    "item_name": "Blaster",
+    "item_value": 20,
+    "amount": 1,
+    "status": "available",
+    "received_at": "2025-12-05T22:11:50.750Z",
+    "image_url": "https://tr.rbxcdn.com/180DAY-af014b1bc4ad46deba8dc9201194537c/420/420/Model/Png/noFilter"
+  }
+},
+{
+  "model": "casino.useritem",
+  "pk": 207,
+  "fields": {
+    "owner_name": "lastdosebeforedream",
+    "item_name": "Chroma Candleflame",
+    "item_value": 70,
+    "amount": 1,
+    "status": "available",
+    "received_at": "2025-12-05T22:11:50.752Z",
+    "image_url": "http://www.roblox.com/asset/?id=7806149582&bust=1889"
+  }
+},
+{
+  "model": "casino.useritem",
+  "pk": 208,
+  "fields": {
+    "owner_name": "lastdosebeforedream",
+    "item_name": "Darkbringer",
+    "item_value": 60,
+    "amount": 1,
+    "status": "available",
+    "received_at": "2025-12-05T22:11:50.754Z",
+    "image_url": "http://www.roblox.com/asset/?id=4751387674&bust=1005"
+  }
+},
+{
+  "model": "casino.useritem",
+  "pk": 209,
+  "fields": {
+    "owner_name": "lastdosebeforedream",
+    "item_name": "Candy",
+    "item_value": 170,
+    "amount": 1,
+    "status": "available",
+    "received_at": "2025-12-05T22:13:17.309Z",
+    "image_url": "https://tr.rbxcdn.com/180DAY-fcda95a147064698c53196f44c9ca833/420/420/Model/Png/noFilter"
+  }
+},
+{
+  "model": "casino.useritem",
+  "pk": 210,
+  "fields": {
+    "owner_name": "lastdosebeforedream",
+    "item_name": "Sugar",
+    "item_value": 70,
+    "amount": 1,
+    "status": "available",
+    "received_at": "2025-12-05T22:13:17.840Z",
+    "image_url": "https://static.wikia.nocookie.net/murder-mystery-2/images/5/53/Godly_Icon.png"
+  }
+},
+{
+  "model": "casino.useritem",
+  "pk": 212,
+  "fields": {
+    "owner_name": "lastdosebeforedream",
+    "item_name": "Sugar",
+    "item_value": 70,
+    "amount": 1,
+    "status": "available",
+    "received_at": "2025-12-05T22:20:00.129Z",
+    "image_url": "https://static.wikia.nocookie.net/murder-mystery-2/images/5/53/Godly_Icon.png"
+  }
+},
+{
+  "model": "casino.useritem",
+  "pk": 213,
+  "fields": {
+    "owner_name": "lastdosebeforedream",
+    "item_name": "Candy",
+    "item_value": 170,
+    "amount": 1,
+    "status": "available",
+    "received_at": "2025-12-05T22:23:11.083Z",
+    "image_url": "https://static.wikia.nocookie.net/murder-mystery-2/images/5/53/Godly_Icon.png"
+  }
+},
+{
+  "model": "casino.useritem",
+  "pk": 214,
+  "fields": {
+    "owner_name": "lastdosebeforedream",
+    "item_name": "Sugar",
+    "item_value": 70,
+    "amount": 1,
+    "status": "available",
+    "received_at": "2025-12-05T22:23:11.086Z",
+    "image_url": "https://static.wikia.nocookie.net/murder-mystery-2/images/5/53/Godly_Icon.png"
+  }
+},
+{
+  "model": "casino.useritem",
+  "pk": 215,
+  "fields": {
+    "owner_name": "lastdosebeforedream",
+    "item_name": "Candy",
+    "item_value": 170,
+    "amount": 1,
+    "status": "available",
+    "received_at": "2025-12-05T22:33:25.868Z",
+    "image_url": "https://www.roblox.com/asset-thumbnail/image?assetId=332021011&width=420&height=420&format=png"
+  }
+},
+{
+  "model": "casino.useritem",
+  "pk": 216,
+  "fields": {
+    "owner_name": "lastdosebeforedream",
+    "item_name": "Sugar",
+    "item_value": 70,
+    "amount": 1,
+    "status": "available",
+    "received_at": "2025-12-05T22:33:25.870Z",
+    "image_url": "https://www.roblox.com/asset-thumbnail/image?assetId=3215356000&width=420&height=420&format=png"
+  }
+},
+{
+  "model": "casino.useritem",
+  "pk": 217,
+  "fields": {
+    "owner_name": "lastdosebeforedream",
+    "item_name": "Candy",
+    "item_value": 170,
+    "amount": 1,
+    "status": "available",
+    "received_at": "2025-12-05T22:36:01.184Z",
+    "image_url": "https://static.wikia.nocookie.net/murder-mystery-2/images/5/53/Godly_Icon.png"
+  }
+},
+{
+  "model": "casino.useritem",
+  "pk": 218,
+  "fields": {
+    "owner_name": "lastdosebeforedream",
+    "item_name": "Sugar",
+    "item_value": 70,
+    "amount": 1,
+    "status": "available",
+    "received_at": "2025-12-05T22:36:01.187Z",
+    "image_url": "https://static.wikia.nocookie.net/murder-mystery-2/images/5/53/Godly_Icon.png"
+  }
+},
+{
+  "model": "casino.useritem",
+  "pk": 219,
+  "fields": {
+    "owner_name": "lastdosebeforedream",
+    "item_name": "Candy",
+    "item_value": 170,
+    "amount": 1,
+    "status": "available",
+    "received_at": "2025-12-05T22:36:01.195Z",
+    "image_url": "https://static.wikia.nocookie.net/murder-mystery-2/images/5/53/Godly_Icon.png"
+  }
+},
+{
+  "model": "casino.useritem",
+  "pk": 221,
+  "fields": {
+    "owner_name": "lastdosebeforedream",
+    "item_name": "Sugar",
+    "item_value": 70,
+    "amount": 1,
+    "status": "available",
+    "received_at": "2025-12-05T22:37:00.447Z",
+    "image_url": "https://static.wikia.nocookie.net/murder-mystery-2/images/5/53/Godly_Icon.png"
+  }
+},
+{
+  "model": "casino.useritem",
+  "pk": 222,
+  "fields": {
+    "owner_name": "lastdosebeforedream",
+    "item_name": "Swirly Axe",
+    "item_value": 60,
+    "amount": 1,
+    "status": "available",
+    "received_at": "2025-12-05T22:38:01.383Z",
+    "image_url": "https://static.wikia.nocookie.net/murder-mystery-2/images/5/53/Godly_Icon.png"
+  }
+},
+{
+  "model": "casino.useritem",
+  "pk": 223,
+  "fields": {
+    "owner_name": "lastdosebeforedream",
+    "item_name": "Chroma Candleflame",
+    "item_value": 70,
+    "amount": 1,
+    "status": "available",
+    "received_at": "2025-12-05T22:38:01.385Z",
+    "image_url": "https://static.wikia.nocookie.net/murder-mystery-2/images/5/53/Godly_Icon.png"
+  }
+},
+{
+  "model": "casino.useritem",
+  "pk": 224,
+  "fields": {
+    "owner_name": "Unknown",
+    "item_name": "Candy",
+    "item_value": 170,
+    "amount": 1,
+    "status": "available",
+    "received_at": "2025-12-05T22:38:39.577Z",
+    "image_url": "https://tr.rbxcdn.com/180DAY-fcda95a147064698c53196f44c9ca833/420/420/Model/Png/noFilter"
+  }
+},
+{
+  "model": "casino.useritem",
+  "pk": 225,
+  "fields": {
+    "owner_name": "Unknown",
+    "item_name": "Sugar",
+    "item_value": 70,
+    "amount": 1,
+    "status": "available",
+    "received_at": "2025-12-05T22:38:40.169Z",
+    "image_url": "https://static.wikia.nocookie.net/murder-mystery-2/images/5/53/Godly_Icon.png"
+  }
+},
+{
+  "model": "casino.useritem",
+  "pk": 227,
+  "fields": {
+    "owner_name": "lastdosebeforedream",
+    "item_name": "Sugar",
+    "item_value": 70,
+    "amount": 1,
+    "status": "available",
+    "received_at": "2025-12-05T22:39:02.338Z",
+    "image_url": "https://static.wikia.nocookie.net/murder-mystery-2/images/5/53/Godly_Icon.png"
+  }
+},
+{
+  "model": "casino.useritem",
+  "pk": 228,
+  "fields": {
+    "owner_name": "Unknown",
+    "item_name": "Candy",
+    "item_value": 170,
+    "amount": 1,
+    "status": "available",
+    "received_at": "2025-12-05T22:41:56.725Z",
+    "image_url": "https://static.wikia.nocookie.net/murder-mystery-2/images/5/53/Godly_Icon.png"
+  }
+},
+{
+  "model": "casino.useritem",
+  "pk": 229,
+  "fields": {
+    "owner_name": "Unknown",
+    "item_name": "Sugar",
+    "item_value": 70,
+    "amount": 1,
+    "status": "available",
+    "received_at": "2025-12-05T22:41:56.730Z",
+    "image_url": "https://static.wikia.nocookie.net/murder-mystery-2/images/5/53/Godly_Icon.png"
+  }
+},
+{
+  "model": "casino.useritem",
+  "pk": 230,
+  "fields": {
+    "owner_name": "lastdosebeforedream",
+    "item_name": "Candy",
+    "item_value": 170,
+    "amount": 1,
+    "status": "available",
+    "received_at": "2025-12-05T22:42:08.906Z",
+    "image_url": "https://static.wikia.nocookie.net/murder-mystery-2/images/5/53/Godly_Icon.png"
+  }
+},
+{
+  "model": "casino.useritem",
+  "pk": 235,
+  "fields": {
+    "owner_name": "admin",
+    "item_name": "Candy",
+    "item_value": 170,
+    "amount": 1,
+    "status": "available",
+    "received_at": "2025-12-05T22:48:41.195Z",
+    "image_url": "https://tr.rbxcdn.com/180DAY-fcda95a147064698c53196f44c9ca833/420/420/Model/Png/noFilter"
+  }
+},
+{
+  "model": "casino.useritem",
+  "pk": 236,
+  "fields": {
+    "owner_name": "woundwound",
+    "item_name": "Sugar",
+    "item_value": 70,
+    "amount": 1,
+    "status": "available",
+    "received_at": "2025-12-05T22:48:41.735Z",
+    "image_url": "https://tr.rbxcdn.com/180DAY-fc538eca64fbe088a13c8ce66e47a0a2/420/420/Image/Png/noFilter"
+  }
+},
+{
+  "model": "casino.useritem",
+  "pk": 244,
+  "fields": {
+    "owner_name": "admin",
+    "item_name": "Candy",
+    "item_value": 170,
+    "amount": 1,
+    "status": "available",
+    "received_at": "2025-12-05T23:06:13.917Z",
+    "image_url": "https://tr.rbxcdn.com/180DAY-fcda95a147064698c53196f44c9ca833/420/420/Model/Png/noFilter"
+  }
+},
+{
+  "model": "casino.useritem",
+  "pk": 247,
+  "fields": {
+    "owner_name": "admin",
+    "item_name": "Sugar",
+    "item_value": 70,
+    "amount": 1,
+    "status": "available",
+    "received_at": "2025-12-05T23:06:14.567Z",
+    "image_url": "https://tr.rbxcdn.com/180DAY-fc538eca64fbe088a13c8ce66e47a0a2/420/420/Image/Png/noFilter"
+  }
+},
+{
+  "model": "casino.useritem",
+  "pk": 248,
+  "fields": {
+    "owner_name": "admin",
+    "item_name": "Sugar",
+    "item_value": 70,
+    "amount": 1,
+    "status": "available",
+    "received_at": "2025-12-05T23:06:14.568Z",
+    "image_url": "https://tr.rbxcdn.com/180DAY-fc538eca64fbe088a13c8ce66e47a0a2/420/420/Image/Png/noFilter"
+  }
+},
+{
+  "model": "casino.useritem",
+  "pk": 249,
+  "fields": {
+    "owner_name": "Unknown",
+    "item_name": "Sugar",
+    "item_value": 70,
+    "amount": 1,
+    "status": "available",
+    "received_at": "2025-12-05T23:08:15.142Z",
+    "image_url": "https://tr.rbxcdn.com/180DAY-fc538eca64fbe088a13c8ce66e47a0a2/420/420/Image/Png/noFilter"
+  }
+},
+{
+  "model": "casino.useritem",
+  "pk": 250,
+  "fields": {
+    "owner_name": "Unknown",
+    "item_name": "Sugar",
+    "item_value": 70,
+    "amount": 1,
+    "status": "available",
+    "received_at": "2025-12-05T23:08:15.145Z",
+    "image_url": "https://tr.rbxcdn.com/180DAY-fc538eca64fbe088a13c8ce66e47a0a2/420/420/Image/Png/noFilter"
+  }
+},
+{
+  "model": "casino.useritem",
+  "pk": 254,
+  "fields": {
+    "owner_name": "admin",
+    "item_name": "Frostbite",
+    "item_value": 7,
+    "amount": 1,
+    "status": "available",
+    "received_at": "2025-12-08T03:38:21.101Z",
+    "image_url": "https://tr.rbxcdn.com/180DAY-6f01ff3152df52f3e42df21811c29f17/420/420/Image/Png/noFilter"
+  }
+},
+{
+  "model": "casino.useritem",
+  "pk": 274,
+  "fields": {
+    "owner_name": "woundwound",
+    "item_name": "Frostfade",
+    "item_value": 100,
+    "amount": 1,
+    "status": "available",
+    "received_at": "2026-03-07T12:44:41.014Z",
+    "image_url": "https://tr.rbxcdn.com/180DAY-fbc1439d00a87ee5dcb4ea299864d2fa/420/420/Model/Png/noFilter"
+  }
+},
+{
+  "model": "casino.useritem",
+  "pk": 276,
+  "fields": {
+    "owner_name": "admin",
+    "item_name": "Test Item",
+    "item_value": 10,
+    "amount": 1,
+    "status": "available",
+    "received_at": "2026-03-11T18:16:43.504Z",
+    "image_url": ""
+  }
+},
+{
+  "model": "casino.useritem",
+  "pk": 277,
+  "fields": {
+    "owner_name": "woundwound",
+    "item_name": "Sugar",
+    "item_value": 70,
+    "amount": 1,
+    "status": "betting",
+    "received_at": "2026-03-16T15:33:29.543Z",
+    "image_url": "https://tr.rbxcdn.com/180DAY-fc538eca64fbe088a13c8ce66e47a0a2/420/420/Image/Png/noFilter"
+  }
+},
+{
+  "model": "casino.useritem",
+  "pk": 278,
+  "fields": {
+    "owner_name": "woundwound",
+    "item_name": "Chroma Fire Bunny",
+    "item_value": 13,
+    "amount": 1,
+    "status": "available",
+    "received_at": "2026-03-16T15:33:29.669Z",
+    "image_url": "https://tr.rbxcdn.com/180DAY-3d2b84c6a9da18907c51e690ca01a0cc/420/420/Decal/Png/noFilter"
+  }
+},
+{
+  "model": "casino.useritem",
+  "pk": 279,
+  "fields": {
+    "owner_name": "woundwound",
+    "item_name": "Test Item",
+    "item_value": 20,
+    "amount": 1,
+    "status": "available",
+    "received_at": "2026-03-16T15:33:29.800Z",
+    "image_url": ""
+  }
+},
+{
+  "model": "casino.coinflipgame",
+  "pk": 1,
+  "fields": {
+    "player1": "woundwound",
+    "items1": [
+      {
+        "id": 1,
+        "name": "Overseer (xx2)"
+      },
+      {
+        "id": 2,
+        "name": "Frostfade (xx2)"
+      }
+    ],
+    "value1": 0,
+    "creator_side": "green",
+    "player2": "quwexz2718",
+    "items2": [],
+    "value2": 0,
+    "winner": "quwexz2718",
+    "random_result": 2,
+    "game_hash": null,
+    "is_active": false,
+    "created_at": "2025-11-24T20:28:16.839Z",
+    "player1_viewed": true,
+    "player2_viewed": true
+  }
+},
+{
+  "model": "casino.coinflipgame",
+  "pk": 2,
+  "fields": {
+    "player1": "woundwound",
+    "items1": [
+      {
+        "id": 3,
+        "name": "Cotton Candy (x2)"
+      }
+    ],
+    "value1": 0,
+    "creator_side": "green",
+    "player2": "quwexz2718",
+    "items2": [],
+    "value2": 0,
+    "winner": "quwexz2718",
+    "random_result": 2,
+    "game_hash": null,
+    "is_active": false,
+    "created_at": "2025-11-24T20:29:45.324Z",
+    "player1_viewed": true,
+    "player2_viewed": true
+  }
+},
+{
+  "model": "casino.coinflipgame",
+  "pk": 3,
+  "fields": {
+    "player1": "woundwound",
+    "items1": [
+      {
+        "id": 4,
+        "name": "Swirly Axe",
+        "value": 60
+      },
+      {
+        "id": 5,
+        "name": "Blaster",
+        "value": 20
+      },
+      {
+        "id": 6,
+        "name": "Candleflame",
+        "value": 60
+      },
+      {
+        "id": 7,
+        "name": "Darkbringer",
+        "value": 60
+      }
+    ],
+    "value1": 200,
+    "creator_side": "green",
+    "player2": "admin",
+    "items2": [
+      {
+        "id": 9,
+        "name": "Test Item",
+        "value": 160
+      }
+    ],
+    "value2": 160,
+    "winner": "admin",
+    "random_result": 2,
+    "game_hash": null,
+    "is_active": false,
+    "created_at": "2025-11-24T22:00:00.500Z",
+    "player1_viewed": true,
+    "player2_viewed": true
+  }
+},
+{
+  "model": "casino.coinflipgame",
+  "pk": 10,
+  "fields": {
+    "player1": "woundwound",
+    "items1": [
+      {
+        "id": 28,
+        "name": "Swirly Axe",
+        "value": 60
+      },
+      {
+        "id": 29,
+        "name": "Blaster",
+        "value": 20
+      },
+      {
+        "id": 30,
+        "name": "Candleflame",
+        "value": 60
+      },
+      {
+        "id": 31,
+        "name": "Darkbringer",
+        "value": 60
+      }
+    ],
+    "value1": 200,
+    "creator_side": "green",
+    "player2": "admin",
+    "items2": [
+      {
+        "id": 9,
+        "name": "Test Item",
+        "value": 160
+      }
+    ],
+    "value2": 160,
+    "winner": "woundwound",
+    "random_result": 1,
+    "game_hash": null,
+    "is_active": false,
+    "created_at": "2025-11-25T14:48:41.401Z",
+    "player1_viewed": true,
+    "player2_viewed": true
+  }
+},
+{
+  "model": "casino.coinflipgame",
+  "pk": 14,
+  "fields": {
+    "player1": "woundwound",
+    "items1": [
+      {
+        "id": 36,
+        "name": "Chroma Candleflame",
+        "value": 70
+      },
+      {
+        "id": 39,
+        "name": "Chroma Candleflame",
+        "value": 70
+      }
+    ],
+    "value1": 140,
+    "creator_side": "green",
+    "player2": "admin",
+    "items2": [
+      {
+        "id": 4,
+        "name": "Swirly Axe",
+        "value": 60
+      },
+      {
+        "id": 5,
+        "name": "Blaster",
+        "value": 20
+      },
+      {
+        "id": 7,
+        "name": "Darkbringer",
+        "value": 60
+      }
+    ],
+    "value2": 140,
+    "winner": "woundwound",
+    "random_result": 1,
+    "game_hash": null,
+    "is_active": false,
+    "created_at": "2025-11-25T22:02:45.319Z",
+    "player1_viewed": true,
+    "player2_viewed": true
+  }
+},
+{
+  "model": "casino.coinflipgame",
+  "pk": 15,
+  "fields": {
+    "player1": "admin",
+    "items1": [
+      {
+        "id": 12,
+        "name": "Test Item",
+        "value": 10
+      },
+      {
+        "id": 13,
+        "name": "Test Item",
+        "value": 10
+      }
+    ],
+    "value1": 20,
+    "creator_side": "green",
+    "player2": "woundwound",
+    "items2": [
+      {
+        "id": 5,
+        "name": "Blaster",
+        "value": 20
+      }
+    ],
+    "value2": 20,
+    "winner": "woundwound",
+    "random_result": 2,
+    "game_hash": null,
+    "is_active": false,
+    "created_at": "2025-11-25T22:07:45.452Z",
+    "player1_viewed": true,
+    "player2_viewed": true
+  }
+},
+{
+  "model": "casino.coinflipgame",
+  "pk": 16,
+  "fields": {
+    "player1": "woundwound",
+    "items1": [
+      {
+        "id": 5,
+        "name": "Blaster",
+        "value": 20
+      }
+    ],
+    "value1": 20,
+    "creator_side": "green",
+    "player2": "admin",
+    "items2": [],
+    "value2": 0,
+    "winner": "woundwound",
+    "random_result": 1,
+    "game_hash": null,
+    "is_active": false,
+    "created_at": "2025-11-25T22:13:02.034Z",
+    "player1_viewed": true,
+    "player2_viewed": true
+  }
+},
+{
+  "model": "casino.coinflipgame",
+  "pk": 17,
+  "fields": {
+    "player1": "woundwound",
+    "items1": [
+      {
+        "id": 7,
+        "name": "Darkbringer",
+        "value": 60
+      },
+      {
+        "id": 9,
+        "name": "Test Item",
+        "value": 160
+      },
+      {
+        "id": 28,
+        "name": "Swirly Axe",
+        "value": 60
+      },
+      {
+        "id": 30,
+        "name": "Candleflame",
+        "value": 60
+      },
+      {
+        "id": 36,
+        "name": "Chroma Candleflame",
+        "value": 70
+      },
+      {
+        "id": 39,
+        "name": "Chroma Candleflame",
+        "value": 70
+      }
+    ],
+    "value1": 480,
+    "creator_side": "yellow",
+    "player2": "admin",
+    "items2": [
+      {
+        "id": 6,
+        "name": "Candleflame",
+        "value": 60
+      },
+      {
+        "id": 10,
+        "name": "Test Item",
+        "value": 10
+      },
+      {
+        "id": 11,
+        "name": "Test Item",
+        "value": 10
+      },
+      {
+        "id": 14,
+        "name": "Test Item",
+        "value": 10
+      },
+      {
+        "id": 17,
+        "name": "Test Item",
+        "value": 10
+      },
+      {
+        "id": 18,
+        "name": "Test Item",
+        "value": 10
+      },
+      {
+        "id": 19,
+        "name": "Test Item",
+        "value": 10
+      },
+      {
+        "id": 20,
+        "name": "Test Item",
+        "value": 10
+      },
+      {
+        "id": 21,
+        "name": "Test Item",
+        "value": 10
+      },
+      {
+        "id": 22,
+        "name": "Test Item",
+        "value": 10
+      },
+      {
+        "id": 23,
+        "name": "Test Item",
+        "value": 10
+      },
+      {
+        "id": 33,
+        "name": "Test Item",
+        "value": 270
+      }
+    ],
+    "value2": 430,
+    "winner": "woundwound",
+    "random_result": 2,
+    "game_hash": null,
+    "is_active": false,
+    "created_at": "2025-11-26T16:41:09.985Z",
+    "player1_viewed": true,
+    "player2_viewed": true
+  }
+},
+{
+  "model": "casino.coinflipgame",
+  "pk": 18,
+  "fields": {
+    "player1": "admin",
+    "items1": [
+      {
+        "id": 41,
+        "name": "Test Item",
+        "value": 250
+      },
+      {
+        "id": 42,
+        "name": "Test Item",
+        "value": 250
+      }
+    ],
+    "value1": 500,
+    "creator_side": "green",
+    "player2": "woundwound",
+    "items2": [],
+    "value2": 0,
+    "winner": "admin",
+    "random_result": 1,
+    "game_hash": null,
+    "is_active": false,
+    "created_at": "2025-11-26T16:42:37.159Z",
+    "player1_viewed": true,
+    "player2_viewed": true
+  }
+},
+{
+  "model": "casino.coinflipgame",
+  "pk": 19,
+  "fields": {
+    "player1": "woundwound",
+    "items1": [
+      {
+        "id": 20,
+        "name": "Test Item",
+        "value": 10
+      },
+      {
+        "id": 21,
+        "name": "Test Item",
+        "value": 10
+      },
+      {
+        "id": 22,
+        "name": "Test Item",
+        "value": 10
+      }
+    ],
+    "value1": 30,
+    "creator_side": "green",
+    "player2": "admin",
+    "items2": [
+      {
+        "id": 48,
+        "name": "Test Item",
+        "value": 39
+      }
+    ],
+    "value2": 39,
+    "winner": "admin",
+    "random_result": 2,
+    "game_hash": null,
+    "is_active": false,
+    "created_at": "2025-11-26T16:46:11.069Z",
+    "player1_viewed": true,
+    "player2_viewed": true
+  }
+},
+{
+  "model": "casino.coinflipgame",
+  "pk": 20,
+  "fields": {
+    "player1": "woundwound",
+    "items1": [
+      {
+        "id": 5,
+        "name": "Blaster",
+        "value": 20
+      }
+    ],
+    "value1": 20,
+    "creator_side": "yellow",
+    "player2": "admin",
+    "items2": [
+      {
+        "id": 47,
+        "name": "Test Item",
+        "value": 20
+      }
+    ],
+    "value2": 20,
+    "winner": "admin",
+    "random_result": 1,
+    "game_hash": null,
+    "is_active": false,
+    "created_at": "2025-11-26T16:52:18.502Z",
+    "player1_viewed": true,
+    "player2_viewed": true
+  }
+},
+{
+  "model": "casino.coinflipgame",
+  "pk": 22,
+  "fields": {
+    "player1": "admin",
+    "items1": [
+      {
+        "id": 20,
+        "name": "Test Item",
+        "value": 10
+      }
+    ],
+    "value1": 10,
+    "creator_side": "green",
+    "player2": "woundwound",
+    "items2": [
+      {
+        "id": 18,
+        "name": "Test Item",
+        "value": 10
+      }
+    ],
+    "value2": 10,
+    "winner": "admin",
+    "random_result": 1,
+    "game_hash": null,
+    "is_active": false,
+    "created_at": "2025-11-27T17:32:32.745Z",
+    "player1_viewed": true,
+    "player2_viewed": true
+  }
+},
+{
+  "model": "casino.coinflipgame",
+  "pk": 24,
+  "fields": {
+    "player1": "woundwound",
+    "items1": [
+      {
+        "id": 17,
+        "name": "Test Item",
+        "value": 10
+      },
+      {
+        "id": 19,
+        "name": "Test Item",
+        "value": 10
+      }
+    ],
+    "value1": 20,
+    "creator_side": "green",
+    "player2": "admin",
+    "items2": [
+      {
+        "id": 21,
+        "name": "Test Item",
+        "value": 10
+      },
+      {
+        "id": 22,
+        "name": "Test Item",
+        "value": 10
+      }
+    ],
+    "value2": 20,
+    "winner": "woundwound",
+    "random_result": 1,
+    "game_hash": null,
+    "is_active": false,
+    "created_at": "2025-11-27T19:48:39.780Z",
+    "player1_viewed": true,
+    "player2_viewed": true
+  }
+},
+{
+  "model": "casino.coinflipgame",
+  "pk": 25,
+  "fields": {
+    "player1": "admin",
+    "items1": [
+      {
+        "id": 18,
+        "name": "Test Item",
+        "value": 10
+      },
+      {
+        "id": 42,
+        "name": "Test Item",
+        "value": 250
+      },
+      {
+        "id": 47,
+        "name": "Test Item",
+        "value": 20
+      }
+    ],
+    "value1": 280,
+    "creator_side": "green",
+    "player2": "woundwound",
+    "items2": [
+      {
+        "id": 107,
+        "name": "Swirly Axe",
+        "image": "",
+        "value": 60
+      },
+      {
+        "id": 113,
+        "name": "Swirly Axe",
+        "image": "",
+        "value": 60
+      },
+      {
+        "id": 117,
+        "name": "Swirly Axe",
+        "image": "",
+        "value": 60
+      },
+      {
+        "id": 118,
+        "name": "Blaster",
+        "image": "",
+        "value": 20
+      },
+      {
+        "id": 119,
+        "name": "Chroma Candleflame",
+        "image": "",
+        "value": 70
+      },
+      {
+        "id": 121,
+        "name": "Cotton Candy",
+        "image": "",
+        "value": 10
+      }
+    ],
+    "value2": 280,
+    "winner": "admin",
+    "random_result": 1,
+    "game_hash": null,
+    "is_active": false,
+    "created_at": "2025-11-27T19:52:38.107Z",
+    "player1_viewed": true,
+    "player2_viewed": true
+  }
+},
+{
+  "model": "casino.coinflipgame",
+  "pk": 26,
+  "fields": {
+    "player1": "admin",
+    "items1": [
+      {
+        "id": 48,
+        "name": "Test Item",
+        "value": 39
+      }
+    ],
+    "value1": 39,
+    "creator_side": "yellow",
+    "player2": "woundwound",
+    "items2": [
+      {
+        "id": 5,
+        "name": "Blaster",
+        "value": 20
+      },
+      {
+        "id": 14,
+        "name": "Test Item",
+        "value": 10
+      },
+      {
+        "id": 17,
+        "name": "Test Item",
+        "value": 10
+      }
+    ],
+    "value2": 40,
+    "winner": "admin",
+    "random_result": 2,
+    "game_hash": null,
+    "is_active": false,
+    "created_at": "2025-11-27T19:54:21.929Z",
+    "player1_viewed": true,
+    "player2_viewed": true
+  }
+},
+{
+  "model": "casino.coinflipgame",
+  "pk": 27,
+  "fields": {
+    "player1": "admin",
+    "items1": [
+      {
+        "id": 5,
+        "name": "Blaster",
+        "value": 20
+      }
+    ],
+    "value1": 20,
+    "creator_side": "green",
+    "player2": "woundwound",
+    "items2": [
+      {
+        "id": 19,
+        "name": "Test Item",
+        "value": 10
+      },
+      {
+        "id": 21,
+        "name": "Test Item",
+        "value": 10
+      }
+    ],
+    "value2": 20,
+    "winner": "woundwound",
+    "random_result": 2,
+    "game_hash": null,
+    "is_active": false,
+    "created_at": "2025-11-27T19:54:25.902Z",
+    "player1_viewed": true,
+    "player2_viewed": true
+  }
+},
+{
+  "model": "casino.coinflipgame",
+  "pk": 31,
+  "fields": {
+    "player1": "woundwound",
+    "items1": [
+      {
+        "id": 19,
+        "name": "Test Item",
+        "value": 10
+      }
+    ],
+    "value1": 10,
+    "creator_side": "green",
+    "player2": "admin",
+    "items2": [
+      {
+        "id": 18,
+        "name": "Test Item",
+        "image": "",
+        "value": 10
+      }
+    ],
+    "value2": 10,
+    "winner": "admin",
+    "random_result": 2,
+    "game_hash": null,
+    "is_active": false,
+    "created_at": "2025-11-29T20:01:08.089Z",
+    "player1_viewed": true,
+    "player2_viewed": true
+  }
+},
+{
+  "model": "casino.coinflipgame",
+  "pk": 32,
+  "fields": {
+    "player1": "woundwound",
+    "items1": [
+      {
+        "id": 21,
+        "name": "Test Item",
+        "value": 10
+      },
+      {
+        "id": 22,
+        "name": "Test Item",
+        "value": 10
+      },
+      {
+        "id": 23,
+        "name": "Test Item",
+        "value": 10
+      },
+      {
+        "id": 31,
+        "name": "Darkbringer",
+        "value": 60
+      },
+      {
+        "id": 33,
+        "name": "Test Item",
+        "value": 270
+      },
+      {
+        "id": 36,
+        "name": "Chroma Candleflame",
+        "value": 70
+      }
+    ],
+    "value1": 430,
+    "creator_side": "green",
+    "player2": "admin",
+    "items2": [
+      {
+        "id": 50,
+        "name": "Swirly Axe",
+        "image": "",
+        "value": 60
+      },
+      {
+        "id": 54,
+        "name": "Swirly Axe",
+        "image": "",
+        "value": 60
+      },
+      {
+        "id": 83,
+        "name": "Swirly Axe",
+        "image": "",
+        "value": 60
+      },
+      {
+        "id": 113,
+        "name": "Swirly Axe",
+        "image": "",
+        "value": 60
+      },
+      {
+        "id": 117,
+        "name": "Swirly Axe",
+        "image": "",
+        "value": 60
+      },
+      {
+        "id": 118,
+        "name": "Blaster",
+        "image": "",
+        "value": 20
+      },
+      {
+        "id": 119,
+        "name": "Chroma Candleflame",
+        "image": "",
+        "value": 70
+      }
+    ],
+    "value2": 390,
+    "winner": "woundwound",
+    "random_result": 1,
+    "game_hash": null,
+    "is_active": false,
+    "created_at": "2025-11-29T20:43:58.110Z",
+    "player1_viewed": true,
+    "player2_viewed": true
+  }
+},
+{
+  "model": "casino.coinflipgame",
+  "pk": 33,
+  "fields": {
+    "player1": "woundwound",
+    "items1": [
+      {
+        "id": 53,
+        "name": "Swirly Axe",
+        "value": 60
+      }
+    ],
+    "value1": 60,
+    "creator_side": "yellow",
+    "player2": "admin",
+    "items2": [
+      {
+        "id": 39,
+        "name": "Chroma Candleflame",
+        "image": "",
+        "value": 70
+      }
+    ],
+    "value2": 70,
+    "winner": "woundwound",
+    "random_result": 2,
+    "game_hash": null,
+    "is_active": false,
+    "created_at": "2025-11-29T20:47:50.381Z",
+    "player1_viewed": true,
+    "player2_viewed": true
+  }
+},
+{
+  "model": "casino.coinflipgame",
+  "pk": 35,
+  "fields": {
+    "player1": "woundwound",
+    "items1": [
+      {
+        "id": 152,
+        "name": "Swirly Axe",
+        "image": "https://tr.rbxcdn.com/180DAY-86d80271e4ddea89b54f641d1feaae5e/420/420/Model/Png/noFilter",
+        "value": 60
+      },
+      {
+        "id": 153,
+        "name": "Cotton Candy",
+        "image": "https://tr.rbxcdn.com/180DAY-4eb1c7b513dc42c9ef510aedb7734421/420/420/Model/Png/noFilter",
+        "value": 10
+      },
+      {
+        "id": 154,
+        "name": "Cotton Candy",
+        "image": "https://tr.rbxcdn.com/180DAY-4eb1c7b513dc42c9ef510aedb7734421/420/420/Model/Png/noFilter",
+        "value": 10
+      },
+      {
+        "id": 155,
+        "name": "Cotton Candy",
+        "image": "https://tr.rbxcdn.com/180DAY-4eb1c7b513dc42c9ef510aedb7734421/420/420/Model/Png/noFilter",
+        "value": 10
+      }
+    ],
+    "value1": 90,
+    "creator_side": "green",
+    "player2": "admin",
+    "items2": [
+      {
+        "id": 10,
+        "name": "Test Item",
+        "image": "",
+        "value": 10
+      },
+      {
+        "id": 11,
+        "name": "Test Item",
+        "image": "",
+        "value": 10
+      },
+      {
+        "id": 28,
+        "name": "Swirly Axe",
+        "image": "",
+        "value": 60
+      }
+    ],
+    "value2": 80,
+    "winner": "woundwound",
+    "random_result": 1,
+    "game_hash": null,
+    "is_active": false,
+    "created_at": "2025-11-29T23:25:09.486Z",
+    "player1_viewed": true,
+    "player2_viewed": true
+  }
+},
+{
+  "model": "casino.coinflipgame",
+  "pk": 36,
+  "fields": {
+    "player1": "woundwound",
+    "items1": [
+      {
+        "id": 83,
+        "name": "Swirly Axe",
+        "image": "",
+        "value": 60
+      }
+    ],
+    "value1": 60,
+    "creator_side": "yellow",
+    "player2": "admin",
+    "items2": [
+      {
+        "id": 7,
+        "name": "Darkbringer",
+        "image": "",
+        "value": 60
+      }
+    ],
+    "value2": 60,
+    "winner": "admin",
+    "random_result": 1,
+    "game_hash": null,
+    "is_active": false,
+    "created_at": "2025-12-01T20:18:29.125Z",
+    "player1_viewed": true,
+    "player2_viewed": true
+  }
+},
+{
+  "model": "casino.coinflipgame",
+  "pk": 37,
+  "fields": {
+    "player1": "woundwound",
+    "items1": [
+      {
+        "id": 7,
+        "name": "Darkbringer",
+        "image": "",
+        "value": 60
+      },
+      {
+        "id": 9,
+        "name": "Test Item",
+        "image": "",
+        "value": 160
+      },
+      {
+        "id": 10,
+        "name": "Test Item",
+        "image": "",
+        "value": 10
+      },
+      {
+        "id": 11,
+        "name": "Test Item",
+        "image": "",
+        "value": 10
+      },
+      {
+        "id": 28,
+        "name": "Swirly Axe",
+        "image": "",
+        "value": 60
+      },
+      {
+        "id": 30,
+        "name": "Candleflame",
+        "image": "",
+        "value": 60
+      },
+      {
+        "id": 37,
+        "name": "Candleflame",
+        "image": "",
+        "value": 60
+      },
+      {
+        "id": 39,
+        "name": "Chroma Candleflame",
+        "image": "",
+        "value": 70
+      },
+      {
+        "id": 40,
+        "name": "Chroma Candleflame",
+        "image": "",
+        "value": 70
+      },
+      {
+        "id": 44,
+        "name": "Blaster",
+        "image": "",
+        "value": 20
+      },
+      {
+        "id": 45,
+        "name": "Candleflame",
+        "image": "",
+        "value": 60
+      },
+      {
+        "id": 46,
+        "name": "Darkbringer",
+        "image": "",
+        "value": 60
+      },
+      {
+        "id": 50,
+        "name": "Swirly Axe",
+        "image": "",
+        "value": 60
+      },
+      {
+        "id": 54,
+        "name": "Swirly Axe",
+        "image": "",
+        "value": 60
+      }
+    ],
+    "value1": 820,
+    "creator_side": "green",
+    "player2": "admin",
+    "items2": [
+      {
+        "id": 41,
+        "name": "Test Item",
+        "image": "",
+        "value": 250
+      },
+      {
+        "id": 42,
+        "name": "Test Item",
+        "image": "",
+        "value": 250
+      },
+      {
+        "id": 48,
+        "name": "Test Item",
+        "image": "",
+        "value": 39
+      },
+      {
+        "id": 107,
+        "name": "Swirly Axe",
+        "image": "",
+        "value": 60
+      },
+      {
+        "id": 113,
+        "name": "Swirly Axe",
+        "image": "",
+        "value": 60
+      }
+    ],
+    "value2": 659,
+    "winner": "admin",
+    "random_result": 2,
+    "game_hash": null,
+    "is_active": false,
+    "created_at": "2025-12-03T19:57:11.150Z",
+    "player1_viewed": true,
+    "player2_viewed": true
+  }
+},
+{
+  "model": "casino.coinflipgame",
+  "pk": 38,
+  "fields": {
+    "player1": "woundwound",
+    "items1": [
+      {
+        "id": 122,
+        "name": "Cotton Candy",
+        "image": "",
+        "value": 10
+      },
+      {
+        "id": 123,
+        "name": "Cotton Candy",
+        "image": "",
+        "value": 10
+      }
+    ],
+    "value1": 20,
+    "creator_side": "yellow",
+    "player2": "admin",
+    "items2": [
+      {
+        "id": 47,
+        "name": "Test Item",
+        "image": "",
+        "value": 20
+      }
+    ],
+    "value2": 20,
+    "winner": "woundwound",
+    "random_result": 2,
+    "game_hash": null,
+    "is_active": false,
+    "created_at": "2025-12-03T20:46:19.108Z",
+    "player1_viewed": true,
+    "player2_viewed": true
+  }
+},
+{
+  "model": "casino.coinflipgame",
+  "pk": 39,
+  "fields": {
+    "player1": "woundwound",
+    "items1": [
+      {
+        "id": 131,
+        "name": "Cotton Candy",
+        "image": "",
+        "value": 10
+      },
+      {
+        "id": 132,
+        "name": "Cotton Candy",
+        "image": "",
+        "value": 10
+      },
+      {
+        "id": 134,
+        "name": "Cotton Candy",
+        "image": "",
+        "value": 10
+      }
+    ],
+    "value1": 30,
+    "creator_side": "green",
+    "player2": "admin",
+    "items2": [
+      {
+        "id": 5,
+        "name": "Blaster",
+        "image": "",
+        "value": 20
+      },
+      {
+        "id": 14,
+        "name": "Test Item",
+        "image": "",
+        "value": 10
+      }
+    ],
+    "value2": 30,
+    "winner": "woundwound",
+    "random_result": 1,
+    "game_hash": null,
+    "is_active": false,
+    "created_at": "2025-12-04T16:26:27.599Z",
+    "player1_viewed": true,
+    "player2_viewed": true
+  }
+},
+{
+  "model": "casino.coinflipgame",
+  "pk": 40,
+  "fields": {
+    "player1": "admin",
+    "items1": [
+      {
+        "id": 17,
+        "name": "Test Item",
+        "image": "",
+        "value": 10
+      },
+      {
+        "id": 37,
+        "name": "Candleflame",
+        "image": "",
+        "value": 60
+      },
+      {
+        "id": 40,
+        "name": "Chroma Candleflame",
+        "image": "",
+        "value": 70
+      },
+      {
+        "id": 45,
+        "name": "Candleflame",
+        "image": "",
+        "value": 60
+      }
+    ],
+    "value1": 200,
+    "creator_side": "yellow",
+    "player2": "woundwound",
+    "items2": [
+      {
+        "id": 31,
+        "name": "Darkbringer",
+        "image": "",
+        "value": 60
+      },
+      {
+        "id": 50,
+        "name": "Swirly Axe",
+        "image": "",
+        "value": 60
+      },
+      {
+        "id": 53,
+        "name": "Swirly Axe",
+        "image": "",
+        "value": 60
+      }
+    ],
+    "value2": 180,
+    "winner": "admin",
+    "random_result": 2,
+    "game_hash": null,
+    "is_active": false,
+    "created_at": "2025-12-05T19:39:21.440Z",
+    "player1_viewed": true,
+    "player2_viewed": true
+  }
+},
+{
+  "model": "casino.coinflipgame",
+  "pk": 41,
+  "fields": {
+    "player1": "woundwound",
+    "items1": [
+      {
+        "id": 152,
+        "name": "Swirly Axe",
+        "image": "https://tr.rbxcdn.com/180DAY-86d80271e4ddea89b54f641d1feaae5e/420/420/Model/Png/noFilter",
+        "value": 60
+      },
+      {
+        "id": 153,
+        "name": "Cotton Candy",
+        "image": "https://tr.rbxcdn.com/180DAY-4eb1c7b513dc42c9ef510aedb7734421/420/420/Model/Png/noFilter",
+        "value": 10
+      },
+      {
+        "id": 154,
+        "name": "Cotton Candy",
+        "image": "https://tr.rbxcdn.com/180DAY-4eb1c7b513dc42c9ef510aedb7734421/420/420/Model/Png/noFilter",
+        "value": 10
+      }
+    ],
+    "value1": 80,
+    "creator_side": "green",
+    "player2": "admin",
+    "items2": [
+      {
+        "id": 22,
+        "name": "Test Item",
+        "image": "",
+        "value": 10
+      },
+      {
+        "id": 28,
+        "name": "Swirly Axe",
+        "image": "",
+        "value": 60
+      }
+    ],
+    "value2": 70,
+    "winner": "admin",
+    "random_result": 2,
+    "game_hash": null,
+    "is_active": false,
+    "created_at": "2025-12-05T20:02:07.210Z",
+    "player1_viewed": true,
+    "player2_viewed": true
+  }
+},
+{
+  "model": "casino.coinflipgame",
+  "pk": 42,
+  "fields": {
+    "player1": "woundwound",
+    "items1": [
+      {
+        "id": 5,
+        "name": "Blaster",
+        "image": "",
+        "value": 20
+      },
+      {
+        "id": 22,
+        "name": "Test Item",
+        "image": "",
+        "value": 10
+      },
+      {
+        "id": 28,
+        "name": "Swirly Axe",
+        "image": "",
+        "value": 60
+      },
+      {
+        "id": 33,
+        "name": "Test Item",
+        "image": "",
+        "value": 270
+      },
+      {
+        "id": 36,
+        "name": "Chroma Candleflame",
+        "image": "",
+        "value": 70
+      },
+      {
+        "id": 39,
+        "name": "Chroma Candleflame",
+        "image": "",
+        "value": 70
+      },
+      {
+        "id": 47,
+        "name": "Test Item",
+        "image": "",
+        "value": 20
+      },
+      {
+        "id": 54,
+        "name": "Swirly Axe",
+        "image": "",
+        "value": 60
+      },
+      {
+        "id": 58,
+        "name": "Swirly Axe",
+        "image": "",
+        "value": 60
+      },
+      {
+        "id": 83,
+        "name": "Swirly Axe",
+        "image": "",
+        "value": 60
+      },
+      {
+        "id": 91,
+        "name": "Cotton Candy",
+        "image": "",
+        "value": 0
+      }
+    ],
+    "value1": 700,
+    "creator_side": "yellow",
+    "player2": "admin",
+    "items2": [
+      {
+        "id": 7,
+        "name": "Darkbringer",
+        "image": "",
+        "value": 60
+      },
+      {
+        "id": 9,
+        "name": "Test Item",
+        "image": "",
+        "value": 160
+      },
+      {
+        "id": 17,
+        "name": "Test Item",
+        "image": "",
+        "value": 10
+      },
+      {
+        "id": 18,
+        "name": "Test Item",
+        "image": "",
+        "value": 10
+      },
+      {
+        "id": 19,
+        "name": "Test Item",
+        "image": "",
+        "value": 10
+      },
+      {
+        "id": 30,
+        "name": "Candleflame",
+        "image": "",
+        "value": 60
+      },
+      {
+        "id": 31,
+        "name": "Darkbringer",
+        "image": "",
+        "value": 60
+      },
+      {
+        "id": 37,
+        "name": "Candleflame",
+        "image": "",
+        "value": 60
+      },
+      {
+        "id": 40,
+        "name": "Chroma Candleflame",
+        "image": "",
+        "value": 70
+      },
+      {
+        "id": 41,
+        "name": "Test Item",
+        "image": "",
+        "value": 250
+      }
+    ],
+    "value2": 750,
+    "winner": "admin",
+    "random_result": 1,
+    "game_hash": null,
+    "is_active": false,
+    "created_at": "2025-12-05T20:02:28.817Z",
+    "player1_viewed": true,
+    "player2_viewed": true
+  }
+},
+{
+  "model": "casino.coinflipgame",
+  "pk": 44,
+  "fields": {
+    "player1": "admin",
+    "items1": [
+      {
+        "id": 152,
+        "name": "Swirly Axe",
+        "image": "https://tr.rbxcdn.com/180DAY-86d80271e4ddea89b54f641d1feaae5e/420/420/Model/Png/noFilter",
+        "value": 60
+      },
+      {
+        "id": 153,
+        "name": "Cotton Candy",
+        "image": "https://tr.rbxcdn.com/180DAY-4eb1c7b513dc42c9ef510aedb7734421/420/420/Model/Png/noFilter",
+        "value": 10
+      },
+      {
+        "id": 154,
+        "name": "Cotton Candy",
+        "image": "https://tr.rbxcdn.com/180DAY-4eb1c7b513dc42c9ef510aedb7734421/420/420/Model/Png/noFilter",
+        "value": 10
+      }
+    ],
+    "value1": 80,
+    "creator_side": "green",
+    "player2": "lastdosebeforedream",
+    "items2": [
+      {
+        "id": 190,
+        "name": "Sugar",
+        "image": "https://static.wikia.nocookie.net/murder-mystery-2/images/5/53/Godly_Icon.png",
+        "value": 70
+      }
+    ],
+    "value2": 70,
+    "winner": "admin",
+    "random_result": 1,
+    "game_hash": null,
+    "is_active": false,
+    "created_at": "2025-12-05T20:24:38.293Z",
+    "player1_viewed": true,
+    "player2_viewed": true
+  }
+},
+{
+  "model": "casino.coinflipgame",
+  "pk": 47,
+  "fields": {
+    "player1": "admin",
+    "items1": [
+      {
+        "id": 18,
+        "name": "Test Item",
+        "image": "",
+        "value": 10
+      },
+      {
+        "id": 19,
+        "name": "Test Item",
+        "image": "",
+        "value": 10
+      }
+    ],
+    "value1": 20,
+    "creator_side": "green",
+    "player2": "lastdosebeforedream",
+    "items2": [
+      {
+        "id": 206,
+        "name": "Blaster",
+        "image": "https://tr.rbxcdn.com/180DAY-af014b1bc4ad46deba8dc9201194537c/420/420/Model/Png/noFilter",
+        "value": 20
+      }
+    ],
+    "value2": 20,
+    "winner": "admin",
+    "random_result": 1,
+    "game_hash": null,
+    "is_active": false,
+    "created_at": "2025-12-05T21:58:13.470Z",
+    "player1_viewed": true,
+    "player2_viewed": true
+  }
+},
+{
+  "model": "casino.coinflipgame",
+  "pk": 48,
+  "fields": {
+    "player1": "admin",
+    "items1": [
+      {
+        "id": 28,
+        "name": "Swirly Axe",
+        "image": "",
+        "value": 60
+      }
+    ],
+    "value1": 60,
+    "creator_side": "green",
+    "player2": "lastdosebeforedream",
+    "items2": [
+      {
+        "id": 205,
+        "name": "Swirly Axe",
+        "image": "https://tr.rbxcdn.com/180DAY-86d80271e4ddea89b54f641d1feaae5e/420/420/Model/Png/noFilter",
+        "value": 60
+      }
+    ],
+    "value2": 60,
+    "winner": "admin",
+    "random_result": 1,
+    "game_hash": null,
+    "is_active": false,
+    "created_at": "2025-12-05T21:58:25.082Z",
+    "player1_viewed": true,
+    "player2_viewed": true
+  }
+},
+{
+  "model": "casino.coinflipgame",
+  "pk": 49,
+  "fields": {
+    "player1": "admin",
+    "items1": [
+      {
+        "id": 17,
+        "name": "Test Item",
+        "image": "",
+        "value": 10
+      },
+      {
+        "id": 18,
+        "name": "Test Item",
+        "image": "",
+        "value": 10
+      },
+      {
+        "id": 28,
+        "name": "Swirly Axe",
+        "image": "",
+        "value": 60
+      },
+      {
+        "id": 30,
+        "name": "Candleflame",
+        "image": "",
+        "value": 60
+      }
+    ],
+    "value1": 140,
+    "creator_side": "green",
+    "player2": "woundwound",
+    "items2": [
+      {
+        "id": 59,
+        "name": "Swirly Axe",
+        "image": "",
+        "value": 60
+      },
+      {
+        "id": 113,
+        "name": "Swirly Axe",
+        "image": "",
+        "value": 60
+      }
+    ],
+    "value2": 120,
+    "winner": "admin",
+    "random_result": 1,
+    "game_hash": null,
+    "is_active": false,
+    "created_at": "2025-12-07T18:29:11.721Z",
+    "player1_viewed": true,
+    "player2_viewed": true
+  }
+},
+{
+  "model": "casino.coinflipgame",
+  "pk": 50,
+  "fields": {
+    "player1": "lastdosebeforedream",
+    "items1": [
+      {
+        "id": 176,
+        "name": "Candy",
+        "image": "https://static.wikia.nocookie.net/murder-mystery-2/images/5/53/Godly_Icon.png",
+        "value": 170
+      },
+      {
+        "id": 181,
+        "name": "Sugar",
+        "image": "https://static.wikia.nocookie.net/murder-mystery-2/images/5/53/Godly_Icon.png",
+        "value": 70
+      }
+    ],
+    "value1": 240,
+    "creator_side": "yellow",
+    "player2": "woundwound",
+    "items2": [
+      {
+        "id": 95,
+        "name": "Chroma Candleflame",
+        "image": "",
+        "value": 70
+      },
+      {
+        "id": 117,
+        "name": "Swirly Axe",
+        "image": "",
+        "value": 60
+      },
+      {
+        "id": 118,
+        "name": "Blaster",
+        "image": "",
+        "value": 20
+      },
+      {
+        "id": 119,
+        "name": "Chroma Candleflame",
+        "image": "",
+        "value": 70
+      },
+      {
+        "id": 122,
+        "name": "Cotton Candy",
+        "image": "",
+        "value": 10
+      }
+    ],
+    "value2": 230,
+    "winner": "woundwound",
+    "random_result": 1,
+    "game_hash": null,
+    "is_active": false,
+    "created_at": "2025-12-07T18:32:13.398Z",
+    "player1_viewed": true,
+    "player2_viewed": true
+  }
+},
+{
+  "model": "casino.coinflipgame",
+  "pk": 51,
+  "fields": {
+    "player1": "lastdosebeforedream",
+    "items1": [
+      {
+        "id": 194,
+        "name": "Candy",
+        "image": "https://static.wikia.nocookie.net/murder-mystery-2/images/5/53/Godly_Icon.png",
+        "value": 170
+      },
+      {
+        "id": 209,
+        "name": "Candy",
+        "image": "https://tr.rbxcdn.com/180DAY-fcda95a147064698c53196f44c9ca833/420/420/Model/Png/noFilter",
+        "value": 170
+      }
+    ],
+    "value1": 340,
+    "creator_side": "green",
+    "player2": "woundwound",
+    "items2": [
+      {
+        "id": 95,
+        "name": "Chroma Candleflame",
+        "image": "",
+        "value": 70
+      },
+      {
+        "id": 97,
+        "name": "Swirly Axe",
+        "image": "",
+        "value": 60
+      },
+      {
+        "id": 102,
+        "name": "Chroma Candleflame",
+        "image": "",
+        "value": 70
+      },
+      {
+        "id": 118,
+        "name": "Blaster",
+        "image": "",
+        "value": 20
+      },
+      {
+        "id": 119,
+        "name": "Chroma Candleflame",
+        "image": "",
+        "value": 70
+      },
+      {
+        "id": 122,
+        "name": "Cotton Candy",
+        "image": "",
+        "value": 10
+      }
+    ],
+    "value2": 300,
+    "winner": "woundwound",
+    "random_result": 2,
+    "game_hash": null,
+    "is_active": false,
+    "created_at": "2025-12-07T18:36:28.403Z",
+    "player1_viewed": true,
+    "player2_viewed": true
+  }
+},
+{
+  "model": "casino.coinflipgame",
+  "pk": 52,
+  "fields": {
+    "player1": "lastdosebeforedream",
+    "items1": [
+      {
+        "id": 199,
+        "name": "Sugar",
+        "image": "https://static.wikia.nocookie.net/murder-mystery-2/images/5/53/Godly_Icon.png",
+        "value": 70
+      }
+    ],
+    "value1": 70,
+    "creator_side": "green",
+    "player2": "woundwound",
+    "items2": [
+      {
+        "id": 119,
+        "name": "Chroma Candleflame",
+        "image": "",
+        "value": 70
+      }
+    ],
+    "value2": 70,
+    "winner": "woundwound",
+    "random_result": 2,
+    "game_hash": null,
+    "is_active": false,
+    "created_at": "2025-12-07T18:44:14.373Z",
+    "player1_viewed": true,
+    "player2_viewed": true
+  }
+},
+{
+  "model": "casino.coinflipgame",
+  "pk": 53,
+  "fields": {
+    "player1": "woundwound",
+    "items1": [
+      {
+        "id": 97,
+        "name": "Swirly Axe",
+        "image": "",
+        "value": 60
+      },
+      {
+        "id": 102,
+        "name": "Chroma Candleflame",
+        "image": "",
+        "value": 70
+      }
+    ],
+    "value1": 130,
+    "creator_side": "yellow",
+    "player2": "lastdosebeforedream",
+    "items2": [
+      {
+        "id": 210,
+        "name": "Sugar",
+        "image": "https://static.wikia.nocookie.net/murder-mystery-2/images/5/53/Godly_Icon.png",
+        "value": 70
+      },
+      {
+        "id": 212,
+        "name": "Sugar",
+        "image": "https://static.wikia.nocookie.net/murder-mystery-2/images/5/53/Godly_Icon.png",
+        "value": 70
+      }
+    ],
+    "value2": 140,
+    "winner": "lastdosebeforedream",
+    "random_result": 1,
+    "game_hash": null,
+    "is_active": false,
+    "created_at": "2025-12-07T18:45:52.304Z",
+    "player1_viewed": true,
+    "player2_viewed": true
+  }
+},
+{
+  "model": "casino.coinflipgame",
+  "pk": 54,
+  "fields": {
+    "player1": "woundwound",
+    "items1": [
+      {
+        "id": 95,
+        "name": "Chroma Candleflame",
+        "image": "",
+        "value": 70
+      },
+      {
+        "id": 114,
+        "name": "Swirly Axe",
+        "image": "",
+        "value": 60
+      },
+      {
+        "id": 131,
+        "name": "Cotton Candy",
+        "image": "",
+        "value": 10
+      }
+    ],
+    "value1": 140,
+    "creator_side": "yellow",
+    "player2": "lastdosebeforedream",
+    "items2": [
+      {
+        "id": 192,
+        "name": "Candy",
+        "image": "https://static.wikia.nocookie.net/murder-mystery-2/images/5/53/Godly_Icon.png",
+        "value": 170
+      }
+    ],
+    "value2": 170,
+    "winner": "woundwound",
+    "random_result": 2,
+    "game_hash": null,
+    "is_active": false,
+    "created_at": "2025-12-07T18:47:12.679Z",
+    "player1_viewed": true,
+    "player2_viewed": true
+  }
+},
+{
+  "model": "casino.coinflipgame",
+  "pk": 55,
+  "fields": {
+    "player1": "lastdosebeforedream",
+    "items1": [
+      {
+        "id": 184,
+        "name": "Sugar",
+        "image": "https://static.wikia.nocookie.net/murder-mystery-2/images/5/53/Godly_Icon.png",
+        "value": 70
+      },
+      {
+        "id": 193,
+        "name": "Candy",
+        "image": "https://static.wikia.nocookie.net/murder-mystery-2/images/5/53/Godly_Icon.png",
+        "value": 170
+      },
+      {
+        "id": 200,
+        "name": "Sugar",
+        "image": "https://static.wikia.nocookie.net/murder-mystery-2/images/5/53/Godly_Icon.png",
+        "value": 70
+      },
+      {
+        "id": 212,
+        "name": "Sugar",
+        "image": "https://static.wikia.nocookie.net/murder-mystery-2/images/5/53/Godly_Icon.png",
+        "value": 70
+      }
+    ],
+    "value1": 380,
+    "creator_side": "yellow",
+    "player2": "woundwound",
+    "items2": [
+      {
+        "id": 95,
+        "name": "Chroma Candleflame",
+        "image": "",
+        "value": 70
+      },
+      {
+        "id": 114,
+        "name": "Swirly Axe",
+        "image": "",
+        "value": 60
+      },
+      {
+        "id": 117,
+        "name": "Swirly Axe",
+        "image": "",
+        "value": 60
+      },
+      {
+        "id": 118,
+        "name": "Blaster",
+        "image": "",
+        "value": 20
+      },
+      {
+        "id": 119,
+        "name": "Chroma Candleflame",
+        "image": "",
+        "value": 70
+      },
+      {
+        "id": 122,
+        "name": "Cotton Candy",
+        "image": "",
+        "value": 10
+      },
+      {
+        "id": 129,
+        "name": "Cotton Candy",
+        "image": "",
+        "value": 10
+      },
+      {
+        "id": 130,
+        "name": "Cotton Candy",
+        "image": "",
+        "value": 10
+      }
+    ],
+    "value2": 310,
+    "winner": "lastdosebeforedream",
+    "random_result": 2,
+    "game_hash": null,
+    "is_active": false,
+    "created_at": "2025-12-07T19:45:19.297Z",
+    "player1_viewed": true,
+    "player2_viewed": true
+  }
+},
+{
+  "model": "casino.coinflipgame",
+  "pk": 56,
+  "fields": {
+    "player1": "lastdosebeforedream",
+    "items1": [
+      {
+        "id": 122,
+        "name": "Cotton Candy",
+        "image": "",
+        "value": 10
+      },
+      {
+        "id": 129,
+        "name": "Cotton Candy",
+        "image": "",
+        "value": 10
+      },
+      {
+        "id": 186,
+        "name": "Sugar",
+        "image": "https://static.wikia.nocookie.net/murder-mystery-2/images/5/53/Godly_Icon.png",
+        "value": 70
+      },
+      {
+        "id": 187,
+        "name": "Sugar",
+        "image": "https://static.wikia.nocookie.net/murder-mystery-2/images/5/53/Godly_Icon.png",
+        "value": 70
+      }
+    ],
+    "value1": 160,
+    "creator_side": "green",
+    "player2": "woundwound",
+    "items2": [
+      {
+        "id": 21,
+        "name": "Test Item",
+        "image": "",
+        "value": 10
+      },
+      {
+        "id": 23,
+        "name": "Test Item",
+        "image": "",
+        "value": 10
+      },
+      {
+        "id": 124,
+        "name": "Cotton Candy",
+        "image": "",
+        "value": 10
+      },
+      {
+        "id": 131,
+        "name": "Cotton Candy",
+        "image": "",
+        "value": 10
+      },
+      {
+        "id": 138,
+        "name": "Swirly Axe",
+        "image": "",
+        "value": 60
+      },
+      {
+        "id": 140,
+        "name": "Chroma Candleflame",
+        "image": "",
+        "value": 70
+      },
+      {
+        "id": 141,
+        "name": "Cotton Candy",
+        "image": "",
+        "value": 10
+      }
+    ],
+    "value2": 180,
+    "winner": "lastdosebeforedream",
+    "random_result": 1,
+    "game_hash": null,
+    "is_active": false,
+    "created_at": "2025-12-07T19:47:39.939Z",
+    "player1_viewed": true,
+    "player2_viewed": true
+  }
+},
+{
+  "model": "casino.coinflipgame",
+  "pk": 57,
+  "fields": {
+    "player1": "woundwound",
+    "items1": [
+      {
+        "id": 134,
+        "name": "Cotton Candy",
+        "image": "",
+        "value": 10
+      },
+      {
+        "id": 144,
+        "name": "Cotton Candy",
+        "image": "",
+        "value": 10
+      },
+      {
+        "id": 145,
+        "name": "Cotton Candy",
+        "image": "",
+        "value": 10
+      },
+      {
+        "id": 151,
+        "name": "Blaster",
+        "image": "https://static.wikia.nocookie.net/murder-mystery-2/images/5/53/Godly_Icon.png",
+        "value": 20
+      }
+    ],
+    "value1": 50,
+    "creator_side": "green",
+    "player2": "lastdosebeforedream",
+    "items2": [
+      {
+        "id": 118,
+        "name": "Blaster",
+        "image": "",
+        "value": 20
+      },
+      {
+        "id": 130,
+        "name": "Cotton Candy",
+        "image": "",
+        "value": 10
+      },
+      {
+        "id": 131,
+        "name": "Cotton Candy",
+        "image": "",
+        "value": 10
+      }
+    ],
+    "value2": 40,
+    "winner": "lastdosebeforedream",
+    "random_result": 2,
+    "game_hash": null,
+    "is_active": false,
+    "created_at": "2025-12-07T19:50:22.016Z",
+    "player1_viewed": true,
+    "player2_viewed": true
+  }
+},
+{
+  "model": "casino.coinflipgame",
+  "pk": 60,
+  "fields": {
+    "player1": "woundwound",
+    "items1": [
+      {
+        "id": 148,
+        "name": "Blaster",
+        "image": "https://static.wikia.nocookie.net/murder-mystery-2/images/5/53/Godly_Icon.png",
+        "value": 20
+      },
+      {
+        "id": 150,
+        "name": "Swirly Axe",
+        "image": "https://static.wikia.nocookie.net/murder-mystery-2/images/5/53/Godly_Icon.png",
+        "value": 60
+      },
+      {
+        "id": 192,
+        "name": "Candy",
+        "image": "https://static.wikia.nocookie.net/murder-mystery-2/images/5/53/Godly_Icon.png",
+        "value": 170
+      },
+      {
+        "id": 194,
+        "name": "Candy",
+        "image": "https://static.wikia.nocookie.net/murder-mystery-2/images/5/53/Godly_Icon.png",
+        "value": 170
+      }
+    ],
+    "value1": 420,
+    "creator_side": "green",
+    "player2": "lastdosebeforedream",
+    "items2": [
+      {
+        "id": 21,
+        "name": "Test Item",
+        "image": "",
+        "value": 10
+      },
+      {
+        "id": 23,
+        "name": "Test Item",
+        "image": "",
+        "value": 10
+      },
+      {
+        "id": 95,
+        "name": "Chroma Candleflame",
+        "image": "",
+        "value": 70
+      },
+      {
+        "id": 114,
+        "name": "Swirly Axe",
+        "image": "",
+        "value": 60
+      },
+      {
+        "id": 117,
+        "name": "Swirly Axe",
+        "image": "",
+        "value": 60
+      },
+      {
+        "id": 118,
+        "name": "Blaster",
+        "image": "",
+        "value": 20
+      },
+      {
+        "id": 119,
+        "name": "Chroma Candleflame",
+        "image": "",
+        "value": 70
+      },
+      {
+        "id": 124,
+        "name": "Cotton Candy",
+        "image": "",
+        "value": 10
+      },
+      {
+        "id": 129,
+        "name": "Cotton Candy",
+        "image": "",
+        "value": 10
+      },
+      {
+        "id": 130,
+        "name": "Cotton Candy",
+        "image": "",
+        "value": 10
+      },
+      {
+        "id": 131,
+        "name": "Cotton Candy",
+        "image": "",
+        "value": 10
+      }
+    ],
+    "value2": 340,
+    "winner": "woundwound",
+    "random_result": 1,
+    "game_hash": null,
+    "is_active": false,
+    "created_at": "2025-12-07T21:01:07.921Z",
+    "player1_viewed": true,
+    "player2_viewed": true
+  }
+},
+{
+  "model": "casino.coinflipgame",
+  "pk": 62,
+  "fields": {
+    "player1": "woundwound",
+    "items1": [
+      {
+        "id": 14,
+        "name": "Test Item",
+        "image": "",
+        "value": 10
+      },
+      {
+        "id": 21,
+        "name": "Test Item",
+        "image": "",
+        "value": 10
+      },
+      {
+        "id": 23,
+        "name": "Test Item",
+        "image": "",
+        "value": 10
+      },
+      {
+        "id": 95,
+        "name": "Chroma Candleflame",
+        "image": "",
+        "value": 70
+      },
+      {
+        "id": 114,
+        "name": "Swirly Axe",
+        "image": "",
+        "value": 60
+      },
+      {
+        "id": 117,
+        "name": "Swirly Axe",
+        "image": "",
+        "value": 60
+      },
+      {
+        "id": 123,
+        "name": "Cotton Candy",
+        "image": "",
+        "value": 10
+      },
+      {
+        "id": 124,
+        "name": "Cotton Candy",
+        "image": "",
+        "value": 10
+      },
+      {
+        "id": 129,
+        "name": "Cotton Candy",
+        "image": "",
+        "value": 10
+      }
+    ],
+    "value1": 250,
+    "creator_side": "green",
+    "player2": "lastdosebeforedream",
+    "items2": [
+      {
+        "id": 141,
+        "name": "Cotton Candy",
+        "image": "",
+        "value": 10
+      },
+      {
+        "id": 144,
+        "name": "Cotton Candy",
+        "image": "",
+        "value": 10
+      },
+      {
+        "id": 145,
+        "name": "Cotton Candy",
+        "image": "",
+        "value": 10
+      },
+      {
+        "id": 185,
+        "name": "Sugar",
+        "image": "https://static.wikia.nocookie.net/murder-mystery-2/images/5/53/Godly_Icon.png",
+        "value": 70
+      },
+      {
+        "id": 186,
+        "name": "Sugar",
+        "image": "https://static.wikia.nocookie.net/murder-mystery-2/images/5/53/Godly_Icon.png",
+        "value": 70
+      },
+      {
+        "id": 187,
+        "name": "Sugar",
+        "image": "https://static.wikia.nocookie.net/murder-mystery-2/images/5/53/Godly_Icon.png",
+        "value": 70
+      }
+    ],
+    "value2": 240,
+    "winner": "woundwound",
+    "random_result": 1,
+    "game_hash": null,
+    "is_active": false,
+    "created_at": "2025-12-07T21:02:55.045Z",
+    "player1_viewed": true,
+    "player2_viewed": true
+  }
+},
+{
+  "model": "casino.coinflipgame",
+  "pk": 63,
+  "fields": {
+    "player1": "woundwound",
+    "items1": [
+      {
+        "id": 95,
+        "name": "Chroma Candleflame",
+        "image": "",
+        "value": 70
+      },
+      {
+        "id": 114,
+        "name": "Swirly Axe",
+        "image": "",
+        "value": 60
+      },
+      {
+        "id": 123,
+        "name": "Cotton Candy",
+        "image": "",
+        "value": 10
+      },
+      {
+        "id": 124,
+        "name": "Cotton Candy",
+        "image": "",
+        "value": 10
+      }
+    ],
+    "value1": 150,
+    "creator_side": "green",
+    "player2": "lastdosebeforedream",
+    "items2": [
+      {
+        "id": 130,
+        "name": "Cotton Candy",
+        "image": "",
+        "value": 10
+      },
+      {
+        "id": 131,
+        "name": "Cotton Candy",
+        "image": "",
+        "value": 10
+      },
+      {
+        "id": 140,
+        "name": "Chroma Candleflame",
+        "image": "",
+        "value": 70
+      },
+      {
+        "id": 141,
+        "name": "Cotton Candy",
+        "image": "",
+        "value": 10
+      },
+      {
+        "id": 151,
+        "name": "Blaster",
+        "image": "https://static.wikia.nocookie.net/murder-mystery-2/images/5/53/Godly_Icon.png",
+        "value": 20
+      }
+    ],
+    "value2": 120,
+    "winner": "woundwound",
+    "random_result": 1,
+    "game_hash": null,
+    "is_active": false,
+    "created_at": "2025-12-07T21:05:02.777Z",
+    "player1_viewed": true,
+    "player2_viewed": true
+  }
+},
+{
+  "model": "casino.coinflipgame",
+  "pk": 64,
+  "fields": {
+    "player1": "woundwound",
+    "items1": [
+      {
+        "id": 90,
+        "name": "Chroma Candleflame",
+        "image": "",
+        "value": 0
+      },
+      {
+        "id": 117,
+        "name": "Swirly Axe",
+        "image": "",
+        "value": 60
+      },
+      {
+        "id": 118,
+        "name": "Blaster",
+        "image": "",
+        "value": 20
+      },
+      {
+        "id": 119,
+        "name": "Chroma Candleflame",
+        "image": "",
+        "value": 70
+      },
+      {
+        "id": 130,
+        "name": "Cotton Candy",
+        "image": "",
+        "value": 10
+      },
+      {
+        "id": 131,
+        "name": "Cotton Candy",
+        "image": "",
+        "value": 10
+      },
+      {
+        "id": 132,
+        "name": "Cotton Candy",
+        "image": "",
+        "value": 10
+      },
+      {
+        "id": 141,
+        "name": "Cotton Candy",
+        "image": "",
+        "value": 10
+      }
+    ],
+    "value1": 190,
+    "creator_side": "yellow",
+    "player2": "lastdosebeforedream",
+    "items2": [
+      {
+        "id": 184,
+        "name": "Sugar",
+        "image": "https://static.wikia.nocookie.net/murder-mystery-2/images/5/53/Godly_Icon.png",
+        "value": 70
+      },
+      {
+        "id": 191,
+        "name": "Swirly Axe",
+        "image": "https://static.wikia.nocookie.net/murder-mystery-2/images/5/53/Godly_Icon.png",
+        "value": 60
+      },
+      {
+        "id": 210,
+        "name": "Sugar",
+        "image": "https://static.wikia.nocookie.net/murder-mystery-2/images/5/53/Godly_Icon.png",
+        "value": 70
+      }
+    ],
+    "value2": 200,
+    "winner": "lastdosebeforedream",
+    "random_result": 1,
+    "game_hash": null,
+    "is_active": false,
+    "created_at": "2025-12-07T21:05:13.994Z",
+    "player1_viewed": true,
+    "player2_viewed": true
+  }
+},
+{
+  "model": "casino.coinflipgame",
+  "pk": 65,
+  "fields": {
+    "player1": "woundwound",
+    "items1": [
+      {
+        "id": 155,
+        "name": "Cotton Candy",
+        "image": "https://tr.rbxcdn.com/180DAY-4eb1c7b513dc42c9ef510aedb7734421/420/420/Model/Png/noFilter",
+        "value": 10
+      },
+      {
+        "id": 209,
+        "name": "Candy",
+        "image": "https://tr.rbxcdn.com/180DAY-fcda95a147064698c53196f44c9ca833/420/420/Model/Png/noFilter",
+        "value": 170
+      },
+      {
+        "id": 253,
+        "name": "Chroma Fire Bunny",
+        "image": "https://tr.rbxcdn.com/180DAY-3d2b84c6a9da18907c51e690ca01a0cc/420/420/Decal/Png/noFilter",
+        "value": 13
+      },
+      {
+        "id": 254,
+        "name": "Frostbite",
+        "image": "https://tr.rbxcdn.com/180DAY-6f01ff3152df52f3e42df21811c29f17/420/420/Image/Png/noFilter",
+        "value": 7
+      }
+    ],
+    "value1": 200,
+    "creator_side": "yellow",
+    "player2": "lastdosebeforedream",
+    "items2": [
+      {
+        "id": 97,
+        "name": "Swirly Axe",
+        "image": "",
+        "value": 60
+      },
+      {
+        "id": 102,
+        "name": "Chroma Candleflame",
+        "image": "",
+        "value": 70
+      },
+      {
+        "id": 117,
+        "name": "Swirly Axe",
+        "image": "",
+        "value": 60
+      },
+      {
+        "id": 132,
+        "name": "Cotton Candy",
+        "image": "",
+        "value": 10
+      }
+    ],
+    "value2": 200,
+    "winner": "woundwound",
+    "random_result": 2,
+    "game_hash": null,
+    "is_active": false,
+    "created_at": "2025-12-08T03:41:38.103Z",
+    "player1_viewed": true,
+    "player2_viewed": true
+  }
+},
+{
+  "model": "casino.coinflipgame",
+  "pk": 66,
+  "fields": {
+    "player1": "woundwound",
+    "items1": [
+      {
+        "id": 97,
+        "name": "Swirly Axe",
+        "image": "",
+        "value": 60
+      },
+      {
+        "id": 102,
+        "name": "Chroma Candleflame",
+        "image": "",
+        "value": 70
+      },
+      {
+        "id": 117,
+        "name": "Swirly Axe",
+        "image": "",
+        "value": 60
+      },
+      {
+        "id": 132,
+        "name": "Cotton Candy",
+        "image": "",
+        "value": 10
+      },
+      {
+        "id": 155,
+        "name": "Cotton Candy",
+        "image": "https://tr.rbxcdn.com/180DAY-4eb1c7b513dc42c9ef510aedb7734421/420/420/Model/Png/noFilter",
+        "value": 10
+      },
+      {
+        "id": 209,
+        "name": "Candy",
+        "image": "https://tr.rbxcdn.com/180DAY-fcda95a147064698c53196f44c9ca833/420/420/Model/Png/noFilter",
+        "value": 170
+      },
+      {
+        "id": 253,
+        "name": "Chroma Fire Bunny",
+        "image": "https://tr.rbxcdn.com/180DAY-3d2b84c6a9da18907c51e690ca01a0cc/420/420/Decal/Png/noFilter",
+        "value": 13
+      },
+      {
+        "id": 254,
+        "name": "Frostbite",
+        "image": "https://tr.rbxcdn.com/180DAY-6f01ff3152df52f3e42df21811c29f17/420/420/Image/Png/noFilter",
+        "value": 7
+      }
+    ],
+    "value1": 400,
+    "creator_side": "yellow",
+    "player2": "lastdosebeforedream",
+    "items2": [
+      {
+        "id": 191,
+        "name": "Swirly Axe",
+        "image": "https://static.wikia.nocookie.net/murder-mystery-2/images/5/53/Godly_Icon.png",
+        "value": 60
+      },
+      {
+        "id": 193,
+        "name": "Candy",
+        "image": "https://static.wikia.nocookie.net/murder-mystery-2/images/5/53/Godly_Icon.png",
+        "value": 170
+      },
+      {
+        "id": 210,
+        "name": "Sugar",
+        "image": "https://static.wikia.nocookie.net/murder-mystery-2/images/5/53/Godly_Icon.png",
+        "value": 70
+      },
+      {
+        "id": 212,
+        "name": "Sugar",
+        "image": "https://static.wikia.nocookie.net/murder-mystery-2/images/5/53/Godly_Icon.png",
+        "value": 70
+      }
+    ],
+    "value2": 370,
+    "winner": "lastdosebeforedream",
+    "random_result": 1,
+    "game_hash": null,
+    "is_active": false,
+    "created_at": "2025-12-08T03:42:22.712Z",
+    "player1_viewed": true,
+    "player2_viewed": true
+  }
+},
+{
+  "model": "casino.coinflipgame",
+  "pk": 67,
+  "fields": {
+    "player1": "woundwound",
+    "items1": [
+      {
+        "id": 95,
+        "name": "Chroma Candleflame",
+        "image": "",
+        "value": 70
+      }
+    ],
+    "value1": 70,
+    "creator_side": "green",
+    "player2": "lastdosebeforedream",
+    "items2": [
+      {
+        "id": 191,
+        "name": "Swirly Axe",
+        "image": "https://static.wikia.nocookie.net/murder-mystery-2/images/5/53/Godly_Icon.png",
+        "value": 60
+      }
+    ],
+    "value2": 60,
+    "winner": "lastdosebeforedream",
+    "random_result": 2,
+    "game_hash": null,
+    "is_active": false,
+    "created_at": "2025-12-08T03:53:05.994Z",
+    "player1_viewed": true,
+    "player2_viewed": true
+  }
+},
+{
+  "model": "casino.coinflipgame",
+  "pk": 68,
+  "fields": {
+    "player1": "lastdosebeforedream",
+    "items1": [
+      {
+        "id": 122,
+        "name": "Cotton Candy",
+        "image": "",
+        "value": 10
+      },
+      {
+        "id": 132,
+        "name": "Cotton Candy",
+        "image": "",
+        "value": 10
+      },
+      {
+        "id": 155,
+        "name": "Cotton Candy",
+        "image": "https://tr.rbxcdn.com/180DAY-4eb1c7b513dc42c9ef510aedb7734421/420/420/Model/Png/noFilter",
+        "value": 10
+      }
+    ],
+    "value1": 30,
+    "creator_side": "green",
+    "player2": "admin",
+    "items2": [
+      {
+        "id": 18,
+        "name": "Test Item",
+        "image": "",
+        "value": 10
+      },
+      {
+        "id": 19,
+        "name": "Test Item",
+        "image": "",
+        "value": 10
+      },
+      {
+        "id": 20,
+        "name": "Test Item",
+        "image": "",
+        "value": 10
+      }
+    ],
+    "value2": 30,
+    "winner": "admin",
+    "random_result": 2,
+    "game_hash": "e08e07ce90c94676c6ecb205dcbae0260d9ce444572c05bd8852a12dc59c7ef9",
+    "is_active": false,
+    "created_at": "2025-12-08T03:57:19.814Z",
+    "player1_viewed": false,
+    "player2_viewed": true
+  }
+},
+{
+  "model": "casino.coinflipgame",
+  "pk": 69,
+  "fields": {
+    "player1": "lastdosebeforedream",
+    "items1": [
+      {
+        "id": 235,
+        "name": "Candy",
+        "image": "https://tr.rbxcdn.com/180DAY-fcda95a147064698c53196f44c9ca833/420/420/Model/Png/noFilter",
+        "value": 170
+      },
+      {
+        "id": 236,
+        "name": "Sugar",
+        "image": "https://tr.rbxcdn.com/180DAY-fc538eca64fbe088a13c8ce66e47a0a2/420/420/Image/Png/noFilter",
+        "value": 70
+      },
+      {
+        "id": 241,
+        "name": "Sugar",
+        "image": "https://tr.rbxcdn.com/180DAY-fc538eca64fbe088a13c8ce66e47a0a2/420/420/Image/Png/noFilter",
+        "value": 70
+      },
+      {
+        "id": 244,
+        "name": "Candy",
+        "image": "https://tr.rbxcdn.com/180DAY-fcda95a147064698c53196f44c9ca833/420/420/Model/Png/noFilter",
+        "value": 170
+      },
+      {
+        "id": 247,
+        "name": "Sugar",
+        "image": "https://tr.rbxcdn.com/180DAY-fc538eca64fbe088a13c8ce66e47a0a2/420/420/Image/Png/noFilter",
+        "value": 70
+      },
+      {
+        "id": 248,
+        "name": "Sugar",
+        "image": "https://tr.rbxcdn.com/180DAY-fc538eca64fbe088a13c8ce66e47a0a2/420/420/Image/Png/noFilter",
+        "value": 70
+      },
+      {
+        "id": 253,
+        "name": "Chroma Fire Bunny",
+        "image": "https://tr.rbxcdn.com/180DAY-3d2b84c6a9da18907c51e690ca01a0cc/420/420/Decal/Png/noFilter",
+        "value": 13
+      },
+      {
+        "id": 254,
+        "name": "Frostbite",
+        "image": "https://tr.rbxcdn.com/180DAY-6f01ff3152df52f3e42df21811c29f17/420/420/Image/Png/noFilter",
+        "value": 7
+      }
+    ],
+    "value1": 640,
+    "creator_side": "green",
+    "player2": "admin",
+    "items2": [
+      {
+        "id": 5,
+        "name": "Blaster",
+        "image": "",
+        "value": 20
+      },
+      {
+        "id": 7,
+        "name": "Darkbringer",
+        "image": "",
+        "value": 60
+      },
+      {
+        "id": 9,
+        "name": "Test Item",
+        "image": "",
+        "value": 160
+      },
+      {
+        "id": 17,
+        "name": "Test Item",
+        "image": "",
+        "value": 10
+      },
+      {
+        "id": 18,
+        "name": "Test Item",
+        "image": "",
+        "value": 10
+      },
+      {
+        "id": 19,
+        "name": "Test Item",
+        "image": "",
+        "value": 10
+      },
+      {
+        "id": 20,
+        "name": "Test Item",
+        "image": "",
+        "value": 10
+      },
+      {
+        "id": 22,
+        "name": "Test Item",
+        "image": "",
+        "value": 10
+      },
+      {
+        "id": 28,
+        "name": "Swirly Axe",
+        "image": "",
+        "value": 60
+      },
+      {
+        "id": 30,
+        "name": "Candleflame",
+        "image": "",
+        "value": 60
+      },
+      {
+        "id": 31,
+        "name": "Darkbringer",
+        "image": "",
+        "value": 60
+      },
+      {
+        "id": 36,
+        "name": "Chroma Candleflame",
+        "image": "",
+        "value": 70
+      }
+    ],
+    "value2": 540,
+    "winner": "admin",
+    "random_result": 2,
+    "game_hash": "e4033d8c4ce53c51751e1577b36bafc2ba3e204fde01ba8d9fa3e20206652d67",
+    "is_active": false,
+    "created_at": "2025-12-08T03:57:29.150Z",
+    "player1_viewed": false,
+    "player2_viewed": true
+  }
+},
+{
+  "model": "casino.coinflipgame",
+  "pk": 73,
+  "fields": {
+    "player1": "admin",
+    "items1": [
+      {
+        "id": 18,
+        "name": "Test Item",
+        "image": "",
+        "value": 10
+      },
+      {
+        "id": 19,
+        "name": "Test Item",
+        "image": "",
+        "value": 10
+      },
+      {
+        "id": 20,
+        "name": "Test Item",
+        "image": "",
+        "value": 10
+      },
+      {
+        "id": 22,
+        "name": "Test Item",
+        "image": "",
+        "value": 10
+      },
+      {
+        "id": 28,
+        "name": "Swirly Axe",
+        "image": "",
+        "value": 60
+      }
+    ],
+    "value1": 100,
+    "creator_side": "yellow",
+    "player2": "woundwound",
+    "items2": [
+      {
+        "id": 274,
+        "name": "Frostfade",
+        "image": "https://tr.rbxcdn.com/180DAY-fbc1439d00a87ee5dcb4ea299864d2fa/420/420/Model/Png/noFilter",
+        "value": 100
+      }
+    ],
+    "value2": 100,
+    "winner": "woundwound",
+    "random_result": 1,
+    "game_hash": "fe969960db30b4aa704fe25365a3fe92cfd1becbfeeaea5f4f2871a275515e1b",
+    "is_active": false,
+    "created_at": "2026-03-07T13:09:26.951Z",
+    "player1_viewed": true,
+    "player2_viewed": true
+  }
+},
+{
+  "model": "casino.coinflipgame",
+  "pk": 74,
+  "fields": {
+    "player1": "woundwound",
+    "items1": [
+      {
+        "id": 18,
+        "name": "Test Item",
+        "image": "",
+        "value": 10
+      },
+      {
+        "id": 19,
+        "name": "Test Item",
+        "image": "",
+        "value": 10
+      },
+      {
+        "id": 20,
+        "name": "Test Item",
+        "image": "",
+        "value": 10
+      },
+      {
+        "id": 274,
+        "name": "Frostfade",
+        "image": "https://tr.rbxcdn.com/180DAY-fbc1439d00a87ee5dcb4ea299864d2fa/420/420/Model/Png/noFilter",
+        "value": 100
+      }
+    ],
+    "value1": 130,
+    "creator_side": "yellow",
+    "player2": "admin",
+    "items2": [
+      {
+        "id": 152,
+        "name": "Swirly Axe",
+        "image": "https://tr.rbxcdn.com/180DAY-86d80271e4ddea89b54f641d1feaae5e/420/420/Model/Png/noFilter",
+        "value": 60
+      },
+      {
+        "id": 236,
+        "name": "Sugar",
+        "image": "https://tr.rbxcdn.com/180DAY-fc538eca64fbe088a13c8ce66e47a0a2/420/420/Image/Png/noFilter",
+        "value": 70
+      }
+    ],
+    "value2": 130,
+    "winner": "woundwound",
+    "random_result": 2,
+    "game_hash": "76d1895b89c57e52130d805e46e7f0a7a104bb31f24540c73c13d348f01d514b",
+    "is_active": false,
+    "created_at": "2026-03-07T13:34:25.468Z",
+    "player1_viewed": true,
+    "player2_viewed": true
+  }
+},
+{
+  "model": "casino.coinflipgame",
+  "pk": 75,
+  "fields": {
+    "player1": "admin",
+    "items1": [
+      {
+        "id": 248,
+        "name": "Sugar",
+        "image": "https://tr.rbxcdn.com/180DAY-fc538eca64fbe088a13c8ce66e47a0a2/420/420/Image/Png/noFilter",
+        "value": 70
+      },
+      {
+        "id": 254,
+        "name": "Frostbite",
+        "image": "https://tr.rbxcdn.com/180DAY-6f01ff3152df52f3e42df21811c29f17/420/420/Image/Png/noFilter",
+        "value": 7
+      }
+    ],
+    "value1": 77,
+    "creator_side": "green",
+    "player2": "woundwound",
+    "items2": [
+      {
+        "id": 247,
+        "name": "Sugar",
+        "image": "https://tr.rbxcdn.com/180DAY-fc538eca64fbe088a13c8ce66e47a0a2/420/420/Image/Png/noFilter",
+        "value": 70
+      }
+    ],
+    "value2": 70,
+    "winner": "admin",
+    "random_result": 1,
+    "game_hash": "3b8cfd6b33229bd4aa89cc3fdc8f24907de1430ccef04aeaf0774a95d299a8c4",
+    "is_active": false,
+    "created_at": "2026-03-10T21:27:09.380Z",
+    "player1_viewed": true,
+    "player2_viewed": true
+  }
+},
+{
+  "model": "casino.coinflipgame",
+  "pk": 76,
+  "fields": {
+    "player1": "admin",
+    "items1": [
+      {
+        "id": 31,
+        "name": "Darkbringer",
+        "image": "",
+        "value": 60
+      }
+    ],
+    "value1": 60,
+    "creator_side": "green",
+    "player2": "woundwound",
+    "items2": [
+      {
+        "id": 236,
+        "name": "Sugar",
+        "image": "https://tr.rbxcdn.com/180DAY-fc538eca64fbe088a13c8ce66e47a0a2/420/420/Image/Png/noFilter",
+        "value": 70
+      }
+    ],
+    "value2": 70,
+    "winner": "woundwound",
+    "random_result": 2,
+    "game_hash": "cc6769581b1c8bccf1e64e0c47dc774804e0805f4578ba107409f96f9387cb87",
+    "is_active": false,
+    "created_at": "2026-03-10T21:27:18.785Z",
+    "player1_viewed": true,
+    "player2_viewed": true
+  }
+},
+{
+  "model": "casino.coinflipgame",
+  "pk": 77,
+  "fields": {
+    "player1": "admin",
+    "items1": [
+      {
+        "id": 205,
+        "name": "Swirly Axe",
+        "image": "https://tr.rbxcdn.com/180DAY-86d80271e4ddea89b54f641d1feaae5e/420/420/Model/Png/noFilter",
+        "value": 60
+      },
+      {
+        "id": 247,
+        "name": "Sugar",
+        "image": "https://tr.rbxcdn.com/180DAY-fc538eca64fbe088a13c8ce66e47a0a2/420/420/Image/Png/noFilter",
+        "value": 70
+      }
+    ],
+    "value1": 130,
+    "creator_side": "green",
+    "player2": "woundwound",
+    "items2": [
+      {
+        "id": 19,
+        "name": "Test Item",
+        "image": "",
+        "value": 10
+      },
+      {
+        "id": 274,
+        "name": "Frostfade",
+        "image": "https://tr.rbxcdn.com/180DAY-fbc1439d00a87ee5dcb4ea299864d2fa/420/420/Model/Png/noFilter",
+        "value": 100
+      }
+    ],
+    "value2": 110,
+    "winner": "woundwound",
+    "random_result": 2,
+    "game_hash": "1d79acc5f86e4a197aafb7ba305521b11b8487e6275beda095d04aba33396785",
+    "is_active": false,
+    "created_at": "2026-03-10T21:27:30.203Z",
+    "player1_viewed": true,
+    "player2_viewed": true
+  }
+},
+{
+  "model": "casino.coinflipgame",
+  "pk": 78,
+  "fields": {
+    "player1": "admin",
+    "items1": [
+      {
+        "id": 153,
+        "name": "Cotton Candy",
+        "image": "https://tr.rbxcdn.com/180DAY-4eb1c7b513dc42c9ef510aedb7734421/420/420/Model/Png/noFilter",
+        "value": 10
+      },
+      {
+        "id": 154,
+        "name": "Cotton Candy",
+        "image": "https://tr.rbxcdn.com/180DAY-4eb1c7b513dc42c9ef510aedb7734421/420/420/Model/Png/noFilter",
+        "value": 10
+      },
+      {
+        "id": 155,
+        "name": "Cotton Candy",
+        "image": "https://tr.rbxcdn.com/180DAY-4eb1c7b513dc42c9ef510aedb7734421/420/420/Model/Png/noFilter",
+        "value": 10
+      },
+      {
+        "id": 206,
+        "name": "Blaster",
+        "image": "https://tr.rbxcdn.com/180DAY-af014b1bc4ad46deba8dc9201194537c/420/420/Model/Png/noFilter",
+        "value": 20
+      }
+    ],
+    "value1": 50,
+    "creator_side": "yellow",
+    "player2": "woundwound",
+    "items2": [
+      {
+        "id": 28,
+        "name": "Swirly Axe",
+        "image": "",
+        "value": 60
+      }
+    ],
+    "value2": 60,
+    "winner": "woundwound",
+    "random_result": 1,
+    "game_hash": "67a583a53259fb1fc8d1d7c41d6ef7fb4568c5f2a33c28f5c726d62c1ff4cbec",
+    "is_active": false,
+    "created_at": "2026-03-10T21:27:40.375Z",
+    "player1_viewed": true,
+    "player2_viewed": true
+  }
+},
+{
+  "model": "casino.coinflipgame",
+  "pk": 79,
+  "fields": {
+    "player1": "woundwound",
+    "items1": [
+      {
+        "id": 28,
+        "name": "Swirly Axe",
+        "image": "",
+        "value": 60
+      },
+      {
+        "id": 154,
+        "name": "Cotton Candy",
+        "image": "https://tr.rbxcdn.com/180DAY-4eb1c7b513dc42c9ef510aedb7734421/420/420/Model/Png/noFilter",
+        "value": 10
+      }
+    ],
+    "value1": 70,
+    "creator_side": "yellow",
+    "player2": "admin",
+    "items2": [
+      {
+        "id": 30,
+        "name": "Candleflame",
+        "image": "",
+        "value": 60
+      }
+    ],
+    "value2": 60,
+    "winner": "woundwound",
+    "random_result": 2,
+    "game_hash": "37bf45895d51a543cd52651fe68083a02b086f3b68a98129e5ccfc164676dccc",
+    "is_active": false,
+    "created_at": "2026-03-11T17:01:54.564Z",
+    "player1_viewed": true,
+    "player2_viewed": true
+  }
+},
+{
+  "model": "casino.coinflipgame",
+  "pk": 80,
+  "fields": {
+    "player1": "woundwound",
+    "items1": [
+      {
+        "id": 277,
+        "name": "Sugar",
+        "image": "https://tr.rbxcdn.com/180DAY-fc538eca64fbe088a13c8ce66e47a0a2/420/420/Image/Png/noFilter",
+        "value": 70
+      }
+    ],
+    "value1": 70,
+    "creator_side": "yellow",
+    "player2": null,
+    "items2": [],
+    "value2": 0,
+    "winner": null,
+    "random_result": null,
+    "game_hash": null,
+    "is_active": true,
+    "created_at": "2026-03-16T16:39:04.782Z",
+    "player1_viewed": false,
+    "player2_viewed": false
+  }
+},
+{
+  "model": "casino.withdrawrequest",
+  "pk": 43,
+  "fields": {
+    "user_name": "woundwound",
+    "item_name": "Swirly Axe",
+    "amount": 1,
+    "is_completed": true,
+    "created_at": "2025-11-29T12:59:52.065Z"
+  }
+},
+{
+  "model": "casino.withdrawrequest",
+  "pk": 44,
+  "fields": {
+    "user_name": "woundwound",
+    "item_name": "Swirly Axe",
+    "amount": 1,
+    "is_completed": true,
+    "created_at": "2025-11-29T13:31:07.064Z"
+  }
+},
+{
+  "model": "casino.withdrawrequest",
+  "pk": 45,
+  "fields": {
+    "user_name": "woundwound",
+    "item_name": "Blaster",
+    "amount": 1,
+    "is_completed": true,
+    "created_at": "2025-11-29T13:31:12.443Z"
+  }
+},
+{
+  "model": "casino.withdrawrequest",
+  "pk": 46,
+  "fields": {
+    "user_name": "woundwound",
+    "item_name": "Chroma Candleflame",
+    "amount": 1,
+    "is_completed": true,
+    "created_at": "2025-11-29T13:31:19.648Z"
+  }
+},
+{
+  "model": "casino.withdrawrequest",
+  "pk": 47,
+  "fields": {
+    "user_name": "woundwound",
+    "item_name": "Cotton Candy",
+    "amount": 3,
+    "is_completed": true,
+    "created_at": "2025-11-29T13:40:44.878Z"
+  }
+},
+{
+  "model": "casino.withdrawrequest",
+  "pk": 48,
+  "fields": {
+    "user_name": "woundwound",
+    "item_name": "Cotton Candy",
+    "amount": 1,
+    "is_completed": true,
+    "created_at": "2025-11-29T13:47:49.480Z"
+  }
+},
+{
+  "model": "casino.withdrawrequest",
+  "pk": 49,
+  "fields": {
+    "user_name": "woundwound",
+    "item_name": "Cotton Candy",
+    "amount": 1,
+    "is_completed": true,
+    "created_at": "2025-11-29T13:47:53.910Z"
+  }
+},
+{
+  "model": "casino.withdrawrequest",
+  "pk": 50,
+  "fields": {
+    "user_name": "woundwound",
+    "item_name": "Cotton Candy",
+    "amount": 1,
+    "is_completed": true,
+    "created_at": "2025-11-29T13:47:58.590Z"
+  }
+},
+{
+  "model": "casino.withdrawrequest",
+  "pk": 51,
+  "fields": {
+    "user_name": "woundwound",
+    "item_name": "Cotton Candy",
+    "amount": 1,
+    "is_completed": true,
+    "created_at": "2025-11-29T13:48:03.174Z"
+  }
+},
+{
+  "model": "casino.withdrawrequest",
+  "pk": 52,
+  "fields": {
+    "user_name": "woundwound",
+    "item_name": "Cotton Candy",
+    "amount": 1,
+    "is_completed": true,
+    "created_at": "2025-11-29T13:53:47.588Z"
+  }
+},
+{
+  "model": "casino.withdrawrequest",
+  "pk": 53,
+  "fields": {
+    "user_name": "woundwound",
+    "item_name": "Cotton Candy",
+    "amount": 1,
+    "is_completed": true,
+    "created_at": "2025-11-29T14:03:13.507Z"
+  }
+},
+{
+  "model": "casino.withdrawrequest",
+  "pk": 54,
+  "fields": {
+    "user_name": "woundwound",
+    "item_name": "Cotton Candy",
+    "amount": 1,
+    "is_completed": true,
+    "created_at": "2025-11-29T14:03:18.419Z"
+  }
+},
+{
+  "model": "casino.withdrawrequest",
+  "pk": 55,
+  "fields": {
+    "user_name": "woundwound",
+    "item_name": "Cotton Candy",
+    "amount": 1,
+    "is_completed": true,
+    "created_at": "2025-11-29T14:03:23.044Z"
+  }
+},
+{
+  "model": "casino.withdrawrequest",
+  "pk": 56,
+  "fields": {
+    "user_name": "woundwound",
+    "item_name": "Blaster",
+    "amount": 1,
+    "is_completed": true,
+    "created_at": "2025-11-29T14:03:33.899Z"
+  }
+},
+{
+  "model": "casino.withdrawrequest",
+  "pk": 57,
+  "fields": {
+    "user_name": "woundwound",
+    "item_name": "Chroma Candleflame",
+    "amount": 1,
+    "is_completed": true,
+    "created_at": "2025-11-29T14:03:42.436Z"
+  }
+},
+{
+  "model": "casino.withdrawrequest",
+  "pk": 58,
+  "fields": {
+    "user_name": "woundwound",
+    "item_name": "Swirly Axe",
+    "amount": 1,
+    "is_completed": true,
+    "created_at": "2025-11-29T14:03:47.461Z"
+  }
+},
+{
+  "model": "casino.withdrawrequest",
+  "pk": 59,
+  "fields": {
+    "user_name": "woundwound",
+    "item_name": "Cotton Candy",
+    "amount": 1,
+    "is_completed": true,
+    "created_at": "2025-11-29T19:28:29.941Z"
+  }
+},
+{
+  "model": "casino.withdrawrequest",
+  "pk": 60,
+  "fields": {
+    "user_name": "woundwound",
+    "item_name": "Cotton Candy",
+    "amount": 1,
+    "is_completed": true,
+    "created_at": "2025-11-29T19:28:34.600Z"
+  }
+},
+{
+  "model": "casino.withdrawrequest",
+  "pk": 61,
+  "fields": {
+    "user_name": "woundwound",
+    "item_name": "Blaster",
+    "amount": 1,
+    "is_completed": true,
+    "created_at": "2025-11-29T19:28:40.621Z"
+  }
+},
+{
+  "model": "casino.withdrawrequest",
+  "pk": 62,
+  "fields": {
+    "user_name": "woundwound",
+    "item_name": "Blaster",
+    "amount": 1,
+    "is_completed": true,
+    "created_at": "2025-11-29T22:48:47.748Z"
+  }
+},
+{
+  "model": "casino.withdrawrequest",
+  "pk": 63,
+  "fields": {
+    "user_name": "xkxlation",
+    "item_name": "Harvester",
+    "amount": 1,
+    "is_completed": true,
+    "created_at": "2025-12-05T20:36:50.652Z"
+  }
+},
+{
+  "model": "casino.withdrawrequest",
+  "pk": 64,
+  "fields": {
+    "user_name": "xkxlation",
+    "item_name": "Harvester",
+    "amount": 1,
+    "is_completed": true,
+    "created_at": "2025-12-05T20:37:22.596Z"
+  }
+},
+{
+  "model": "casino.withdrawrequest",
+  "pk": 65,
+  "fields": {
+    "user_name": "xkxlation",
+    "item_name": "Harvester",
+    "amount": 1,
+    "is_completed": true,
+    "created_at": "2025-12-05T20:51:35.742Z"
+  }
+},
+{
+  "model": "casino.withdrawrequest",
+  "pk": 66,
+  "fields": {
+    "user_name": "xkxlation",
+    "item_name": "Harvester",
+    "amount": 1,
+    "is_completed": true,
+    "created_at": "2025-12-05T20:51:41.357Z"
+  }
+},
+{
+  "model": "casino.withdrawrequest",
+  "pk": 67,
+  "fields": {
+    "user_name": "xkxlation",
+    "item_name": "Sugar",
+    "amount": 1,
+    "is_completed": false,
+    "created_at": "2025-12-05T20:55:51.179Z"
+  }
+},
+{
+  "model": "casino.withdrawrequest",
+  "pk": 68,
+  "fields": {
+    "user_name": "xkxlation",
+    "item_name": "Candy",
+    "amount": 1,
+    "is_completed": false,
+    "created_at": "2025-12-05T20:55:55.395Z"
+  }
+},
+{
+  "model": "casino.withdrawrequest",
+  "pk": 69,
+  "fields": {
+    "user_name": "xkxlation",
+    "item_name": "Candy",
+    "amount": 1,
+    "is_completed": false,
+    "created_at": "2025-12-05T20:55:59.004Z"
+  }
+},
+{
+  "model": "casino.withdrawrequest",
+  "pk": 70,
+  "fields": {
+    "user_name": "xkxlation",
+    "item_name": "Sugar",
+    "amount": 1,
+    "is_completed": false,
+    "created_at": "2025-12-05T20:56:02.514Z"
+  }
+},
+{
+  "model": "casino.withdrawrequest",
+  "pk": 71,
+  "fields": {
+    "user_name": "xkxlation",
+    "item_name": "Sugar",
+    "amount": 1,
+    "is_completed": false,
+    "created_at": "2025-12-05T20:56:06.238Z"
+  }
+},
+{
+  "model": "casino.withdrawrequest",
+  "pk": 72,
+  "fields": {
+    "user_name": "xkxlation",
+    "item_name": "Candy",
+    "amount": 1,
+    "is_completed": false,
+    "created_at": "2025-12-05T20:56:10.010Z"
+  }
+},
+{
+  "model": "casino.withdrawrequest",
+  "pk": 73,
+  "fields": {
+    "user_name": "xkxlation",
+    "item_name": "Sugar",
+    "amount": 1,
+    "is_completed": false,
+    "created_at": "2025-12-05T20:56:13.613Z"
+  }
+},
+{
+  "model": "casino.withdrawrequest",
+  "pk": 74,
+  "fields": {
+    "user_name": "xkxlation",
+    "item_name": "Sugar",
+    "amount": 1,
+    "is_completed": false,
+    "created_at": "2025-12-05T20:56:17.338Z"
+  }
+},
+{
+  "model": "casino.withdrawrequest",
+  "pk": 75,
+  "fields": {
+    "user_name": "xkxlation",
+    "item_name": "Sugar",
+    "amount": 1,
+    "is_completed": false,
+    "created_at": "2025-12-05T20:57:25.802Z"
+  }
+},
+{
+  "model": "casino.withdrawrequest",
+  "pk": 76,
+  "fields": {
+    "user_name": "xkxlation",
+    "item_name": "Sugar",
+    "amount": 1,
+    "is_completed": false,
+    "created_at": "2025-12-05T20:57:29.792Z"
+  }
+},
+{
+  "model": "casino.withdrawrequest",
+  "pk": 77,
+  "fields": {
+    "user_name": "xkxlation",
+    "item_name": "Sugar",
+    "amount": 1,
+    "is_completed": false,
+    "created_at": "2025-12-05T20:57:35.372Z"
+  }
+},
+{
+  "model": "casino.withdrawrequest",
+  "pk": 78,
+  "fields": {
+    "user_name": "lastdosebeforedream",
+    "item_name": "Candy",
+    "amount": 1,
+    "is_completed": true,
+    "created_at": "2025-12-05T21:52:48.523Z"
+  }
+},
+{
+  "model": "casino.withdrawrequest",
+  "pk": 79,
+  "fields": {
+    "user_name": "lastdosebeforedream",
+    "item_name": "Sugar",
+    "amount": 1,
+    "is_completed": true,
+    "created_at": "2025-12-05T21:52:52.994Z"
+  }
+},
+{
+  "model": "casino.withdrawrequest",
+  "pk": 80,
+  "fields": {
+    "user_name": "lastdosebeforedream",
+    "item_name": "Sugar",
+    "amount": 1,
+    "is_completed": true,
+    "created_at": "2025-12-05T21:52:57.444Z"
+  }
+},
+{
+  "model": "casino.withdrawrequest",
+  "pk": 81,
+  "fields": {
+    "user_name": "lastdosebeforedream",
+    "item_name": "Candy",
+    "amount": 1,
+    "is_completed": true,
+    "created_at": "2025-12-05T21:53:12.150Z"
+  }
+},
+{
+  "model": "casino.withdrawrequest",
+  "pk": 82,
+  "fields": {
+    "user_name": "lastdosebeforedream",
+    "item_name": "Sugar",
+    "amount": 1,
+    "is_completed": true,
+    "created_at": "2025-12-05T21:53:25.109Z"
+  }
+},
+{
+  "model": "casino.withdrawrequest",
+  "pk": 83,
+  "fields": {
+    "user_name": "lastdosebeforedream",
+    "item_name": "Candy",
+    "amount": 1,
+    "is_completed": true,
+    "created_at": "2025-12-05T21:53:29.198Z"
+  }
+},
+{
+  "model": "casino.withdrawrequest",
+  "pk": 84,
+  "fields": {
+    "user_name": "lastdosebeforedream",
+    "item_name": "Sugar",
+    "amount": 1,
+    "is_completed": true,
+    "created_at": "2025-12-05T21:53:36.138Z"
+  }
+},
+{
+  "model": "casino.withdrawrequest",
+  "pk": 85,
+  "fields": {
+    "user_name": "lastdosebeforedream",
+    "item_name": "Candy",
+    "amount": 1,
+    "is_completed": true,
+    "created_at": "2025-12-05T21:53:40.598Z"
+  }
+},
+{
+  "model": "casino.withdrawrequest",
+  "pk": 86,
+  "fields": {
+    "user_name": "lastdosebeforedream",
+    "item_name": "Candy",
+    "amount": 1,
+    "is_completed": true,
+    "created_at": "2025-12-05T22:09:58.342Z"
+  }
+},
+{
+  "model": "casino.withdrawrequest",
+  "pk": 87,
+  "fields": {
+    "user_name": "lastdosebeforedream",
+    "item_name": "Candy",
+    "amount": 1,
+    "is_completed": true,
+    "created_at": "2025-12-05T22:45:37.200Z"
+  }
+},
+{
+  "model": "casino.withdrawrequest",
+  "pk": 88,
+  "fields": {
+    "user_name": "lastdosebeforedream",
+    "item_name": "Sugar",
+    "amount": 1,
+    "is_completed": true,
+    "created_at": "2025-12-05T22:45:41.621Z"
+  }
+},
+{
+  "model": "casino.withdrawrequest",
+  "pk": 89,
+  "fields": {
+    "user_name": "lastdosebeforedream",
+    "item_name": "Sugar",
+    "amount": 1,
+    "is_completed": true,
+    "created_at": "2025-12-05T22:45:46.066Z"
+  }
+},
+{
+  "model": "casino.withdrawrequest",
+  "pk": 90,
+  "fields": {
+    "user_name": "lastdosebeforedream",
+    "item_name": "Candy",
+    "amount": 1,
+    "is_completed": true,
+    "created_at": "2025-12-05T22:45:53.005Z"
+  }
+},
+{
+  "model": "casino.withdrawrequest",
+  "pk": 91,
+  "fields": {
+    "user_name": "lastdosebeforedream",
+    "item_name": "Sugar",
+    "amount": 1,
+    "is_completed": true,
+    "created_at": "2025-12-05T22:46:02.785Z"
+  }
+},
+{
+  "model": "casino.withdrawrequest",
+  "pk": 92,
+  "fields": {
+    "user_name": "lastdosebeforedream",
+    "item_name": "Sugar",
+    "amount": 1,
+    "is_completed": true,
+    "created_at": "2025-12-05T22:48:53.365Z"
+  }
+},
+{
+  "model": "casino.withdrawrequest",
+  "pk": 93,
+  "fields": {
+    "user_name": "lastdosebeforedream",
+    "item_name": "Sugar",
+    "amount": 1,
+    "is_completed": true,
+    "created_at": "2025-12-05T22:48:57.514Z"
+  }
+},
+{
+  "model": "casino.withdrawrequest",
+  "pk": 94,
+  "fields": {
+    "user_name": "lastdosebeforedream",
+    "item_name": "Candy",
+    "amount": 1,
+    "is_completed": true,
+    "created_at": "2025-12-05T22:49:04.563Z"
+  }
+},
+{
+  "model": "casino.withdrawrequest",
+  "pk": 95,
+  "fields": {
+    "user_name": "lastdosebeforedream",
+    "item_name": "Candy",
+    "amount": 1,
+    "is_completed": true,
+    "created_at": "2025-12-05T22:49:09.959Z"
+  }
+},
+{
+  "model": "casino.withdrawrequest",
+  "pk": 96,
+  "fields": {
+    "user_name": "lastdosebeforedream",
+    "item_name": "Sugar",
+    "amount": 1,
+    "is_completed": true,
+    "created_at": "2025-12-05T23:00:01.534Z"
+  }
+},
+{
+  "model": "casino.withdrawrequest",
+  "pk": 97,
+  "fields": {
+    "user_name": "lastdosebeforedream",
+    "item_name": "Sugar",
+    "amount": 1,
+    "is_completed": true,
+    "created_at": "2025-12-05T23:00:06.592Z"
+  }
+},
+{
+  "model": "casino.withdrawrequest",
+  "pk": 98,
+  "fields": {
+    "user_name": "lastdosebeforedream",
+    "item_name": "Candy",
+    "amount": 1,
+    "is_completed": true,
+    "created_at": "2025-12-05T23:04:46.761Z"
+  }
+},
+{
+  "model": "casino.withdrawrequest",
+  "pk": 99,
+  "fields": {
+    "user_name": "lastdosebeforedream",
+    "item_name": "Sugar",
+    "amount": 1,
+    "is_completed": true,
+    "created_at": "2025-12-05T23:04:51.803Z"
+  }
+},
+{
+  "model": "casino.withdrawrequest",
+  "pk": 100,
+  "fields": {
+    "user_name": "lastdosebeforedream",
+    "item_name": "Sugar",
+    "amount": 1,
+    "is_completed": true,
+    "created_at": "2025-12-05T23:05:01.284Z"
+  }
+},
+{
+  "model": "casino.withdrawrequest",
+  "pk": 101,
+  "fields": {
+    "user_name": "lastdosebeforedream",
+    "item_name": "Sugar",
+    "amount": 1,
+    "is_completed": true,
+    "created_at": "2025-12-05T23:06:54.905Z"
+  }
+},
+{
+  "model": "casino.withdrawrequest",
+  "pk": 102,
+  "fields": {
+    "user_name": "lastdosebeforedream",
+    "item_name": "Sugar",
+    "amount": 1,
+    "is_completed": true,
+    "created_at": "2025-12-05T23:07:09.288Z"
+  }
+},
+{
+  "model": "casino.withdrawrequest",
+  "pk": 103,
+  "fields": {
+    "user_name": "woundwound",
+    "item_name": "Frostbite",
+    "amount": 1,
+    "is_completed": true,
+    "created_at": "2025-12-07T21:19:08.262Z"
+  }
+},
+{
+  "model": "casino.withdrawrequest",
+  "pk": 104,
+  "fields": {
+    "user_name": "woundwound",
+    "item_name": "Frostbite",
+    "amount": 1,
+    "is_completed": true,
+    "created_at": "2025-12-07T21:24:49.427Z"
+  }
+},
+{
+  "model": "casino.withdrawrequest",
+  "pk": 106,
+  "fields": {
+    "user_name": "woundwound",
+    "item_name": "Nightblade",
+    "amount": 1,
+    "is_completed": true,
+    "created_at": "2025-12-13T16:27:34.762Z"
+  }
+},
+{
+  "model": "casino.withdrawrequest",
+  "pk": 107,
+  "fields": {
+    "user_name": "woundwound",
+    "item_name": "Red Luger",
+    "amount": 1,
+    "is_completed": true,
+    "created_at": "2025-12-13T16:27:45.798Z"
+  }
+},
+{
+  "model": "casino.withdrawrequest",
+  "pk": 108,
+  "fields": {
+    "user_name": "woundwound",
+    "item_name": "Lightbringer",
+    "amount": 1,
+    "is_completed": true,
+    "created_at": "2025-12-13T16:28:45.805Z"
+  }
+},
+{
+  "model": "casino.withdrawrequest",
+  "pk": 109,
+  "fields": {
+    "user_name": "woundwound",
+    "item_name": "Elderwood Scythe",
+    "amount": 1,
+    "is_completed": true,
+    "created_at": "2025-12-13T16:29:35.575Z"
+  }
+},
+{
+  "model": "casino.withdrawrequest",
+  "pk": 110,
+  "fields": {
+    "user_name": "woundwound",
+    "item_name": "Nightblade",
+    "amount": 1,
+    "is_completed": true,
+    "created_at": "2025-12-13T16:37:06.418Z"
+  }
+},
+{
+  "model": "casino.withdrawrequest",
+  "pk": 111,
+  "fields": {
+    "user_name": "woundwound",
+    "item_name": "Red Luger",
+    "amount": 1,
+    "is_completed": true,
+    "created_at": "2025-12-13T16:37:14.989Z"
+  }
+},
+{
+  "model": "casino.withdrawrequest",
+  "pk": 112,
+  "fields": {
+    "user_name": "woundwound",
+    "item_name": "Lightbringer",
+    "amount": 1,
+    "is_completed": true,
+    "created_at": "2025-12-13T16:37:15.459Z"
+  }
+},
+{
+  "model": "casino.withdrawrequest",
+  "pk": 113,
+  "fields": {
+    "user_name": "woundwound",
+    "item_name": "Elderwood Scythe",
+    "amount": 1,
+    "is_completed": true,
+    "created_at": "2025-12-13T16:37:15.948Z"
+  }
+},
+{
+  "model": "casino.withdrawrequest",
+  "pk": 114,
+  "fields": {
+    "user_name": "woundwound",
+    "item_name": "Elderwood Scythe",
+    "amount": 1,
+    "is_completed": true,
+    "created_at": "2025-12-13T16:49:00.267Z"
+  }
+},
+{
+  "model": "casino.withdrawrequest",
+  "pk": 115,
+  "fields": {
+    "user_name": "woundwound",
+    "item_name": "Lightbringer",
+    "amount": 1,
+    "is_completed": true,
+    "created_at": "2025-12-13T16:49:53.438Z"
+  }
+},
+{
+  "model": "casino.withdrawrequest",
+  "pk": 116,
+  "fields": {
+    "user_name": "woundwound",
+    "item_name": "Red Luger",
+    "amount": 1,
+    "is_completed": true,
+    "created_at": "2025-12-13T16:50:16.795Z"
+  }
+},
+{
+  "model": "casino.withdrawrequest",
+  "pk": 117,
+  "fields": {
+    "user_name": "woundwound",
+    "item_name": "Nightblade",
+    "amount": 1,
+    "is_completed": true,
+    "created_at": "2025-12-13T16:55:27.698Z"
+  }
+},
+{
+  "model": "casino.withdrawrequest",
+  "pk": 118,
+  "fields": {
+    "user_name": "woundwound",
+    "item_name": "Lightbringer",
+    "amount": 1,
+    "is_completed": true,
+    "created_at": "2025-12-13T16:56:19.386Z"
+  }
+},
+{
+  "model": "casino.withdrawrequest",
+  "pk": 119,
+  "fields": {
+    "user_name": "woundwound",
+    "item_name": "Nightblade",
+    "amount": 1,
+    "is_completed": true,
+    "created_at": "2025-12-13T16:56:27.136Z"
+  }
+},
+{
+  "model": "casino.withdrawrequest",
+  "pk": 120,
+  "fields": {
+    "user_name": "woundwound",
+    "item_name": "Elderwood Scythe",
+    "amount": 1,
+    "is_completed": true,
+    "created_at": "2025-12-13T17:05:22.765Z"
+  }
+},
+{
+  "model": "casino.withdrawrequest",
+  "pk": 121,
+  "fields": {
+    "user_name": "woundwound",
+    "item_name": "Frostfade",
+    "amount": 1,
+    "is_completed": true,
+    "created_at": "2026-02-26T17:58:00.961Z"
+  }
+},
+{
+  "model": "casino.withdrawrequest",
+  "pk": 122,
+  "fields": {
+    "user_name": "woundwound",
+    "item_name": "Frostfade",
+    "amount": 1,
+    "is_completed": true,
+    "created_at": "2026-02-26T18:17:41.069Z"
+  }
+},
+{
+  "model": "casino.withdrawrequest",
+  "pk": 123,
+  "fields": {
+    "user_name": "woundwound",
+    "item_name": "Frostfade",
+    "amount": 1,
+    "is_completed": true,
+    "created_at": "2026-02-26T18:29:52.933Z"
+  }
+},
+{
+  "model": "casino.withdrawrequest",
+  "pk": 124,
+  "fields": {
+    "user_name": "woundwound",
+    "item_name": "Vampire's Edge",
+    "amount": 1,
+    "is_completed": true,
+    "created_at": "2026-03-11T18:10:07.218Z"
+  }
+},
+{
+  "model": "casino.withdrawrequest",
+  "pk": 125,
+  "fields": {
+    "user_name": "woundwound",
+    "item_name": "Cotton Candy",
+    "amount": 1,
+    "is_completed": false,
+    "created_at": "2026-03-16T17:13:28.193Z"
+  }
+},
+{
+  "model": "casino.chatmessage",
+  "pk": 1,
+  "fields": {
+    "user": [
+      "woundwound"
+    ],
+    "message": "sDSa",
+    "created_at": "2025-12-09T22:15:31.330Z"
+  }
+},
+{
+  "model": "casino.chatmessage",
+  "pk": 2,
+  "fields": {
+    "user": [
+      "lastdosebeforedream"
+    ],
+    "message": "yo fam",
+    "created_at": "2025-12-09T22:20:21.673Z"
+  }
+},
+{
+  "model": "casino.chatmessage",
+  "pk": 3,
+  "fields": {
+    "user": [
+      "woundwound"
+    ],
+    "message": "yoo",
+    "created_at": "2025-12-09T22:20:38.514Z"
+  }
+},
+{
+  "model": "casino.chatmessage",
+  "pk": 4,
+  "fields": {
+    "user": [
+      "lastdosebeforedream"
+    ],
+    "message": "fuck bitches",
+    "created_at": "2025-12-09T22:21:50.693Z"
+  }
+},
+{
+  "model": "casino.chatmessage",
+  "pk": 5,
+  "fields": {
+    "user": [
+      "woundwound"
+    ],
+    "message": "low skill ebaniy",
+    "created_at": "2025-12-09T22:33:11.600Z"
+  }
+},
+{
+  "model": "casino.chatmessage",
+  "pk": 6,
+  "fields": {
+    "user": [
+      "woundwound"
+    ],
+    "message": "yodfsogodfsgooasdfffffffffffffffffffffffffff",
+    "created_at": "2025-12-10T10:02:38.574Z"
+  }
+},
+{
+  "model": "casino.chatmessage",
+  "pk": 7,
+  "fields": {
+    "user": [
+      "woundwound"
+    ],
+    "message": "das",
+    "created_at": "2025-12-10T10:05:43.861Z"
+  }
+},
+{
+  "model": "casino.chatmessage",
+  "pk": 8,
+  "fields": {
+    "user": [
+      "woundwound"
+    ],
+    "message": "das",
+    "created_at": "2025-12-10T10:05:44.085Z"
+  }
+},
+{
+  "model": "casino.chatmessage",
+  "pk": 9,
+  "fields": {
+    "user": [
+      "woundwound"
+    ],
+    "message": "das",
+    "created_at": "2025-12-10T10:05:44.305Z"
+  }
+},
+{
+  "model": "casino.chatmessage",
+  "pk": 10,
+  "fields": {
+    "user": [
+      "woundwound"
+    ],
+    "message": "ну так дая знаю",
+    "created_at": "2025-12-10T10:10:52.328Z"
+  }
+},
+{
+  "model": "casino.chatmessage",
+  "pk": 11,
+  "fields": {
+    "user": [
+      "woundwound"
+    ],
+    "message": "тупойц ебаный",
+    "created_at": "2025-12-10T10:10:53.738Z"
+  }
+},
+{
+  "model": "casino.chatmessage",
+  "pk": 12,
+  "fields": {
+    "user": [
+      "woundwound"
+    ],
+    "message": "долабеб",
+    "created_at": "2025-12-10T10:10:54.262Z"
+  }
+},
+{
+  "model": "casino.chatmessage",
+  "pk": 13,
+  "fields": {
+    "user": [
+      "woundwound"
+    ],
+    "message": "азкройе",
+    "created_at": "2025-12-10T10:10:54.600Z"
+  }
+},
+{
+  "model": "casino.chatmessage",
+  "pk": 14,
+  "fields": {
+    "user": [
+      "woundwound"
+    ],
+    "message": "даоъанхй",
+    "created_at": "2025-12-10T10:10:55.118Z"
+  }
+},
+{
+  "model": "casino.chatmessage",
+  "pk": 15,
+  "fields": {
+    "user": [
+      "woundwound"
+    ],
+    "message": "я",
+    "created_at": "2025-12-10T10:10:55.249Z"
+  }
+},
+{
+  "model": "casino.chatmessage",
+  "pk": 16,
+  "fields": {
+    "user": [
+      "woundwound"
+    ],
+    "message": "ет маьте",
+    "created_at": "2025-12-10T10:10:55.663Z"
+  }
+},
+{
+  "model": "casino.chatmessage",
+  "pk": 17,
+  "fields": {
+    "user": [
+      "woundwound"
+    ],
+    "message": "буанхй",
+    "created_at": "2025-12-10T10:10:56.120Z"
+  }
+},
+{
+  "model": "casino.chatmessage",
+  "pk": 18,
+  "fields": {
+    "user": [
+      "woundwound"
+    ],
+    "message": "вдж опу",
+    "created_at": "2025-12-10T10:10:56.410Z"
+  }
+},
+{
+  "model": "casino.chatmessage",
+  "pk": 19,
+  "fields": {
+    "user": [
+      "woundwound"
+    ],
+    "message": "ты",
+    "created_at": "2025-12-10T10:10:56.593Z"
+  }
+},
+{
+  "model": "casino.chatmessage",
+  "pk": 20,
+  "fields": {
+    "user": [
+      "woundwound"
+    ],
+    "message": "ващ",
+    "created_at": "2025-12-10T10:10:56.881Z"
+  }
+},
+{
+  "model": "casino.chatmessage",
+  "pk": 21,
+  "fields": {
+    "user": [
+      "woundwound"
+    ],
+    "message": "тко таок",
+    "created_at": "2025-12-10T10:10:57.392Z"
+  }
+},
+{
+  "model": "casino.chatmessage",
+  "pk": 22,
+  "fields": {
+    "user": [
+      "woundwound"
+    ],
+    "message": "йнахуй",
+    "created_at": "2025-12-10T10:10:57.783Z"
+  }
+},
+{
+  "model": "casino.chatmessage",
+  "pk": 23,
+  "fields": {
+    "user": [
+      "woundwound"
+    ],
+    "message": "пиорп",
+    "created_at": "2025-12-10T10:10:58.246Z"
+  }
+},
+{
+  "model": "casino.chatmessage",
+  "pk": 24,
+  "fields": {
+    "user": [
+      "woundwound"
+    ],
+    "message": "сыпбе нанзй со иъ",
+    "created_at": "2025-12-10T10:10:59.487Z"
+  }
+},
+{
+  "model": "casino.chatmessage",
+  "pk": 25,
+  "fields": {
+    "user": [
+      "woundwound"
+    ],
+    "message": "соис ъуй гмне сын шлмаынр ахуй нахуй мо ебанрео на хуй тупое",
+    "created_at": "2025-12-10T10:11:03.367Z"
+  }
+},
+{
+  "model": "casino.chatmessage",
+  "pk": 26,
+  "fields": {
+    "user": [
+      "woundwound"
+    ],
+    "message": "ты пидолрас ебаный анхуй я те мавтье бу нахуй в жопу тупой пидролас нахуй чмо",
+    "created_at": "2025-12-10T10:11:08.734Z"
+  }
+},
+{
+  "model": "casino.chatmessage",
+  "pk": 27,
+  "fields": {
+    "user": [
+      "woundwound"
+    ],
+    "message": "эя",
+    "created_at": "2025-12-10T12:22:44.948Z"
+  }
+},
+{
+  "model": "casino.chatmessage",
+  "pk": 28,
+  "fields": {
+    "user": [
+      "woundwound"
+    ],
+    "message": "те тьма",
+    "created_at": "2025-12-10T12:22:45.351Z"
+  }
+},
+{
+  "model": "casino.chatmessage",
+  "pk": 29,
+  "fields": {
+    "user": [
+      "woundwound"
+    ],
+    "message": "ернащцб агнй",
+    "created_at": "2025-12-10T12:22:45.925Z"
+  }
+},
+{
+  "model": "casino.chatmessage",
+  "pk": 30,
+  "fields": {
+    "user": [
+      "woundwound"
+    ],
+    "message": "т ыв",
+    "created_at": "2025-12-10T12:22:46.129Z"
+  }
+},
+{
+  "model": "casino.chatmessage",
+  "pk": 31,
+  "fields": {
+    "user": [
+      "woundwound"
+    ],
+    "message": "а щеток",
+    "created_at": "2025-12-10T12:22:46.466Z"
+  }
+},
+{
+  "model": "casino.chatmessage",
+  "pk": 32,
+  "fields": {
+    "user": [
+      "woundwound"
+    ],
+    "message": "нйх",
+    "created_at": "2025-12-10T12:22:46.757Z"
+  }
+},
+{
+  "model": "casino.chatmessage",
+  "pk": 33,
+  "fields": {
+    "user": [
+      "woundwound"
+    ],
+    "message": "пдиораа",
+    "created_at": "2025-12-10T12:22:47.104Z"
+  }
+},
+{
+  "model": "casino.chatmessage",
+  "pk": 34,
+  "fields": {
+    "user": [
+      "woundwound"
+    ],
+    "message": "оьтукшлап",
+    "created_at": "2025-12-10T12:22:47.318Z"
+  }
+},
+{
+  "model": "casino.chatmessage",
+  "pk": 35,
+  "fields": {
+    "user": [
+      "woundwound"
+    ],
+    "message": "нгай",
+    "created_at": "2025-12-10T12:22:47.598Z"
+  }
+},
+{
+  "model": "casino.chatmessage",
+  "pk": 36,
+  "fields": {
+    "user": [
+      "woundwound"
+    ],
+    "message": "т ы",
+    "created_at": "2025-12-10T12:22:47.748Z"
+  }
+},
+{
+  "model": "casino.chatmessage",
+  "pk": 37,
+  "fields": {
+    "user": [
+      "woundwound"
+    ],
+    "message": "ващет",
+    "created_at": "2025-12-10T12:22:47.986Z"
+  }
+},
+{
+  "model": "casino.chatmessage",
+  "pk": 38,
+  "fields": {
+    "user": [
+      "woundwound"
+    ],
+    "message": "ок",
+    "created_at": "2025-12-10T12:22:48.140Z"
+  }
+},
+{
+  "model": "casino.chatmessage",
+  "pk": 39,
+  "fields": {
+    "user": [
+      "woundwound"
+    ],
+    "message": "пнахуй",
+    "created_at": "2025-12-10T12:22:48.545Z"
+  }
+},
+{
+  "model": "casino.chatmessage",
+  "pk": 40,
+  "fields": {
+    "user": [
+      "woundwound"
+    ],
+    "message": "гнлкгну",
+    "created_at": "2025-12-10T12:22:49.010Z"
+  }
+},
+{
+  "model": "casino.chatmessage",
+  "pk": 41,
+  "fields": {
+    "user": [
+      "woundwound"
+    ],
+    "message": "егйцмг",
+    "created_at": "2025-12-10T12:22:49.325Z"
+  }
+},
+{
+  "model": "casino.chatmessage",
+  "pk": 42,
+  "fields": {
+    "user": [
+      "woundwound"
+    ],
+    "message": "=ауй",
+    "created_at": "2025-12-10T12:22:49.538Z"
+  }
+},
+{
+  "model": "casino.chatmessage",
+  "pk": 43,
+  "fields": {
+    "user": [
+      "woundwound"
+    ],
+    "message": "я",
+    "created_at": "2025-12-10T12:22:49.773Z"
+  }
+},
+{
+  "model": "casino.chatmessage",
+  "pk": 44,
+  "fields": {
+    "user": [
+      "woundwound"
+    ],
+    "message": "теь е",
+    "created_at": "2025-12-10T12:22:50.041Z"
+  }
+},
+{
+  "model": "casino.chatmessage",
+  "pk": 45,
+  "fields": {
+    "user": [
+      "woundwound"
+    ],
+    "message": "мтаье",
+    "created_at": "2025-12-10T12:22:50.314Z"
+  }
+},
+{
+  "model": "casino.chatmessage",
+  "pk": 46,
+  "fields": {
+    "user": [
+      "woundwound"
+    ],
+    "message": "бюуъарнхуй",
+    "created_at": "2025-12-10T12:22:50.795Z"
+  }
+},
+{
+  "model": "casino.chatmessage",
+  "pk": 47,
+  "fields": {
+    "user": [
+      "woundwound"
+    ],
+    "message": "ажва оп",
+    "created_at": "2025-12-10T12:22:51.187Z"
+  }
+},
+{
+  "model": "casino.chatmessage",
+  "pk": 48,
+  "fields": {
+    "user": [
+      "woundwound"
+    ],
+    "message": "у ты",
+    "created_at": "2025-12-10T12:22:51.424Z"
+  }
+},
+{
+  "model": "casino.chatmessage",
+  "pk": 49,
+  "fields": {
+    "user": [
+      "woundwound"
+    ],
+    "message": "ващек",
+    "created_at": "2025-12-10T12:22:51.687Z"
+  }
+},
+{
+  "model": "casino.chatmessage",
+  "pk": 50,
+  "fields": {
+    "user": [
+      "woundwound"
+    ],
+    "message": "ток такрой",
+    "created_at": "2025-12-10T12:22:52.070Z"
+  }
+},
+{
+  "model": "casino.chatmessage",
+  "pk": 51,
+  "fields": {
+    "user": [
+      "woundwound"
+    ],
+    "message": "пилор",
+    "created_at": "2025-12-10T12:22:52.483Z"
+  }
+},
+{
+  "model": "casino.chatmessage",
+  "pk": 52,
+  "fields": {
+    "user": [
+      "woundwound"
+    ],
+    "message": "стурнй",
+    "created_at": "2025-12-10T12:22:52.887Z"
+  }
+},
+{
+  "model": "casino.chatmessage",
+  "pk": 53,
+  "fields": {
+    "user": [
+      "woundwound"
+    ],
+    "message": "панзхйу",
+    "created_at": "2025-12-10T12:22:53.226Z"
+  }
+},
+{
+  "model": "casino.chatmessage",
+  "pk": 54,
+  "fields": {
+    "user": [
+      "woundwound"
+    ],
+    "message": "нахйу",
+    "created_at": "2025-12-10T12:22:53.550Z"
+  }
+},
+{
+  "model": "casino.chatmessage",
+  "pk": 55,
+  "fields": {
+    "user": [
+      "woundwound"
+    ],
+    "message": "чмо",
+    "created_at": "2025-12-10T12:22:53.753Z"
+  }
+},
+{
+  "model": "casino.chatmessage",
+  "pk": 56,
+  "fields": {
+    "user": [
+      "woundwound"
+    ],
+    "message": "еюарена",
+    "created_at": "2025-12-10T12:22:54.217Z"
+  }
+},
+{
+  "model": "casino.chatmessage",
+  "pk": 57,
+  "fields": {
+    "user": [
+      "woundwound"
+    ],
+    "message": "хуй",
+    "created_at": "2025-12-10T12:22:54.437Z"
+  }
+},
+{
+  "model": "casino.chatmessage",
+  "pk": 58,
+  "fields": {
+    "user": [
+      "woundwound"
+    ],
+    "message": "нахй",
+    "created_at": "2025-12-10T12:22:54.717Z"
+  }
+},
+{
+  "model": "casino.chatmessage",
+  "pk": 59,
+  "fields": {
+    "user": [
+      "woundwound"
+    ],
+    "message": "т ы",
+    "created_at": "2025-12-10T12:22:54.947Z"
+  }
+},
+{
+  "model": "casino.chatmessage",
+  "pk": 60,
+  "fields": {
+    "user": [
+      "woundwound"
+    ],
+    "message": "в ащке",
+    "created_at": "2025-12-10T12:22:55.158Z"
+  }
+},
+{
+  "model": "casino.chatmessage",
+  "pk": 61,
+  "fields": {
+    "user": [
+      "woundwound"
+    ],
+    "message": "клт пи",
+    "created_at": "2025-12-10T12:22:55.533Z"
+  }
+},
+{
+  "model": "casino.chatmessage",
+  "pk": 62,
+  "fields": {
+    "user": [
+      "woundwound"
+    ],
+    "message": "даорс",
+    "created_at": "2025-12-10T12:22:55.834Z"
+  }
+},
+{
+  "model": "casino.chatmessage",
+  "pk": 63,
+  "fields": {
+    "user": [
+      "woundwound"
+    ],
+    "message": "агз",
+    "created_at": "2025-12-10T12:22:56.169Z"
+  }
+},
+{
+  "model": "casino.chatmessage",
+  "pk": 64,
+  "fields": {
+    "user": [
+      "woundwound"
+    ],
+    "message": "sdfjgkdgjksdgkjKFKFFFFfffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff",
+    "created_at": "2026-03-16T15:56:28.330Z"
+  }
+},
+{
+  "model": "casino.userchatprefix",
+  "pk": 1,
+  "fields": {
+    "user": [
+      "woundwound"
+    ],
+    "prefix": "Grinder",
+    "color": "#ffffff"
+  }
+},
+{
+  "model": "casino.giveaway",
+  "pk": 1,
+  "fields": {
+    "creator": "woundwound",
+    "item_id": 273,
+    "item_name": "Frostfade",
+    "item_value": 100,
+    "item_image": "https://tr.rbxcdn.com/180DAY-fbc1439d00a87ee5dcb4ea299864d2fa/420/420/Model/Png/noFilter",
+    "participants": [],
+    "winner": null,
+    "is_active": false,
+    "created_at": "2026-03-03T10:49:22.385Z",
+    "ends_at": "2026-03-04T10:49:22.385Z"
+  }
+},
+{
+  "model": "casino.giveaway",
+  "pk": 2,
+  "fields": {
+    "creator": "woundwound",
+    "item_id": 22,
+    "item_name": "Test Item",
+    "item_value": 10,
+    "item_image": "",
+    "participants": [
+      "admin"
+    ],
+    "winner": "admin",
+    "is_active": false,
+    "created_at": "2026-03-10T18:15:46.716Z",
+    "ends_at": "2026-03-11T18:15:46.716Z"
+  }
+},
+{
+  "model": "casino.giveaway",
+  "pk": 3,
+  "fields": {
+    "creator": "admin",
+    "item_id": 241,
+    "item_name": "Sugar",
+    "item_value": 70,
+    "item_image": "https://tr.rbxcdn.com/180DAY-fc538eca64fbe088a13c8ce66e47a0a2/420/420/Image/Png/noFilter",
+    "participants": [
+      "woundwound"
+    ],
+    "winner": "woundwound",
+    "is_active": false,
+    "created_at": "2026-03-10T21:20:20.705Z",
+    "ends_at": "2026-03-11T21:20:20.705Z"
+  }
+},
+{
+  "model": "casino.giveaway",
+  "pk": 4,
+  "fields": {
+    "creator": "admin",
+    "item_id": 253,
+    "item_name": "Chroma Fire Bunny",
+    "item_value": 13,
+    "item_image": "https://tr.rbxcdn.com/180DAY-3d2b84c6a9da18907c51e690ca01a0cc/420/420/Decal/Png/noFilter",
+    "participants": [
+      "woundwound"
+    ],
+    "winner": "woundwound",
+    "is_active": false,
+    "created_at": "2026-03-10T21:22:36.434Z",
+    "ends_at": "2026-03-11T21:22:36.434Z"
+  }
+},
+{
+  "model": "casino.giveaway",
+  "pk": 5,
+  "fields": {
+    "creator": "admin",
+    "item_id": 47,
+    "item_name": "Test Item",
+    "item_value": 20,
+    "item_image": "",
+    "participants": [
+      "woundwound"
+    ],
+    "winner": "woundwound",
+    "is_active": false,
+    "created_at": "2026-03-10T21:22:44.457Z",
+    "ends_at": "2026-03-11T21:22:44.457Z"
+  }
+}
+]

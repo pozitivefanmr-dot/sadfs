@@ -6,15 +6,53 @@
         </a>
 
         <div class="nav-links">
-            <a href="{% url 'home' %}" class="nav-link"><i class="bi bi-grid"></i> Dashboard</a>
-            <a href="{% url 'trade' %}" class="nav-link"><i class="bi bi-journal-text"></i> History</a>
-            <a href="{% url 'coinflip' %}" class="nav-link"><i class="bi bi-dice-3"></i> Coinflip</a>
+            <a href="{% url 'home' %}" class="nav-link"><i class="bi bi-grid"></i> <span data-i18n="nav.dashboard">Dashboard</span></a>
+            <a href="{% url 'trade' %}" class="nav-link"><i class="bi bi-journal-text"></i> <span data-i18n="nav.history">History</span></a>
+            <a href="{% url 'coinflip' %}" class="nav-link"><i class="bi bi-dice-3"></i> <span data-i18n="nav.coinflip">Coinflip</span></a>
             {% if user.is_superuser %}
-            <a href="{% url 'admin_panel' %}" class="nav-link" style="color: #00ff9d;"><i class="bi bi-shield-lock"></i> Admin</a>
+            <a href="{% url 'admin_panel' %}" class="nav-link" style="color: #00ff9d;"><i class="bi bi-shield-lock"></i> <span data-i18n="nav.admin">Admin</span></a>
             {% endif %}
         </div>
 
         <div class="desktop-auth" style="display: flex; align-items: center;">
+
+            <!-- Language Dropdown -->
+            <div class="lang-dropdown-wrapper">
+                <div class="btn-lang-toggle" aria-label="Language">
+                    <i class="bi bi-translate lang-globe-icon"></i>
+                    <span class="lang-current-code" id="langCurrentCode">EN</span>
+                    <i class="bi bi-chevron-down lang-chevron"></i>
+                </div>
+                <div class="lang-dropdown-menu">
+                    <div class="lang-dd-accent-line"></div>
+                    <div class="lang-dd-header">
+                        <div class="lang-dd-icon-mini"><i class="bi bi-globe2"></i></div>
+                        <div class="lang-dd-title-copy">
+                            <span data-i18n="lang.title">Language</span>
+                            <small data-i18n="lang.subtitle">Choose your language</small>
+                        </div>
+                    </div>
+                    <div class="lang-dd-divider"></div>
+                    <div class="lang-dd-options">
+                        <div class="lang-option" data-lang="en" onclick="setLanguage('en')">
+                            <div class="lang-flag">EN</div>
+                            <div class="lang-option-text">
+                                <span class="lang-option-name">English</span>
+                                <span class="lang-option-native">English</span>
+                            </div>
+                            <i class="bi bi-check-circle-fill lang-option-check"></i>
+                        </div>
+                        <div class="lang-option" data-lang="ru" onclick="setLanguage('ru')">
+                            <div class="lang-flag">RU</div>
+                            <div class="lang-option-text">
+                                <span class="lang-option-name">Russian</span>
+                                <span class="lang-option-native">Русский</span>
+                            </div>
+                            <i class="bi bi-check-circle-fill lang-option-check"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
 
             <!-- Premium Snow Dropdown -->
             <div class="user-dropdown-container snow-dropdown-wrapper">
@@ -38,12 +76,12 @@
                             <div class="snow-dd-icon-ring"></div>
                         </div>
                         <div class="snow-dd-title-copy">
-                            <span>Snow Effect</span>
-                            <small>Particle system control</small>
+                            <span data-i18n="snow.title">Snow Effect</span>
+                            <small data-i18n="snow.subtitle">Particle system control</small>
                         </div>
                         <div class="snow-dd-status" id="snowStatusDot">
                             <div class="snow-dd-status-dot active"></div>
-                            <span>ON</span>
+                            <span data-i18n="snow.on">ON</span>
                         </div>
                     </div>
 
@@ -52,7 +90,7 @@
                     <!-- Intensity control -->
                     <div class="snow-dd-control">
                         <div class="snow-dd-label-row">
-                            <label class="snow-dd-label">Intensity</label>
+                            <label class="snow-dd-label" data-i18n="snow.intensity">Intensity</label>
                             <span class="snow-dd-value" id="snowValueDisplay">50%</span>
                         </div>
                         <div class="snow-dd-slider-row">
@@ -60,9 +98,9 @@
                                 oninput="updateSnowSettings(this.value)">
                         </div>
                         <div class="snow-dd-marks">
-                            <span>Low</span>
-                            <span>Med</span>
-                            <span>High</span>
+                            <span data-i18n="snow.low">Low</span>
+                            <span data-i18n="snow.med">Med</span>
+                            <span data-i18n="snow.high">High</span>
                         </div>
                     </div>
 
@@ -73,7 +111,7 @@
                         <button type="button" class="snow-dd-toggle-btn" onclick="toggleSnowEffect()">
                             <div class="snow-dd-btn-bg"></div>
                             <i class="bi bi-power" id="snowToggleIcon"></i>
-                            <span id="snowToggleBtnText">DISABLE</span>
+                            <span id="snowToggleBtnText" data-i18n-dynamic="snow.disable">DISABLE</span>
                         </button>
                     </div>
                 </div>
@@ -98,7 +136,7 @@
                         <img src="{{ avatar_url }}" class="user-dd-avatar" alt="User">
                         {% endif %}
                         <div class="user-dd-greeting-text">
-                            <span class="user-dd-hello">Welcome back</span>
+                            <span class="user-dd-hello" data-i18n="user.welcomeBack">Welcome back</span>
                             <span class="user-dd-name">{{ user.username }}</span>
                         </div>
                     </div>
@@ -112,8 +150,8 @@
                                 <i class="bi bi-wallet2"></i>
                             </div>
                             <div class="user-dd-item-text">
-                                <span class="user-dd-item-label">Deposit</span>
-                                <span class="user-dd-item-desc">Add funds</span>
+                                <span class="user-dd-item-label" data-i18n="user.deposit">Deposit</span>
+                                <span class="user-dd-item-desc" data-i18n="user.addFunds">Add funds</span>
                             </div>
                             <i class="bi bi-chevron-right user-dd-item-arrow"></i>
                         </div>
@@ -123,8 +161,8 @@
                                 <i class="bi bi-currency-exchange"></i>
                             </div>
                             <div class="user-dd-item-text">
-                                <span class="user-dd-item-label">Withdraw</span>
-                                <span class="user-dd-item-desc">Cash out</span>
+                                <span class="user-dd-item-label" data-i18n="user.withdraw">Withdraw</span>
+                                <span class="user-dd-item-desc" data-i18n="user.cashOut">Cash out</span>
                             </div>
                             <i class="bi bi-chevron-right user-dd-item-arrow"></i>
                         </div>
@@ -135,12 +173,12 @@
                     <!-- Logout -->
                     <a href="{% url 'logout' %}" class="user-dd-logout">
                         <i class="bi bi-box-arrow-right"></i>
-                        <span>Logout</span>
+                        <span data-i18n="user.logout">Logout</span>
                     </a>
                 </div>
             </div>
             {% else %}
-            <div class="btn-login" onclick="openAuthModal()" style="cursor: pointer;">LOGIN</div>
+            <div class="btn-login" onclick="openAuthModal()" style="cursor: pointer;" data-i18n="header.login">LOGIN</div>
             {% endif %}
         </div>
 
@@ -170,24 +208,24 @@
         <!-- Nav links with icons -->
         <a href="{% url 'home' %}" class="mobile-nav-link">
             <div class="mobile-nav-icon"><i class="bi bi-grid"></i></div>
-            <span>Dashboard</span>
+            <span data-i18n="nav.dashboard">Dashboard</span>
             <i class="bi bi-chevron-right mobile-nav-arrow"></i>
         </a>
         <a href="{% url 'trade' %}" class="mobile-nav-link">
             <div class="mobile-nav-icon"><i class="bi bi-journal-text"></i></div>
-            <span>History</span>
+            <span data-i18n="nav.history">History</span>
             <i class="bi bi-chevron-right mobile-nav-arrow"></i>
         </a>
         <a href="{% url 'coinflip' %}" class="mobile-nav-link">
             <div class="mobile-nav-icon"><i class="bi bi-dice-3"></i></div>
-            <span>Coinflip</span>
+            <span data-i18n="nav.coinflip">Coinflip</span>
             <i class="bi bi-chevron-right mobile-nav-arrow"></i>
         </a>
 
         {% if user.is_superuser %}
         <a href="{% url 'admin_panel' %}" class="mobile-nav-link" style="border-left: 2px solid #00ff9d;">
             <div class="mobile-nav-icon" style="color: #00ff9d;"><i class="bi bi-shield-lock"></i></div>
-            <span style="color: #00ff9d;">Admin</span>
+            <span style="color: #00ff9d;" data-i18n="nav.admin">Admin</span>
             <i class="bi bi-chevron-right mobile-nav-arrow"></i>
         </a>
         {% endif %}
@@ -197,25 +235,43 @@
         <div class="mobile-action-buttons">
             <div class="btn-mobile-action deposit" onclick="openBotModal('DEPOSIT'); toggleMobileMenu()">
                 <i class="bi bi-wallet2"></i>
-                <span>DEPOSIT</span>
+                <span data-i18n="user.depositUp">DEPOSIT</span>
             </div>
             <div class="btn-mobile-action withdraw" onclick="openBotModal('WITHDRAW'); toggleMobileMenu()">
                 <i class="bi bi-currency-exchange"></i>
-                <span>WITHDRAW</span>
+                <span data-i18n="user.withdrawUp">WITHDRAW</span>
             </div>
         </div>
 
         <a href="{% url 'logout' %}" class="mobile-logout-btn">
             <i class="bi bi-box-arrow-right"></i>
-            <span>LOGOUT</span>
+            <span data-i18n="user.logoutUp">LOGOUT</span>
             <span class="mobile-logout-user">({{ user.username }})</span>
         </a>
         {% else %}
         <div class="mobile-login-btn" onclick="openAuthModal(); toggleMobileMenu()">
             <i class="bi bi-person-circle"></i>
-            LOGIN WITH ROBLOX
+            <span data-i18n="header.loginRoblox">LOGIN WITH ROBLOX</span>
         </div>
         {% endif %}
+
+        <!-- Mobile language picker -->
+        <div class="mobile-lang-section">
+            <div class="mobile-lang-title">
+                <i class="bi bi-translate"></i>
+                <span data-i18n="lang.title">Language</span>
+            </div>
+            <div class="mobile-lang-options">
+                <div class="mobile-lang-option" data-lang="en" onclick="setLanguage('en')">
+                    <div class="lang-flag">EN</div>
+                    <span class="mobile-lang-option-text">English</span>
+                </div>
+                <div class="mobile-lang-option" data-lang="ru" onclick="setLanguage('ru')">
+                    <div class="lang-flag">RU</div>
+                    <span class="mobile-lang-option-text">Русский</span>
+                </div>
+            </div>
+        </div>
     </div>
 </div>
 
@@ -223,7 +279,7 @@
     <div class="bot-modal">
         <div class="modal-close" onclick="closeBotModal()">&#10005;</div>
 
-        <h2 id="modalTitle">SELECT BOT</h2>
+        <h2 id="modalTitle" data-i18n="bot.selectBot">SELECT BOT</h2>
 
         {% for bot in bots_data %}
         <div class="bot-row">
@@ -244,7 +300,7 @@
             </div>
 
             <a href="{{ bot.link }}" target="_blank" class="btn-bot-join">
-                JOIN
+                <span data-i18n="bot.join">JOIN</span>
             </a>
         </div>
         {% endfor %}
@@ -279,10 +335,12 @@
             overlay.classList.add('active');
 
             if (type === 'DEPOSIT') {
-                title.innerText = "DEPOSIT ITEMS";
+                title.setAttribute('data-i18n', 'bot.depositItems');
+                title.innerText = (window.I18N && window.I18N.t) ? window.I18N.t('bot.depositItems') : "DEPOSIT ITEMS";
                 title.style.color = "var(--primary-green)";
             } else {
-                title.innerText = "WITHDRAW ITEMS";
+                title.setAttribute('data-i18n', 'bot.withdrawItems');
+                title.innerText = (window.I18N && window.I18N.t) ? window.I18N.t('bot.withdrawItems') : "WITHDRAW ITEMS";
                 title.style.color = "var(--primary-cyan)";
             }
         }

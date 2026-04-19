@@ -2,6 +2,11 @@
 {% load static %}
 {% load custom_filters %}
 
+{% block seo_title %}MMFLIP | MM2 Coinflip Games — Bet & Win MM2 Items{% endblock %}
+{% block seo_description %}Join or create MM2 coinflip games. Bet your Murder Mystery 2 godlies, ancients and more in fair 50/50 coin flip battles!{% endblock %}
+{% block og_title %}MMFLIP — MM2 Coinflip Games{% endblock %}
+{% block og_description %}Join or create MM2 coinflip games. Bet your MM2 items in fair 50/50 battles!{% endblock %}
+
 {% block content %}
 {% include 'header.html' %}
 
@@ -39,7 +44,7 @@
                     <i class="bi bi-fire"></i>
                 </div>
                 <div class="cf-stat-body">
-                    <div class="cf-stat-label">ACTIVE GAMES</div>
+                    <div class="cf-stat-label" data-i18n="cf.activeGamesLabel">ACTIVE GAMES</div>
                     <div class="cf-stat-value cf-stat-value--large text-green">{{ games.count }}</div>
                 </div>
             </div>
@@ -53,11 +58,11 @@
                 </div>
                 <div class="cf-stat-body">
                     <div class="cf-stat-label">
-                        PROFIT
+                        <span data-i18n="cf.profitLabel">PROFIT</span>
                         <div class="cf-profit-tabs">
-                            <span class="cf-profit-tab active" onclick="switchProfitTab(this, 'all')">ALL</span>
-                            <span class="cf-profit-tab" onclick="switchProfitTab(this, '7d')">7D</span>
-                            <span class="cf-profit-tab" onclick="switchProfitTab(this, 'today')">24H</span>
+                            <span class="cf-profit-tab active" onclick="switchProfitTab(this, 'all')" data-i18n="cf.tabAll">ALL</span>
+                            <span class="cf-profit-tab" onclick="switchProfitTab(this, '7d')" data-i18n="cf.tab7d">7D</span>
+                            <span class="cf-profit-tab" onclick="switchProfitTab(this, 'today')" data-i18n="cf.tab24h">24H</span>
                         </div>
                     </div>
                     <div class="cf-stat-value cf-stat-value--large {% if profit_all >= 0 %}text-green{% else %}text-red{% endif %}"
@@ -75,10 +80,10 @@
 
         {% if user.is_authenticated %}
         <button type="button" class="btn-place-bet" onclick="openCreateModal()">
-            <span><i class="bi bi-plus-lg"></i></span> CREATE GAME
+            <span><i class="bi bi-plus-lg"></i></span> <span data-i18n="cf.createGame">CREATE GAME</span>
         </button>
         {% else %}
-        <div class="btn-login" onclick="openAuthModal()" style="cursor: pointer;">LOGIN TO PLAY</div>
+        <div class="btn-login" onclick="openAuthModal()" style="cursor: pointer;" data-i18n="cf.loginToPlay">LOGIN TO PLAY</div>
         {% endif %}
     </div>
 
@@ -110,8 +115,8 @@
             {% empty %}
             <div class="text-center text-muted empty-msg" style="padding: 80px 20px; display: flex; flex-direction: column; align-items: center; gap: 8px;">
                 <i class="bi bi-dice-3" style="font-size: 2.4rem; color: rgba(0,255,157,0.15);"></i>
-                <h3 style="margin: 0; font-size: 1rem; font-weight: 700; color: #4a5e52; letter-spacing: 2px; text-transform: uppercase;">NO GAMES YET</h3>
-                <p style="margin: 0; font-size: 0.8rem; color: #3d4f45;">Be the first to create one!</p>
+                <h3 style="margin: 0; font-size: 1rem; font-weight: 700; color: #4a5e52; letter-spacing: 2px; text-transform: uppercase;" data-i18n="cf.noGamesYet">NO GAMES YET</h3>
+                <p style="margin: 0; font-size: 0.8rem; color: #3d4f45;" data-i18n="cf.beFirst">Be the first to create one!</p>
             </div>
             {% endfor %}
         </div>
@@ -125,7 +130,7 @@
         {% csrf_token %}
 
         <div class="modal-header">
-            <h2 id="modalTitle">CREATE GAME</h2>
+            <h2 id="modalTitle" data-i18n="cf.createGame">CREATE GAME</h2>
             <div class="modal-close-btn" onclick="closeModal()"><i class="bi bi-x-lg"></i></div>
         </div>
 
@@ -161,7 +166,7 @@
                     <div class="check-indicator"></div>
 
                     <div class="item-img-container" style="height: 60px; background: transparent;">
-                        <img src="{{ item.image_url }}" class="item-img" alt="Item"
+                        <img src="{{ item.image_url }}" class="item-img" alt="{{ item.item_name }}" loading="lazy" decoding="async"
                             onerror="this.src='https://static.wikia.nocookie.net/murder-mystery-2/images/5/53/Godly_Icon.png'">
                     </div>
 
@@ -175,13 +180,13 @@
                 {% empty %}
                 <div class="empty-inventory-placeholder premium-empty">
                     <i class="bi bi-box-seam empty-icon-premium"></i>
-                    <h3 class="empty-title premium-title">INVENTORY EMPTY</h3>
-                    <p class="empty-desc premium-desc">
+                    <h3 class="empty-title premium-title" data-i18n="cf.invEmptyTitle">INVENTORY EMPTY</h3>
+                    <p class="empty-desc premium-desc" data-i18n-html="cf.invEmptyDesc">
                         You don't have any items yet.<br>
                         Use our bot to start playing.
                     </p>
                     <button type="button" class="btn-deposit-premium" onclick="openBotModal('DEPOSIT')">
-                        <i class="bi bi-wallet2"></i> DEPOSIT ITEMS
+                        <i class="bi bi-wallet2"></i> <span data-i18n="home.depositBtn">DEPOSIT ITEMS</span>
                     </button>
                 </div>
                 {% endfor %}
@@ -196,7 +201,7 @@
                         <i class="bi bi-layers-fill"></i>
                     </div>
                     <div class="premium-sel-content">
-                        <span class="premium-selected-label">SELECTED</span>
+                        <span class="premium-selected-label" data-i18n="cf.selected">SELECTED</span>
                         <div class="premium-selected-value-row">
                             <img src="{% static 'img/sv_coin.png' %}" class="premium-selected-coin" alt="SV">
                             <span id="modal-selected-sum" class="premium-selected-value">0</span>
@@ -221,14 +226,14 @@
                         <i class="bi bi-sliders2"></i>
                     </div>
                     <div class="join-info-content">
-                        <span class="req-label">Entry Range</span>
+                        <span class="req-label" data-i18n="cf.entryRange">Entry Range</span>
                         <span class="req-range" id="joinRangeVal">0 - 0</span>
                     </div>
                 </div>
             </div>
 
             <button type="submit" id="modalActionBtn" class="btn btn-create btn-submit-create"
-                style="width: auto; padding: 0 50px;" disabled>
+                style="width: auto; padding: 0 50px;" disabled data-i18n-dynamic="cf.confirm">
                 CREATE
             </button>
         </div>
@@ -242,17 +247,22 @@
     let joinMin = 0;
     let joinMax = 0;
 
+    function _tr(k, f) { return (window.I18N && window.I18N.t) ? window.I18N.t(k) : f; }
+
     function openCreateModal() {
         mode = 'CREATE';
         resetModal();
         document.getElementById('inventoryModal').classList.add('active');
         document.body.style.overflow = 'hidden';
-        document.getElementById('modalTitle').innerText = "CREATE GAME";
+        const modalTitle = document.getElementById('modalTitle');
+        modalTitle.setAttribute('data-i18n', 'cf.createGame');
+        modalTitle.innerText = _tr('cf.createGame', 'CREATE GAME');
         document.getElementById('coinSelector').style.display = "flex";
         document.getElementById('joinInfoBox').style.display = "none";
 
         const btn = document.getElementById('modalActionBtn');
-        btn.innerText = "CREATE";
+        btn.setAttribute('data-i18n-dynamic', 'cf.confirm');
+        btn.innerText = _tr('cf.confirm', 'CREATE');
         btn.className = 'btn btn-create btn-submit-create';
         document.getElementById('modalForm').action = "{% url 'create_game' %}";
     }
@@ -264,13 +274,16 @@
         resetModal();
         document.getElementById('inventoryModal').classList.add('active');
         document.body.style.overflow = 'hidden';
-        document.getElementById('modalTitle').innerText = "JOIN VS " + creator;
+        const modalTitle = document.getElementById('modalTitle');
+        modalTitle.removeAttribute('data-i18n');
+        modalTitle.innerText = _tr('cf.joinVs', 'JOIN VS') + " " + creator;
         document.getElementById('coinSelector').style.display = "none";
         document.getElementById('joinInfoBox').style.display = "flex";
         document.getElementById('joinRangeVal').innerText = min + " - " + max;
 
         const btn = document.getElementById('modalActionBtn');
-        btn.innerText = "CONFIRM JOIN";
+        btn.setAttribute('data-i18n-dynamic', 'cf.confirmJoin');
+        btn.innerText = _tr('cf.confirmJoin', 'CONFIRM JOIN');
         btn.className = 'btn btn-confirm-join btn-submit-join';
         document.getElementById('modalForm').action = "/coinflip/join/" + gameId + "/";
     }
@@ -350,7 +363,7 @@
                 btn.disabled = true;
                 btn.setAttribute('data-processing', 'true');
                 const originalText = btn.innerText;
-                btn.innerText = "JOINING...";
+                btn.innerText = _tr('cf.joining', 'JOINING...');
 
                 const formData = new FormData(form);
 
@@ -365,7 +378,7 @@
                             closeModal();
                             // РљРЅРѕРїРєСѓ СЂР°Р·Р±Р»РѕРєРёСЂСѓРµРј С‚РѕР»СЊРєРѕ РµСЃР»Рё РѕС‚РєСЂС‹РІР°РµРј РјРѕРґР°Р»РєСѓ Р·Р°РЅРѕРІРѕ
                         } else {
-                            alert(data.message || "Error joining game");
+                            alert(data.message || _tr('cf.errorJoining', 'Error joining game'));
                             // Р•СЃР»Рё РѕС€РёР±РєР° - РІРѕР·РІСЂР°С‰Р°РµРј РєРЅРѕРїРєСѓ Рє Р¶РёР·РЅРё
                             btn.disabled = false;
                             btn.removeAttribute('data-processing');
@@ -387,7 +400,7 @@
 
                 btn.disabled = true;
                 btn.setAttribute('data-processing', 'true');
-                btn.innerText = "CREATING...";
+                btn.innerText = _tr('cf.creating', 'CREATING...');
 
                 // Р•СЃР»Рё С„РѕСЂРјР° РѕС‚РїСЂР°РІР»СЏРµС‚СЃСЏ СЃС‚Р°РЅРґР°СЂС‚РЅРѕ (РїРµСЂРµР·Р°РіСЂСѓР·РєР°),
                 // РєРЅРѕРїРєР° РѕСЃС‚Р°РЅРµС‚СЃСЏ Р·Р°Р±Р»РѕРєРёСЂРѕРІР°РЅРЅРѕР№ РґРѕ РїРµСЂРµР·Р°РіСЂСѓР·РєРё СЃС‚СЂР°РЅРёС†С‹.
