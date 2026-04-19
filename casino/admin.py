@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import TradeLog, CommissionLog
+from .models import TradeLog, CommissionLog, ItemLog
 
 
 @admin.register(TradeLog)
@@ -24,3 +24,14 @@ class CommissionLogAdmin(admin.ModelAdmin):
     list_filter = ('created_at',)
     readonly_fields = ('game', 'winner', 'item_name', 'item_value', 'item_id',
                        'total_pot', 'total_items', 'target_commission', 'actual_percent', 'created_at')
+
+
+@admin.register(ItemLog)
+class ItemLogAdmin(admin.ModelAdmin):
+    list_display = ('created_at', 'username', 'action', 'item_name', 'item_value',
+                    'related_game_id', 'related_giveaway_id', 'ip_address')
+    list_filter = ('action', 'created_at')
+    search_fields = ('username', 'item_name', 'note', 'ip_address')
+    readonly_fields = ('username', 'action', 'item_id', 'item_name', 'item_value',
+                       'related_game_id', 'related_giveaway_id', 'note', 'ip_address', 'created_at')
+    date_hierarchy = 'created_at'

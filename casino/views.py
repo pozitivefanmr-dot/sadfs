@@ -20,10 +20,73 @@ from django.contrib.auth import login, logout
 from django.template.loader import render_to_string
 from django.utils.timesince import timesince
 from django.utils import timezone
+from django.db import transaction
 from django.db.models import Sum, Q
 from django.contrib.auth.models import User
 from django.contrib import messages
+from django_ratelimit.decorators import ratelimit
+from django_ratelimit.exceptions import Ratelimited
 from .models import *
+
+
+def _client_ip(request):
+    xff = request.META.get('HTTP_X_FORWARDED_FOR', '')
+    if xff:
+        return xff.split(',')[0].strip()
+    return request.META.get('REMOTE_ADDR')
+
+
+def log_item_action(username, action, item=None, *, item_id=None, item_name='', item_value=0,
+                    related_game_id=None, related_giveaway_id=None, note='', request=None):
+    """Создаёт запись в ItemLog. Никогда не падает — логирование не должно ломать бизнес-логику."""
+    try:
+        if item is not None:
+            item_id = item_id or item.id
+            item_name = item_name or item.item_name
+            item_value = item_value or item.item_value
+        ItemLog.objects.create(
+            username=username or '',
+            action=action,
+            item_id=item_id,
+            item_name=item_name or '',
+            item_value=item_value or 0,
+            related_game_id=related_game_id,
+            related_giveaway_id=related_giveaway_id,
+            note=note[:255] if note else '',
+            ip_address=_client_ip(request) if request else None,
+        )
+    except Exception as exc:
+        logger.warning("ItemLog write failed: %s", exc)
+
+
+# === CHAT VALIDATION ===
+CHAT_MIN_LEN = 1
+CHAT_MAX_LEN = 300
+CHAT_MAX_REPEAT_CHARS = 15  # запрещаем aaaaaaaaaaaaaaaa...
+CHAT_RECENT_DUP_WINDOW = 60  # секунд: повторение того же сообщения от того же юзера
+
+
+def validate_chat_message(user, raw_text):
+    """Возвращает (cleaned_text, error_or_None)."""
+    if not isinstance(raw_text, str):
+        return None, "Invalid message"
+    text = raw_text.strip()
+    if len(text) < CHAT_MIN_LEN:
+        return None, "Message is empty"
+    if len(text) > CHAT_MAX_LEN:
+        return None, f"Message too long (max {CHAT_MAX_LEN} chars)"
+
+    # Запрещаем длинные подряд повторы одного символа (флуд)
+    if re.search(r'(.)\1{' + str(CHAT_MAX_REPEAT_CHARS) + r',}', text):
+        return None, "Please don't spam repeated characters"
+
+    import datetime as _dt
+    cutoff = timezone.now() - _dt.timedelta(seconds=CHAT_RECENT_DUP_WINDOW)
+    last = ChatMessage.objects.filter(user=user).order_by('-created_at').first()
+    if last and last.message.strip() == text and last.created_at >= cutoff:
+        return None, "Don't repeat the same message"
+
+    return text, None
 
 # ==========================================
 # 1. НАСТРОЙКИ И ВСПОМОГАТЕЛЬНЫЕ ФУНКЦИИ
@@ -703,188 +766,246 @@ def apply_commission(game, winner):
     return commission_logs
 
 @login_required
+@ratelimit(key='user', rate='10/m', block=False)
 def create_game(request):
-    if request.method == 'POST':
+    if request.method != 'POST':
+        return redirect('coinflip')
 
-        last_game = CoinflipGame.objects.filter(
-            player1=request.user.username
-        ).order_by('-created_at').first()
+    if getattr(request, 'limited', False):
+        messages.error(request, "Too many games created. Slow down.")
+        return redirect('coinflip')
 
-        if last_game:
-            # Считаем разницу во времени
-            time_diff = (timezone.now() - last_game.created_at).total_seconds()
-            if time_diff < 5:  # Если прошло меньше 5 секунд
-                messages.error(request, "Please wait a few seconds before creating another game.")
+    last_game = CoinflipGame.objects.filter(
+        player1=request.user.username
+    ).order_by('-created_at').first()
+
+    if last_game and (timezone.now() - last_game.created_at).total_seconds() < 5:
+        messages.error(request, "Please wait a few seconds before creating another game.")
+        return redirect('coinflip')
+
+    selected_ids = request.POST.getlist('items')
+    side = request.POST.get('side', 'green')
+    if side not in ['green', 'yellow']:
+        side = 'green'
+
+    if not selected_ids:
+        messages.error(request, "Select items to bet!")
+        return redirect('coinflip')
+
+    try:
+        with transaction.atomic():
+            items = list(
+                UserItem.objects.select_for_update().filter(
+                    id__in=selected_ids,
+                    owner_name__iexact=request.user.username,
+                    status='available',
+                )
+            )
+            if not items:
+                messages.error(request, "Selected items unavailable.")
                 return redirect('coinflip')
 
-        selected_ids = request.POST.getlist('items')
-        side = request.POST.get('side', 'green')
-        if side not in ['green', 'yellow']: side = 'green'
+            total_bet = sum(item.item_value for item in items)
+            if total_bet < 10:
+                messages.error(request, "Minimum bet is 10 value.")
+                return redirect('coinflip')
 
-        if not selected_ids:
-            messages.error(request, "Select items to bet!")
-            return redirect('coinflip')
+            items_json = []
+            for item in items:
+                item.status = 'betting'
+                item.save(update_fields=['status'])
+                items_json.append({
+                    'id': item.id,
+                    'name': item.item_name,
+                    'value': item.item_value,
+                    'image': item.image_url,
+                })
 
-        items = UserItem.objects.filter(id__in=selected_ids, owner_name__iexact=request.user.username,
-                                        status='available')
-        total_bet = sum(item.item_value for item in items)
+            game = CoinflipGame.objects.create(
+                player1=request.user.username,
+                items1=items_json,
+                value1=total_bet,
+                creator_side=side,
+                is_active=True,
+            )
 
-        if total_bet < 10:
-            messages.error(request, "Minimum bet is 10 value.")
-            return redirect('coinflip')
-
-        items_json = []
-        for item in items:
-            item.status = 'betting'
-            item.save()
-            # Добавляем image_url в JSON
-            items_json.append({
-                'id': item.id,
-                'name': item.item_name,
-                'value': item.item_value,
-                'image': item.image_url  # <---
-            })
-
-        CoinflipGame.objects.create(
-            player1=request.user.username,
-            items1=items_json,
-            value1=total_bet,
-            creator_side=side,
-            is_active=True
-        )
-        messages.success(request, f"Game created on {side.upper()} side!")
+            for it in items:
+                log_item_action(request.user.username, 'bet_lock', item=it,
+                                related_game_id=game.id, request=request)
+    except Exception as exc:
+        logger.exception("create_game failed: %s", exc)
+        messages.error(request, "Could not create game. Try again.")
         return redirect('coinflip')
+
+    messages.success(request, f"Game created on {side.upper()} side!")
     return redirect('coinflip')
 
 
 @login_required
+@ratelimit(key='user', rate='20/m', block=False)
 def join_game(request, game_id):
-    if request.method == 'POST':
-        # Проверяем, это AJAX запрос или обычный?
-        is_ajax = request.headers.get('x-requested-with') == 'XMLHttpRequest'
-
-        game = get_object_or_404(CoinflipGame, id=game_id)
-
-        # --- ПРОВЕРКИ (Упростим для краткости, логика та же) ---
-        error_msg = None
-        if game.player1.lower() == request.user.username.lower():
-            error_msg = "You cannot join your own game!"
-
-        selected_ids = request.POST.getlist('items')
-        if not selected_ids and not error_msg:
-            error_msg = "Select items to match the bet!"
-
-        if error_msg:
-            if is_ajax: return JsonResponse({'status': 'error', 'message': error_msg})
-            messages.error(request, error_msg)
-            return redirect('coinflip')
-
-        # Достаем предметы
-        items = UserItem.objects.filter(id__in=selected_ids, owner_name__iexact=request.user.username,
-                                        status='available')
-        total_bet_p2 = sum(item.item_value for item in items)
-
-        # Проверки ставок (используем методы модели для единого расчёта)
-        min_req = game.min_join_value()
-        max_req = game.max_join_value()
-
-        if total_bet_p2 < 10:
-            error_msg = "Minimum bet is 10!"
-        elif not (min_req <= total_bet_p2 <= max_req):
-            error_msg = f"Bet out of range ({min_req}-{max_req})"
-
-        if error_msg:
-            if is_ajax: return JsonResponse({'status': 'error', 'message': error_msg})
-            messages.error(request, error_msg)
-            return redirect('coinflip')
-
-        # === ЕСЛИ ВСЕ ОК, ИГРАЕМ ===
-
-        # 1. Блокируем предметы
-        items_json_p2 = []
-        for item in items:
-            item.status = 'betting'
-            item.save()
-            items_json_p2.append({
-                'id': item.id, 'name': item.item_name, 'value': item.item_value, 'image': item.image_url
-            })
-
-        # 2. Определяем победителя
-        try:
-            resp = requests.get("https://www.random.org/integers/?num=1&min=1&max=2&col=1&base=10&format=plain&rnd=new",
-                                timeout=3)
-            result = int(resp.text.strip())
-        except:
-            result = secrets.randbelow(2) + 1
-
-        winning_side_num = 1 if game.creator_side == 'green' else 2
-        winner = game.player1 if result == winning_side_num else request.user.username
-
-        # 2.5. Генерируем хеш игры для проверки честности
-        game_hash = generate_game_hash(
-            game.id, game.player1, request.user.username,
-            result, settings.SECRET_KEY
-        )
-
-        # 3. Сохраняем игру
-        game.player2 = request.user.username
-        game.items2 = items_json_p2
-        game.value2 = total_bet_p2
-        game.winner = winner
-        game.random_result = result
-        game.game_hash = game_hash
-        game.is_active = False  # Игра закончена
-        game.save()
-
-        # 4. Раздаем призы
-        all_items_json = game.items1 + game.items2
-        for i in all_items_json:
-            try:
-                db_item = UserItem.objects.get(id=i['id'])
-                db_item.owner_name = winner
-                db_item.status = 'available'
-                db_item.save()
-            except:
-                pass
-
-        # 4.5. Комиссия сайта
-        commission = apply_commission(game, winner)
-
-        # 5. Отправляем лог в Discord (асинхронно)
-        send_discord_log_async(game)
-
-        # === ГЛАВНОЕ ИЗМЕНЕНИЕ ===
-        # Если запрос от JS -> возвращаем JSON, чтобы страница НЕ перезагружалась
-        if is_ajax:
-            return JsonResponse({'status': 'success'})
-
-        # Для обычного входа (на всякий случай)
+    if request.method != 'POST':
         return redirect('coinflip')
 
+    is_ajax = request.headers.get('x-requested-with') == 'XMLHttpRequest'
+
+    if getattr(request, 'limited', False):
+        msg = "Too many actions, slow down."
+        if is_ajax: return JsonResponse({'status': 'error', 'message': msg}, status=429)
+        messages.error(request, msg)
+        return redirect('coinflip')
+
+    selected_ids = request.POST.getlist('items')
+
+    try:
+        with transaction.atomic():
+            game = CoinflipGame.objects.select_for_update().filter(id=game_id, is_active=True).first()
+            if not game:
+                msg = "Game not available."
+                if is_ajax: return JsonResponse({'status': 'error', 'message': msg})
+                messages.error(request, msg)
+                return redirect('coinflip')
+
+            if game.player2:
+                msg = "Game already has a second player."
+                if is_ajax: return JsonResponse({'status': 'error', 'message': msg})
+                messages.error(request, msg)
+                return redirect('coinflip')
+
+            if game.player1.lower() == request.user.username.lower():
+                msg = "You cannot join your own game!"
+                if is_ajax: return JsonResponse({'status': 'error', 'message': msg})
+                messages.error(request, msg)
+                return redirect('coinflip')
+
+            if not selected_ids:
+                msg = "Select items to match the bet!"
+                if is_ajax: return JsonResponse({'status': 'error', 'message': msg})
+                messages.error(request, msg)
+                return redirect('coinflip')
+
+            items = list(
+                UserItem.objects.select_for_update().filter(
+                    id__in=selected_ids,
+                    owner_name__iexact=request.user.username,
+                    status='available',
+                )
+            )
+            total_bet_p2 = sum(item.item_value for item in items)
+
+            min_req = game.min_join_value()
+            max_req = game.max_join_value()
+
+            if total_bet_p2 < 10:
+                msg = "Minimum bet is 10!"
+                if is_ajax: return JsonResponse({'status': 'error', 'message': msg})
+                messages.error(request, msg)
+                return redirect('coinflip')
+            if not (min_req <= total_bet_p2 <= max_req):
+                msg = f"Bet out of range ({min_req}-{max_req})"
+                if is_ajax: return JsonResponse({'status': 'error', 'message': msg})
+                messages.error(request, msg)
+                return redirect('coinflip')
+
+            items_json_p2 = []
+            for item in items:
+                item.status = 'betting'
+                item.save(update_fields=['status'])
+                items_json_p2.append({
+                    'id': item.id, 'name': item.item_name, 'value': item.item_value, 'image': item.image_url,
+                })
+                log_item_action(request.user.username, 'bet_lock', item=item,
+                                related_game_id=game.id, request=request)
+
+            try:
+                resp = requests.get(
+                    "https://www.random.org/integers/?num=1&min=1&max=2&col=1&base=10&format=plain&rnd=new",
+                    timeout=3,
+                )
+                result = int(resp.text.strip())
+            except Exception:
+                result = secrets.randbelow(2) + 1
+
+            winning_side_num = 1 if game.creator_side == 'green' else 2
+            winner = game.player1 if result == winning_side_num else request.user.username
+            loser = request.user.username if winner == game.player1 else game.player1
+
+            game_hash = generate_game_hash(
+                game.id, game.player1, request.user.username,
+                result, settings.SECRET_KEY,
+            )
+
+            game.player2 = request.user.username
+            game.items2 = items_json_p2
+            game.value2 = total_bet_p2
+            game.winner = winner
+            game.random_result = result
+            game.game_hash = game_hash
+            game.is_active = False
+            game.save()
+
+            all_items_json = game.items1 + game.items2
+            for i in all_items_json:
+                try:
+                    db_item = UserItem.objects.select_for_update().get(id=i['id'])
+                    prev_owner = db_item.owner_name
+                    db_item.owner_name = winner
+                    db_item.status = 'available'
+                    db_item.save(update_fields=['owner_name', 'status'])
+                    log_item_action(winner, 'won', item=db_item,
+                                    related_game_id=game.id, request=request)
+                    if prev_owner.lower() != winner.lower():
+                        log_item_action(prev_owner, 'lost', item=db_item,
+                                        related_game_id=game.id, request=request)
+                except UserItem.DoesNotExist:
+                    logger.warning("join_game: item id %s missing", i.get('id'))
+
+            commission = apply_commission(game, winner)
+
+        send_discord_log_async(game)
+    except Exception as exc:
+        logger.exception("join_game failed: %s", exc)
+        msg = "Could not join game. Try again."
+        if is_ajax: return JsonResponse({'status': 'error', 'message': msg}, status=500)
+        messages.error(request, msg)
+        return redirect('coinflip')
+
+    if is_ajax:
+        return JsonResponse({'status': 'success'})
     return redirect('coinflip')
 
 
 @login_required
 def cancel_game(request, game_id):
-    if request.method == 'POST':
-        game = get_object_or_404(CoinflipGame, id=game_id)
+    if request.method != 'POST':
+        return redirect('coinflip')
 
-        if game.player1 != request.user.username:
-            return redirect('coinflip')
-        if game.player2:
-            return redirect('coinflip')
+    try:
+        with transaction.atomic():
+            game = CoinflipGame.objects.select_for_update().filter(id=game_id).first()
+            if not game:
+                return redirect('coinflip')
+            if game.player1 != request.user.username or game.player2:
+                return redirect('coinflip')
 
-        for item_data in game.items1:
-            try:
-                db_item = UserItem.objects.get(id=item_data['id'])
-                if db_item.owner_name == request.user.username:
-                    db_item.status = 'available'
-                    db_item.save()
-            except UserItem.DoesNotExist:
-                pass
+            for item_data in game.items1:
+                try:
+                    db_item = UserItem.objects.select_for_update().get(id=item_data['id'])
+                    if db_item.owner_name == request.user.username:
+                        db_item.status = 'available'
+                        db_item.save(update_fields=['status'])
+                        log_item_action(request.user.username, 'bet_unlock', item=db_item,
+                                        related_game_id=game.id, note='cancel_game', request=request)
+                except UserItem.DoesNotExist:
+                    pass
 
-        game.delete()
-        messages.success(request, "Game cancelled.")
+            game.delete()
+    except Exception as exc:
+        logger.exception("cancel_game failed: %s", exc)
+        messages.error(request, "Could not cancel game.")
+        return redirect('coinflip')
+
+    messages.success(request, "Game cancelled.")
     return redirect('coinflip')
 
 
@@ -1130,13 +1251,15 @@ def accept_trade_log(request):
 
                     # Создаем QTY карточек
                     for _ in range(qty):
-                        UserItem.objects.create(
+                        new_item = UserItem.objects.create(
                             owner_name=sender_name,
                             item_name=item['name'],
                             item_value=item.get('value', 0),
                             image_url=clean_image_url,
                             status='available'
                         )
+                        log_item_action(sender_name, 'create', item=new_item,
+                                        note=f'deposit via {bot_name}', request=request)
                 except Exception as e_item:
                     print(f"⚠️ Ошибка с предметом {item.get('name')}: {e_item}")
                     continue  # Пропускаем битый предмет, но сохраняем остальные
@@ -1154,8 +1277,11 @@ def accept_trade_log(request):
 # === ЛОГИКА АВТОРИЗАЦИИ (JSON) ===
 
 
+@ratelimit(key='ip', rate='10/m', block=False)
 def robox_login(request):
     """Шаг 1: Принимаем ник, находим ID, генерируем код"""
+    if getattr(request, 'limited', False):
+        return JsonResponse({'status': 'error', 'message': 'Too many login attempts'}, status=429)
     if request.method == 'POST':
         try:
             data = json.loads(request.body)
@@ -1244,18 +1370,25 @@ def logout_user(request):
 
 @login_required
 @require_POST
+@ratelimit(key='user', rate='10/m', block=False)
 def withdraw_item(request):
+    if getattr(request, 'limited', False):
+        return JsonResponse({'status': 'error', 'message': 'Too many withdraw requests'}, status=429)
     item_id = request.POST.get('item_id')
     try:
-        item = UserItem.objects.get(id=item_id, owner_name=request.user.username, status='available')
-        item.status = 'withdrawing'
-        item.save()
+        with transaction.atomic():
+            item = UserItem.objects.select_for_update().get(
+                id=item_id, owner_name=request.user.username, status='available'
+            )
+            item.status = 'withdrawing'
+            item.save(update_fields=['status'])
 
-        WithdrawRequest.objects.create(
-            user_name=request.user.username,
-            item_name=item.item_name,
-            amount=item.amount  # Передаем количество в заявку
-        )
+            WithdrawRequest.objects.create(
+                user_name=request.user.username,
+                item_name=item.item_name,
+                amount=item.amount,
+            )
+            log_item_action(request.user.username, 'withdraw_request', item=item, request=request)
         return JsonResponse({'status': 'success', 'message': 'Withdrawal requested!'})
     except UserItem.DoesNotExist:
         return JsonResponse({'status': 'error', 'message': 'Item unavailable.'})
@@ -1288,26 +1421,29 @@ def api_check_withdraw(request):
 # 3. API ДЛЯ БОТА (ПОДТВЕРЖДЕНИЕ)
 @csrf_exempt
 def api_confirm_withdraw(request):
-    if request.method == 'POST':
+    if request.method != 'POST':
+        return JsonResponse({'status': 'error'})
+    try:
         data = json.loads(request.body)
         task_id = data.get('task_id')
-
-        try:
-            task = WithdrawRequest.objects.get(id=task_id)
+        with transaction.atomic():
+            task = WithdrawRequest.objects.select_for_update().get(id=task_id)
             task.is_completed = True
-            task.save()
+            task.save(update_fields=['is_completed'])
 
-            # Удаляем предмет из инвентаря сайта (он ушел в игру)
-            # Или помечаем как 'withdrawn' для истории
-            UserItem.objects.filter(
+            withdrawn = UserItem.objects.select_for_update().filter(
                 owner_name__iexact=task.user_name,
                 item_name=task.item_name,
-                status='withdrawing'
-            ).delete()  # Удаляем, так как пользователь забрал вещь
-
-            return JsonResponse({'status': 'success'})
-        except:
-            return JsonResponse({'status': 'error'})
+                status='withdrawing',
+            )
+            for it in withdrawn:
+                log_item_action(task.user_name, 'withdraw_confirmed', item=it,
+                                note=f'task#{task.id}', request=request)
+            withdrawn.delete()
+        return JsonResponse({'status': 'success'})
+    except Exception as exc:
+        logger.warning("api_confirm_withdraw failed: %s", exc)
+        return JsonResponse({'status': 'error'})
 
 
 @login_required
@@ -1495,49 +1631,51 @@ def api_active_games_json(request):
 
 @login_required
 @require_POST
+@ratelimit(key='user', rate='30/m', block=False)
 def delete_item(request):
+    if getattr(request, 'limited', False):
+        return JsonResponse({'status': 'error', 'message': 'Too fast'}, status=429)
     item_id = request.POST.get('item_id')
     try:
-        item = UserItem.objects.get(
-            id=item_id,
-            owner_name=request.user.username,
-            status='available'
-        )
-        item.delete()
+        with transaction.atomic():
+            item = UserItem.objects.select_for_update().get(
+                id=item_id,
+                owner_name=request.user.username,
+                status='available',
+            )
+            log_item_action(request.user.username, 'delete', item=item, request=request)
+            item.delete()
         return JsonResponse({'status': 'success'})
     except UserItem.DoesNotExist:
         return JsonResponse({
             'status': 'error',
-            'message': 'Item not found or currently in use (game/withdraw).'
+            'message': 'Item not found or currently in use (game/withdraw).',
         })
 
 @csrf_exempt
 def api_cancel_withdraw(request):
-    if request.method == 'POST':
-        try:
-            data = json.loads(request.body)
-            task_id = data.get('task_id')
-
-            # Находим заявку
-            task = WithdrawRequest.objects.get(id=task_id)
-
-            # 1. Возвращаем предмету статус 'available' (чтобы юзер видел, что вывод не удался)
-            # Если хочешь, чтобы предмет ИСЧЕЗ СОВСЕМ, удали этот блок UserItem...update
-            UserItem.objects.filter(
+    if request.method != 'POST':
+        return JsonResponse({'status': 'error'})
+    try:
+        data = json.loads(request.body)
+        task_id = data.get('task_id')
+        with transaction.atomic():
+            task = WithdrawRequest.objects.select_for_update().get(id=task_id)
+            stuck = list(UserItem.objects.select_for_update().filter(
                 owner_name__iexact=task.user_name,
                 item_name=task.item_name,
-                status='withdrawing'
-            ).update(status='available')
-
-            # 2. Удаляем заявку, чтобы бот больше её не видел
+                status='withdrawing',
+            ))
+            for it in stuck:
+                it.status = 'available'
+                it.save(update_fields=['status'])
+                log_item_action(task.user_name, 'withdraw_cancelled', item=it,
+                                note=f'task#{task.id}', request=request)
             task.delete()
-
-            print(f"🚫 Заявка {task_id} отменена (предмет не найден у бота)")
-            return JsonResponse({'status': 'success'})
-        except Exception as e:
-            print(f"Error cancelling: {e}")
-            return JsonResponse({'status': 'error'})
-    return JsonResponse({'status': 'error'})
+        return JsonResponse({'status': 'success'})
+    except Exception as e:
+        logger.warning("api_cancel_withdraw failed: %s", e)
+        return JsonResponse({'status': 'error'})
 
 
 def get_cached_avatar(username):
@@ -1568,18 +1706,23 @@ def api_get_avatar(request, username):
 
 
 @login_required
+@require_POST
+@ratelimit(key='user', rate='5/10s', block=False)
+@ratelimit(key='user', rate='30/m', block=False)
 def send_chat_message(request):
-    if request.method == 'POST':
-        try:
-            data = json.loads(request.body)
-            msg_text = data.get('message', '').strip()
+    if getattr(request, 'limited', False):
+        return JsonResponse({'status': 'error', 'message': 'Slow down — too many messages'}, status=429)
+    try:
+        data = json.loads(request.body)
+    except (ValueError, TypeError):
+        return JsonResponse({'status': 'error', 'message': 'Bad request'}, status=400)
 
-            if msg_text:
-                ChatMessage.objects.create(user=request.user, message=msg_text)
-                return JsonResponse({'status': 'success'})
-        except:
-            pass
-    return JsonResponse({'status': 'error'})
+    cleaned, err = validate_chat_message(request.user, data.get('message', ''))
+    if err:
+        return JsonResponse({'status': 'error', 'message': err}, status=400)
+
+    ChatMessage.objects.create(user=request.user, message=cleaned)
+    return JsonResponse({'status': 'success'})
 
 
 # views.py
@@ -1875,36 +2018,40 @@ def _resolve_expired_giveaways():
 
 @login_required
 @require_POST
+@ratelimit(key='user', rate='5/m', block=False)
 def create_giveaway(request):
     """Создает розыгрыш из предмета инвентаря (вызывается кнопкой GIVEAWAY)"""
+    if getattr(request, 'limited', False):
+        return JsonResponse({'status': 'error', 'message': 'Too many giveaways'}, status=429)
     item_id = request.POST.get('item_id')
     try:
-        item = UserItem.objects.get(
-            id=item_id,
-            owner_name__iexact=request.user.username,
-            status='available'
-        )
+        with transaction.atomic():
+            item = UserItem.objects.select_for_update().get(
+                id=item_id,
+                owner_name__iexact=request.user.username,
+                status='available',
+            )
 
-        # Проверяем — уже есть активный розыгрыш от этого юзера?
-        existing = Giveaway.objects.filter(creator__iexact=request.user.username, is_active=True).count()
-        if existing >= 3:
-            return JsonResponse({'status': 'error', 'message': 'You can have max 3 active giveaways!'})
+            existing = Giveaway.objects.filter(creator__iexact=request.user.username, is_active=True).count()
+            if existing >= 3:
+                return JsonResponse({'status': 'error', 'message': 'You can have max 3 active giveaways!'})
 
-        now = timezone.now()
-        giveaway = Giveaway.objects.create(
-            creator=request.user.username,
-            item_id=item.id,
-            item_name=item.item_name,
-            item_value=item.item_value,
-            item_image=item.image_url,
-            participants=[],
-            is_active=True,
-            created_at=now,
-            ends_at=now + datetime.timedelta(hours=24)
-        )
+            now = timezone.now()
+            giveaway = Giveaway.objects.create(
+                creator=request.user.username,
+                item_id=item.id,
+                item_name=item.item_name,
+                item_value=item.item_value,
+                item_image=item.image_url,
+                participants=[],
+                is_active=True,
+                created_at=now,
+                ends_at=now + datetime.timedelta(hours=24),
+            )
 
-        # Убираем предмет из инвентаря
-        item.delete()
+            log_item_action(request.user.username, 'giveaway_create', item=item,
+                            related_giveaway_id=giveaway.id, request=request)
+            item.delete()
 
         return JsonResponse({'status': 'success', 'giveaway_id': giveaway.id})
     except UserItem.DoesNotExist:
@@ -1913,8 +2060,11 @@ def create_giveaway(request):
 
 @login_required
 @require_POST
+@ratelimit(key='user', rate='15/m', block=False)
 def join_giveaway(request):
     """Пользователь участвует в розыгрыше"""
+    if getattr(request, 'limited', False):
+        return JsonResponse({'status': 'error', 'message': 'Too many actions'}, status=429)
     try:
         data = json.loads(request.body)
         giveaway_id = data.get('giveaway_id')

@@ -90,23 +90,48 @@ def build_database_config():
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/5.2/howto/deployment/checklist/
 
-# SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = os.environ.get('SECRET_KEY', 'django-insecure-1ai(#r*ur=bli!qqv+bbv@!y&13)efy49u-$oc%^zcbu0h$@^0')
-
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = os.environ.get('DEBUG', 'False').lower() in ('true', '1', 'yes')
 
-ALLOWED_HOSTS = os.environ.get('ALLOWED_HOSTS', '*').split(',')
+# SECURITY WARNING: keep the secret key used in production secret!
+SECRET_KEY = os.environ.get('SECRET_KEY')
+if not SECRET_KEY:
+    if DEBUG:
+        SECRET_KEY = 'django-insecure-dev-only-do-not-use-in-prod'
+    else:
+        raise RuntimeError('SECRET_KEY environment variable must be set in production')
 
-# Railway даёт переменную CSRF_TRUSTED_ORIGINS — нужна для POST-запросов
-CSRF_TRUSTED_ORIGINS = os.environ.get('CSRF_TRUSTED_ORIGINS', 'http://127.0.0.1:8000,https://web-production-dae10.up.railway.app').split(',')
+_default_hosts = '*' if DEBUG else ''
+ALLOWED_HOSTS = [h.strip() for h in os.environ.get('ALLOWED_HOSTS', _default_hosts).split(',') if h.strip()]
 
 # Автоматически добавляем Railway домен (если есть)
-RAILWAY_PUBLIC_DOMAIN = os.environ.get('RAILWAY_PUBLIC_DOMAIN', '')
+RAILWAY_PUBLIC_DOMAIN = os.environ.get('RAILWAY_PUBLIC_DOMAIN', '').strip()
+if RAILWAY_PUBLIC_DOMAIN and RAILWAY_PUBLIC_DOMAIN not in ALLOWED_HOSTS:
+    ALLOWED_HOSTS.append(RAILWAY_PUBLIC_DOMAIN)
+
+# Railway даёт переменную CSRF_TRUSTED_ORIGINS — нужна для POST-запросов
+CSRF_TRUSTED_ORIGINS = [o.strip() for o in os.environ.get(
+    'CSRF_TRUSTED_ORIGINS',
+    'http://127.0.0.1:8000,https://web-production-dae10.up.railway.app'
+).split(',') if o.strip()]
+
 if RAILWAY_PUBLIC_DOMAIN:
     railway_origin = f'https://{RAILWAY_PUBLIC_DOMAIN}'
     if railway_origin not in CSRF_TRUSTED_ORIGINS:
         CSRF_TRUSTED_ORIGINS.append(railway_origin)
+
+# === HTTPS / SECURITY HEADERS (применяются только в production) ===
+if not DEBUG:
+    SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
+    SESSION_COOKIE_SECURE = True
+    CSRF_COOKIE_SECURE = True
+    SECURE_SSL_REDIRECT = True
+    SECURE_HSTS_SECONDS = 31536000
+    SECURE_HSTS_INCLUDE_SUBDOMAINS = True
+    SECURE_HSTS_PRELOAD = True
+    SECURE_CONTENT_TYPE_NOSNIFF = True
+    SECURE_REFERRER_POLICY = 'same-origin'
+    X_FRAME_OPTIONS = 'DENY'
 
 
 # Application definition

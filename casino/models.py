@@ -127,6 +127,46 @@ class Giveaway(models.Model):
         return f"Giveaway by {self.creator}: {self.item_name}"
 
 
+class ItemLog(models.Model):
+    """Аудит всех движений предметов: создание, ставка, выигрыш, проигрыш, вывод, удаление."""
+    ACTION_CHOICES = [
+        ('create', 'Created'),
+        ('bet_lock', 'Locked for bet'),
+        ('bet_unlock', 'Unlocked from bet'),
+        ('won', 'Won in coinflip'),
+        ('lost', 'Lost in coinflip'),
+        ('commission', 'Taken as commission'),
+        ('withdraw_request', 'Withdraw requested'),
+        ('withdraw_confirmed', 'Withdraw confirmed'),
+        ('withdraw_cancelled', 'Withdraw cancelled'),
+        ('giveaway_create', 'Sent to giveaway'),
+        ('giveaway_won', 'Won in giveaway'),
+        ('delete', 'Deleted by user'),
+        ('admin_delete', 'Deleted by admin'),
+    ]
+
+    username = models.CharField(max_length=100, db_index=True)
+    action = models.CharField(max_length=32, choices=ACTION_CHOICES, db_index=True)
+    item_id = models.IntegerField(null=True, blank=True)
+    item_name = models.CharField(max_length=100, default='')
+    item_value = models.IntegerField(default=0)
+    related_game_id = models.IntegerField(null=True, blank=True)
+    related_giveaway_id = models.IntegerField(null=True, blank=True)
+    note = models.CharField(max_length=255, blank=True, default='')
+    ip_address = models.GenericIPAddressField(null=True, blank=True)
+    created_at = models.DateTimeField(default=timezone.now, db_index=True)
+
+    class Meta:
+        ordering = ['-created_at']
+        indexes = [
+            models.Index(fields=['username', '-created_at']),
+            models.Index(fields=['action', '-created_at']),
+        ]
+
+    def __str__(self):
+        return f"[{self.action}] {self.username}: {self.item_name} ({self.item_value})"
+
+
 class CommissionLog(models.Model):
     """Лог комиссий, снятых с выигрышей в coinflip"""
     game = models.ForeignKey(CoinflipGame, on_delete=models.CASCADE, related_name='commissions')
