@@ -237,6 +237,130 @@
     <!-- ADD ITEM FORM -->
     <div class="ap-card">
         <div class="ap-card-title">
+            <i class="bi bi-search" style="color: #38bdf8;"></i>
+            Lookup User
+        </div>
+        <form method="POST" action="{% url 'admin_panel' %}" style="display:flex; gap:10px; align-items:flex-end;">
+            {% csrf_token %}
+            <input type="hidden" name="action" value="lookup_user">
+            <div style="flex:1;">
+                <label class="ap-label">Roblox Username</label>
+                <input type="text" name="lookup_username" placeholder="Enter username..." value="{{ lookup_username }}" required class="ap-input">
+            </div>
+            <button type="submit" class="ap-btn-primary" style="width:auto; padding:11px 28px;">
+                <i class="bi bi-search"></i> SEARCH
+            </button>
+            {% if lookup_username %}
+            <form method="POST" action="{% url 'admin_panel' %}" style="display:inline;">
+                {% csrf_token %}
+                <input type="hidden" name="action" value="clear_lookup">
+                <button type="submit" class="ap-btn-del" style="width:auto; padding:11px 18px; height:auto;">
+                    <i class="bi bi-x-lg"></i>
+                </button>
+            </form>
+            {% endif %}
+        </form>
+    </div>
+
+    <!-- LOOKUP RESULTS -->
+    {% if lookup_username %}
+    <div class="ap-card">
+        <div class="ap-inv-header">
+            <div class="ap-card-title" style="margin-bottom:0;">
+                <i class="bi bi-person-badge-fill" style="color: #c084fc;"></i>
+                {{ lookup_username }}'s Profile
+                {% if lookup_roblox_id %}
+                <span class="ap-inv-badge">ID: {{ lookup_roblox_id }}</span>
+                {% endif %}
+            </div>
+            <div class="ap-inv-total">
+                Inventory: <span>{{ lookup_total }} SV</span> · {{ lookup_inventory|length }} items
+            </div>
+        </div>
+
+        {% if lookup_inventory %}
+        <div class="ap-inv-grid">
+            {% for item in lookup_inventory %}
+            <div class="ap-inv-item">
+                {% if item.image_url %}
+                <img src="{{ item.image_url }}" class="ap-inv-img" alt="">
+                {% else %}
+                <div class="ap-inv-placeholder"><i class="bi bi-box-seam"></i></div>
+                {% endif %}
+                <div style="flex:1; min-width:0;">
+                    <div class="ap-inv-name">{{ item.item_name }}</div>
+                    <div class="ap-inv-meta">{{ item.item_value }} SV · #{{ item.id }}</div>
+                </div>
+                <form method="POST" action="{% url 'admin_panel' %}" style="margin:0;"
+                      onsubmit="return confirm('Delete {{ item.item_name }} from {{ lookup_username }}?');">
+                    {% csrf_token %}
+                    <input type="hidden" name="action" value="delete_user_item">
+                    <input type="hidden" name="item_id" value="{{ item.id }}">
+                    <button type="submit" class="ap-btn-del" title="Delete"><i class="bi bi-trash"></i></button>
+                </form>
+            </div>
+            {% endfor %}
+        </div>
+        {% else %}
+        <div class="ap-empty"><i class="bi bi-inbox"></i> No items in inventory</div>
+        {% endif %}
+    </div>
+
+    <!-- LOOKUP USER GAMES -->
+    <div class="ap-card">
+        <div class="ap-card-title">
+            <i class="bi bi-controller" style="color: #fbbf24;"></i>
+            {{ lookup_username }}'s Games
+            <span class="ap-inv-badge" style="background:rgba(251,191,36,0.08);border-color:rgba(251,191,36,0.15);color:#fbbf24;">
+                {{ lookup_games|length }}
+            </span>
+        </div>
+        {% if lookup_games %}
+        <div style="overflow-x:auto;">
+            <table style="width:100%; border-collapse:collapse; font-size:0.8rem;">
+                <thead>
+                    <tr style="border-bottom:1px solid rgba(255,255,255,0.06);">
+                        <th style="padding:8px 10px; text-align:left; color:#6b7c71; font-weight:600;">#</th>
+                        <th style="padding:8px 10px; text-align:left; color:#6b7c71; font-weight:600;">P1</th>
+                        <th style="padding:8px 10px; text-align:left; color:#6b7c71; font-weight:600;">P2</th>
+                        <th style="padding:8px 10px; text-align:left; color:#6b7c71; font-weight:600;">Pot</th>
+                        <th style="padding:8px 10px; text-align:left; color:#6b7c71; font-weight:600;">Winner</th>
+                        <th style="padding:8px 10px; text-align:left; color:#6b7c71; font-weight:600;">Status</th>
+                        <th style="padding:8px 10px; text-align:left; color:#6b7c71; font-weight:600;">Date</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for g in lookup_games %}
+                    <tr style="border-bottom:1px solid rgba(255,255,255,0.03);">
+                        <td style="padding:8px 10px; color:#6b7c71;">{{ g.id }}</td>
+                        <td style="padding:8px 10px; color:{% if g.player1 == lookup_username %}#c084fc{% else %}#fff{% endif %}; font-weight:600;">
+                            {{ g.player1 }} <span style="color:#6b7c71;">({{ g.value1 }})</span>
+                        </td>
+                        <td style="padding:8px 10px; color:{% if g.player2 == lookup_username %}#c084fc{% else %}#fff{% endif %}; font-weight:600;">
+                            {{ g.player2|default:"—" }} {% if g.player2 %}<span style="color:#6b7c71;">({{ g.value2 }})</span>{% endif %}
+                        </td>
+                        <td style="padding:8px 10px; color:#00ff9d; font-weight:700;">{{ g.value1|add:g.value2 }}</td>
+                        <td style="padding:8px 10px; color:{% if g.winner == lookup_username %}#00ff9d{% elif g.winner %}#ff4b4b{% else %}#6b7c71{% endif %}; font-weight:700;">
+                            {% if g.winner == lookup_username %}🏆 WON{% elif g.winner %}💀 LOST{% else %}—{% endif %}
+                        </td>
+                        <td style="padding:8px 10px;">
+                            {% if g.is_active %}<span style="color:#fbbf24;">Active</span>{% else %}<span style="color:#6b7c71;">Ended</span>{% endif %}
+                        </td>
+                        <td style="padding:8px 10px; color:#6b7c71;">{{ g.created_at|date:"d.m H:i" }}</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+        {% else %}
+        <div class="ap-empty"><i class="bi bi-controller"></i> No games found</div>
+        {% endif %}
+    </div>
+    {% endif %}
+
+    <!-- ADD ITEM FORM -->
+    <div class="ap-card">
+        <div class="ap-card-title">
             <i class="bi bi-plus-circle-fill" style="color: #a855f7;"></i>
             Add Item to Player
         </div>

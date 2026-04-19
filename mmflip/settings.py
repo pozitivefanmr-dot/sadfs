@@ -228,6 +228,12 @@ DISCORD_WEBHOOK_URL = os.environ.get(
     'https://discord.com/api/webhooks/1492518777651204238/TPbzx_u5vH1d8j7dN0cdF88f1nlRgkGXkefXr2dip1Qm0k51b0hubFVID39-bPQmDWwH'
 )
 
+# Discord Webhook для логирования событий (логины, действия)
+DISCORD_EVENTS_WEBHOOK_URL = os.environ.get(
+    'DISCORD_EVENTS_WEBHOOK_URL',
+    'https://discord.com/api/webhooks/1495435667113640100/G9IdCaXw1owkBw1a3sGdY0HGf6VvhmRbx_cFKFALt1pVfXxkZwRLD235vWIXYtQZ4kwT'
+)
+
 LOGGING = {
     'version': 1,
     'disable_existing_loggers': False,

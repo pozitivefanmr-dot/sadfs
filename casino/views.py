@@ -913,6 +913,29 @@ def add_test_item(request):
     return redirect('coinflip')
 
 
+def send_event_log(title, description, color=0x3498db, fields=None):
+    """Отправляет лог события в Discord вебхук"""
+    try:
+        webhook_url = getattr(settings, 'DISCORD_EVENTS_WEBHOOK_URL', '')
+        if not webhook_url:
+            return
+        embed = {
+            'title': title,
+            'description': description,
+            'color': color,
+            'timestamp': timezone.now().isoformat(),
+        }
+        if fields:
+            embed['fields'] = fields
+        payload = {'embeds': [embed]}
+        threading.Thread(
+            target=lambda: requests.post(webhook_url, json=payload, timeout=5),
+            daemon=True
+        ).start()
+    except Exception as e:
+        logger.error(f'[Event Log] Error: {e}')
+
+
 def admin_panel(request):
     """Admin panel for superusers to manage items & inventory"""
     if not request.user.is_authenticated or not request.user.is_superuser:
@@ -970,6 +993,34 @@ def admin_panel(request):
             except UserItem.DoesNotExist:
                 messages.error(request, 'Item not found')
 
+        elif action == 'lookup_user':
+            lookup_name = request.POST.get('lookup_username', '').strip()
+            if lookup_name:
+                request.session['admin_lookup_user'] = lookup_name
+            return redirect('admin_panel')
+
+        elif action == 'clear_lookup':
+            if 'admin_lookup_user' in request.session:
+                del request.session['admin_lookup_user']
+            return redirect('admin_panel')
+
+        elif action == 'delete_user_item':
+            item_id = request.POST.get('item_id')
+            try:
+                item = UserItem.objects.get(id=item_id)
+                owner = item.owner_name
+                name = item.item_name
+                item.delete()
+                messages.success(request, f'Deleted "{name}" from {owner} (#{item_id})')
+                send_event_log(
+                    '🗑️ Admin Deleted Item',
+                    f'**Admin:** {request.user.username}\n**Owner:** {owner}\n**Item:** {name} (#{item_id})',
+                    color=0xff4b4b
+                )
+            except UserItem.DoesNotExist:
+                messages.error(request, 'Item not found')
+            return redirect('admin_panel')
+
         elif action == 'force_end_giveaway':
             ga_id = request.POST.get('giveaway_id')
             try:
@@ -1017,6 +1068,23 @@ def admin_panel(request):
     # Active giveaways for management
     active_giveaways = Giveaway.objects.filter(is_active=True).order_by('-created_at')
 
+    # Lookup user
+    lookup_username = request.session.get('admin_lookup_user', '')
+    lookup_inventory = []
+    lookup_games = []
+    lookup_total = 0
+    lookup_roblox_id = None
+    if lookup_username:
+        lookup_inventory = UserItem.objects.filter(
+            owner_name__iexact=lookup_username,
+            status='available'
+        ).order_by('-received_at')
+        lookup_total = lookup_inventory.aggregate(Sum('item_value'))['item_value__sum'] or 0
+        lookup_games = CoinflipGame.objects.filter(
+            Q(player1__iexact=lookup_username) | Q(player2__iexact=lookup_username)
+        ).order_by('-created_at')[:20]
+        lookup_roblox_id = get_roblox_id(lookup_username)
+
     return render(request, 'admin_panel.html', {
         'inventory': inventory,
         'total_value': total_value,
@@ -1024,6 +1092,11 @@ def admin_panel(request):
         'bots_data': bots_data,
         'avatar_url': avatar_url,
         'active_giveaways': active_giveaways,
+        'lookup_username': lookup_username,
+        'lookup_inventory': lookup_inventory,
+        'lookup_games': lookup_games,
+        'lookup_total': lookup_total,
+        'lookup_roblox_id': lookup_roblox_id,
     })
 
 
@@ -1136,6 +1209,16 @@ def verify_page(request):
                 # Создаем или получаем юзера
                 user, created = User.objects.get_or_create(username=username)
                 login(request, user)
+
+                # Логируем вход в Discord
+                send_event_log(
+                    '🔑 User Login',
+                    f'**Username:** {username}\n**Roblox ID:** {user_id}\n**New user:** {"Yes" if created else "No"}',
+                    color=0x00ff9d,
+                    fields=[
+                        {'name': 'IP', 'value': request.META.get("HTTP_X_FORWARDED_FOR", request.META.get("REMOTE_ADDR", "unknown")), 'inline': True},
+                    ]
+                )
 
                 # Чистим сессию
                 del request.session['auth_code']
