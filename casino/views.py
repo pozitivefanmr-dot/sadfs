@@ -1749,7 +1749,8 @@ def get_chat_messages(request):
             'user': msg.user.username,
             'avatar': get_cached_avatar(msg.user.username),
             'text': msg.message,
-            'time': msg.created_at.strftime("%H:%M"),
+            'time': msg.created_at.strftime("%H:%M"),  # UTC, fallback
+            'time_iso': msg.created_at.isoformat(),
             'is_me': is_me,
             'prefix': prefix_text,
             'prefix_color': prefix_color,

@@ -929,11 +929,23 @@
         }
 
         // Р—РђР“Р РЈР—РљРђ (РЎ Р—РђР©РРўРћР™ РћРў РњР•Р Р¦РђРќРРЇ)
+        function formatChatTime(isoString, fallback) {
+            if (!isoString) return fallback || '';
+            try {
+                const d = new Date(isoString);
+                if (isNaN(d.getTime())) return fallback || '';
+                return d.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', hour12: false });
+            } catch (e) {
+                return fallback || '';
+            }
+        }
+
         function renderChatMessage(msg) {
             const msgClass = msg.is_me ? 'msg-me' : 'msg-other';
             const prefixHtml = msg.prefix
                 ? `<span class="chat-tag" style="color: ${msg.prefix_color}">(${escapeHtml(msg.prefix)})</span>`
                 : '';
+            const localTime = formatChatTime(msg.time_iso, msg.time);
             const wrap = document.createElement('div');
             wrap.className = `chat-msg-row ${msgClass}`;
             wrap.dataset.msgId = msg.id;
@@ -944,7 +956,7 @@
                     <div class="chat-bubble">
                         <div class="chat-text">${escapeHtml(msg.text)}</div>
                     </div>
-                    <div class="chat-time">${escapeHtml(msg.time)}</div>
+                    <div class="chat-time">${escapeHtml(localTime)}</div>
                 </div>
             `;
             return wrap;
