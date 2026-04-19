@@ -781,6 +781,7 @@
         <div class="chat-input-area">
             <input type="text" id="chatInput" placeholder="Message..." maxlength="300"
                 data-i18n-attr="placeholder:chat.placeholder"
+                {% if request.user.is_authenticated %}data-current-user="{{ request.user.username }}"{% endif %}
                 onkeypress="handleChatEnter(event)">
             <button class="chat-send-btn" onclick="sendMessage()">
                 <svg viewBox="0 0 24 24">
@@ -919,13 +920,42 @@
 
             input.value = '';
 
+            const currentUser = input.dataset.currentUser;
+            if (currentUser) {
+                const lastAvatar = document.querySelector('.chat-msg-row.msg-me .chat-avatar');
+                const tempEl = renderChatMessage({
+                    id: 'temp-' + Date.now(),
+                    user: currentUser,
+                    avatar: lastAvatar ? lastAvatar.src : '',
+                    text: text,
+                    time_iso: new Date().toISOString(),
+                    time: '',
+                    is_me: true,
+                    prefix: '',
+                    prefix_color: ''
+                });
+                tempEl.dataset.temp = '1';
+                tempEl.style.opacity = '0.55';
+                chatArea.appendChild(tempEl);
+                while (chatArea.children.length > 80) chatArea.removeChild(chatArea.firstChild);
+                scrollToBottom();
+            }
+
             fetch("{% url 'chat_send' %}", {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json', 'X-CSRFToken': getCsrfToken() },
                 body: JSON.stringify({ message: text })
             })
-                .then(() => loadMessages(true)) // true = РїСЂРёРЅСѓРґРёС‚РµР»СЊРЅРѕ РѕР±РЅРѕРІРёС‚СЊ СЃСЂР°Р·Сѓ
-                .catch(err => console.error(err));
+                .then(res => {
+                    if (!res.ok) {
+                        chatArea.querySelectorAll('[data-temp="1"]').forEach(el => el.remove());
+                    }
+                    return loadMessages(true);
+                })
+                .catch(err => {
+                    chatArea.querySelectorAll('[data-temp="1"]').forEach(el => el.remove());
+                    console.error(err);
+                });
         }
 
         // Р—РђР“Р РЈР—РљРђ (РЎ Р—РђР©РРўРћР™ РћРў РњР•Р Р¦РђРќРРЇ)
@@ -979,6 +1009,8 @@
                     if (newestId === lastSeenId && !force) return;
 
                     const isAtBottom = (chatArea.scrollHeight - chatArea.scrollTop <= chatArea.clientHeight + 100);
+
+                    chatArea.querySelectorAll('[data-temp="1"]').forEach(el => el.remove());
 
                     if (force || lastSeenId == null) {
                         chatArea.innerHTML = '';

@@ -1056,8 +1056,9 @@ def cancel_game(request, game_id):
 # ==========================================
 
 @login_required
+@require_POST
 def add_test_item(request):
-    if not request.user.is_superuser:
+    if not request.user.is_authenticated or not request.user.is_superuser:
         return redirect('coinflip')
 
     if request.method == 'POST':
@@ -1438,8 +1439,11 @@ def robox_login(request):
     return JsonResponse({'status': 'error', 'message': 'Method not allowed'})
 
 
+@ratelimit(key='ip', rate='20/m', block=False)
 def verify_page(request):
     """Шаг 2: Проверяем код в описании"""
+    if getattr(request, 'limited', False):
+        return JsonResponse({'status': 'error', 'message': 'Too many verification attempts'}, status=429)
     if request.method == 'POST':
         if 'auth_code' not in request.session:
             return JsonResponse({'status': 'error', 'message': 'Session expired. Try again.'})
@@ -1477,7 +1481,8 @@ def verify_page(request):
                     'message': 'Code not found in bio! Wait 10s and try again.'
                 })
         except Exception as e:
-            return JsonResponse({'status': 'error', 'message': str(e)})
+            logger.warning("verify_page failed: %s", e)
+            return JsonResponse({'status': 'error', 'message': 'Verification failed. Try again.'})
 
     return JsonResponse({'status': 'error', 'message': 'Method not allowed'})
 
@@ -1575,6 +1580,7 @@ def api_confirm_withdraw(request):
 
 
 @login_required
+@require_POST
 def reset_all_withdrawals(request):
     if not request.user.is_superuser:
         return redirect('home')
@@ -2163,6 +2169,9 @@ def create_giveaway(request):
     item_id = request.POST.get('item_id')
     try:
         with transaction.atomic():
+            # Lock the user row to serialize giveaway-creation for this user (prevents race past the >=3 limit)
+            User.objects.select_for_update().filter(pk=request.user.pk).first()
+
             item = UserItem.objects.select_for_update().get(
                 id=item_id,
                 owner_name__iexact=request.user.username,
