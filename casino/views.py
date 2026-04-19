@@ -29,20 +29,6 @@ from django_ratelimit.exceptions import Ratelimited
 from .models import *
 
 
-import os as _os
-import hmac as _hmac
-
-
-def _bot_token_ok(request):
-    """Проверяет, что запрос от бота: заголовок X-Bot-Token совпадает с env BOT_API_TOKEN.
-    Если BOT_API_TOKEN не задан — отклоняем все запросы (fail-closed)."""
-    expected = (_os.environ.get('BOT_API_TOKEN') or '').strip()
-    if not expected:
-        return False
-    provided = request.headers.get('X-Bot-Token', '').strip()
-    return bool(provided) and _hmac.compare_digest(provided, expected)
-
-
 def _client_ip(request):
     xff = request.META.get('HTTP_X_FORWARDED_FOR', '')
     if xff:
@@ -1239,8 +1225,6 @@ def admin_panel(request):
 
 @csrf_exempt
 def accept_trade_log(request):
-    if not _bot_token_ok(request):
-        return JsonResponse({'status': 'error', 'message': 'forbidden'}, status=403)
     if request.method == 'POST':
         try:
             data = json.loads(request.body)
@@ -1411,8 +1395,6 @@ def withdraw_item(request):
 
 
 def api_check_withdraw(request):
-    if not _bot_token_ok(request):
-        return JsonResponse({'status': 'error', 'message': 'forbidden'}, status=403)
     username = request.GET.get('username')
 
     # Получаем ВСЕ активные заявки пользователя
@@ -1439,8 +1421,6 @@ def api_check_withdraw(request):
 # 3. API ДЛЯ БОТА (ПОДТВЕРЖДЕНИЕ)
 @csrf_exempt
 def api_confirm_withdraw(request):
-    if not _bot_token_ok(request):
-        return JsonResponse({'status': 'error', 'message': 'forbidden'}, status=403)
     if request.method != 'POST':
         return JsonResponse({'status': 'error'})
     try:
@@ -1674,8 +1654,6 @@ def delete_item(request):
 
 @csrf_exempt
 def api_cancel_withdraw(request):
-    if not _bot_token_ok(request):
-        return JsonResponse({'status': 'error', 'message': 'forbidden'}, status=403)
     if request.method != 'POST':
         return JsonResponse({'status': 'error'})
     try:
