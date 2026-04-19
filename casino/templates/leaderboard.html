@@ -96,24 +96,24 @@
 <div class="lb-wrap">
     <div class="lb-hero">
         <div class="lb-hero-icon"><i class="bi bi-trophy-fill"></i></div>
-        <h1 class="lb-hero-title">LEADERBOARD</h1>
-        <p class="lb-hero-sub">TOP COINFLIP WINNERS</p>
+        <h1 class="lb-hero-title" data-i18n="lb.title">LEADERBOARD</h1>
+        <p class="lb-hero-sub" data-i18n="lb.sub">TOP COINFLIP WINNERS</p>
     </div>
 
     <div class="lb-tabs">
-        <div class="lb-tab active" data-tab="all" onclick="switchLbTab('all')">ALL TIME</div>
-        <div class="lb-tab" data-tab="week" onclick="switchLbTab('week')">LAST 7 DAYS</div>
+        <div class="lb-tab active" data-tab="all" onclick="switchLbTab('all')" data-i18n="lb.allTime">ALL TIME</div>
+        <div class="lb-tab" data-tab="week" onclick="switchLbTab('week')" data-i18n="lb.week">LAST 7 DAYS</div>
     </div>
 
     {% for period, rows in periods %}
     <div class="lb-table" id="lb-{{ period }}" {% if period != 'all' %}style="display:none;"{% endif %}>
         <div class="lb-row lb-head">
             <div class="lb-rank">#</div>
-            <div>PLAYER</div>
-            <div class="lb-cell lb-hide-mobile">GAMES</div>
-            <div class="lb-cell">WINS</div>
-            <div class="lb-cell lb-hide-mobile">WIN RATE</div>
-            <div class="lb-cell">WON VALUE</div>
+            <div data-i18n="lb.player">PLAYER</div>
+            <div class="lb-cell lb-hide-mobile" data-i18n="lb.games">GAMES</div>
+            <div class="lb-cell" data-i18n="lb.wins">WINS</div>
+            <div class="lb-cell lb-hide-mobile" data-i18n="lb.winRate">WIN RATE</div>
+            <div class="lb-cell" data-i18n="lb.wonValue">WON VALUE</div>
         </div>
         {% for r in rows %}
         <div class="lb-row">
@@ -132,7 +132,7 @@
         {% empty %}
         <div class="lb-empty">
             <i class="bi bi-hourglass-split"></i>
-            No games played yet. Be the first!
+            <span data-i18n="lb.empty">No games played yet. Be the first!</span>
         </div>
         {% endfor %}
     </div>

@@ -216,6 +216,19 @@
         "flip.totalBet":     { en: "TOTAL BET",      ru: "ОБЩАЯ СТАВКА" },
         "flip.close":        { en: "CLOSE",          ru: "ЗАКРЫТЬ" },
 
+        // ===== LEADERBOARD =====
+        "lb.title":      { en: "LEADERBOARD",         ru: "ЛИДЕРБОРД" },
+        "lb.sub":        { en: "TOP COINFLIP WINNERS", ru: "ТОП ПОБЕДИТЕЛЕЙ КОИНФЛИПА" },
+        "lb.allTime":    { en: "ALL TIME",            ru: "ЗА ВСЁ ВРЕМЯ" },
+        "lb.week":       { en: "LAST 7 DAYS",         ru: "ПОСЛЕДНИЕ 7 ДНЕЙ" },
+        "lb.player":     { en: "PLAYER",              ru: "ИГРОК" },
+        "lb.games":      { en: "GAMES",               ru: "ИГРЫ" },
+        "lb.wins":       { en: "WINS",                ru: "ПОБЕДЫ" },
+        "lb.winRate":    { en: "WIN RATE",            ru: "ВИНРЕЙТ" },
+        "lb.wonValue":   { en: "WON VALUE",           ru: "ВЫИГРАНО" },
+        "lb.empty":      { en: "No games played yet. Be the first!", ru: "Пока нет сыгранных игр. Станьте первым!" },
+        "nav.leaderboard": { en: "Leaderboard",       ru: "Лидерборд" },
+
         // ===== HOME MODALS =====
         "home.confirmWithdrawTitle": { en: "CONFIRM WITHDRAWAL",     ru: "ПОДТВЕРДИТЬ ВЫВОД" },
         "home.confirmWithdrawDesc":  { en: "You are about to withdraw this item. It will be sent to the trade bot for pickup.", ru: "Вы собираетесь вывести этот предмет. Он будет отправлен трейд-боту для получения." },
