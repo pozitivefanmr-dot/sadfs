@@ -1,5 +1,16 @@
+import os
 from django.contrib import admin
+from django_otp.admin import OTPAdminSite
 from .models import TradeLog, CommissionLog, ItemLog
+
+# 2FA на /admin/ включается через ENFORCE_ADMIN_2FA=true.
+# По умолчанию выкл, чтобы дать тебе возможность сначала привязать TOTP-устройство:
+#   1. Выставить ENFORCE_ADMIN_2FA=false (или не выставлять), задеплоить
+#   2. Зайти в /admin/, добавить себе TOTP device (Django OTP → TOTP devices),
+#      отсканировать QR в Google Authenticator / Authy
+#   3. Поменять ENFORCE_ADMIN_2FA=true и передеплоить
+if os.environ.get('ENFORCE_ADMIN_2FA', '').lower() in ('true', '1', 'yes'):
+    admin.site.__class__ = OTPAdminSite
 
 
 @admin.register(TradeLog)

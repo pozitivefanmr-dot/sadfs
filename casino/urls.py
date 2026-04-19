@@ -11,6 +11,7 @@ urlpatterns = [
     path('verify/', views.verify_page, name='verify_page'),
     path('logout/', views.logout_user, name='logout'),
     path('coinflip/', views.coinflip_home, name='coinflip'),
+    path('leaderboard/', views.leaderboard, name='leaderboard'),
     path('coinflip/create/', views.create_game, name='create_game'),
     path('coinflip/join/<int:game_id>/', views.join_game, name='join_game'),
     path('add-test-item/', views.add_test_item, name='add_test_item'),

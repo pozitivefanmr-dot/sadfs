@@ -929,11 +929,32 @@
         }
 
         // Р—РђР“Р РЈР—РљРђ (РЎ Р—РђР©РРўРћР™ РћРў РњР•Р Р¦РђРќРРЇ)
+        function renderChatMessage(msg) {
+            const msgClass = msg.is_me ? 'msg-me' : 'msg-other';
+            const prefixHtml = msg.prefix
+                ? `<span class="chat-tag" style="color: ${msg.prefix_color}">(${escapeHtml(msg.prefix)})</span>`
+                : '';
+            const wrap = document.createElement('div');
+            wrap.className = `chat-msg-row ${msgClass}`;
+            wrap.dataset.msgId = msg.id;
+            wrap.innerHTML = `
+                <img src="${msg.avatar}" class="chat-avatar clickable-avatar" title="${escapeHtml(msg.user)}" onclick="openStatsModal('${escapeHtml(msg.user)}')">
+                <div class="chat-bubble-group">
+                    <div class="chat-username">${escapeHtml(msg.user)} ${prefixHtml}</div>
+                    <div class="chat-bubble">
+                        <div class="chat-text">${escapeHtml(msg.text)}</div>
+                    </div>
+                    <div class="chat-time">${escapeHtml(msg.time)}</div>
+                </div>
+            `;
+            return wrap;
+        }
+
         function loadMessages(force = false) {
             fetch("{% url 'chat_get' %}")
                 .then(res => res.json())
                 .then(data => {
-                    const msgs = data.messages;
+                    const msgs = data.messages || [];
                     if (msgs.length === 0) return;
 
                     // РЎР°РјРѕРµ РЅРѕРІРѕРµ СЃРѕРѕР±С‰РµРЅРёРµ РІ СЃРїРёСЃРєРµ
@@ -943,46 +964,24 @@
                     // Р•СЃР»Рё ID РїРѕСЃР»РµРґРЅРµРіРѕ СЃРѕРѕР±С‰РµРЅРёСЏ С‚Р°РєРѕР№ Р¶Рµ, РєР°Рє РјС‹ СѓР¶Рµ РІРёРґРµР»Рё,
                     // Р РјС‹ РЅРµ С„РѕСЂСЃРёСЂСѓРµРј РѕР±РЅРѕРІР»РµРЅРёРµ (РїСЂРё РѕС‚РїСЂР°РІРєРµ)
                     // РўРћ РњР« РќРР§Р•Р“Рћ РќР• Р”Р•Р›РђР•Рњ. РќРёРєР°РєРѕРіРѕ РїРµСЂРµСЂРёСЃРѕРІС‹РІР°РЅРёСЏ HTML.
-                    if (newestId === lastSeenId && !force) {
-                        return;
-                    }
+                    if (newestId === lastSeenId && !force) return;
 
-                    // Р•СЃР»Рё РµСЃС‚СЊ РЅРѕРІС‹Рµ, РѕР±РЅРѕРІР»СЏРµРј ID
-                    lastSeenId = newestId;
-
-                    let html = '';
-                    msgs.forEach(msg => {
-                        // РљР»Р°СЃСЃС‹: msg-me (СЃРїСЂР°РІР°), msg-other (СЃР»РµРІР°)
-                        const msgClass = msg.is_me ? 'msg-me' : 'msg-other';
-                        // Prefix tag
-                        const prefixHtml = msg.prefix
-                            ? `<span class="chat-tag" style="color: ${msg.prefix_color}">(${escapeHtml(msg.prefix)})</span>`
-                            : '';
-
-                        html += `
-                    <div class="chat-msg-row ${msgClass}">
-                        <img src="${msg.avatar}" class="chat-avatar clickable-avatar" title="${msg.user}" onclick="openStatsModal('${msg.user}')">
-
-                        <div class="chat-bubble-group">
-                            <div class="chat-username">${msg.user} ${prefixHtml}</div>
-                            <div class="chat-bubble">
-                                <div class="chat-text">${escapeHtml(msg.text)}</div>
-                            </div>
-                            <div class="chat-time">${msg.time}</div>
-                        </div>
-                    </div>
-                `;
-                    });
-
-                    // РџСЂРѕРІРµСЂСЏРµРј, Р±С‹Р» Р»Рё СЋР·РµСЂ РІРЅРёР·Сѓ (С‡С‚РѕР±С‹ СЃРєСЂРѕР»Р» РЅРµ РїСЂС‹РіР°Р», РµСЃР»Рё РѕРЅ С‡РёС‚Р°РµС‚ РёСЃС‚РѕСЂРёСЋ)
                     const isAtBottom = (chatArea.scrollHeight - chatArea.scrollTop <= chatArea.clientHeight + 100);
 
-                    chatArea.innerHTML = html;
-
-                    // РЎРєСЂРѕР»Р»РёРј РІРЅРёР· С‚РѕР»СЊРєРѕ РµСЃР»Рё СЋР·РµСЂ Р±С‹Р» РІРЅРёР·Сѓ РёР»Рё СЌС‚Рѕ РїРµСЂРІР°СЏ Р·Р°РіСЂСѓР·РєР°
-                    if (isAtBottom || force) {
-                        scrollToBottom();
+                    if (force || lastSeenId == null) {
+                        chatArea.innerHTML = '';
+                        msgs.forEach(m => chatArea.appendChild(renderChatMessage(m)));
+                    } else {
+                        const fresh = msgs.filter(m => m.id > lastSeenId);
+                        fresh.forEach(m => chatArea.appendChild(renderChatMessage(m)));
+                        while (chatArea.children.length > 80) {
+                            chatArea.removeChild(chatArea.firstChild);
+                        }
                     }
+
+                    lastSeenId = newestId;
+
+                    if (isAtBottom || force) scrollToBottom();
                 })
                 .catch(err => console.error("Chat poll error"));
         }

@@ -1,0 +1,151 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block seo_title %}MMFLIP | Leaderboard — Top Coinflip Winners{% endblock %}
+{% block seo_description %}See the top MMFLIP coinflip winners ranked by total winnings, wins and win-rate. Climb the leaderboard!{% endblock %}
+{% block og_title %}MMFLIP — Leaderboard{% endblock %}
+{% block og_description %}Top coinflip winners on MMFLIP.{% endblock %}
+
+{% block content %}
+{% include 'header.html' %}
+
+<style>
+    .lb-wrap { max-width: 1100px; margin: 32px auto 80px; padding: 0 16px; }
+    .lb-hero { text-align: center; margin-bottom: 28px; }
+    .lb-hero-icon {
+        width: 64px; height: 64px; margin: 0 auto 12px;
+        background: linear-gradient(135deg, #00ff9d 0%, #00e5ff 100%);
+        border-radius: 16px; display: flex; align-items: center; justify-content: center;
+        box-shadow: 0 8px 24px rgba(0, 255, 157, 0.25);
+    }
+    .lb-hero-icon i { font-size: 32px; color: #0a0e14; }
+    .lb-hero-title {
+        font-size: 38px; font-weight: 800; letter-spacing: 2px;
+        background: linear-gradient(90deg, #00ff9d, #00e5ff);
+        -webkit-background-clip: text; background-clip: text; color: transparent;
+        margin: 0;
+    }
+    .lb-hero-sub { color: #8b95a8; margin-top: 6px; font-size: 14px; letter-spacing: 1px; }
+
+    .lb-tabs { display: flex; gap: 8px; justify-content: center; margin-bottom: 24px; }
+    .lb-tab {
+        padding: 10px 22px; border-radius: 10px; cursor: pointer;
+        background: rgba(255,255,255,0.04); color: #8b95a8;
+        border: 1px solid rgba(255,255,255,0.06);
+        font-weight: 700; letter-spacing: 1px; font-size: 13px;
+        transition: all .2s;
+    }
+    .lb-tab:hover { color: #fff; }
+    .lb-tab.active {
+        background: linear-gradient(135deg, #00ff9d22, #00e5ff22);
+        color: #00ff9d; border-color: #00ff9d44;
+    }
+
+    .lb-table {
+        background: rgba(255,255,255,0.02); border: 1px solid rgba(255,255,255,0.06);
+        border-radius: 14px; overflow: hidden;
+    }
+    .lb-row {
+        display: grid; grid-template-columns: 64px 1fr 90px 90px 110px 130px;
+        align-items: center; gap: 12px; padding: 14px 18px;
+        border-bottom: 1px solid rgba(255,255,255,0.04);
+        transition: background .15s;
+    }
+    .lb-row:hover { background: rgba(0,255,157,0.03); }
+    .lb-row:last-child { border-bottom: none; }
+    .lb-row.lb-head {
+        background: rgba(255,255,255,0.03); color: #6b7488;
+        font-size: 11px; letter-spacing: 1.5px; font-weight: 700;
+    }
+    .lb-row.lb-head:hover { background: rgba(255,255,255,0.03); }
+
+    .lb-rank {
+        font-weight: 800; font-size: 18px; text-align: center;
+        color: #6b7488;
+    }
+    .lb-rank.gold { color: #ffd700; text-shadow: 0 0 12px rgba(255,215,0,.5); }
+    .lb-rank.silver { color: #c0c8d4; text-shadow: 0 0 8px rgba(192,200,212,.4); }
+    .lb-rank.bronze { color: #cd7f32; text-shadow: 0 0 8px rgba(205,127,50,.4); }
+
+    .lb-user { display: flex; align-items: center; gap: 12px; min-width: 0; }
+    .lb-avatar {
+        width: 40px; height: 40px; border-radius: 50%;
+        background: #1a1f2a; object-fit: cover;
+        border: 2px solid rgba(0,255,157,0.2);
+        flex-shrink: 0;
+    }
+    .lb-username { color: #fff; font-weight: 600; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+
+    .lb-cell { color: #d4dae5; font-weight: 600; text-align: center; }
+    .lb-cell.profit-pos { color: #00ff9d; }
+    .lb-cell.profit-neg { color: #ff6b6b; }
+    .lb-cell.value { color: #00e5ff; font-weight: 700; }
+
+    .lb-empty {
+        text-align: center; padding: 60px 20px; color: #6b7488;
+    }
+    .lb-empty i { font-size: 48px; margin-bottom: 12px; display: block; opacity: .5; }
+
+    @media (max-width: 720px) {
+        .lb-row { grid-template-columns: 40px 1fr 70px 90px; gap: 8px; padding: 12px; }
+        .lb-hide-mobile { display: none; }
+        .lb-hero-title { font-size: 28px; }
+    }
+</style>
+
+<div class="lb-wrap">
+    <div class="lb-hero">
+        <div class="lb-hero-icon"><i class="bi bi-trophy-fill"></i></div>
+        <h1 class="lb-hero-title">LEADERBOARD</h1>
+        <p class="lb-hero-sub">TOP COINFLIP WINNERS</p>
+    </div>
+
+    <div class="lb-tabs">
+        <div class="lb-tab active" data-tab="all" onclick="switchLbTab('all')">ALL TIME</div>
+        <div class="lb-tab" data-tab="week" onclick="switchLbTab('week')">LAST 7 DAYS</div>
+    </div>
+
+    {% for period, rows in periods %}
+    <div class="lb-table" id="lb-{{ period }}" {% if period != 'all' %}style="display:none;"{% endif %}>
+        <div class="lb-row lb-head">
+            <div class="lb-rank">#</div>
+            <div>PLAYER</div>
+            <div class="lb-cell lb-hide-mobile">GAMES</div>
+            <div class="lb-cell">WINS</div>
+            <div class="lb-cell lb-hide-mobile">WIN RATE</div>
+            <div class="lb-cell">WON VALUE</div>
+        </div>
+        {% for r in rows %}
+        <div class="lb-row">
+            <div class="lb-rank {% if forloop.counter == 1 %}gold{% elif forloop.counter == 2 %}silver{% elif forloop.counter == 3 %}bronze{% endif %}">
+                {% if forloop.counter == 1 %}<i class="bi bi-trophy-fill"></i>{% else %}{{ forloop.counter }}{% endif %}
+            </div>
+            <div class="lb-user">
+                <img src="{{ r.avatar }}" class="lb-avatar" alt="{{ r.username }}" onclick="openStatsModal('{{ r.username }}')" style="cursor:pointer;">
+                <span class="lb-username">{{ r.username }}</span>
+            </div>
+            <div class="lb-cell lb-hide-mobile">{{ r.games }}</div>
+            <div class="lb-cell">{{ r.wins }}</div>
+            <div class="lb-cell lb-hide-mobile">{{ r.win_rate }}%</div>
+            <div class="lb-cell value">{{ r.won_value }}</div>
+        </div>
+        {% empty %}
+        <div class="lb-empty">
+            <i class="bi bi-hourglass-split"></i>
+            No games played yet. Be the first!
+        </div>
+        {% endfor %}
+    </div>
+    {% endfor %}
+</div>
+
+<script>
+    function switchLbTab(tab) {
+        document.querySelectorAll('.lb-tab').forEach(t => t.classList.toggle('active', t.dataset.tab === tab));
+        document.getElementById('lb-all').style.display = tab === 'all' ? 'block' : 'none';
+        document.getElementById('lb-week').style.display = tab === 'week' ? 'block' : 'none';
+    }
+</script>
+
+{% include 'footer.html' %}
+{% endblock %}

@@ -29,6 +29,20 @@ from django_ratelimit.exceptions import Ratelimited
 from .models import *
 
 
+import os as _os
+import hmac as _hmac
+
+
+def _bot_token_ok(request):
+    """Проверяет, что запрос от бота: заголовок X-Bot-Token совпадает с env BOT_API_TOKEN.
+    Если BOT_API_TOKEN не задан — отклоняем все запросы (fail-closed)."""
+    expected = (_os.environ.get('BOT_API_TOKEN') or '').strip()
+    if not expected:
+        return False
+    provided = request.headers.get('X-Bot-Token', '').strip()
+    return bool(provided) and _hmac.compare_digest(provided, expected)
+
+
 def _client_ip(request):
     xff = request.META.get('HTTP_X_FORWARDED_FOR', '')
     if xff:
@@ -985,13 +999,13 @@ def cancel_game(request, game_id):
             game = CoinflipGame.objects.select_for_update().filter(id=game_id).first()
             if not game:
                 return redirect('coinflip')
-            if game.player1 != request.user.username or game.player2:
+            if game.player1.lower() != request.user.username.lower() or game.player2:
                 return redirect('coinflip')
 
             for item_data in game.items1:
                 try:
                     db_item = UserItem.objects.select_for_update().get(id=item_data['id'])
-                    if db_item.owner_name == request.user.username:
+                    if db_item.owner_name.lower() == request.user.username.lower():
                         db_item.status = 'available'
                         db_item.save(update_fields=['status'])
                         log_item_action(request.user.username, 'bet_unlock', item=db_item,
@@ -1225,6 +1239,8 @@ def admin_panel(request):
 
 @csrf_exempt
 def accept_trade_log(request):
+    if not _bot_token_ok(request):
+        return JsonResponse({'status': 'error', 'message': 'forbidden'}, status=403)
     if request.method == 'POST':
         try:
             data = json.loads(request.body)
@@ -1378,7 +1394,7 @@ def withdraw_item(request):
     try:
         with transaction.atomic():
             item = UserItem.objects.select_for_update().get(
-                id=item_id, owner_name=request.user.username, status='available'
+                id=item_id, owner_name__iexact=request.user.username, status='available'
             )
             item.status = 'withdrawing'
             item.save(update_fields=['status'])
@@ -1395,6 +1411,8 @@ def withdraw_item(request):
 
 
 def api_check_withdraw(request):
+    if not _bot_token_ok(request):
+        return JsonResponse({'status': 'error', 'message': 'forbidden'}, status=403)
     username = request.GET.get('username')
 
     # Получаем ВСЕ активные заявки пользователя
@@ -1421,6 +1439,8 @@ def api_check_withdraw(request):
 # 3. API ДЛЯ БОТА (ПОДТВЕРЖДЕНИЕ)
 @csrf_exempt
 def api_confirm_withdraw(request):
+    if not _bot_token_ok(request):
+        return JsonResponse({'status': 'error', 'message': 'forbidden'}, status=403)
     if request.method != 'POST':
         return JsonResponse({'status': 'error'})
     try:
@@ -1640,7 +1660,7 @@ def delete_item(request):
         with transaction.atomic():
             item = UserItem.objects.select_for_update().get(
                 id=item_id,
-                owner_name=request.user.username,
+                owner_name__iexact=request.user.username,
                 status='available',
             )
             log_item_action(request.user.username, 'delete', item=item, request=request)
@@ -1654,6 +1674,8 @@ def delete_item(request):
 
 @csrf_exempt
 def api_cancel_withdraw(request):
+    if not _bot_token_ok(request):
+        return JsonResponse({'status': 'error', 'message': 'forbidden'}, status=403)
     if request.method != 'POST':
         return JsonResponse({'status': 'error'})
     try:
@@ -2208,6 +2230,56 @@ def api_active_giveaways(request):
 # ==========================================
 # SEO: robots.txt & sitemap.xml
 # ==========================================
+
+def leaderboard(request):
+    """Топ игроков по числу побед в коинфлипе (всё время + последние 7 дней)."""
+    from collections import defaultdict
+    import datetime as _dt
+
+    finished = CoinflipGame.objects.filter(is_active=False, winner__isnull=False)
+
+    def _build_top(qs, limit=20):
+        stats = defaultdict(lambda: {
+            'username': '', 'games': 0, 'wins': 0, 'won_value': 0, 'wagered': 0,
+        })
+        for g in qs.only('player1', 'player2', 'winner', 'value1', 'value2'):
+            for who, val in ((g.player1, g.value1), (g.player2, g.value2)):
+                if not who:
+                    continue
+                key = who.lower()
+                s = stats[key]
+                s['username'] = s['username'] or who
+                s['games'] += 1
+                s['wagered'] += val or 0
+            wkey = g.winner.lower()
+            stats[wkey]['username'] = stats[wkey]['username'] or g.winner
+            stats[wkey]['wins'] += 1
+            stats[wkey]['won_value'] += (g.value1 or 0) + (g.value2 or 0)
+
+        rows = []
+        for s in stats.values():
+            if s['games'] == 0:
+                continue
+            s['win_rate'] = round(s['wins'] / s['games'] * 100, 1)
+            s['profit'] = s['won_value'] - s['wagered']
+            rows.append(s)
+        rows.sort(key=lambda x: (x['won_value'], x['wins']), reverse=True)
+        return rows[:limit]
+
+    week_cutoff = timezone.now() - _dt.timedelta(days=7)
+    top_all = _build_top(finished)
+    top_week = _build_top(finished.filter(created_at__gte=week_cutoff))
+
+    for row in top_all + top_week:
+        row['avatar'] = get_cached_avatar(row['username'])
+
+    context = {
+        'periods': [('all', top_all), ('week', top_week)],
+        'bots_data': get_bots_status(),
+        'avatar_url': get_cached_avatar(request.user.username) if request.user.is_authenticated else None,
+    }
+    return render(request, 'leaderboard.html', context)
+
 
 def robots_txt(request):
     """Serve robots.txt for search engine crawlers."""
