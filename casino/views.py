@@ -29,6 +29,54 @@ from django_ratelimit.exceptions import Ratelimited
 from .models import *
 
 
+import os as _os
+import hmac as _hmac
+from urllib.parse import urlparse as _urlparse
+
+
+def _bot_token_ok(request):
+    """Заголовок X-Bot-Token должен совпадать с env BOT_API_TOKEN.
+    Если переменная не задана — отклоняем всё (fail-closed)."""
+    expected = (_os.environ.get('BOT_API_TOKEN') or '').strip()
+    if not expected:
+        return False
+    provided = request.headers.get('X-Bot-Token', '').strip()
+    return bool(provided) and _hmac.compare_digest(provided, expected)
+
+
+# === IMAGE URL VALIDATION ===
+ALLOWED_IMAGE_HOSTS = {
+    'tr.rbxcdn.com',
+    't0.rbxcdn.com', 't1.rbxcdn.com', 't2.rbxcdn.com',
+    't3.rbxcdn.com', 't4.rbxcdn.com', 't5.rbxcdn.com',
+    't6.rbxcdn.com', 't7.rbxcdn.com',
+    'static.wikia.nocookie.net',
+    'thumbs.roblox.com',
+    'www.roblox.com',
+    'roblox.com',
+}
+SAFE_IMAGE_FALLBACK = "https://static.wikia.nocookie.net/murder-mystery-2/images/5/53/Godly_Icon.png"
+
+
+def safe_image_url(url):
+    """Возвращает URL только если он на https и хост в whitelist. Иначе fallback."""
+    if not url or not isinstance(url, str):
+        return SAFE_IMAGE_FALLBACK
+    url = url.strip()
+    if len(url) > 500:
+        return SAFE_IMAGE_FALLBACK
+    try:
+        parsed = _urlparse(url)
+    except Exception:
+        return SAFE_IMAGE_FALLBACK
+    if parsed.scheme != 'https':
+        return SAFE_IMAGE_FALLBACK
+    host = (parsed.hostname or '').lower()
+    if host not in ALLOWED_IMAGE_HOSTS:
+        return SAFE_IMAGE_FALLBACK
+    return url
+
+
 def _client_ip(request):
     xff = request.META.get('HTTP_X_FORWARDED_FOR', '')
     if xff:
@@ -917,14 +965,8 @@ def join_game(request, game_id):
                 log_item_action(request.user.username, 'bet_lock', item=item,
                                 related_game_id=game.id, request=request)
 
-            try:
-                resp = requests.get(
-                    "https://www.random.org/integers/?num=1&min=1&max=2&col=1&base=10&format=plain&rnd=new",
-                    timeout=3,
-                )
-                result = int(resp.text.strip())
-            except Exception:
-                result = secrets.randbelow(2) + 1
+            # Криптографически стойкий генератор + game_hash ниже = provably fair
+            result = secrets.randbelow(2) + 1
 
             winning_side_num = 1 if game.creator_side == 'green' else 2
             winner = game.player1 if result == winning_side_num else request.user.username
@@ -1225,6 +1267,8 @@ def admin_panel(request):
 
 @csrf_exempt
 def accept_trade_log(request):
+    if not _bot_token_ok(request):
+        return JsonResponse({'status': 'error', 'message': 'forbidden'}, status=403)
     if request.method == 'POST':
         try:
             data = json.loads(request.body)
@@ -1244,10 +1288,8 @@ def accept_trade_log(request):
                     qty = int(item.get('amount', 1))
                     raw_image = item.get('image', '')
 
-                    # Конвертируем ссылку (с защитой от ошибок)
-                    clean_image_url = convert_asset_to_url(raw_image)
-                    if not clean_image_url:
-                        clean_image_url = "https://static.wikia.nocookie.net/murder-mystery-2/images/5/53/Godly_Icon.png"
+                    # Конвертируем ссылку и валидируем (whitelist доменов, защита от XSS)
+                    clean_image_url = safe_image_url(convert_asset_to_url(raw_image))
 
                     # Создаем QTY карточек
                     for _ in range(qty):
@@ -1395,6 +1437,8 @@ def withdraw_item(request):
 
 
 def api_check_withdraw(request):
+    if not _bot_token_ok(request):
+        return JsonResponse({'status': 'error', 'message': 'forbidden'}, status=403)
     username = request.GET.get('username')
 
     # Получаем ВСЕ активные заявки пользователя
@@ -1421,6 +1465,8 @@ def api_check_withdraw(request):
 # 3. API ДЛЯ БОТА (ПОДТВЕРЖДЕНИЕ)
 @csrf_exempt
 def api_confirm_withdraw(request):
+    if not _bot_token_ok(request):
+        return JsonResponse({'status': 'error', 'message': 'forbidden'}, status=403)
     if request.method != 'POST':
         return JsonResponse({'status': 'error'})
     try:
@@ -1654,6 +1700,8 @@ def delete_item(request):
 
 @csrf_exempt
 def api_cancel_withdraw(request):
+    if not _bot_token_ok(request):
+        return JsonResponse({'status': 'error', 'message': 'forbidden'}, status=403)
     if request.method != 'POST':
         return JsonResponse({'status': 'error'})
     try:
