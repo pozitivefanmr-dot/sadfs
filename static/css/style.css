@@ -7855,53 +7855,52 @@ input[type=range].snow-range::-webkit-slider-thumb {
     text-transform: uppercase;
 }
 
-/* 5. MM2 VALUE (ЗОЛОТОЙ СЛИТОК) */
+/* 5. MM2 VALUE (ПЛАШКА В ЦВЕТЕ САЙТА) */
+.box-title .home-value,
 .home-value {
-    background: rgba(0, 255, 157, 0.05) !important;
-    border: 1px solid rgba(0, 255, 157, 0.18) !important;
+    background: rgba(0, 255, 157, 0.06) !important;
+    border: 1px solid rgba(0, 255, 157, 0.2) !important;
 
-    padding: 5px 11px !important;
+    padding: 7px 13px !important;
     border-radius: 6px !important;
 
     font-family: 'Montserrat', sans-serif !important;
-    font-size: 0.62rem !important;
-    font-weight: 500 !important;
-    color: #a8c9bb !important;
+    font-size: 0.78rem !important;
+    font-weight: 600 !important;
+    color: #d5e8df !important;
     text-transform: uppercase;
-    letter-spacing: 0.9px;
+    letter-spacing: 0.8px !important;
 
     display: inline-flex !important;
     align-items: center;
-    gap: 6px;
+    gap: 7px;
     transition: 0.2s ease;
     line-height: 1;
     box-shadow: none !important;
+    text-shadow: none !important;
 }
 
+.box-title .home-value > span,
 .home-value > span {
-    color: #8aa09a !important;
+    color: #8aa89d !important;
     font-weight: 500 !important;
-    font-size: 0.62rem !important;
-    letter-spacing: 0.9px !important;
+    font-size: 0.7rem !important;
+    letter-spacing: 0.8px !important;
     text-transform: uppercase;
+    font-family: 'Montserrat', sans-serif !important;
 }
 
 .home-value:hover {
-    border-color: rgba(0, 255, 157, 0.35) !important;
-    background: rgba(0, 255, 157, 0.08) !important;
+    border-color: rgba(0, 255, 157, 0.4) !important;
+    background: rgba(0, 255, 157, 0.1) !important;
 }
 
-.home-value .home-coin {
-    width: 14px !important;
-    height: 14px !important;
-    filter: none;
-}
-
-/* Иконка монетки в Value */
+/* Иконка монетки в Value — оставляем исходный размер */
+.home-value .home-coin,
 .home-coin {
     width: 24px !important;
     height: 24px !important;
-    filter: drop-shadow(0 0 5px rgba(255, 230, 0, 0.6));
+    filter: drop-shadow(0 0 4px rgba(0, 255, 157, 0.35));
 }
 
 /* МОБИЛЬНАЯ АДАПТАЦИЯ ЭТИХ СТИЛЕЙ */
