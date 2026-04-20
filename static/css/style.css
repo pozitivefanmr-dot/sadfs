@@ -7857,34 +7857,41 @@ input[type=range].snow-range::-webkit-slider-thumb {
 
 /* 5. MM2 VALUE (ЗОЛОТОЙ СЛИТОК) */
 .home-value {
-    /* Фон: Темный с золотым отливом */
-    background: linear-gradient(135deg, rgba(50, 40, 0, 0.6) 0%, rgba(20, 15, 0, 0.8) 100%) !important;
-    border: 1px solid rgba(255, 230, 0, 0.3) !important;
+    background: linear-gradient(135deg, rgba(0, 255, 157, 0.08) 0%, rgba(0, 229, 255, 0.04) 100%) !important;
+    border: 1px solid rgba(0, 255, 157, 0.22) !important;
+    border-left: 3px solid #00ff9d !important;
 
-    padding: 8px 20px !important;
-    border-radius: 50px !important;
-    /* Овальная форма */
+    padding: 7px 14px !important;
+    border-radius: 8px !important;
 
     font-family: 'Montserrat', sans-serif !important;
-    font-size: 0.95rem !important;
-    font-weight: 800 !important;
-    color: #ffe600 !important;
-    /* Золотой текст */
+    font-size: 0.72rem !important;
+    font-weight: 700 !important;
+    color: #d7ffe6 !important;
 
-    box-shadow: 0 0 15px rgba(255, 230, 0, 0.1), inset 0 0 10px rgba(255, 230, 0, 0.05) !important;
+    box-shadow: 0 2px 10px rgba(0, 255, 157, 0.08), inset 0 0 0 1px rgba(255, 255, 255, 0.02) !important;
     text-transform: uppercase;
-    letter-spacing: 1px;
+    letter-spacing: 1.4px;
 
-    display: flex;
+    display: inline-flex !important;
     align-items: center;
-    gap: 10px;
-    transition: 0.3s;
+    gap: 8px;
+    transition: 0.25s ease;
+    line-height: 1;
 }
 
+.home-value > span { color: #8aa09a; font-weight: 600; font-size: 0.7rem; }
+
 .home-value:hover {
-    border-color: #ffe600 !important;
-    box-shadow: 0 0 20px rgba(255, 230, 0, 0.3) !important;
-    transform: translateX(-3px);
+    border-color: rgba(0, 255, 157, 0.45) !important;
+    box-shadow: 0 4px 18px rgba(0, 255, 157, 0.2) !important;
+    transform: translateY(-1px);
+}
+
+.home-value .home-coin {
+    width: 18px !important;
+    height: 18px !important;
+    filter: drop-shadow(0 0 4px rgba(0, 255, 157, 0.5));
 }
 
 /* Иконка монетки в Value */

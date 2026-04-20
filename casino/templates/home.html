@@ -226,16 +226,28 @@
         </div>
 
         {% if inventory_items %}
-        <div class="multi-withdraw-bar" id="multiWithdrawBar">
-            <button class="btn-multi-toggle" id="btnSelectMode" type="button" onclick="toggleSelectMode()">
-                <i class="bi bi-check2-square"></i> <span id="selectModeLabel">SELECT ITEMS</span>
-            </button>
-            <div class="multi-actions" id="multiActions" style="display:none;">
-                <span class="multi-count">Selected: <b id="selectedCount">0</b></span>
-                <button class="btn-multi-all" type="button" onclick="selectAllItems()">Select All</button>
-                <button class="btn-multi-clear" type="button" onclick="clearAllSelection()">Clear</button>
-                <button class="btn-multi-withdraw" type="button" onclick="openBatchWithdrawConfirm()" disabled id="btnBatchWithdraw">
-                    <i class="bi bi-send-fill"></i> WITHDRAW SELECTED
+        <div class="mw-bar" id="multiWithdrawBar">
+            <div class="mw-bar__left">
+                <button class="mw-toggle" id="btnSelectMode" type="button" onclick="toggleSelectMode()">
+                    <span class="mw-toggle__icon"><i class="bi bi-ui-checks"></i></span>
+                    <span class="mw-toggle__text" id="selectModeLabel">SELECT ITEMS</span>
+                </button>
+                <div class="mw-counter" id="mwCounter">
+                    <span class="mw-counter__dot"></span>
+                    <span class="mw-counter__label">Selected</span>
+                    <span class="mw-counter__num" id="selectedCount">0</span>
+                    <span class="mw-counter__max">/ 20</span>
+                </div>
+            </div>
+            <div class="mw-actions" id="multiActions">
+                <button class="mw-btn mw-btn--ghost" type="button" onclick="selectAllItems()" title="Select all items">
+                    <i class="bi bi-check2-all"></i><span>Select All</span>
+                </button>
+                <button class="mw-btn mw-btn--ghost" type="button" onclick="clearAllSelection()" title="Clear selection">
+                    <i class="bi bi-x-lg"></i><span>Clear</span>
+                </button>
+                <button class="mw-btn mw-btn--primary" type="button" onclick="openBatchWithdrawConfirm()" disabled id="btnBatchWithdraw">
+                    <i class="bi bi-box-arrow-up-right"></i><span>Withdraw Selected</span>
                 </button>
             </div>
         </div>
@@ -324,40 +336,217 @@
 </div>
 
 <style>
-.multi-withdraw-bar {
-    display:flex; align-items:center; gap:12px; flex-wrap:wrap;
-    padding:10px 14px; margin: 6px 0 14px; border-radius:10px;
-    background: rgba(255,255,255,0.03); border:1px solid rgba(255,255,255,0.08);
+/* ============== MULTI-WITHDRAW BAR ============== */
+.mw-bar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+    flex-wrap: wrap;
+    padding: 14px 18px;
+    margin: 4px 0 20px;
+    border-radius: 14px;
+    background:
+        linear-gradient(135deg, rgba(0, 255, 157, 0.04) 0%, rgba(0, 229, 255, 0.02) 100%),
+        rgba(13, 22, 18, 0.7);
+    border: 1px solid rgba(0, 255, 157, 0.15);
+    backdrop-filter: blur(8px);
+    font-family: 'Montserrat', sans-serif;
+    position: relative;
+    overflow: hidden;
 }
-.btn-multi-toggle, .btn-multi-all, .btn-multi-clear, .btn-multi-withdraw {
-    padding:8px 14px; border-radius:8px; border:1px solid rgba(255,255,255,0.1);
-    background: rgba(255,255,255,0.05); color:#ddd; cursor:pointer; font-weight:600;
-    font-size:13px; transition: all 0.15s;
+.mw-bar::before {
+    content: "";
+    position: absolute;
+    left: 0; top: 0; bottom: 0;
+    width: 3px;
+    background: linear-gradient(180deg, #00ff9d, #00e5ff);
+    box-shadow: 0 0 12px rgba(0, 255, 157, 0.6);
 }
-.btn-multi-toggle:hover, .btn-multi-all:hover, .btn-multi-clear:hover { background: rgba(255,255,255,0.1); }
-.btn-multi-toggle.active { background: rgba(0,255,157,0.15); border-color:#00ff9d; color:#00ff9d; }
-.btn-multi-withdraw {
-    background: linear-gradient(135deg,#e74c3c,#c0392b); border-color:#e74c3c; color:#fff;
-}
-.btn-multi-withdraw:disabled { opacity:0.4; cursor:not-allowed; }
-.btn-multi-withdraw:not(:disabled):hover { transform: translateY(-1px); box-shadow: 0 4px 12px rgba(231,76,60,0.4); }
-.multi-actions { display:flex; gap:10px; align-items:center; flex-wrap:wrap; }
-.multi-count { color:#aaa; font-size:13px; }
-.multi-count b { color:#00ff9d; font-size:14px; }
 
+.mw-bar__left { display: flex; align-items: center; gap: 14px; flex-wrap: wrap; }
+
+/* Toggle button */
+.mw-toggle {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    padding: 9px 18px;
+    border: 1px solid rgba(0, 255, 157, 0.25);
+    border-radius: 10px;
+    background: rgba(0, 255, 157, 0.06);
+    color: #e8ffe8;
+    font-family: inherit;
+    font-weight: 700;
+    font-size: 0.82rem;
+    letter-spacing: 1.2px;
+    text-transform: uppercase;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+.mw-toggle:hover {
+    background: rgba(0, 255, 157, 0.12);
+    border-color: rgba(0, 255, 157, 0.5);
+    transform: translateY(-1px);
+    box-shadow: 0 4px 16px rgba(0, 255, 157, 0.15);
+}
+.mw-toggle.active {
+    background: linear-gradient(135deg, rgba(255, 77, 77, 0.15), rgba(255, 77, 77, 0.08));
+    border-color: rgba(255, 77, 77, 0.5);
+    color: #ffb4b4;
+}
+.mw-toggle__icon {
+    display: inline-flex;
+    align-items: center; justify-content: center;
+    width: 22px; height: 22px;
+    font-size: 1rem;
+    color: #00ff9d;
+}
+.mw-toggle.active .mw-toggle__icon { color: #ff6b6b; }
+.mw-toggle__text { line-height: 1; }
+
+/* Counter chip */
+.mw-counter {
+    display: none;
+    align-items: center;
+    gap: 8px;
+    padding: 7px 14px;
+    border-radius: 999px;
+    background: rgba(0, 0, 0, 0.35);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    font-size: 0.78rem;
+    color: #9aa;
+    letter-spacing: 0.8px;
+    text-transform: uppercase;
+    font-weight: 600;
+}
+body.select-mode .mw-counter { display: inline-flex; }
+.mw-counter__dot {
+    width: 8px; height: 8px; border-radius: 50%;
+    background: #00ff9d;
+    box-shadow: 0 0 8px #00ff9d;
+    animation: mwPulse 1.6s ease-in-out infinite;
+}
+@keyframes mwPulse { 0%,100%{opacity:.5;} 50%{opacity:1;} }
+.mw-counter__num {
+    color: #00ff9d;
+    font-size: 0.95rem;
+    font-weight: 800;
+    min-width: 18px; text-align: center;
+}
+.mw-counter__max { color: #667; font-size: 0.72rem; }
+
+/* Actions group */
+.mw-actions {
+    display: none;
+    align-items: center;
+    gap: 8px;
+    flex-wrap: wrap;
+}
+body.select-mode .mw-actions { display: inline-flex; }
+
+.mw-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 9px 16px;
+    border-radius: 10px;
+    font-family: inherit;
+    font-weight: 700;
+    font-size: 0.8rem;
+    letter-spacing: 0.8px;
+    text-transform: uppercase;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    border: 1px solid transparent;
+    line-height: 1;
+}
+.mw-btn i { font-size: 1rem; }
+
+.mw-btn--ghost {
+    background: rgba(255, 255, 255, 0.04);
+    border-color: rgba(255, 255, 255, 0.1);
+    color: #ccd;
+}
+.mw-btn--ghost:hover {
+    background: rgba(255, 255, 255, 0.08);
+    border-color: rgba(255, 255, 255, 0.2);
+    color: #fff;
+}
+
+.mw-btn--primary {
+    background: linear-gradient(135deg, #00ff9d 0%, #00e5ff 100%);
+    color: #001a0e;
+    border: none;
+    font-weight: 800;
+    box-shadow: 0 4px 14px rgba(0, 255, 157, 0.25);
+}
+.mw-btn--primary:hover:not(:disabled) {
+    transform: translateY(-1px);
+    box-shadow: 0 6px 22px rgba(0, 255, 157, 0.45);
+    filter: brightness(1.08);
+}
+.mw-btn--primary:disabled {
+    opacity: 0.35;
+    cursor: not-allowed;
+    box-shadow: none;
+    filter: grayscale(0.4);
+}
+
+/* Selection badge on item cards */
+.dashboard-item-card { position: relative; }
 .dashboard-item-card .select-badge {
-    position:absolute; top:8px; left:8px; width:26px; height:26px; border-radius:50%;
-    background: rgba(0,0,0,0.6); border:2px solid rgba(255,255,255,0.25);
-    display:flex; align-items:center; justify-content:center; color:transparent;
-    font-size:14px; z-index:3; transition: all 0.15s; pointer-events:none; opacity:0;
+    position: absolute;
+    top: 10px; left: 10px;
+    width: 30px; height: 30px;
+    border-radius: 9px;
+    background: rgba(0, 0, 0, 0.75);
+    border: 2px solid rgba(255, 255, 255, 0.2);
+    display: flex; align-items: center; justify-content: center;
+    color: transparent;
+    font-size: 1rem;
+    z-index: 4;
+    opacity: 0;
+    transform: scale(0.8);
+    transition: all 0.2s cubic-bezier(0.34, 1.56, 0.64, 1);
+    pointer-events: none;
+    backdrop-filter: blur(4px);
 }
-body.select-mode .dashboard-item-card { cursor:pointer; }
-body.select-mode .dashboard-item-card .select-badge { opacity:1; }
-body.select-mode .dashboard-item-card .item-overlay { display:none !important; }
+body.select-mode .dashboard-item-card {
+    cursor: pointer;
+    transition: transform 0.15s ease, box-shadow 0.15s ease;
+}
+body.select-mode .dashboard-item-card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 18px rgba(0, 255, 157, 0.12);
+}
+body.select-mode .dashboard-item-card .select-badge {
+    opacity: 1;
+    transform: scale(1);
+}
+body.select-mode .dashboard-item-card .item-overlay { display: none !important; }
+body.select-mode .dashboard-item-card.selected {
+    outline: 2px solid #00ff9d;
+    outline-offset: -2px;
+    box-shadow: 0 0 0 4px rgba(0, 255, 157, 0.15), 0 8px 20px rgba(0, 255, 157, 0.2);
+}
 body.select-mode .dashboard-item-card.selected .select-badge {
-    background:#00ff9d; border-color:#00ff9d; color:#000;
+    background: linear-gradient(135deg, #00ff9d, #00e5ff);
+    border-color: #00ff9d;
+    color: #001a0e;
+    box-shadow: 0 0 14px rgba(0, 255, 157, 0.6);
 }
-body.select-mode .dashboard-item-card.selected { outline:2px solid #00ff9d; outline-offset:-2px; }
+
+/* Mobile */
+@media (max-width: 640px) {
+    .mw-bar { padding: 12px 14px; gap: 10px; }
+    .mw-bar__left { width: 100%; justify-content: space-between; }
+    .mw-actions { width: 100%; }
+    .mw-actions .mw-btn { flex: 1; justify-content: center; padding: 10px 10px; }
+    .mw-btn span { display: none; }
+    .mw-btn i { font-size: 1.15rem; }
+    .mw-btn--primary span { display: inline; font-size: 0.75rem; }
+}
 </style>
 
 
@@ -432,9 +621,11 @@ body.select-mode .dashboard-item-card.selected { outline:2px solid #00ff9d; outl
     function toggleSelectMode() {
         selectMode = !selectMode;
         document.body.classList.toggle('select-mode', selectMode);
-        document.getElementById('btnSelectMode').classList.toggle('active', selectMode);
-        document.getElementById('selectModeLabel').textContent = selectMode ? 'CANCEL SELECT' : 'SELECT ITEMS';
-        document.getElementById('multiActions').style.display = selectMode ? 'flex' : 'none';
+        const toggleBtn = document.getElementById('btnSelectMode');
+        toggleBtn.classList.toggle('active', selectMode);
+        const icon = toggleBtn.querySelector('.mw-toggle__icon i');
+        if (icon) icon.className = selectMode ? 'bi bi-x-circle-fill' : 'bi bi-ui-checks';
+        document.getElementById('selectModeLabel').textContent = selectMode ? 'CANCEL' : 'SELECT ITEMS';
         if (!selectMode) clearAllSelection();
     }
 
