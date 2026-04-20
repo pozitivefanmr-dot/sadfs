@@ -7,8 +7,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
     <!-- SEO: Title & Description -->
-    <title>{% block seo_title %}MMFLIP | MM2 Coinflip Gambling — Flip Murder Mystery 2 Items{% endblock %}</title>
-    <meta name="description" content="{% block seo_description %}MMFLIP is the #1 MM2 coinflip site. Gamble your Murder Mystery 2 items in fair 50/50 coinflip games. Trade, bet and win MM2 godlies, ancients, vintages and more!{% endblock %}">
+    <title>{% block seo_title %}MMFLIP | MM2 Coinflip Platform — Flip Murder Mystery 2 Items{% endblock %}</title>
+    <meta name="description" content="{% block seo_description %}MMFLIP is the #1 MM2 coinflip platform. Flip your Murder Mystery 2 items in provably fair 50/50 coinflip duels. Trade, stake and win MM2 godlies, ancients, vintages and more!{% endblock %}">
     <meta name="author" content="MMFLIP">
     <meta name="robots" content="index, follow">
     <link rel="canonical" href="{% block canonical_url %}https://{{ request.get_host }}{{ request.path }}{% endblock %}">
@@ -27,9 +27,9 @@
     <!-- Open Graph (Facebook, Discord, Telegram) -->
     <meta property="og:type" content="website">
     <meta property="og:site_name" content="MMFLIP">
-    <meta property="og:title" content="{% block og_title %}MMFLIP — MM2 Coinflip Gambling{% endblock %}">
-    <meta property="og:description" content="{% block og_description %}Flip your Murder Mystery 2 items in fair 50/50 coinflip games. The best MM2 gambling site!{% endblock %}">
-    <meta property="og:image" content="{% block og_image %}https://{{ request.get_host }}{% static 'img/og-cover.png' %}{% endblock %}">
+    <meta property="og:title" content="{% block og_title %}MMFLIP — MM2 Coinflip Platform{% endblock %}">
+    <meta property="og:description" content="{% block og_description %}Flip your Murder Mystery 2 items in fair 50/50 coinflip duels. The #1 MM2 coinflip platform!{% endblock %}">
+    <meta property="og:image" content="{% block og_image %}https://{{ request.get_host }}{% static 'img/bg.png' %}{% endblock %}">
     <meta property="og:image:width" content="1200">
     <meta property="og:image:height" content="630">
     <meta property="og:url" content="https://{{ request.get_host }}{{ request.path }}">
@@ -38,9 +38,9 @@
 
     <!-- Twitter Card (inherits og_title/og_description/og_image via block.super) -->
     <meta name="twitter:card" content="summary_large_image">
-    <meta name="twitter:title" content="{% block twitter_title %}{% block og_title_mirror %}MMFLIP — MM2 Coinflip Gambling{% endblock %}{% endblock %}">
-    <meta name="twitter:description" content="{% block twitter_description %}{% block og_description_mirror %}Flip your Murder Mystery 2 items in fair 50/50 coinflip games.{% endblock %}{% endblock %}">
-    <meta name="twitter:image" content="{% block twitter_image %}https://{{ request.get_host }}{% static 'img/og-cover.png' %}{% endblock %}">
+    <meta name="twitter:title" content="{% block twitter_title %}{% block og_title_mirror %}MMFLIP — MM2 Coinflip Platform{% endblock %}{% endblock %}">
+    <meta name="twitter:description" content="{% block twitter_description %}{% block og_description_mirror %}Flip your Murder Mystery 2 items in fair 50/50 coinflip duels.{% endblock %}{% endblock %}">
+    <meta name="twitter:image" content="{% block twitter_image %}https://{{ request.get_host }}{% static 'img/bg.png' %}{% endblock %}">
 
     <!-- Theme -->
     <meta name="theme-color" content="#00ff9d">
@@ -56,7 +56,7 @@
                 "@id": "https://{{ request.get_host }}/#website",
                 "name": "MMFLIP",
                 "url": "https://{{ request.get_host }}",
-                "description": "The #1 MM2 coinflip gambling site. Flip Murder Mystery 2 items in fair 50/50 games.",
+                "description": "The #1 MM2 coinflip platform. Flip Murder Mystery 2 items in fair 50/50 duels.",
                 "inLanguage": ["en", "ru"],
                 "publisher": { "@id": "https://{{ request.get_host }}/#organization" },
                 "potentialAction": {
@@ -79,10 +79,10 @@
                 "name": "MMFLIP Coinflip",
                 "url": "https://{{ request.get_host }}",
                 "applicationCategory": "GameApplication",
-                "applicationSubCategory": "Gambling",
+                "applicationSubCategory": "Trading Platform",
                 "operatingSystem": "Web Browser",
                 "browserRequirements": "Requires JavaScript",
-                "description": "Play MM2 coinflip games online — bet your Murder Mystery 2 items in fair 50/50 duels.",
+                "description": "Play MM2 coinflip online — stake your Murder Mystery 2 items in fair 50/50 duels.",
                 "inLanguage": ["en", "ru"],
                 "offers": {
                     "@type": "Offer",
