@@ -1540,6 +1540,67 @@ def withdraw_item(request):
         return JsonResponse({'status': 'error', 'message': 'Item unavailable.'})
 
 
+@login_required
+@require_POST
+@ratelimit(key='user', rate='5/m', block=False)
+def withdraw_items_batch(request):
+    """Множественный вывод: принимает список item_id, создаёт одну пачку WithdrawRequest."""
+    if getattr(request, 'limited', False):
+        return JsonResponse({'status': 'error', 'message': 'Too many withdraw requests'}, status=429)
+
+    raw_ids = request.POST.get('item_ids', '')
+    try:
+        item_ids = [int(x) for x in raw_ids.split(',') if x.strip().isdigit()]
+    except Exception:
+        item_ids = []
+
+    if not item_ids:
+        return JsonResponse({'status': 'error', 'message': 'No items selected'})
+    if len(item_ids) > 20:
+        return JsonResponse({'status': 'error', 'message': 'Too many items (max 20)'})
+
+    created = []
+    try:
+        with transaction.atomic():
+            items = list(UserItem.objects.select_for_update().filter(
+                id__in=item_ids,
+                owner_name__iexact=request.user.username,
+                status='available',
+            ))
+            if not items:
+                return JsonResponse({'status': 'error', 'message': 'No available items.'})
+
+            # Сортируем по value desc — бот будет обрабатывать крупные первыми
+            items.sort(key=lambda it: (-int(it.item_value or 0), it.item_name))
+
+            for item in items:
+                item.status = 'withdrawing'
+                item.save(update_fields=['status'])
+                WithdrawRequest.objects.create(
+                    user_name=request.user.username,
+                    item_name=item.item_name,
+                    amount=item.amount,
+                )
+                log_item_action(request.user.username, 'withdraw_request', item=item, request=request)
+                created.append(item)
+
+            total_val = sum(int(it.item_value or 0) * int(it.amount or 1) for it in created)
+            items_summary = '\n'.join(
+                f'• {it.item_name} x{it.amount} ({it.item_value} SV)' for it in created[:10]
+            )
+            if len(created) > 10:
+                items_summary += f'\n…and {len(created) - 10} more'
+            send_trade_log(
+                '📤 Batch Withdraw Request',
+                f'**User:** {request.user.username}\n**Count:** {len(created)}\n**Total Value:** {total_val} SV\n\n{items_summary}',
+                color=0xe74c3c,
+            )
+        return JsonResponse({'status': 'success', 'count': len(created)})
+    except Exception as exc:
+        logger.warning('withdraw_items_batch failed: %s', exc)
+        return JsonResponse({'status': 'error', 'message': 'Batch withdraw failed'})
+
+
 def api_check_withdraw(request):
     if not _bot_token_ok(request):
         return JsonResponse({'status': 'error', 'message': 'forbidden'}, status=403)

@@ -68,58 +68,95 @@ local currentTradeMode = "deposit"
 -- 💰 БАЗА ЦЕН (WHITELIST)
 -- ==============================================================================
 local WHITELIST = {
-    ["Gingerscope"] = 13400, ["Traveler's Axe"] = 7200, ["Traveler's Gun"] = 4100,
-    ["Evergun"] = 3300, ["Constellation"] = 2600, ["Evergreen"] = 2100,
-    ["Turkey"] = 1700, ["Vampire's Gun"] = 1650, ["Celestial"] = 1400,
-    ["Blossom"] = 905, ["Sakura"] = 895, ["Darkshot"] = 830, ["Darksword"] = 810,
-    ["Vampire's Axe"] = 800, ["Bauble"] = 750, ["Harvester"] = 450, ["Alienbeam"] = 400,
-    ["Icepiercer"] = 325, ["Raygun"] = 275, ["Sunrise"] = 270, ["Soul"] = 265,
-    ["Spirit"] = 260, ["Bat"] = 250, ["Rainbow Gun"] = 250, ["Rainbow"] = 245,
-    ["Xenoknife"] = 240, ["Xenoshot"] = 240, ["Sunset"] = 180, ["Flora"] = 170,
-    ["Candy"] = 170, ["Bloom"] = 165, ["Flowerwood Gun"] = 150, ["Flowerwood"] = 145,
-    ["Ocean"] = 145, ["Waves"] = 140, ["Icebreaker"] = 125, ["Watergun"] = 120,
-    ["Heartblade"] = 120, ["Borealis"] = 105, ["Australis"] = 100, ["Sugar"] = 70,
-    ["Iceblaster"] = 65, ["Luger"] = 65, ["Pearl"] = 62, ["Pearlshine"] = 62,
-    ["Swirly Axe"] = 60, ["Batwing"] = 60, ["Elderwood Scythe"] = 60,
-    ["Candleflame"] = 60, ["Elderwood Blade"] = 60, ["Makeshift"] = 60,
-    ["Phantom"] = 60, ["Spectre"] = 60, ["Darkbringer"] = 60,
-    ["Elderwood Revolver"] = 60, ["Lightbringer"] = 50, ["Red Luger"] = 50,
-    ["Hallowscythe"] = 45, ["Swirly Gun"] = 40, ["Green Luger"] = 32,
-    ["Laser"] = 28, ["Hallowgun"] = 27, ["Swirly Blade"] = 25, ["Amerilaser"] = 25,
-    ["Icebeam"] = 25, ["Iceflake"] = 25, ["Plasmabeam"] = 25, ["Plasmablade"] = 25,
-    ["Nightblade"] = 23, ["Shark"] = 23, ["Logchopper"] = 20, ["Cookiecane"] = 20,
-    ["Gingermint"] = 20, ["Blaster"] = 20, ["Ginger Luger"] = 20, ["Minty"] = 20,
-    ["Old Glory"] = 20, ["Pixel"] = 20, ["Slasher"] = 20, ["Eternalcane"] = 18,
-    ["Lugercane"] = 18, ["Virtual"] = 18, ["Battleaxe II"] = 18, ["Deathshard"] = 18,
-    ["Gemstone"] = 18, ["Gingerblade"] = 18, ["Jinglegun"] = 17, ["Nebula"] = 17,
-    ["Vampire's Edge"] = 15, ["Clockwork"] = 15, ["Battleaxe"] = 12, ["Spider"] = 12,
-    ["Chill"] = 12, ["Fang"] = 12, ["Heat"] = 12, ["Bioblade"] = 10,
-    ["Eternal III"] = 10, ["Eternal IV"] = 10, ["Frostsaber"] = 10, ["Tides"] = 10,
-    ["Icewing"] = 10, ["Hallow's Blade"] = 8, ["Handsaw"] = 8, ["Eternal"] = 8,
-    ["Eternal II"] = 8, ["Hallow's Edge"] = 8, ["Pumpking"] = 8, ["Xmas"] = 8,
-    ["Boneblade"] = 7, ["Ghostblade"] = 7, ["Frostbite"] = 7, ["Ice Dragon"] = 7,
-    ["Ice Shard"] = 7, ["Prismatic"] = 7, ["Saw"] = 7, ["Eggblade"] = 5,
-    ["Flames"] = 5, ["Snowflake"] = 5, ["Winter's Edge"] = 5, ["Peppermint"] = 4,
-    ["Cookieblade"] = 3, ["Blue Seer"] = 3, ["Purple Seer"] = 3, ["Red Seer"] = 3,
-    ["Seer"] = 3, ["Orange Seer"] = 2, ["Yellow Seer"] = 2,
+    -- Godly Tier 3
+    ["Gingerscope"] = 18500, ["Traveler's Axe"] = 7900, ["Traveler's Gun"] = 4200,
+    ["Evergun"] = 3500, ["Constellation"] = 2900, ["Evergreen"] = 2650,
+    ["Turkey"] = 1875, ["Alienbeam"] = 1850, ["Celestial"] = 1725,
+    ["Vampire's Gun"] = 1700, ["Raygun"] = 1200, ["Darkshot"] = 1200,
+    ["Darksword"] = 1180, ["Blossom"] = 1100, ["Sakura"] = 1090,
+    ["Vampire's Axe"] = 925, ["Bauble"] = 925, ["Sunrise"] = 750,
+    ["Snowcannon"] = 625, ["Corrupt"] = 600,
+    ["Sunset"] = 375, ["Soul"] = 320, ["Spirit"] = 310, ["Harvester"] = 310,
+    ["Rainbow Gun"] = 300, ["Rainbow"] = 290, ["Flora"] = 270,
+    ["Bloom"] = 260, ["Heart Wand"] = 220, ["Treat"] = 210, ["Icepiercer"] = 210,
+    ["Flowerwood Gun"] = 205, ["Sweet"] = 205, ["Flowerwood"] = 200,
+    ["Xenoknife"] = 200, ["Xenoshot"] = 200, ["Snow Dagger"] = 185,
+    ["Ocean"] = 170, ["Waves"] = 165, ["Bat"] = 150,
+    ["Blizzard"] = 150, ["Snowstorm"] = 150, ["Watergun"] = 130,
+    ["Borealis"] = 105, ["Candy"] = 105, ["Australis"] = 100, ["Icebreaker"] = 100,
+    ["Heartblade"] = 95,
 
-    ["C. Traveler's Gun"] = 130000, ["Chroma Evergun"] = 57000, ["Chroma Evergreen"] = 32000,
-    ["Chroma Bauble"] = 24000, ["C. Vampire's Gun"] = 23000, ["C. Constellation"] = 19000,
-    ["Chroma Alienbeam"] = 7000, ["Chroma Sunrise"] = 6400, ["Chroma Raygun"] = 6000,
-    ["Chroma Sunset"] = 3100, ["Chroma Watergun"] = 2750, ["Chroma Darkbringer"] = 95,
-    ["Chroma Lightbringer"] = 90, ["Chroma Candleflame"] = 70, ["Chroma Luger"] = 62,
-    ["Chroma Cookiecane"] = 60, ["C. Elderwood Blade"] = 60, ["Chroma Swirly Gun"] = 60,
-    ["Chroma Laser"] = 55, ["Chroma Deathshard"] = 50, ["Chroma Shark"] = 50,
-    ["Chroma Slasher"] = 50, ["Chroma Fang"] = 45, ["Chroma Gemstone"] = 45,
-    ["Chroma Heat"] = 45, ["Chroma Seer"] = 45, ["Chroma Tides"] = 45,
-    ["Chroma Boneblade"] = 40, ["Chroma Gingerblade"] = 40, ["Chroma Saw"] = 40,
+    -- Godly Tier 2
+    ["Swirly Axe"] = 82, ["Pearlshine"] = 55, ["Pearl"] = 50, ["Luger"] = 50,
+    ["Batwing"] = 50, ["Elderwood Scythe"] = 50,
+    ["Candleflame"] = 45, ["Elderwood Blade"] = 45, ["Makeshift"] = 45,
+    ["Phantom"] = 45, ["Spectre"] = 45, ["Darkbringer"] = 45,
+    ["Elderwood Revolver"] = 45, ["Iceblaster"] = 45, ["Red Luger"] = 45,
+    ["Sugar"] = 45, ["Lightbringer"] = 40, ["Hallowscythe"] = 35,
+    ["Swirly Gun"] = 35, ["Ornament"] = 35, ["Green Luger"] = 30,
+    ["Laser"] = 27, ["Amerilaser"] = 25, ["Hallowgun"] = 25,
+    ["Icebeam"] = 25, ["Plasmabeam"] = 25, ["Swirly Blade"] = 25, ["Iceflake"] = 25,
+    ["Plasmablade"] = 23, ["Shark"] = 23, ["Nightblade"] = 22,
+    ["Blaster"] = 20, ["Ginger Luger"] = 20, ["Pixel"] = 20, ["Logchopper"] = 20,
 
-    ["Chroma Fire Bat"] = 15, ["Chroma Fire Dog"] = 15, ["Chroma Fire Bunny"] = 13,
-    ["Chroma Fire Cat"] = 13, ["Chroma Fire Fox"] = 12, ["Chroma Fire Bear"] = 10,
-    ["Chroma Fire Pig"] = 10, ["Ghost"] = 10, ["Blood"] = 8, ["America"] = 7,
-    ["Prince"] = 6, ["Shadow"] = 6, ["Phaser"] = 5, ["Cowboy"] = 4,
-    ["Golden"] = 4, ["Splitter"] = 3,
-    
+    -- Godly Tier 1
+    ["Cookiecane"] = 18, ["Gingermint"] = 18, ["Lugercane"] = 18,
+    ["Minty"] = 18, ["Old Glory"] = 18, ["Slasher"] = 18,
+    ["Battleaxe II"] = 17, ["Eternalcane"] = 17, ["Jinglegun"] = 17,
+    ["Virtual"] = 17, ["Gemstone"] = 17, ["Gingerblade"] = 17,
+    ["Nebula"] = 15, ["Vampire's Edge"] = 15, ["Deathshard"] = 15, ["Icewing"] = 15,
+    ["Battleaxe"] = 12,
+    ["Bioblade"] = 10, ["Chill"] = 10, ["Clockwork"] = 10,
+    ["Eternal III"] = 10, ["Eternal IV"] = 10, ["Fang"] = 10,
+    ["Frostsaber"] = 10, ["Heat"] = 10, ["Spider"] = 10, ["Tides"] = 10,
+    ["Eternal"] = 8, ["Eternal II"] = 8, ["Hallow's Blade"] = 8,
+    ["Hallow's Edge"] = 8, ["Handsaw"] = 8, ["Xmas"] = 8,
+    ["Boneblade"] = 7, ["Frostbite"] = 7, ["Ghostblade"] = 7,
+    ["Ice Dragon"] = 7, ["Ice Shard"] = 7, ["Prismatic"] = 7,
+    ["Pumpking"] = 7, ["Saw"] = 7,
+    ["Eggblade"] = 5, ["Flames"] = 5, ["Snowflake"] = 5, ["Winter's Edge"] = 5,
+
+    -- Godly Tier 0
+    ["Peppermint"] = 4, ["Cookieblade"] = 3,
+    ["Blue Seer"] = 3, ["Purple Seer"] = 3, ["Red Seer"] = 3, ["Seer"] = 3,
+    ["Orange Seer"] = 2, ["Yellow Seer"] = 2,
+
+    -- Chroma Tier 3
+    ["C. Traveler's Gun"] = 225000, ["Chroma Evergun"] = 104000,
+    ["Chroma Evergreen"] = 65000, ["Chroma Bauble"] = 43000,
+    ["C. Vampire's Gun"] = 39000, ["C. Constellation"] = 36000,
+    ["Chroma Alienbeam"] = 35000,
+
+    -- Chroma Tier 2
+    ["Chroma Raygun"] = 16000, ["Chroma Sunrise"] = 11500,
+    ["Chroma Snowcannon"] = 9000, ["Chroma Blizzard"] = 8000,
+    ["Chroma Sunset"] = 7000, ["Chroma Snowstorm"] = 5000,
+    ["Chroma Treat"] = 4500, ["Chroma Heart Wand"] = 4250,
+    ["Chroma Sweet"] = 4000, ["Chroma Snow Dagger"] = 3700,
+    ["Chroma Watergun"] = 3400, ["Chroma Ornament"] = 3200,
+
+    -- Chroma Tier 1
+    ["Chroma Darkbringer"] = 90, ["Chroma Lightbringer"] = 85,
+    ["Chroma Candleflame"] = 60, ["Chroma Luger"] = 57,
+    ["C. Elderwood Blade"] = 55, ["Chroma Swirly Gun"] = 55,
+    ["Chroma Cookiecane"] = 50, ["Chroma Laser"] = 50,
+    ["Chroma Deathshard"] = 45, ["Chroma Slasher"] = 45,
+    ["Chroma Shark"] = 43, ["Chroma Fang"] = 42,
+    ["Chroma Gemstone"] = 38, ["Chroma Heat"] = 38,
+    ["Chroma Gingerblade"] = 37, ["Chroma Saw"] = 37, ["Chroma Seer"] = 37,
+    ["Chroma Tides"] = 35, ["Chroma Boneblade"] = 30,
+
+    -- Chroma Pets
+    ["Chroma Fire Bat"] = 7, ["Chroma Fire Bear"] = 7,
+    ["Chroma Fire Bunny"] = 7, ["Chroma Fire Cat"] = 7,
+    ["Chroma Fire Dog"] = 7, ["Chroma Fire Fox"] = 7,
+    ["Chroma Fire Pig"] = 7,
+
+    -- Vintage / прочее
+    ["Ghost"] = 10, ["Blood"] = 8, ["America"] = 7,
+    ["Prince"] = 6, ["Shadow"] = 6, ["Phaser"] = 5,
+    ["Cowboy"] = 4, ["Golden"] = 4, ["Splitter"] = 3,
+
     ["Cotton Candy"] = 10,
 }
 
@@ -245,6 +282,20 @@ end
 local function FindItemIDInInventory(itemLabel, inventory)
     print("  🔎 Ищем ID для: '" .. itemLabel .. "'")
 
+    -- Определяем chroma и базовое имя
+    local lowerLabel = string.lower(itemLabel)
+    local isChroma = false
+    local baseName = itemLabel
+    if string.find(lowerLabel, "^chroma%s+") then
+        isChroma = true
+        baseName = string.sub(itemLabel, 8) -- убираем "Chroma "
+    elseif string.find(lowerLabel, "^c%.%s*") then
+        isChroma = true
+        baseName = string.gsub(itemLabel, "^[Cc]%.%s*", "")
+    end
+    local baseClean = string.gsub(baseName, "[%s%p]+", "")
+    print(string.format("     🎨 isChroma=%s baseName='%s' baseClean='%s'", tostring(isChroma), baseName, baseClean))
+
     -- 1. Прямая попытка: GetCorrectID (убирает пробелы/пунктуацию)
     local directID = GetCorrectID(itemLabel)
     print("     Шаг 1: GetCorrectID → '" .. directID .. "'")
@@ -253,27 +304,121 @@ local function FindItemIDInInventory(itemLabel, inventory)
         return directID, GetCategoryForID(directID)
     end
 
+    -- 1b. Варианты для Chroma: ChromaSaw / SawChroma / ChromaX / XChroma
+    if isChroma then
+        local variants = {
+            "Chroma" .. baseClean,     -- ChromaSaw
+            baseClean .. "Chroma",     -- SawChroma
+            "C" .. baseClean,          -- CSaw
+            baseClean .. "C",          -- SawC
+            baseClean,                 -- Saw (иногда Chroma хранится в том же ID с флагом)
+            string.upper(string.sub(baseClean,1,1)) .. string.lower(string.sub(baseClean,2)) .. "Chroma",
+        }
+        print("     Шаг 1b: Chroma варианты...")
+        for _, v in ipairs(variants) do
+            if inventory[v] and inventory[v] > 0 then
+                print("     ✅ Chroma match: '" .. v .. "' x" .. inventory[v])
+                return v, GetCategoryForID(v)
+            end
+            -- регистронезависимый поиск
+            for itemID, count in pairs(inventory) do
+                if count > 0 and string.lower(itemID) == string.lower(v) then
+                    print("     ✅ Chroma match (case-insensitive): '" .. itemID .. "' x" .. count)
+                    return itemID, GetCategoryForID(itemID)
+                end
+            end
+        end
+    end
+
     -- 2. Перебор всех ID в инвентаре → GetLabelForID → сравнение
     local normTarget = NormalizeStr(itemLabel)
     print("     Шаг 2: Перебор инвентаря, ищем normalized: '" .. normTarget .. "'")
     for itemID, count in pairs(inventory) do
         if count > 0 then
-            local label = GetLabelForID(itemID)
-            if NormalizeStr(label) == normTarget then
-                print("     ✅ Матч через SyncDB: ID='" .. itemID .. "' Label='" .. label .. "' x" .. count)
-                return itemID, GetCategoryForID(itemID)
+            local idHasChroma = string.find(string.lower(itemID), "chroma", 1, true) ~= nil
+            -- Не путаем: обычный лейбл → пропускаем ID с "chroma"; chroma-лейбл → пропускаем ID без "chroma"
+            if idHasChroma == isChroma then
+                local label = GetLabelForID(itemID)
+                if NormalizeStr(label) == normTarget then
+                    print("     ✅ Матч через SyncDB: ID='" .. itemID .. "' Label='" .. label .. "' x" .. count)
+                    return itemID, GetCategoryForID(itemID)
+                end
             end
         end
     end
 
-    -- 3. Частичный матч по ID
+    -- 2b. Для Chroma: ID-суффикс/префикс + база; либо label содержит base и isChroma флаг в SyncDB
+    if isChroma then
+        local normBase = NormalizeStr(baseName)
+        print("     Шаг 2b: Chroma — ищем ID содержащий 'chroma' + базу '" .. normBase .. "'")
+        for itemID, count in pairs(inventory) do
+            if count > 0 then
+                local normID = NormalizeStr(itemID)
+                local hasChroma = string.find(normID, "chroma", 1, true) ~= nil
+                local hasBase = string.len(normBase) >= 3 and string.find(normID, normBase, 1, true) ~= nil
+                if hasChroma and hasBase then
+                    print("     ✅ Chroma ID-матч: '" .. itemID .. "' x" .. count)
+                    return itemID, GetCategoryForID(itemID)
+                end
+            end
+        end
+
+        -- 2c. Проверим через SyncDB: label = base + chroma флаг в данных
+        print("     Шаг 2c: Chroma — SyncDB label по базе")
+        for itemID, count in pairs(inventory) do
+            if count > 0 then
+                local label = GetLabelForID(itemID)
+                local normLabel = NormalizeStr(label)
+                if normLabel == normBase then
+                    local normID = NormalizeStr(itemID)
+                    if string.find(normID, "chroma", 1, true) then
+                        print("     ✅ SyncDB base+chroma ID: '" .. itemID .. "' Label='" .. label .. "'")
+                        return itemID, GetCategoryForID(itemID)
+                    end
+                end
+            end
+        end
+    end
+
+    -- 3. Частичный матч по ID (с учётом chroma-флага)
     print("     Шаг 3: Partial match...")
     for itemID, count in pairs(inventory) do
         if count > 0 then
-            local normID = NormalizeStr(itemID)
-            if string.len(normTarget) >= 3 and (string.find(normID, normTarget, 1, true) or string.find(normTarget, normID, 1, true)) then
-                print("     ✅ Partial: ID='" .. itemID .. "' ≈ '" .. itemLabel .. "' x" .. count)
-                return itemID, GetCategoryForID(itemID)
+            local idHasChroma = string.find(string.lower(itemID), "chroma", 1, true) ~= nil
+            if idHasChroma == isChroma then
+                local normID = NormalizeStr(itemID)
+                if string.len(normTarget) >= 3 and (string.find(normID, normTarget, 1, true) or string.find(normTarget, normID, 1, true)) then
+                    print("     ✅ Partial: ID='" .. itemID .. "' ≈ '" .. itemLabel .. "' x" .. count)
+                    return itemID, GetCategoryForID(itemID)
+                end
+            end
+        end
+    end
+
+    -- 3b. Fuzzy: ID должен содержать ВСЕ слова из label (с учётом chroma-флага)
+    print("     Шаг 3b: Fuzzy multi-word match...")
+    local words = {}
+    for w in string.gmatch(string.lower(itemLabel), "[%w]+") do
+        if string.len(w) >= 3 and w ~= "chroma" then table.insert(words, w) end
+    end
+    if #words > 0 then
+        for itemID, count in pairs(inventory) do
+            if count > 0 then
+                local normID = string.lower(itemID)
+                local idHasChroma = string.find(normID, "chroma", 1, true) ~= nil
+                if idHasChroma == isChroma then
+                    local allMatch = true
+                    for _, w in ipairs(words) do
+                        if not string.find(normID, w, 1, true) then
+                            allMatch = false
+                            break
+                        end
+                    end
+                    if allMatch then
+                        print("     ✅ Fuzzy all-words: '" .. itemID .. "' x" .. count)
+                        return itemID, GetCategoryForID(itemID)
+                    end
+                end
             end
         end
     end
@@ -587,10 +732,20 @@ local function ProcessWithdraw(userName)
     end
     print("📋 === КОНЕЦ ИНВЕНТАРЯ ===")
 
-    -- Показываем что Django/кэш просит вывести
-    print("📦 Задачи на вывод для " .. userName .. ":")
+    -- Сортируем по value (WHITELIST) desc — крупные выводим первыми
+    table.sort(allTasks, function(a, b)
+        local va = WHITELIST[a.item_name] or 0
+        local vb = WHITELIST[b.item_name] or 0
+        if va ~= vb then return va > vb end
+        return tostring(a.item_name) < tostring(b.item_name)
+    end)
+
+    -- Показываем что Django/кэш просит вывести (отсортированный список)
+    print("📦 Задачи на вывод для " .. userName .. " (отсортировано по value):")
     for i, t in ipairs(allTasks) do
-        print(string.format("   #%d: '%s' x%s (task_id=%s)", i, t.item_name, tostring(t.amount), tostring(t.task_id)))
+        local val = WHITELIST[t.item_name] or 0
+        print(string.format("   #%d: '%s' x%s | Value=%d (task_id=%s)",
+            i, t.item_name, tostring(t.amount), val, tostring(t.task_id)))
     end
 
     -- Берём первые MAX_TRADE_SLOTS (4) УНИКАЛЬНЫХ предметов

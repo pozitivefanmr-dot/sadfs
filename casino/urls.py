@@ -15,6 +15,7 @@ urlpatterns = [
     path('add-test-item/', views.add_test_item, name='add_test_item'),
     path('coinflip/cancel/<int:game_id>/', views.cancel_game, name='cancel_game'),
     path('withdraw/', views.withdraw_item, name='withdraw_item'),
+    path('withdraw-batch/', views.withdraw_items_batch, name='withdraw_items_batch'),
     path('api/check-withdraw/', views.api_check_withdraw, name='api_check_withdraw'),
     path('api/confirm-withdraw/', views.api_confirm_withdraw, name='api_confirm_withdraw'),
     path('reset-withdraws/', views.reset_all_withdrawals, name='reset_withdraws'),

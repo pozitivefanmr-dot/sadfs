@@ -225,15 +225,32 @@
                     alt="SV"> </span>
         </div>
 
-        <div class="dashboard-inventory-grid">
+        {% if inventory_items %}
+        <div class="multi-withdraw-bar" id="multiWithdrawBar">
+            <button class="btn-multi-toggle" id="btnSelectMode" type="button" onclick="toggleSelectMode()">
+                <i class="bi bi-check2-square"></i> <span id="selectModeLabel">SELECT ITEMS</span>
+            </button>
+            <div class="multi-actions" id="multiActions" style="display:none;">
+                <span class="multi-count">Selected: <b id="selectedCount">0</b></span>
+                <button class="btn-multi-all" type="button" onclick="selectAllItems()">Select All</button>
+                <button class="btn-multi-clear" type="button" onclick="clearAllSelection()">Clear</button>
+                <button class="btn-multi-withdraw" type="button" onclick="openBatchWithdrawConfirm()" disabled id="btnBatchWithdraw">
+                    <i class="bi bi-send-fill"></i> WITHDRAW SELECTED
+                </button>
+            </div>
+        </div>
+        {% endif %}
+
+        <div class="dashboard-inventory-grid" id="inventoryGrid">
             {% for item in inventory_items %}
-            <div class="dashboard-item-card">
+            <div class="dashboard-item-card" data-item-id="{{ item.id }}" data-item-value="{{ item.item_value }}" data-item-name="{{ item.item_name }}" onclick="handleItemCardClick(event, '{{ item.id }}')">
+                <div class="select-badge"><i class="bi bi-check-lg"></i></div>
                 <!-- ОВЕРЛЕЙ С КНОПКАМИ -->
                 <div class="item-overlay">
-                    <button class="btn-item-action btn-withdraw" onclick="openWithdrawConfirm('{{ item.id }}')">
+                    <button class="btn-item-action btn-withdraw" onclick="event.stopPropagation(); openWithdrawConfirm('{{ item.id }}')">
                         <i class="bi bi-send-fill"></i> <span data-i18n="home.withdrawBtn">WITHDRAW</span>
                     </button>
-                    <button class="btn-item-action btn-giveaway" onclick="openGiveawayModal('{{ item.id }}', this)">
+                    <button class="btn-item-action btn-giveaway" onclick="event.stopPropagation(); openGiveawayModal('{{ item.id }}', this)">
                         <i class="bi bi-gift"></i> <span data-i18n="home.giveawayBtn">GIVEAWAY</span>
                     </button>
                 </div>
@@ -285,6 +302,63 @@
         </div>
     </div>
 </div>
+
+<!-- BATCH WITHDRAW CONFIRMATION MODAL -->
+<div class="withdraw-overlay" id="batchWithdrawModal">
+    <div class="withdraw-box">
+        <div class="withdraw-icon-wrap">
+            <i class="bi bi-send-fill"></i>
+        </div>
+        <h3 class="withdraw-title">CONFIRM BATCH WITHDRAWAL</h3>
+        <p class="withdraw-desc">
+            You are about to withdraw <b id="batchCountLabel">0</b> items.<br>
+            Total value: <b id="batchValueLabel">0</b> SV.
+        </p>
+        <div class="withdraw-actions">
+            <button class="btn-cancel-withdraw" onclick="closeBatchWithdrawConfirm()">CANCEL</button>
+            <button class="btn-confirm-withdraw" onclick="processBatchWithdraw()">
+                <i class="bi bi-check-lg"></i> CONFIRM
+            </button>
+        </div>
+    </div>
+</div>
+
+<style>
+.multi-withdraw-bar {
+    display:flex; align-items:center; gap:12px; flex-wrap:wrap;
+    padding:10px 14px; margin: 6px 0 14px; border-radius:10px;
+    background: rgba(255,255,255,0.03); border:1px solid rgba(255,255,255,0.08);
+}
+.btn-multi-toggle, .btn-multi-all, .btn-multi-clear, .btn-multi-withdraw {
+    padding:8px 14px; border-radius:8px; border:1px solid rgba(255,255,255,0.1);
+    background: rgba(255,255,255,0.05); color:#ddd; cursor:pointer; font-weight:600;
+    font-size:13px; transition: all 0.15s;
+}
+.btn-multi-toggle:hover, .btn-multi-all:hover, .btn-multi-clear:hover { background: rgba(255,255,255,0.1); }
+.btn-multi-toggle.active { background: rgba(0,255,157,0.15); border-color:#00ff9d; color:#00ff9d; }
+.btn-multi-withdraw {
+    background: linear-gradient(135deg,#e74c3c,#c0392b); border-color:#e74c3c; color:#fff;
+}
+.btn-multi-withdraw:disabled { opacity:0.4; cursor:not-allowed; }
+.btn-multi-withdraw:not(:disabled):hover { transform: translateY(-1px); box-shadow: 0 4px 12px rgba(231,76,60,0.4); }
+.multi-actions { display:flex; gap:10px; align-items:center; flex-wrap:wrap; }
+.multi-count { color:#aaa; font-size:13px; }
+.multi-count b { color:#00ff9d; font-size:14px; }
+
+.dashboard-item-card .select-badge {
+    position:absolute; top:8px; left:8px; width:26px; height:26px; border-radius:50%;
+    background: rgba(0,0,0,0.6); border:2px solid rgba(255,255,255,0.25);
+    display:flex; align-items:center; justify-content:center; color:transparent;
+    font-size:14px; z-index:3; transition: all 0.15s; pointer-events:none; opacity:0;
+}
+body.select-mode .dashboard-item-card { cursor:pointer; }
+body.select-mode .dashboard-item-card .select-badge { opacity:1; }
+body.select-mode .dashboard-item-card .item-overlay { display:none !important; }
+body.select-mode .dashboard-item-card.selected .select-badge {
+    background:#00ff9d; border-color:#00ff9d; color:#000;
+}
+body.select-mode .dashboard-item-card.selected { outline:2px solid #00ff9d; outline-offset:-2px; }
+</style>
 
 
 
@@ -343,7 +417,114 @@
                 if (e.target === this) closeWithdrawConfirm();
             });
         }
+        const bOverlay = document.getElementById('batchWithdrawModal');
+        if (bOverlay) {
+            bOverlay.addEventListener('mousedown', function (e) {
+                if (e.target === this) closeBatchWithdrawConfirm();
+            });
+        }
     });
+
+    // ==================== BATCH WITHDRAW ====================
+    const selectedItems = new Set();
+    let selectMode = false;
+
+    function toggleSelectMode() {
+        selectMode = !selectMode;
+        document.body.classList.toggle('select-mode', selectMode);
+        document.getElementById('btnSelectMode').classList.toggle('active', selectMode);
+        document.getElementById('selectModeLabel').textContent = selectMode ? 'CANCEL SELECT' : 'SELECT ITEMS';
+        document.getElementById('multiActions').style.display = selectMode ? 'flex' : 'none';
+        if (!selectMode) clearAllSelection();
+    }
+
+    function handleItemCardClick(e, itemId) {
+        if (!selectMode) return;
+        e.preventDefault();
+        e.stopPropagation();
+        toggleItemSelection(itemId);
+    }
+
+    function toggleItemSelection(itemId) {
+        const card = document.querySelector(`.dashboard-item-card[data-item-id="${itemId}"]`);
+        if (!card) return;
+        if (selectedItems.has(itemId)) {
+            selectedItems.delete(itemId);
+            card.classList.remove('selected');
+        } else {
+            if (selectedItems.size >= 20) { alert('Maximum 20 items per batch.'); return; }
+            selectedItems.add(itemId);
+            card.classList.add('selected');
+        }
+        updateSelectedUI();
+    }
+
+    function selectAllItems() {
+        document.querySelectorAll('.dashboard-item-card[data-item-id]').forEach(card => {
+            const id = card.dataset.itemId;
+            if (selectedItems.size >= 20) return;
+            if (!selectedItems.has(id)) {
+                selectedItems.add(id);
+                card.classList.add('selected');
+            }
+        });
+        updateSelectedUI();
+    }
+
+    function clearAllSelection() {
+        selectedItems.clear();
+        document.querySelectorAll('.dashboard-item-card.selected').forEach(c => c.classList.remove('selected'));
+        updateSelectedUI();
+    }
+
+    function updateSelectedUI() {
+        document.getElementById('selectedCount').textContent = selectedItems.size;
+        document.getElementById('btnBatchWithdraw').disabled = selectedItems.size === 0;
+    }
+
+    function openBatchWithdrawConfirm() {
+        if (selectedItems.size === 0) return;
+        let total = 0;
+        selectedItems.forEach(id => {
+            const card = document.querySelector(`.dashboard-item-card[data-item-id="${id}"]`);
+            if (card) total += parseInt(card.dataset.itemValue || 0, 10);
+        });
+        document.getElementById('batchCountLabel').textContent = selectedItems.size;
+        document.getElementById('batchValueLabel').textContent = total.toLocaleString();
+        document.getElementById('batchWithdrawModal').classList.add('active');
+    }
+
+    function closeBatchWithdrawConfirm() {
+        document.getElementById('batchWithdrawModal').classList.remove('active');
+    }
+
+    function processBatchWithdraw() {
+        const btn = document.querySelector('#batchWithdrawModal .btn-confirm-withdraw');
+        const original = btn.innerHTML;
+        btn.innerHTML = '<i class="bi bi-hourglass-split"></i> PROCESSING...';
+        btn.disabled = true;
+
+        const ids = Array.from(selectedItems).join(',');
+        const formData = new FormData();
+        formData.append('item_ids', ids);
+        formData.append('csrfmiddlewaretoken', '{{ csrf_token }}');
+
+        fetch("{% url 'withdraw_items_batch' %}", { method: 'POST', body: formData })
+            .then(r => r.json())
+            .then(data => {
+                if (data.status === 'success') {
+                    location.reload();
+                } else {
+                    alert('Error: ' + (data.message || 'Batch withdraw failed'));
+                    btn.innerHTML = original; btn.disabled = false;
+                }
+            })
+            .catch(err => {
+                console.error(err);
+                alert('Connection error');
+                btn.innerHTML = original; btn.disabled = false;
+            });
+    }
 </script>
 {% endif %}
 
