@@ -250,30 +250,13 @@ STORAGES = {
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
-# Discord Webhook для логирования результатов игр
-# Замени на свой URL вебхука из Discord (Server Settings -> Integrations -> Webhooks)
-DISCORD_WEBHOOK_URL = os.environ.get(
-    'DISCORD_WEBHOOK_URL',
-    'https://discord.com/api/webhooks/1492518777651204238/TPbzx_u5vH1d8j7dN0cdF88f1nlRgkGXkefXr2dip1Qm0k51b0hubFVID39-bPQmDWwH'
-)
-
-# Discord Webhook для логирования событий (логины, действия)
-DISCORD_EVENTS_WEBHOOK_URL = os.environ.get(
-    'DISCORD_EVENTS_WEBHOOK_URL',
-    'https://discord.com/api/webhooks/1495435667113640100/G9IdCaXw1owkBw1a3sGdY0HGf6VvhmRbx_cFKFALt1pVfXxkZwRLD235vWIXYtQZ4kwT'
-)
-
-# Discord Webhook для действий админа
-DISCORD_ADMIN_WEBHOOK_URL = os.environ.get(
-    'DISCORD_ADMIN_WEBHOOK_URL',
-    'https://discord.com/api/webhooks/1495500636177826094/E4CqFoMPBhRyVWqoshthYmEzcENrLufsQZ408cWgXcilCa9bTGohY-yUoXuoF3qT1tkf'
-)
-
-# Discord Webhook для депозитов и выводов
-DISCORD_TRADES_WEBHOOK_URL = os.environ.get(
-    'DISCORD_TRADES_WEBHOOK_URL',
-    'https://discord.com/api/webhooks/1495501003821420554/iBXXsGBV7TcASvGYUqWctq8T3KueFSnUEr2h7nHUgumKTUfX8LTflWrXuMTal06OzOyq'
-)
+# Discord webhooks — читаются только из env. Если переменная не задана,
+# отправка тихо пропускается (_send_discord_embed обрабатывает пустую строку).
+# ВАЖНО: никогда не коммить URL'ы в код — они позволяют спамить Discord-каналы.
+DISCORD_WEBHOOK_URL = os.environ.get('DISCORD_WEBHOOK_URL', '')
+DISCORD_EVENTS_WEBHOOK_URL = os.environ.get('DISCORD_EVENTS_WEBHOOK_URL', '')
+DISCORD_ADMIN_WEBHOOK_URL = os.environ.get('DISCORD_ADMIN_WEBHOOK_URL', '')
+DISCORD_TRADES_WEBHOOK_URL = os.environ.get('DISCORD_TRADES_WEBHOOK_URL', '')
 
 LOGGING = {
     'version': 1,

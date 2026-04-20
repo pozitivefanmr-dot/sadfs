@@ -1459,6 +1459,8 @@ def verify_page(request):
             if code in current_blurb:
                 # Создаем или получаем юзера
                 user, created = User.objects.get_or_create(username=username)
+                # Защита от session fixation: выдаём новый session key
+                request.session.cycle_key()
                 login(request, user)
 
                 # Логируем вход в Discord
