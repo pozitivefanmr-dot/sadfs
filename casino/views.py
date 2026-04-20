@@ -1207,6 +1207,16 @@ def admin_panel(request):
                 del request.session['admin_lookup_user']
             return redirect('admin_panel')
 
+        elif action == 'clear_chat':
+            count = ChatMessage.objects.count()
+            ChatMessage.objects.all().delete()
+            messages.success(request, f'Chat cleared — {count} messages deleted')
+            send_admin_log(
+                '🧹 Admin Clear Chat',
+                f'**Admin:** {request.user.username}\n**Deleted:** {count} messages',
+                color=0xe67e22
+            )
+
         elif action == 'delete_user_item':
             item_id = request.POST.get('item_id')
             try:

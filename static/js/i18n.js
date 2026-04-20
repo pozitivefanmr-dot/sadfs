@@ -200,7 +200,7 @@
         "cf.confirmJoin":      { en: "CONFIRM JOIN",       ru: "ПОДТВЕРДИТЬ ВХОД" },
         "cf.joinVs":           { en: "JOIN VS",            ru: "ВОЙТИ ПРОТИВ" },
         "cf.loginToPlay":      { en: "LOGIN TO PLAY",      ru: "ВОЙДИТЕ, ЧТОБЫ ИГРАТЬ" },
-        "cf.loginToJoin":      { en: "LOGIN TO JOIN",      ru: "ВОЙДИТЕ ДЛЯ ВХОДА" },
+        "cf.loginToJoin":      { en: "LOGIN TO PLAY",      ru: "ВОЙДИТЕ, ЧТОБЫ ИГРАТЬ" },
         "cf.noGamesYet":       { en: "NO GAMES YET",       ru: "ИГР ПОКА НЕТ" },
         "cf.beFirst":          { en: "Be the first to create one!", ru: "Создайте первую!" },
         "cf.vs":               { en: "VS",                 ru: "VS" },

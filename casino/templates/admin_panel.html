@@ -450,6 +450,21 @@
         </div>
     </div>
 
+    <!-- CLEAR CHAT -->
+    <div class="ap-card">
+        <div class="ap-card-title">
+            <i class="bi bi-chat-dots-fill" style="color: #e67e22;"></i>
+            Chat Management
+        </div>
+        <form method="POST" action="{% url 'admin_panel' %}" onsubmit="return confirm('Clear ALL chat messages?');">
+            {% csrf_token %}
+            <input type="hidden" name="action" value="clear_chat">
+            <button type="submit" class="ap-btn-del" style="width:100%;padding:10px;font-size:14px;">
+                <i class="bi bi-trash3-fill"></i> Clear All Chat Messages
+            </button>
+        </form>
+    </div>
+
     <!-- ACTIVE GIVEAWAYS -->
     <div class="ap-card">
         <div class="ap-card-title">
