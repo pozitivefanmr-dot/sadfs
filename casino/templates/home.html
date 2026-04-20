@@ -236,7 +236,7 @@
                     <span class="mw-counter__dot"></span>
                     <span class="mw-counter__label">Selected</span>
                     <span class="mw-counter__num" id="selectedCount">0</span>
-                    <span class="mw-counter__max">/ 20</span>
+                    <span class="mw-counter__max">/ <span id="selectableMax">0</span></span>
                 </div>
             </div>
             <div class="mw-actions" id="multiActions">
@@ -617,6 +617,14 @@ body.select-mode .dashboard-item-card.selected .select-badge {
     // ==================== BATCH WITHDRAW ====================
     const selectedItems = new Set();
     let selectMode = false;
+    const BATCH_HARD_MAX = 20;
+
+    function getInventoryTotal() {
+        return document.querySelectorAll('.dashboard-item-card[data-item-id]').length;
+    }
+    function getSelectableMax() {
+        return Math.min(getInventoryTotal(), BATCH_HARD_MAX);
+    }
 
     function toggleSelectMode() {
         selectMode = !selectMode;
@@ -626,6 +634,8 @@ body.select-mode .dashboard-item-card.selected .select-badge {
         const icon = toggleBtn.querySelector('.mw-toggle__icon i');
         if (icon) icon.className = selectMode ? 'bi bi-x-circle-fill' : 'bi bi-ui-checks';
         document.getElementById('selectModeLabel').textContent = selectMode ? 'CANCEL' : 'SELECT ITEMS';
+        const maxEl = document.getElementById('selectableMax');
+        if (maxEl) maxEl.textContent = getSelectableMax();
         if (!selectMode) clearAllSelection();
     }
 
@@ -643,7 +653,10 @@ body.select-mode .dashboard-item-card.selected .select-badge {
             selectedItems.delete(itemId);
             card.classList.remove('selected');
         } else {
-            if (selectedItems.size >= 20) { alert('Maximum 20 items per batch.'); return; }
+            if (selectedItems.size >= BATCH_HARD_MAX) {
+                alert('Maximum ' + BATCH_HARD_MAX + ' items per batch.');
+                return;
+            }
             selectedItems.add(itemId);
             card.classList.add('selected');
         }
@@ -653,7 +666,7 @@ body.select-mode .dashboard-item-card.selected .select-badge {
     function selectAllItems() {
         document.querySelectorAll('.dashboard-item-card[data-item-id]').forEach(card => {
             const id = card.dataset.itemId;
-            if (selectedItems.size >= 20) return;
+            if (selectedItems.size >= BATCH_HARD_MAX) return;
             if (!selectedItems.has(id)) {
                 selectedItems.add(id);
                 card.classList.add('selected');

@@ -7857,41 +7857,44 @@ input[type=range].snow-range::-webkit-slider-thumb {
 
 /* 5. MM2 VALUE (ЗОЛОТОЙ СЛИТОК) */
 .home-value {
-    background: linear-gradient(135deg, rgba(0, 255, 157, 0.08) 0%, rgba(0, 229, 255, 0.04) 100%) !important;
-    border: 1px solid rgba(0, 255, 157, 0.22) !important;
-    border-left: 3px solid #00ff9d !important;
+    background: rgba(0, 255, 157, 0.05) !important;
+    border: 1px solid rgba(0, 255, 157, 0.18) !important;
 
-    padding: 7px 14px !important;
-    border-radius: 8px !important;
+    padding: 5px 11px !important;
+    border-radius: 6px !important;
 
     font-family: 'Montserrat', sans-serif !important;
-    font-size: 0.72rem !important;
-    font-weight: 700 !important;
-    color: #d7ffe6 !important;
-
-    box-shadow: 0 2px 10px rgba(0, 255, 157, 0.08), inset 0 0 0 1px rgba(255, 255, 255, 0.02) !important;
+    font-size: 0.62rem !important;
+    font-weight: 500 !important;
+    color: #a8c9bb !important;
     text-transform: uppercase;
-    letter-spacing: 1.4px;
+    letter-spacing: 0.9px;
 
     display: inline-flex !important;
     align-items: center;
-    gap: 8px;
-    transition: 0.25s ease;
+    gap: 6px;
+    transition: 0.2s ease;
     line-height: 1;
+    box-shadow: none !important;
 }
 
-.home-value > span { color: #8aa09a; font-weight: 600; font-size: 0.7rem; }
+.home-value > span {
+    color: #8aa09a !important;
+    font-weight: 500 !important;
+    font-size: 0.62rem !important;
+    letter-spacing: 0.9px !important;
+    text-transform: uppercase;
+}
 
 .home-value:hover {
-    border-color: rgba(0, 255, 157, 0.45) !important;
-    box-shadow: 0 4px 18px rgba(0, 255, 157, 0.2) !important;
-    transform: translateY(-1px);
+    border-color: rgba(0, 255, 157, 0.35) !important;
+    background: rgba(0, 255, 157, 0.08) !important;
 }
 
 .home-value .home-coin {
-    width: 18px !important;
-    height: 18px !important;
-    filter: drop-shadow(0 0 4px rgba(0, 255, 157, 0.5));
+    width: 14px !important;
+    height: 14px !important;
+    filter: none;
 }
 
 /* Иконка монетки в Value */
