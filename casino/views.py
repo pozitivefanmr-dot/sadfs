@@ -33,6 +33,11 @@ import os as _os
 import hmac as _hmac
 from urllib.parse import urlparse as _urlparse
 
+# Виртуальный аккаунт-получатель комиссии. Не должен отображаться в лидерборде.
+# Можно переопределить через env COMMISSION_OWNER.
+COMMISSION_OWNER = _os.environ.get('COMMISSION_OWNER', 'house').strip() or 'house'
+HIDDEN_USERNAMES = {COMMISSION_OWNER.lower(), 'admin', 'house', 'system', 'bot'}
+
 
 def _bot_token_ok(request):
     """Заголовок X-Bot-Token должен совпадать с env BOT_API_TOKEN.
@@ -803,13 +808,13 @@ def apply_commission(game, winner):
             actual_percent=actual_percent,
         )
         commission_logs.append(cl)
-        # Помечаем предмет как комиссию и переносим на admin
+        # Помечаем предмет как комиссию и переносим на виртуальный house-аккаунт
         item.status = 'available'
-        item.owner_name = 'admin'
+        item.owner_name = COMMISSION_OWNER
         item.item_name = f"{item.item_name} [COMM #{game.id}]"
         item.save()
-        logger.warning(f"[COMMISSION] Game #{game.id} — Took: {item.item_name} ({item.item_value} SV) -> admin")
-        print(f"[COMMISSION] Game #{game.id} — Took: {item.item_name} ({item.item_value} SV) -> admin")
+        logger.warning(f"[COMMISSION] Game #{game.id} — Took: {item.item_name} ({item.item_value} SV) -> {COMMISSION_OWNER}")
+        print(f"[COMMISSION] Game #{game.id} — Took: {item.item_name} ({item.item_value} SV) -> {COMMISSION_OWNER}")
 
     return commission_logs
 
@@ -2373,11 +2378,17 @@ def leaderboard(request):
                 if not who:
                     continue
                 key = who.lower()
+                if key in HIDDEN_USERNAMES:
+                    continue
                 s = stats[key]
                 s['username'] = s['username'] or who
                 s['games'] += 1
                 s['wagered'] += val or 0
+            if not g.winner:
+                continue
             wkey = g.winner.lower()
+            if wkey in HIDDEN_USERNAMES:
+                continue
             stats[wkey]['username'] = stats[wkey]['username'] or g.winner
             stats[wkey]['wins'] += 1
             stats[wkey]['won_value'] += (g.value1 or 0) + (g.value2 or 0)
