@@ -13,6 +13,11 @@
     <meta name="robots" content="index, follow">
     <link rel="canonical" href="{% block canonical_url %}https://{{ request.get_host }}{{ request.path }}{% endblock %}">
 
+    <!-- Language alternates (hreflang) -->
+    <link rel="alternate" hreflang="en" href="https://{{ request.get_host }}{{ request.path }}">
+    <link rel="alternate" hreflang="ru" href="https://{{ request.get_host }}{{ request.path }}?lang=ru">
+    <link rel="alternate" hreflang="x-default" href="https://{{ request.get_host }}{{ request.path }}">
+
     <!-- Performance: preconnect -->
     <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
     <link rel="dns-prefetch" href="https://cdn.jsdelivr.net">
@@ -24,15 +29,18 @@
     <meta property="og:site_name" content="MMFLIP">
     <meta property="og:title" content="{% block og_title %}MMFLIP — MM2 Coinflip Gambling{% endblock %}">
     <meta property="og:description" content="{% block og_description %}Flip your Murder Mystery 2 items in fair 50/50 coinflip games. The best MM2 gambling site!{% endblock %}">
-    <meta property="og:image" content="{% block og_image %}https://{{ request.get_host }}{% static 'img/bg.png' %}{% endblock %}">
+    <meta property="og:image" content="{% block og_image %}https://{{ request.get_host }}{% static 'img/og-cover.png' %}{% endblock %}">
+    <meta property="og:image:width" content="1200">
+    <meta property="og:image:height" content="630">
     <meta property="og:url" content="https://{{ request.get_host }}{{ request.path }}">
     <meta property="og:locale" content="en_US">
+    <meta property="og:locale:alternate" content="ru_RU">
 
-    <!-- Twitter Card -->
+    <!-- Twitter Card (inherits og_title/og_description/og_image via block.super) -->
     <meta name="twitter:card" content="summary_large_image">
-    <meta name="twitter:title" content="MMFLIP — MM2 Coinflip Gambling">
-    <meta name="twitter:description" content="Flip your Murder Mystery 2 items in fair 50/50 coinflip games.">
-    <meta name="twitter:image" content="https://{{ request.get_host }}{% static 'img/bg.png' %}">
+    <meta name="twitter:title" content="{% block twitter_title %}{% block og_title_mirror %}MMFLIP — MM2 Coinflip Gambling{% endblock %}{% endblock %}">
+    <meta name="twitter:description" content="{% block twitter_description %}{% block og_description_mirror %}Flip your Murder Mystery 2 items in fair 50/50 coinflip games.{% endblock %}{% endblock %}">
+    <meta name="twitter:image" content="{% block twitter_image %}https://{{ request.get_host }}{% static 'img/og-cover.png' %}{% endblock %}">
 
     <!-- Theme -->
     <meta name="theme-color" content="#00ff9d">
@@ -49,15 +57,39 @@
                 "name": "MMFLIP",
                 "url": "https://{{ request.get_host }}",
                 "description": "The #1 MM2 coinflip gambling site. Flip Murder Mystery 2 items in fair 50/50 games.",
-                "inLanguage": "en",
-                "publisher": { "@id": "https://{{ request.get_host }}/#organization" }
+                "inLanguage": ["en", "ru"],
+                "publisher": { "@id": "https://{{ request.get_host }}/#organization" },
+                "potentialAction": {
+                    "@type": "SearchAction",
+                    "target": "https://{{ request.get_host }}/?q={search_term_string}",
+                    "query-input": "required name=search_term_string"
+                }
             },
             {
                 "@type": "Organization",
                 "@id": "https://{{ request.get_host }}/#organization",
                 "name": "MMFLIP",
                 "url": "https://{{ request.get_host }}",
-                "logo": "https://{{ request.get_host }}{% static 'img/logo.png' %}"
+                "logo": "https://{{ request.get_host }}{% static 'img/logo.png' %}",
+                "sameAs": []
+            },
+            {
+                "@type": "WebApplication",
+                "@id": "https://{{ request.get_host }}/#webapp",
+                "name": "MMFLIP Coinflip",
+                "url": "https://{{ request.get_host }}",
+                "applicationCategory": "GameApplication",
+                "applicationSubCategory": "Gambling",
+                "operatingSystem": "Web Browser",
+                "browserRequirements": "Requires JavaScript",
+                "description": "Play MM2 coinflip games online — bet your Murder Mystery 2 items in fair 50/50 duels.",
+                "inLanguage": ["en", "ru"],
+                "offers": {
+                    "@type": "Offer",
+                    "price": "0",
+                    "priceCurrency": "USD"
+                },
+                "isPartOf": { "@id": "https://{{ request.get_host }}/#website" }
             }
         ]
     }

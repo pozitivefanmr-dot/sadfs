@@ -2437,16 +2437,28 @@ def robots_txt(request):
 
 
 def sitemap_xml(request):
-    """Serve sitemap.xml for search engines."""
+    """Serve sitemap.xml for search engines with real lastmod timestamps."""
     from django.http import HttpResponse
-    from django.utils import timezone
     host = f"https://{request.get_host()}"
-    today = timezone.now().strftime("%Y-%m-%d")
+
+    # Фиксированная дата релиза — lastmod для статичных страниц. Обновляй руками
+    # при реальной правке контента, иначе Google перестанет доверять sitemap.
+    SITE_LAUNCH = "2026-04-15"
+
+    def _fmt(dt):
+        return dt.strftime("%Y-%m-%d") if dt else SITE_LAUNCH
+
+    # Реальные lastmod для страниц, зависящих от контента БД
+    last_game = CoinflipGame.objects.order_by('-created_at').values_list('created_at', flat=True).first()
+    last_giveaway = Giveaway.objects.order_by('-created_at').values_list('created_at', flat=True).first()
+    home_last = max(filter(None, [last_game, last_giveaway]), default=None)
+
     urls = [
-        {"loc": f"{host}/", "priority": "1.0", "changefreq": "daily", "lastmod": today},
-        {"loc": f"{host}/coinflip/", "priority": "0.9", "changefreq": "hourly", "lastmod": today},
-        {"loc": f"{host}/trade/", "priority": "0.7", "changefreq": "daily", "lastmod": today},
-        {"loc": f"{host}/login/", "priority": "0.5", "changefreq": "monthly", "lastmod": today},
+        {"loc": f"{host}/",            "priority": "1.0", "changefreq": "daily",   "lastmod": _fmt(home_last)},
+        {"loc": f"{host}/coinflip/",   "priority": "0.9", "changefreq": "hourly",  "lastmod": _fmt(last_game)},
+        {"loc": f"{host}/leaderboard/","priority": "0.8", "changefreq": "daily",   "lastmod": _fmt(last_game)},
+        {"loc": f"{host}/trade/",      "priority": "0.6", "changefreq": "weekly",  "lastmod": SITE_LAUNCH},
+        {"loc": f"{host}/login/",      "priority": "0.4", "changefreq": "yearly",  "lastmod": SITE_LAUNCH},
     ]
     xml_lines = ['<?xml version="1.0" encoding="UTF-8"?>']
     xml_lines.append('<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">')
