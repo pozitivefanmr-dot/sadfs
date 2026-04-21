@@ -53,14 +53,14 @@
     <div class="cf-header-bar">
         <div class="cf-stats-grid cf-stats-grid--compact">
 
-            <!-- ACTIVE GAMES -->
+            <!-- ONLINE NOW -->
             <div class="cf-stat-card cf-stat-card--premium">
                 <div class="cf-stat-icon-circle cf-stat-icon-circle--green">
-                    <i class="bi bi-fire"></i>
+                    <i class="bi bi-people-fill"></i>
                 </div>
                 <div class="cf-stat-body">
-                    <div class="cf-stat-label" data-i18n="cf.activeGamesLabel">ACTIVE GAMES</div>
-                    <div class="cf-stat-value cf-stat-value--large text-green">{{ games.count }}</div>
+                    <div class="cf-stat-label" data-i18n="cf.onlineNowLabel">ONLINE NOW</div>
+                    <div class="cf-stat-value cf-stat-value--large text-green" id="onlineCountValue">{{ online_count }}</div>
                 </div>
             </div>
 
@@ -456,6 +456,12 @@
             .then(data => {
                 const container = document.getElementById('gamesListContainer');
                 const emptyMsg = container.querySelector('.empty-msg');
+
+                // Update online count
+                if (typeof data.online === 'number') {
+                    const onlineEl = document.getElementById('onlineCountValue');
+                    if (onlineEl) onlineEl.textContent = data.online;
+                }
 
                 // 1. РЈР”РђР›Р•РќРР•: Р•СЃР»Рё РёРіСЂР° РµСЃС‚СЊ РЅР° СЃР°Р№С‚Рµ, РЅРѕ РЅРµС‚ РІ РґР°РЅРЅС‹С… СЃРµСЂРІРµСЂР° -> СѓРґР°Р»СЏРµРј
                 const serverIds = data.games.map(g => g.id);

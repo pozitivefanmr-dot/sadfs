@@ -686,8 +686,17 @@ def coinflip_home(request):
         'avatars': avatars,
         'title': 'Coinflip',
         'avatar_url': avatar_url,
+        'online_count': _online_count_safe(),
     }
     return render(request, 'coinflip.html', context)
+
+
+def _online_count_safe():
+    try:
+        from casino.visit_logger import get_online_count
+        return get_online_count()
+    except Exception:
+        return 0
 
 
 # ==========================================
@@ -1845,7 +1854,7 @@ def api_active_games_json(request):
             'html': html
         })
 
-    return JsonResponse({'games': games_data})
+    return JsonResponse({'games': games_data, 'online': _online_count_safe()})
 
 @login_required
 @require_POST
