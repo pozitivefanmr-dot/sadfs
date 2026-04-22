@@ -76,6 +76,10 @@ class WithdrawRequest(models.Model):
     user_name = models.CharField(max_length=100)
     item_name = models.CharField(max_length=100)
     amount = models.IntegerField(default=1) # НОВОЕ ПОЛЕ: Сколько вывести
+    # ID конкретного UserItem, который выводится. null=True для legacy-заявок,
+    # созданных до миграции. Новые заявки всегда должны указывать item_id, иначе
+    # подтверждение удалит не те предметы (bug C3).
+    item_id = models.IntegerField(null=True, blank=True, db_index=True)
     is_completed = models.BooleanField(default=False)
     created_at = models.DateTimeField(default=timezone.now)
 

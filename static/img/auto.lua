@@ -59,8 +59,10 @@ local processingFinalResult = false
 -- GUI данные: {label, amount, image}
 local parsedTheirItems = {}
 
--- Какие task_id мы загрузили в ЭТОТ трейд (подтвердим только после закрытия)
-local pendingConfirmTaskIDs = {}
+-- Задачи, загруженные в текущий трейд. Подтвердим ТОЛЬКО те, чьи предметы
+-- реально ушли из инвентаря (защита от частичного трейда). Структура элемента:
+--   { task_id, item_id, roblox_id, amount, item_name }
+local pendingTasks = {}
 -- Режим трейда: "deposit" (получаем) или "withdraw" (отдаём)
 local currentTradeMode = "deposit"
 
@@ -777,7 +779,13 @@ local function ProcessWithdraw(userName)
             end
 
             inventory[itemID] = inventory[itemID] - amountToGive
-            table.insert(tasksThisTrade, t)
+            table.insert(tasksThisTrade, {
+                task_id = t.task_id,
+                item_id = t.item_id,       -- DB id на сервере (может быть nil для legacy)
+                roblox_id = itemID,         -- Roblox itemID из инвентаря бота
+                amount = amountToGive,
+                item_name = itemLabel,
+            })
             slotsUsed = slotsUsed + 1
             print("     ✅ Предмет добавлен в трейд!")
         else
@@ -786,11 +794,8 @@ local function ProcessWithdraw(userName)
         end
     end
 
-    -- Сохраняем task_id для подтверждения ПОСЛЕ закрытия трейда
-    pendingConfirmTaskIDs = {}
-    for _, t in ipairs(tasksThisTrade) do
-        table.insert(pendingConfirmTaskIDs, t.task_id)
-    end
+    -- Сохраняем полную структуру для верификации ПОСЛЕ закрытия трейда
+    pendingTasks = tasksThisTrade
 
     if slotsUsed > 0 then
         local remaining = #allTasks - #tasksThisTrade
@@ -805,39 +810,58 @@ local function ProcessWithdraw(userName)
     return false
 end
 
--- Подтверждение после успешного закрытия трейда (С ВЕРИФИКАЦИЕЙ)
+-- Подтверждение после закрытия трейда — ПОЭЛЕМЕНТНО.
+-- Раньше при любом убыле подтверждались ВСЕ task_id сразу — если трейд был
+-- частичным, сервер считал выданными предметы, которые фактически не уходили.
+-- Теперь для каждой задачи проверяем, что из инвентаря ушло достаточно
+-- экземпляров именно её roblox_id.
 local function ConfirmWithdrawsAfterTrade(targetName)
-    if #pendingConfirmTaskIDs == 0 then return end
+    if #pendingTasks == 0 then return end
 
-    -- ВЕРИФИКАЦИЯ: проверяем что предметы РЕАЛЬНО ушли из инвентаря
     local newInventory = GetInventory()
-    local itemsActuallyLeft = false
+    local actualDrops = {}  -- { [robloxID] = сколько ушло }
     for itemID, oldCount in pairs(preTradeInventory) do
         local newCount = newInventory[itemID] or 0
         if newCount < oldCount then
-            itemsActuallyLeft = true
-            local diff = oldCount - newCount
-            print(string.format("  📉 '%s' убыло: %d → %d (-%d)", itemID, oldCount, newCount, diff))
+            actualDrops[itemID] = oldCount - newCount
+            print(string.format("  📉 '%s': %d → %d (-%d)",
+                itemID, oldCount, newCount, oldCount - newCount))
         end
     end
 
-    if not itemsActuallyLeft then
-        print("⚠️ ПРЕДМЕТЫ НЕ УШЛИ! Трейд не прошёл. Кэш НЕ трогаем.")
-        pendingConfirmTaskIDs = {}
+    if next(actualDrops) == nil then
+        print("⚠️ НИЧЕГО НЕ УШЛО. Трейд не прошёл. Кэш НЕ трогаем.")
+        pendingTasks = {}
         return
     end
 
-    print("✅ Предметы ушли! Подтверждаем " .. #pendingConfirmTaskIDs .. " вывод(ов) на Django...")
-
-    for _, taskId in ipairs(pendingConfirmTaskIDs) do
-        confirmWithdraw(taskId)
-        print("  ✔ Подтвержден task_id: " .. tostring(taskId))
+    local confirmedIds = {}
+    local skipped = 0
+    for _, pt in ipairs(pendingTasks) do
+        local need = pt.amount or 1
+        local have = actualDrops[pt.roblox_id] or 0
+        if have >= need then
+            confirmWithdraw(pt.task_id)
+            actualDrops[pt.roblox_id] = have - need
+            table.insert(confirmedIds, pt.task_id)
+            print(string.format("  ✔ CONFIRM task=%s item='%s' x%d (db_id=%s)",
+                tostring(pt.task_id), pt.roblox_id, need, tostring(pt.item_id)))
+        else
+            skipped = skipped + 1
+            print(string.format("  ⚠️ SKIP task=%s — нужно '%s' x%d, ушло x%d",
+                tostring(pt.task_id), pt.roblox_id, need, have))
+        end
     end
 
-    local remaining = RemoveFromCache(targetName, pendingConfirmTaskIDs)
-    print("📂 В кэше осталось: " .. #remaining .. " задач для " .. targetName)
+    if #confirmedIds > 0 then
+        local remaining = RemoveFromCache(targetName, confirmedIds)
+        print("📂 В кэше осталось: " .. #remaining .. " задач для " .. targetName)
+    end
+    if skipped > 0 then
+        print("⚠️ Не подтверждено " .. skipped .. " задач (частичный трейд). Остаются в кэше.")
+    end
 
-    pendingConfirmTaskIDs = {}
+    pendingTasks = {}
 end
 
 -- ==============================================================================
@@ -941,7 +965,7 @@ local function resetTradeState()
     enemyAcceptedState = false
     isProcessingTrade = false
     parsedTheirItems = {}
-    -- НЕ чистим pendingConfirmTaskIDs и currentTradeMode здесь!
+    -- НЕ чистим pendingTasks и currentTradeMode здесь!
     -- Они чистятся в ProcessFinalTrade после подтверждения.
 end
 

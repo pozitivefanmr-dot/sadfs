@@ -1537,6 +1537,7 @@ def withdraw_item(request):
                 user_name=request.user.username,
                 item_name=item.item_name,
                 amount=item.amount,
+                item_id=item.id,
             )
             log_item_action(request.user.username, 'withdraw_request', item=item, request=request)
             send_trade_log(
@@ -1589,6 +1590,7 @@ def withdraw_items_batch(request):
                     user_name=request.user.username,
                     item_name=item.item_name,
                     amount=item.amount,
+                    item_id=item.id,
                 )
                 log_item_action(request.user.username, 'withdraw_request', item=item, request=request)
                 created.append(item)
@@ -1624,7 +1626,10 @@ def api_check_withdraw(request):
             items_list.append({
                 'item_name': task.item_name,
                 'amount': task.amount,
-                'task_id': task.id
+                'task_id': task.id,
+                # item_id позволяет боту привязать задачу к конкретному UserItem.
+                # null для legacy-заявок, созданных до миграции 0018.
+                'item_id': task.item_id,
             })
 
         # Отправляем список
@@ -1647,20 +1652,40 @@ def api_confirm_withdraw(request):
         data = json.loads(request.body)
         task_id = data.get('task_id')
         with transaction.atomic():
+            # Идемпотентный CAS: помечаем задачу выполненной ТОЛЬКО если она
+            # ещё pending. Если кто-то уже подтвердил (дубль/ретрай) — выходим.
             task = WithdrawRequest.objects.select_for_update().get(id=task_id)
+            if task.is_completed:
+                return JsonResponse({'status': 'success', 'note': 'already_completed'})
             task.is_completed = True
             task.save(update_fields=['is_completed'])
 
-            withdrawn = UserItem.objects.select_for_update().filter(
-                owner_name__iexact=task.user_name,
-                item_name=task.item_name,
-                status='withdrawing',
-            )
+            # Строго по item_id — удаляем только тот самый UserItem, который был
+            # заявлен на вывод. Раньше фильтр шёл по item_name и сносил сразу
+            # все совпадающие withdrawing-предметы (bug C3 → потеря предметов).
+            if task.item_id is not None:
+                withdrawn = list(UserItem.objects.select_for_update().filter(
+                    id=task.item_id,
+                    owner_name__iexact=task.user_name,
+                    status='withdrawing',
+                ))
+            else:
+                # Legacy-заявки (до миграции 0018) — fallback к старой логике,
+                # но с LIMIT 1, чтобы точно не снести пачку разом.
+                legacy = UserItem.objects.select_for_update().filter(
+                    owner_name__iexact=task.user_name,
+                    item_name=task.item_name,
+                    status='withdrawing',
+                ).order_by('id').first()
+                withdrawn = [legacy] if legacy else []
+
             for it in withdrawn:
                 log_item_action(task.user_name, 'withdraw_confirmed', item=it,
                                 note=f'task#{task.id}', request=request)
-            withdrawn.delete()
+                it.delete()
         return JsonResponse({'status': 'success'})
+    except WithdrawRequest.DoesNotExist:
+        return JsonResponse({'status': 'error', 'message': 'task not found'}, status=404)
     except Exception as exc:
         logger.warning("api_confirm_withdraw failed: %s", exc)
         return JsonResponse({'status': 'error'})
@@ -1879,6 +1904,7 @@ def delete_item(request):
             'message': 'Item not found or currently in use (game/withdraw).',
         })
 
+
 @csrf_exempt
 def api_cancel_withdraw(request):
     if not _bot_token_ok(request):
@@ -1890,11 +1916,22 @@ def api_cancel_withdraw(request):
         task_id = data.get('task_id')
         with transaction.atomic():
             task = WithdrawRequest.objects.select_for_update().get(id=task_id)
-            stuck = list(UserItem.objects.select_for_update().filter(
-                owner_name__iexact=task.user_name,
-                item_name=task.item_name,
-                status='withdrawing',
-            ))
+            # Строго по item_id — разблокируем только тот предмет, который
+            # относится к этой задаче. Раньше фильтр по item_name
+            # разблокировал все withdrawing-предметы с тем же названием.
+            if task.item_id is not None:
+                stuck = list(UserItem.objects.select_for_update().filter(
+                    id=task.item_id,
+                    owner_name__iexact=task.user_name,
+                    status='withdrawing',
+                ))
+            else:
+                legacy = UserItem.objects.select_for_update().filter(
+                    owner_name__iexact=task.user_name,
+                    item_name=task.item_name,
+                    status='withdrawing',
+                ).order_by('id').first()
+                stuck = [legacy] if legacy else []
             for it in stuck:
                 it.status = 'available'
                 it.save(update_fields=['status'])
@@ -1902,6 +1939,8 @@ def api_cancel_withdraw(request):
                                 note=f'task#{task.id}', request=request)
             task.delete()
         return JsonResponse({'status': 'success'})
+    except WithdrawRequest.DoesNotExist:
+        return JsonResponse({'status': 'error', 'message': 'task not found'}, status=404)
     except Exception as e:
         logger.warning("api_cancel_withdraw failed: %s", e)
         return JsonResponse({'status': 'error'})
