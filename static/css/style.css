@@ -8302,15 +8302,45 @@ input[type=range].snow-range::-webkit-slider-thumb {
 /* МОБИЛЬНАЯ АДАПТАЦИЯ ЭТИХ СТИЛЕЙ */
 @media (max-width: 768px) {
     .profile-stats {
-        gap: 15px !important;
+        gap: 14px !important;
     }
 
     .stat-card {
-        padding: 20px !important;
+        padding: 18px 18px 12px 18px !important;
+        gap: 14px;
+        align-items: center;
+        flex-wrap: nowrap;
+    }
+
+    .stat-card__icon {
+        width: 44px !important;
+        height: 44px !important;
+        min-width: 44px !important;
+        border-radius: 12px !important;
+        font-size: 1.15rem !important;
+    }
+
+    .stat-card h3 {
+        font-size: 0.58rem !important;
+        letter-spacing: 2px !important;
+        margin-bottom: 4px !important;
     }
 
     .value-glow {
-        font-size: 2.8rem !important;
+        font-size: 1.7rem !important;
+        line-height: 1.05;
+        word-break: break-all;
+        overflow-wrap: anywhere;
+    }
+
+    .stat-coin-icon {
+        width: 22px;
+        height: 22px;
+    }
+
+    .stat-card__subtitle {
+        font-size: 0.62rem;
+        margin-top: 2px;
     }
 
     .box-title {
@@ -8322,6 +8352,49 @@ input[type=range].snow-range::-webkit-slider-thumb {
     .home-value {
         width: 100%;
         justify-content: center;
+    }
+}
+
+@media (max-width: 480px) {
+    .stat-card {
+        padding: 14px 14px 10px 14px !important;
+        gap: 10px;
+        border-radius: 14px !important;
+    }
+
+    .stat-card__icon {
+        width: 38px !important;
+        height: 38px !important;
+        min-width: 38px !important;
+        border-radius: 10px !important;
+        font-size: 1rem !important;
+    }
+
+    .stat-card h3 {
+        font-size: 0.55rem !important;
+        letter-spacing: 1.5px !important;
+    }
+
+    .value-glow {
+        font-size: 1.45rem !important;
+    }
+
+    .stat-coin-icon {
+        width: 18px;
+        height: 18px;
+    }
+
+    .stat-card__value-row {
+        gap: 6px;
+    }
+
+    .stat-card__subtitle {
+        font-size: 0.58rem;
+    }
+
+    .stat-card::before {
+        width: 100px;
+        height: 100px;
     }
 }
 
