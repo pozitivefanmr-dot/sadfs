@@ -291,7 +291,7 @@
 
         <div class="bot-modal__header">
             <div class="bot-modal__icon" id="botModalIcon">
-                <i class="bi bi-box-arrow-in-down"></i>
+                <i class="bi bi-wallet2"></i>
             </div>
             <div class="bot-modal__heading">
                 <h2 class="bot-modal__title" id="modalTitle" data-i18n="bot.selectBot">SELECT BOT</h2>
@@ -301,20 +301,41 @@
             </div>
         </div>
 
+        <div class="bot-modal__steps-label">
+            <i class="bi bi-list-ol"></i>
+            <span data-i18n="bot.howItWorks">How it works</span>
+        </div>
+
         <div class="bot-modal__steps" id="botModalSteps">
             <div class="bot-step">
-                <div class="bot-step__badge"><i class="bi bi-controller"></i><span class="bot-step__num">1</span></div>
-                <div class="bot-step__text" id="botStep1" data-i18n="bot.depositStep1">Join the bot in Roblox</div>
+                <div class="bot-step__num">1</div>
+                <div class="bot-step__body">
+                    <div class="bot-step__badge"><i class="bi bi-controller"></i></div>
+                    <div class="bot-step__texts">
+                        <div class="bot-step__title" id="botStep1" data-i18n="bot.depositStep1">Join the bot in Roblox</div>
+                        <div class="bot-step__desc" id="botStep1Desc" data-i18n="bot.depositStep1Desc">Click the JOIN button below to enter the bot's private server</div>
+                    </div>
+                </div>
             </div>
-            <div class="bot-step__line"></div>
             <div class="bot-step">
-                <div class="bot-step__badge"><i class="bi bi-send"></i><span class="bot-step__num">2</span></div>
-                <div class="bot-step__text" id="botStep2" data-i18n="bot.depositStep2">Send items via trade</div>
+                <div class="bot-step__num">2</div>
+                <div class="bot-step__body">
+                    <div class="bot-step__badge" id="botStep2Badge"><i class="bi bi-send"></i></div>
+                    <div class="bot-step__texts">
+                        <div class="bot-step__title" id="botStep2" data-i18n="bot.depositStep2">Send items via trade</div>
+                        <div class="bot-step__desc" id="botStep2Desc" data-i18n="bot.depositStep2Desc">Start a Roblox trade with the bot and add the items you want to deposit</div>
+                    </div>
+                </div>
             </div>
-            <div class="bot-step__line"></div>
             <div class="bot-step">
-                <div class="bot-step__badge"><i class="bi bi-check2-circle"></i><span class="bot-step__num">3</span></div>
-                <div class="bot-step__text" id="botStep3" data-i18n="bot.depositStep3">Items credited to inventory</div>
+                <div class="bot-step__num">3</div>
+                <div class="bot-step__body">
+                    <div class="bot-step__badge"><i class="bi bi-check2-circle"></i></div>
+                    <div class="bot-step__texts">
+                        <div class="bot-step__title" id="botStep3" data-i18n="bot.depositStep3">Items credited to inventory</div>
+                        <div class="bot-step__desc" id="botStep3Desc" data-i18n="bot.depositStep3Desc">Your items will appear on the dashboard within a few seconds</div>
+                    </div>
+                </div>
             </div>
         </div>
 
@@ -389,9 +410,17 @@
         const step1 = document.getElementById('botStep1');
         const step2 = document.getElementById('botStep2');
         const step3 = document.getElementById('botStep3');
-        const step2Icon = document.querySelector('#botModalSteps .bot-step:nth-child(3) .bot-step__badge > i');
+        const step1Desc = document.getElementById('botStep1Desc');
+        const step2Desc = document.getElementById('botStep2Desc');
+        const step3Desc = document.getElementById('botStep3Desc');
+        const step2BadgeIcon = document.querySelector('#botStep2Badge > i');
 
         const t = (key, fallback) => (window.I18N && window.I18N.t) ? (window.I18N.t(key) || fallback) : fallback;
+        const setText = (el, key, fallback) => {
+            if (!el) return;
+            el.setAttribute('data-i18n', key);
+            el.innerText = t(key, fallback);
+        };
 
         if (!overlay || !modal) return;
 
@@ -400,38 +429,35 @@
         const isDeposit = type === 'DEPOSIT';
         modal.dataset.mode = isDeposit ? 'deposit' : 'withdraw';
 
+        // Header icon: wallet for deposit, coin for withdraw
         if (iconEl) {
-            iconEl.className = isDeposit ? 'bi bi-box-arrow-in-down' : 'bi bi-box-arrow-up';
+            iconEl.className = isDeposit ? 'bi bi-wallet2' : 'bi bi-coin';
         }
 
         if (isDeposit) {
-            title.setAttribute('data-i18n', 'bot.depositItems');
-            title.innerText = t('bot.depositItems', 'DEPOSIT ITEMS');
-            subtitle.setAttribute('data-i18n', 'bot.depositSubtitle');
-            subtitle.innerText = t('bot.depositSubtitle', 'Send items to one of our secure bots');
+            setText(title, 'bot.depositItems', 'DEPOSIT ITEMS');
+            setText(subtitle, 'bot.depositSubtitle', 'Send items to one of our secure bots');
 
-            step1.setAttribute('data-i18n', 'bot.depositStep1');
-            step1.innerText = t('bot.depositStep1', 'Join the bot in Roblox');
-            step2.setAttribute('data-i18n', 'bot.depositStep2');
-            step2.innerText = t('bot.depositStep2', 'Send items via trade');
-            step3.setAttribute('data-i18n', 'bot.depositStep3');
-            step3.innerText = t('bot.depositStep3', 'Items credited to inventory');
+            setText(step1, 'bot.depositStep1', 'Join the bot in Roblox');
+            setText(step1Desc, 'bot.depositStep1Desc', "Click the JOIN button below to enter the bot's private server");
+            setText(step2, 'bot.depositStep2', 'Send items via trade');
+            setText(step2Desc, 'bot.depositStep2Desc', 'Start a Roblox trade with the bot and add the items you want to deposit');
+            setText(step3, 'bot.depositStep3', 'Items credited to inventory');
+            setText(step3Desc, 'bot.depositStep3Desc', 'Your items will appear on the dashboard within a few seconds');
 
-            if (step2Icon) step2Icon.className = 'bi bi-send';
+            if (step2BadgeIcon) step2BadgeIcon.className = 'bi bi-send';
         } else {
-            title.setAttribute('data-i18n', 'bot.withdrawItems');
-            title.innerText = t('bot.withdrawItems', 'WITHDRAW ITEMS');
-            subtitle.setAttribute('data-i18n', 'bot.withdrawSubtitle');
-            subtitle.innerText = t('bot.withdrawSubtitle', 'Receive items from one of our secure bots');
+            setText(title, 'bot.withdrawItems', 'WITHDRAW ITEMS');
+            setText(subtitle, 'bot.withdrawSubtitle', 'Receive items from one of our secure bots');
 
-            step1.setAttribute('data-i18n', 'bot.withdrawStep1');
-            step1.innerText = t('bot.withdrawStep1', 'Join the bot in Roblox');
-            step2.setAttribute('data-i18n', 'bot.withdrawStep2');
-            step2.innerText = t('bot.withdrawStep2', 'Accept trade offer from bot');
-            step3.setAttribute('data-i18n', 'bot.withdrawStep3');
-            step3.innerText = t('bot.withdrawStep3', 'Items in your Roblox inventory');
+            setText(step1, 'bot.withdrawStep1', 'Join the bot in Roblox');
+            setText(step1Desc, 'bot.withdrawStep1Desc', "Click JOIN to enter the bot's server so it can send you a trade");
+            setText(step2, 'bot.withdrawStep2', 'Accept trade offer from bot');
+            setText(step2Desc, 'bot.withdrawStep2Desc', 'The bot will send you a Roblox trade — accept it to receive the items');
+            setText(step3, 'bot.withdrawStep3', 'Items in your Roblox inventory');
+            setText(step3Desc, 'bot.withdrawStep3Desc', 'The items are removed from MMFLIP and appear in your Roblox inventory');
 
-            if (step2Icon) step2Icon.className = 'bi bi-inbox';
+            if (step2BadgeIcon) step2BadgeIcon.className = 'bi bi-inbox';
         }
 
         title.style.color = '';
