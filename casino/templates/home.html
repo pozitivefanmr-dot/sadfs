@@ -221,12 +221,16 @@
     <div class="box-card">
         <div class="box-title">
             <span data-i18n="home.inventoryTitle">YOUR INVENTORY</span>
-            <div class="home-value">
-                <i class="bi bi-graph-up-arrow home-value__icon"></i>
-                <span class="home-value__label" data-i18n="home.mm2Value">MM2 VALUE</span>
-                <span class="home-value__divider"></span>
-                <img src="{% static 'img/sv_coin.png' %}" class="home-coin" alt="SV">
-                <span class="home-value__num" id="inventory-mm2-value">{{ total_profit|default:0 }}</span>
+            <div class="home-value" title="1 SV coin equals 1 MM2 value unit">
+                <i class="bi bi-patch-check-fill home-value__icon"></i>
+                <span class="home-value__eq">
+                    <span class="home-value__num">1</span>
+                    <img src="{% static 'img/sv_coin.png' %}" class="home-coin" alt="SV">
+                    <span class="home-value__sign">=</span>
+                    <span class="home-value__num">1</span>
+                    <span class="home-value__label" data-i18n="home.mm2Value">MM2 VALUE</span>
+                </span>
+                <span class="home-value__shine"></span>
             </div>
         </div>
 
