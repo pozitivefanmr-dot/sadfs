@@ -234,6 +234,60 @@
         </div>
     </div>
 
+    <!-- REAL ONLINE STATS -->
+    <div class="ap-card" id="adminOnlineCard" data-refresh-url="{% url 'api_admin_online' %}">
+        <div class="ap-card-title">
+            <i class="bi bi-people-fill" style="color: #00ff9d;"></i>
+            Online (real vs displayed)
+            {% if is_night_mode %}
+            <span style="margin-left:auto; padding:3px 10px; background:rgba(168,85,247,0.12); border:1px solid rgba(168,85,247,0.3); border-radius:999px; font-size:0.65rem; font-weight:700; letter-spacing:0.6px; color:#c084fc;">
+                <i class="bi bi-moon-stars-fill"></i> NIGHT
+            </span>
+            {% else %}
+            <span style="margin-left:auto; padding:3px 10px; background:rgba(251,191,36,0.10); border:1px solid rgba(251,191,36,0.28); border-radius:999px; font-size:0.65rem; font-weight:700; letter-spacing:0.6px; color:#fbbf24;">
+                <i class="bi bi-sun-fill"></i> DAY
+            </span>
+            {% endif %}
+        </div>
+        <div style="display:grid; grid-template-columns: repeat(3, 1fr); gap:14px;">
+            <div style="padding:14px 16px; background:rgba(0,255,157,0.05); border:1px solid rgba(0,255,157,0.2); border-radius:12px;">
+                <div class="ap-label" style="margin-bottom:4px;">Real</div>
+                <div style="font-size:1.4rem; font-weight:900; color:#00ff9d;" id="adminOnlineReal">{{ real_online }}</div>
+            </div>
+            <div style="padding:14px 16px; background:rgba(255,255,255,0.03); border:1px solid rgba(255,255,255,0.07); border-radius:12px;">
+                <div class="ap-label" style="margin-bottom:4px;">Fake offset</div>
+                <div style="font-size:1.4rem; font-weight:900; color:#6b7c71;" id="adminOnlineOffset">+{{ fake_offset }}</div>
+            </div>
+            <div style="padding:14px 16px; background:rgba(56,189,248,0.05); border:1px solid rgba(56,189,248,0.2); border-radius:12px;">
+                <div class="ap-label" style="margin-bottom:4px;">Displayed</div>
+                <div style="font-size:1.4rem; font-weight:900; color:#38bdf8;" id="adminOnlineShown">{{ real_online|add:fake_offset }}</div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        (function () {
+            const card = document.getElementById('adminOnlineCard');
+            if (!card) return;
+            const url = card.getAttribute('data-refresh-url');
+            const elReal = document.getElementById('adminOnlineReal');
+            const elOffset = document.getElementById('adminOnlineOffset');
+            const elShown = document.getElementById('adminOnlineShown');
+
+            async function tick() {
+                try {
+                    const r = await fetch(url, { headers: { 'X-Requested-With': 'XMLHttpRequest' } });
+                    if (!r.ok) return;
+                    const d = await r.json();
+                    if (typeof d.real === 'number') elReal.textContent = d.real;
+                    if (typeof d.offset === 'number') elOffset.textContent = '+' + d.offset;
+                    if (typeof d.displayed === 'number') elShown.textContent = d.displayed;
+                } catch (e) { }
+            }
+            setInterval(tick, 5000);
+        })();
+    </script>
+
     <!-- ADD ITEM FORM -->
     <div class="ap-card">
         <div class="ap-card-title">

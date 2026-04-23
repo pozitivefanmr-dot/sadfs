@@ -37,21 +37,50 @@ def _touch_online(ip):
     cache.set(ONLINE_CACHE_KEY, visitors, timeout=ONLINE_TTL * 2)
 
 
-def get_online_count():
-    """Real online count + drifting fake offset, mostly [3,4], rarely up to 9."""
-    import hashlib
+import hashlib as _hashlib
+import datetime as _dt
+
+# Night window in UTC (covers ~23:00–08:00 Moscow time).
+NIGHT_START_HOUR_UTC = 20
+NIGHT_END_HOUR_UTC = 5
+
+
+def _is_night(now_ts):
+    hour = _dt.datetime.utcfromtimestamp(now_ts).hour
+    if NIGHT_START_HOUR_UTC <= NIGHT_END_HOUR_UTC:
+        return NIGHT_START_HOUR_UTC <= hour < NIGHT_END_HOUR_UTC
+    return hour >= NIGHT_START_HOUR_UTC or hour < NIGHT_END_HOUR_UTC
+
+
+def get_online_components():
+    """Returns (real, offset, is_night). Real = live visitors in last 120s."""
     now = int(time.time())
     visitors = cache.get(ONLINE_CACHE_KEY) or {}
     cutoff = now - ONLINE_TTL
     real = sum(1 for v in visitors.values() if v >= cutoff)
-    # New bucket every ~23s; biased toward low values (3-4),
-    # rarely climbs near 9. Deterministic per-bucket via md5.
-    bucket = now // 23
-    h = int(hashlib.md5(str(bucket).encode()).hexdigest()[:8], 16)
-    r = (h % 10_000) / 10_000.0  # 0..1
-    # Strong low-bias: r ** 3 keeps most samples near 0
-    biased = r ** 3
-    offset = 3 + int(biased * 6.999)  # 3..9, ~9 very rare
+
+    night = _is_night(now)
+    if night:
+        # Slower drift (~90s) and tighter range: 1..4, higher values rarer.
+        bucket_size = 90
+        span = 4  # offset ∈ [1, 4]
+        base = 1
+    else:
+        # Day: faster drift (~23s), range 3..9, higher values rarer.
+        bucket_size = 23
+        span = 7  # offset ∈ [3, 9]
+        base = 3
+
+    bucket = now // bucket_size
+    h = int(_hashlib.md5(str(bucket).encode()).hexdigest()[:8], 16)
+    r = (h % 10_000) / 10_000.0
+    biased = r ** 3.0  # strong low-bias
+    offset = base + int(biased * (span - 0.001))
+    return real, offset, night
+
+
+def get_online_count():
+    real, offset, _ = get_online_components()
     return real + offset
 
 

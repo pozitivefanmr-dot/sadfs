@@ -35,6 +35,7 @@ urlpatterns = [
     path('api/giveaway/active/', views.api_active_giveaways, name='api_active_giveaways'),
     path('api/giveaway/force-end/', views.force_end_giveaway, name='force_end_giveaway'),
     path('admin-panel/', views.admin_panel, name='admin_panel'),
+    path('api/admin/online/', views.api_admin_online, name='api_admin_online'),
     path('robots.txt', views.robots_txt, name='robots_txt'),
     path('sitemap.xml', views.sitemap_xml, name='sitemap_xml'),
 ]

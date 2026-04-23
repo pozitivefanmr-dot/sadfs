@@ -1342,6 +1342,13 @@ def admin_panel(request):
         ).order_by('-created_at')[:20]
         lookup_roblox_id = get_roblox_id(lookup_username)
 
+    # Real vs displayed online stats for admin
+    try:
+        from casino.visit_logger import get_online_components
+        real_online, fake_offset, is_night = get_online_components()
+    except Exception:
+        real_online, fake_offset, is_night = 0, 0, False
+
     return render(request, 'admin_panel.html', {
         'inventory': inventory,
         'total_value': total_value,
@@ -1355,6 +1362,22 @@ def admin_panel(request):
         'lookup_total': lookup_total,
         'lookup_roblox_id': lookup_roblox_id,
         'lookup_pending_withdrawals': lookup_pending_withdrawals,
+        'real_online': real_online,
+        'fake_offset': fake_offset,
+        'is_night_mode': is_night,
+    })
+
+
+def api_admin_online(request):
+    if not request.user.is_authenticated or not request.user.is_superuser:
+        return JsonResponse({'error': 'forbidden'}, status=403)
+    from casino.visit_logger import get_online_components
+    real, offset, night = get_online_components()
+    return JsonResponse({
+        'real': real,
+        'offset': offset,
+        'displayed': real + offset,
+        'night': night,
     })
 
 
