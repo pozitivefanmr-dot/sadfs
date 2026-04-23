@@ -282,35 +282,82 @@
 </div>
 
 <div class="bot-modal-overlay" id="botModalOverlay">
-    <div class="bot-modal">
-        <div class="modal-close" onclick="closeBotModal()">&#10005;</div>
+    <div class="bot-modal" id="botModal" data-mode="deposit">
+        <div class="bot-modal__accent-bar"></div>
 
-        <h2 id="modalTitle" data-i18n="bot.selectBot">SELECT BOT</h2>
+        <button type="button" class="modal-close" onclick="closeBotModal()" aria-label="Close">
+            <i class="bi bi-x-lg"></i>
+        </button>
 
-        {% for bot in bots_data %}
-        <div class="bot-row">
-            <div class="bot-avatar-wrapper">
-                {% if bot.image %}
-                <img src="{{ bot.image }}" class="bot-avatar" alt="Bot">
-                {% else %}
-                <div class="bot-avatar" style="background:#333;"></div>
-                {% endif %}
-                <div class="status-dot {% if bot.is_online %}online{% else %}offline{% endif %}"></div>
+        <div class="bot-modal__header">
+            <div class="bot-modal__icon" id="botModalIcon">
+                <i class="bi bi-box-arrow-in-down"></i>
             </div>
-
-            <div class="bot-info">
-                <span class="bot-name">{{ bot.username }}</span>
-                <span class="bot-status-text" style="color: {% if bot.is_online %}#00ff9d{% else %}#666{% endif %};">
-                    {{ bot.status_text }}
-                </span>
+            <div class="bot-modal__heading">
+                <h2 class="bot-modal__title" id="modalTitle" data-i18n="bot.selectBot">SELECT BOT</h2>
+                <p class="bot-modal__subtitle" id="modalSubtitle" data-i18n="bot.depositSubtitle">
+                    Send items to one of our secure bots
+                </p>
             </div>
-
-            <a href="{{ bot.link }}" target="_blank" class="btn-bot-join">
-                <span data-i18n="bot.join">JOIN</span>
-            </a>
         </div>
-        {% endfor %}
 
+        <div class="bot-modal__steps" id="botModalSteps">
+            <div class="bot-step">
+                <div class="bot-step__badge"><i class="bi bi-controller"></i><span class="bot-step__num">1</span></div>
+                <div class="bot-step__text" id="botStep1" data-i18n="bot.depositStep1">Join the bot in Roblox</div>
+            </div>
+            <div class="bot-step__line"></div>
+            <div class="bot-step">
+                <div class="bot-step__badge"><i class="bi bi-send"></i><span class="bot-step__num">2</span></div>
+                <div class="bot-step__text" id="botStep2" data-i18n="bot.depositStep2">Send items via trade</div>
+            </div>
+            <div class="bot-step__line"></div>
+            <div class="bot-step">
+                <div class="bot-step__badge"><i class="bi bi-check2-circle"></i><span class="bot-step__num">3</span></div>
+                <div class="bot-step__text" id="botStep3" data-i18n="bot.depositStep3">Items credited to inventory</div>
+            </div>
+        </div>
+
+        <div class="bot-modal__list-label">
+            <i class="bi bi-robot"></i>
+            <span data-i18n="bot.availableBots">Available bots</span>
+        </div>
+
+        <div class="bot-modal__list">
+            {% for bot in bots_data %}
+            <div class="bot-row">
+                <div class="bot-avatar-wrapper {% if bot.is_online %}is-online{% endif %}">
+                    {% if bot.image %}
+                    <img src="{{ bot.image }}" class="bot-avatar" alt="Bot">
+                    {% else %}
+                    <div class="bot-avatar bot-avatar--placeholder"><i class="bi bi-robot"></i></div>
+                    {% endif %}
+                    <div class="status-dot {% if bot.is_online %}online{% else %}offline{% endif %}"></div>
+                </div>
+
+                <div class="bot-info">
+                    <span class="bot-name">
+                        {{ bot.username }}
+                        <i class="bi bi-patch-check-fill bot-verified" title="Verified bot"></i>
+                    </span>
+                    <span class="bot-status-text {% if bot.is_online %}is-online{% else %}is-offline{% endif %}">
+                        <i class="bi bi-circle-fill"></i>
+                        {{ bot.status_text }}
+                    </span>
+                </div>
+
+                <a href="{{ bot.link }}" target="_blank" rel="noopener" class="btn-bot-join">
+                    <span data-i18n="bot.join">JOIN</span>
+                    <i class="bi bi-box-arrow-up-right"></i>
+                </a>
+            </div>
+            {% endfor %}
+        </div>
+
+        <div class="bot-modal__footer">
+            <i class="bi bi-shield-check"></i>
+            <span data-i18n="bot.verifiedBots">Only trade with bots listed here. Always verify the username.</span>
+        </div>
     </div>
 </div>
 
@@ -335,21 +382,59 @@
     // 2. Bot Modal (Deposit/Withdraw)
     function openBotModal(type) {
         const overlay = document.getElementById('botModalOverlay');
+        const modal = document.getElementById('botModal');
         const title = document.getElementById('modalTitle');
+        const subtitle = document.getElementById('modalSubtitle');
+        const iconEl = document.querySelector('#botModalIcon > i');
+        const step1 = document.getElementById('botStep1');
+        const step2 = document.getElementById('botStep2');
+        const step3 = document.getElementById('botStep3');
+        const step2Icon = document.querySelector('#botModalSteps .bot-step:nth-child(3) .bot-step__badge > i');
 
-        if (overlay) {
-            overlay.classList.add('active');
+        const t = (key, fallback) => (window.I18N && window.I18N.t) ? (window.I18N.t(key) || fallback) : fallback;
 
-            if (type === 'DEPOSIT') {
-                title.setAttribute('data-i18n', 'bot.depositItems');
-                title.innerText = (window.I18N && window.I18N.t) ? window.I18N.t('bot.depositItems') : "DEPOSIT ITEMS";
-                title.style.color = "var(--primary-green)";
-            } else {
-                title.setAttribute('data-i18n', 'bot.withdrawItems');
-                title.innerText = (window.I18N && window.I18N.t) ? window.I18N.t('bot.withdrawItems') : "WITHDRAW ITEMS";
-                title.style.color = "var(--primary-cyan)";
-            }
+        if (!overlay || !modal) return;
+
+        overlay.classList.add('active');
+
+        const isDeposit = type === 'DEPOSIT';
+        modal.dataset.mode = isDeposit ? 'deposit' : 'withdraw';
+
+        if (iconEl) {
+            iconEl.className = isDeposit ? 'bi bi-box-arrow-in-down' : 'bi bi-box-arrow-up';
         }
+
+        if (isDeposit) {
+            title.setAttribute('data-i18n', 'bot.depositItems');
+            title.innerText = t('bot.depositItems', 'DEPOSIT ITEMS');
+            subtitle.setAttribute('data-i18n', 'bot.depositSubtitle');
+            subtitle.innerText = t('bot.depositSubtitle', 'Send items to one of our secure bots');
+
+            step1.setAttribute('data-i18n', 'bot.depositStep1');
+            step1.innerText = t('bot.depositStep1', 'Join the bot in Roblox');
+            step2.setAttribute('data-i18n', 'bot.depositStep2');
+            step2.innerText = t('bot.depositStep2', 'Send items via trade');
+            step3.setAttribute('data-i18n', 'bot.depositStep3');
+            step3.innerText = t('bot.depositStep3', 'Items credited to inventory');
+
+            if (step2Icon) step2Icon.className = 'bi bi-send';
+        } else {
+            title.setAttribute('data-i18n', 'bot.withdrawItems');
+            title.innerText = t('bot.withdrawItems', 'WITHDRAW ITEMS');
+            subtitle.setAttribute('data-i18n', 'bot.withdrawSubtitle');
+            subtitle.innerText = t('bot.withdrawSubtitle', 'Receive items from one of our secure bots');
+
+            step1.setAttribute('data-i18n', 'bot.withdrawStep1');
+            step1.innerText = t('bot.withdrawStep1', 'Join the bot in Roblox');
+            step2.setAttribute('data-i18n', 'bot.withdrawStep2');
+            step2.innerText = t('bot.withdrawStep2', 'Accept trade offer from bot');
+            step3.setAttribute('data-i18n', 'bot.withdrawStep3');
+            step3.innerText = t('bot.withdrawStep3', 'Items in your Roblox inventory');
+
+            if (step2Icon) step2Icon.className = 'bi bi-inbox';
+        }
+
+        title.style.color = '';
     }
 
     function closeBotModal() {
