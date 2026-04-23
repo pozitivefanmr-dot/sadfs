@@ -244,6 +244,10 @@
                         <span class="req-label" data-i18n="cf.entryRange">Entry Range</span>
                         <span class="req-range" id="joinRangeVal">0 - 0</span>
                     </div>
+                    <button type="button" class="fast-select-btn" id="fastSelectBtn" onclick="fastSelectForRange()" title="Auto-pick best combo">
+                        <i class="bi bi-magic"></i>
+                        <span data-i18n="cf.fastSelect">FAST SELECT</span>
+                    </button>
                 </div>
             </div>
 
@@ -355,6 +359,80 @@
             if (cb.checked) label.classList.add('checked');
             else label.classList.remove('checked');
         }, 10);
+    }
+
+    // Auto-picks the smallest combo of items whose total value falls
+    // within [joinMin, joinMax], targeting as close to joinMin as possible.
+    function fastSelectForRange() {
+        if (mode !== 'JOIN') return;
+
+        const checkboxes = Array.from(document.querySelectorAll('.modal-checkbox'));
+        if (!checkboxes.length) return;
+
+        const items = checkboxes.map(cb => ({
+            cb,
+            val: parseInt(cb.getAttribute('data-value')) || 0
+        })).filter(it => it.val > 0);
+
+        // Greedy descending: add largest item that keeps total <= max,
+        // stop as soon as total >= min. Minimizes count, stays close to min.
+        items.sort((a, b) => b.val - a.val);
+
+        const picked = [];
+        let total = 0;
+        for (const it of items) {
+            if (total >= joinMin) break;
+            if (total + it.val <= joinMax) {
+                picked.push(it);
+                total += it.val;
+            }
+        }
+
+        // Fallback: if we couldn't reach min with the greedy pass
+        // (e.g. largest items alone overshoot but smaller ones fit together),
+        // try ascending greedy while staying <= max.
+        if (total < joinMin) {
+            picked.length = 0;
+            total = 0;
+            const asc = [...items].sort((a, b) => a.val - b.val);
+            for (const it of asc) {
+                if (total + it.val <= joinMax) {
+                    picked.push(it);
+                    total += it.val;
+                    if (total >= joinMin) break;
+                }
+            }
+        }
+
+        // Clear current selection
+        checkboxes.forEach(cb => {
+            cb.checked = false;
+            const lbl = cb.closest('.modal-item-card');
+            if (lbl) lbl.classList.remove('checked');
+        });
+
+        if (total < joinMin || total > joinMax) {
+            calcModalTotal();
+            const btn = document.getElementById('fastSelectBtn');
+            if (btn) {
+                btn.classList.add('fast-select-btn--error');
+                const txt = btn.querySelector('span');
+                const orig = txt ? txt.innerText : '';
+                if (txt) txt.innerText = _tr('cf.fastSelectNone', 'NO COMBO');
+                setTimeout(() => {
+                    btn.classList.remove('fast-select-btn--error');
+                    if (txt) txt.innerText = orig;
+                }, 1500);
+            }
+            return;
+        }
+
+        picked.forEach(it => {
+            it.cb.checked = true;
+            const lbl = it.cb.closest('.modal-item-card');
+            if (lbl) lbl.classList.add('checked');
+        });
+        calcModalTotal();
     }
 
     // === РћР‘Р РђР‘РћРўРљРђ РўРРҐРћР™ РћРўРџР РђР’РљР Р¤РћР РњР« (NO RELOAD) ===
