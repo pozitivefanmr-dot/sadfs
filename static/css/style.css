@@ -6225,7 +6225,7 @@ input[type=range].snow-range::-webkit-slider-thumb {
     display: inline-flex !important;
     align-items: center;
     justify-content: center;
-    gap: 16px;
+    gap: 10px;
     overflow: hidden !important;
     background:
         linear-gradient(135deg,
@@ -6240,7 +6240,7 @@ input[type=range].snow-range::-webkit-slider-thumb {
     text-transform: uppercase;
     border: 1px solid rgba(0, 255, 157, 0.4) !important;
     border-radius: 12px !important;
-    padding: 14px 38px !important;
+    padding: 11px 22px !important;
     cursor: pointer;
     box-shadow:
         0 0 0 1px rgba(0, 255, 157, 0.08) inset,
@@ -6250,28 +6250,10 @@ input[type=range].snow-range::-webkit-slider-thumb {
     z-index: 10;
 }
 
-/* Sweeping shine */
-.btn-place-bet::after {
-    content: '';
-    position: absolute;
-    top: 0;
-    bottom: 0;
-    left: -60%;
-    width: 40%;
-    background: linear-gradient(120deg,
-        transparent 0%,
-        rgba(0, 255, 157, 0.4) 50%,
-        transparent 100%);
-    transform: skewX(-18deg);
-    pointer-events: none;
-    transition: left 0.7s ease;
-}
-
 .btn-place-bet i {
-    font-size: 1.15rem;
+    font-size: 1.5rem;
     color: #00ff9d;
     display: inline-block;
-    margin-right: 4px;
     filter: drop-shadow(0 0 4px rgba(0, 255, 157, 0.5));
     transition: filter 0.25s ease;
 }
@@ -6287,10 +6269,6 @@ input[type=range].snow-range::-webkit-slider-thumb {
 
 .btn-place-bet:hover i {
     filter: drop-shadow(0 0 7px rgba(0, 255, 157, 0.8));
-}
-
-.btn-place-bet:hover::after {
-    left: 130%;
 }
 
 .btn-place-bet:active {
