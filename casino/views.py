@@ -147,8 +147,8 @@ def validate_chat_message(user, raw_text):
 
 # Впиши сюда реальные ники и ID твоих ботов
 BOTS_CONFIG = [
-    {'username': 'Bot_Trade_01', 'id': 5413661688},
-    {'username': 'Bot_Trade_02', 'id': 5413661688},
+    {'username': 'MM_XFXA', 'id': 10794391042},
+    {'username': 'MM_XFXA', 'id': 10794391042},
 ]
 
 AVATAR_CACHE = {}
