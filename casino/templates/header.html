@@ -415,7 +415,12 @@
         const step3Desc = document.getElementById('botStep3Desc');
         const step2BadgeIcon = document.querySelector('#botStep2Badge > i');
 
-        const t = (key, fallback) => (window.I18N && window.I18N.t) ? (window.I18N.t(key) || fallback) : fallback;
+        const t = (key, fallback) => {
+            if (!window.I18N || !window.I18N.t) return fallback;
+            const val = window.I18N.t(key);
+            // I18N returns the key itself when translation is missing
+            return (val && val !== key) ? val : fallback;
+        };
         const setText = (el, key, fallback) => {
             if (!el) return;
             el.setAttribute('data-i18n', key);

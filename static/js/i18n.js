@@ -47,10 +47,31 @@
         "user.logoutUp":    { en: "LOGOUT",       ru: "ВЫЙТИ" },
 
         // ===== BOT MODAL =====
-        "bot.selectBot":      { en: "SELECT BOT",      ru: "ВЫБЕРИТЕ БОТА" },
-        "bot.depositItems":   { en: "DEPOSIT ITEMS",   ru: "ВНЕСТИ ПРЕДМЕТЫ" },
-        "bot.withdrawItems":  { en: "WITHDRAW ITEMS",  ru: "ВЫВЕСТИ ПРЕДМЕТЫ" },
-        "bot.join":           { en: "JOIN",            ru: "ВОЙТИ" },
+        "bot.selectBot":        { en: "SELECT BOT",      ru: "ВЫБЕРИТЕ БОТА" },
+        "bot.depositItems":     { en: "DEPOSIT ITEMS",   ru: "ВНЕСТИ ПРЕДМЕТЫ" },
+        "bot.withdrawItems":    { en: "WITHDRAW ITEMS",  ru: "ВЫВЕСТИ ПРЕДМЕТЫ" },
+        "bot.join":             { en: "JOIN",            ru: "ВОЙТИ" },
+        "bot.depositSubtitle":  { en: "Send items to one of our secure bots", ru: "Отправьте предметы одному из наших проверенных ботов" },
+        "bot.withdrawSubtitle": { en: "Receive items from one of our secure bots", ru: "Получите предметы от одного из наших проверенных ботов" },
+        "bot.howItWorks":       { en: "How it works",    ru: "Как это работает" },
+        "bot.availableBots":    { en: "Available bots",  ru: "Доступные боты" },
+        "bot.verifiedBots":     { en: "Only trade with bots listed here. Always verify the username.", ru: "Торгуйте только с ботами из этого списка. Всегда проверяйте ник." },
+
+        // Deposit steps
+        "bot.depositStep1":     { en: "Join the bot in Roblox", ru: "Присоединитесь к боту в Roblox" },
+        "bot.depositStep1Desc": { en: "Click the JOIN button below to enter the bot's private server", ru: "Нажмите JOIN ниже, чтобы войти в приватный сервер бота" },
+        "bot.depositStep2":     { en: "Send items via trade", ru: "Отправьте предметы через трейд" },
+        "bot.depositStep2Desc": { en: "Start a Roblox trade with the bot and add the items you want to deposit", ru: "Начните трейд с ботом и добавьте предметы, которые хотите внести" },
+        "bot.depositStep3":     { en: "Items credited to inventory", ru: "Предметы появятся в инвентаре" },
+        "bot.depositStep3Desc": { en: "Your items will appear on the dashboard within a few seconds", ru: "Ваши предметы появятся на главной странице в течение нескольких секунд" },
+
+        // Withdraw steps
+        "bot.withdrawStep1":     { en: "Join the bot in Roblox", ru: "Присоединитесь к боту в Roblox" },
+        "bot.withdrawStep1Desc": { en: "Click JOIN to enter the bot's server so it can send you a trade", ru: "Нажмите JOIN, чтобы войти на сервер бота — тогда он сможет отправить вам трейд" },
+        "bot.withdrawStep2":     { en: "Accept trade offer from bot", ru: "Примите трейд от бота" },
+        "bot.withdrawStep2Desc": { en: "The bot will send you a Roblox trade — accept it to receive the items", ru: "Бот отправит вам трейд в Roblox — примите его, чтобы получить предметы" },
+        "bot.withdrawStep3":     { en: "Items in your Roblox inventory", ru: "Предметы окажутся в вашем инвентаре Roblox" },
+        "bot.withdrawStep3Desc": { en: "The items are removed from MMFLIP and appear in your Roblox inventory", ru: "Предметы списываются с MMFLIP и появляются в вашем инвентаре Roblox" },
 
         // ===== HOME PAGE =====
         "home.welcomeBack": { en: "WELCOME BACK,", ru: "С ВОЗВРАЩЕНИЕМ," },
