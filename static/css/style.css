@@ -6268,10 +6268,8 @@ input[type=range].snow-range::-webkit-slider-thumb {
 }
 
 .btn-place-bet i {
-    font-size: 1.1rem;
+    font-size: 1.15rem;
     color: #00ff9d;
-    transform: rotate(45deg);
-    transform-origin: center;
     display: inline-block;
     margin-right: 4px;
     filter: drop-shadow(0 0 4px rgba(0, 255, 157, 0.5));
