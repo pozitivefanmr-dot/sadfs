@@ -38,13 +38,20 @@ def _touch_online(ip):
 
 
 def get_online_count():
-    """Real online count + drifting fake offset in [5,8]."""
+    """Real online count + drifting fake offset, mostly [3,4], rarely up to 9."""
+    import hashlib
     now = int(time.time())
     visitors = cache.get(ONLINE_CACHE_KEY) or {}
     cutoff = now - ONLINE_TTL
     real = sum(1 for v in visitors.values() if v >= cutoff)
-    # drifts every ~17s, stays in [5,8]
-    offset = 5 + ((now // 17) % 4)
+    # New bucket every ~23s; biased toward low values (3-4),
+    # rarely climbs near 9. Deterministic per-bucket via md5.
+    bucket = now // 23
+    h = int(hashlib.md5(str(bucket).encode()).hexdigest()[:8], 16)
+    r = (h % 10_000) / 10_000.0  # 0..1
+    # Strong low-bias: r ** 3 keeps most samples near 0
+    biased = r ** 3
+    offset = 3 + int(biased * 6.999)  # 3..9, ~9 very rare
     return real + offset
 
 
