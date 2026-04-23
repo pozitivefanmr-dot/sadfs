@@ -6220,6 +6220,23 @@ input[type=range].snow-range::-webkit-slider-thumb {
 /* FIX: КНОПКА CREATE + МЕДЛЕННАЯ СНЕЖИНКА */
 /* ========================================= */
 
+@keyframes btnNeonPulse {
+    0%, 100% {
+        box-shadow:
+            0 0 0 1px rgba(0, 255, 157, 0.35) inset,
+            0 0 18px rgba(0, 255, 157, 0.55),
+            0 0 38px rgba(0, 255, 157, 0.28),
+            0 10px 26px rgba(0, 0, 0, 0.4);
+    }
+    50% {
+        box-shadow:
+            0 0 0 1px rgba(0, 255, 157, 0.55) inset,
+            0 0 26px rgba(0, 255, 157, 0.85),
+            0 0 60px rgba(0, 255, 157, 0.45),
+            0 10px 26px rgba(0, 0, 0, 0.4);
+    }
+}
+
 .btn-place-bet {
     position: relative !important;
     display: inline-flex !important;
@@ -6227,53 +6244,85 @@ input[type=range].snow-range::-webkit-slider-thumb {
     justify-content: center;
     gap: 10px;
     overflow: hidden !important;
-    background: linear-gradient(135deg, #00ff9d 0%, #00c281 60%, #00a36a 100%) !important;
-    color: #07120d !important;
+    background:
+        linear-gradient(135deg,
+            rgba(0, 60, 40, 0.92) 0%,
+            rgba(0, 40, 28, 0.92) 50%,
+            rgba(0, 24, 18, 0.92) 100%) !important;
+    color: #ffffff !important;
     font-family: 'Montserrat', sans-serif !important;
     font-weight: 900 !important;
     font-size: 1.05rem !important;
-    letter-spacing: 1.2px;
+    letter-spacing: 1.4px;
     text-transform: uppercase;
-    border: 1px solid rgba(0, 255, 157, 0.55) !important;
+    text-shadow:
+        0 0 6px rgba(0, 255, 157, 0.9),
+        0 0 14px rgba(0, 255, 157, 0.6),
+        0 0 22px rgba(0, 255, 157, 0.35);
+    border: 1.5px solid rgba(0, 255, 157, 0.7) !important;
     border-radius: 12px !important;
     padding: 14px 38px !important;
     cursor: pointer;
-    box-shadow:
-        0 0 0 1px rgba(0, 255, 157, 0.15) inset,
-        0 0 18px rgba(0, 255, 157, 0.28),
-        0 10px 26px rgba(0, 0, 0, 0.35) !important;
-    transition: transform 0.25s ease, box-shadow 0.25s ease, filter 0.25s ease !important;
+    transition: transform 0.25s ease, filter 0.25s ease, border-color 0.25s ease !important;
     z-index: 10;
+    animation: btnNeonPulse 2.4s ease-in-out infinite;
 }
 
+/* Sweeping neon shine */
 .btn-place-bet::after {
     content: '';
     position: absolute;
     top: 0;
     bottom: 0;
     left: -60%;
-    width: 40%;
+    width: 45%;
     background: linear-gradient(120deg,
         transparent 0%,
-        rgba(255, 255, 255, 0.45) 50%,
+        rgba(0, 255, 157, 0.55) 50%,
         transparent 100%);
     transform: skewX(-18deg);
     pointer-events: none;
     transition: left 0.7s ease;
+    filter: blur(1px);
+}
+
+/* Inner top highlight */
+.btn-place-bet::before {
+    content: '';
+    position: absolute;
+    top: 1px;
+    left: 10%;
+    right: 10%;
+    height: 1px;
+    background: linear-gradient(90deg,
+        transparent 0%,
+        rgba(0, 255, 157, 0.9) 50%,
+        transparent 100%);
+    box-shadow: 0 0 10px rgba(0, 255, 157, 0.7);
+    pointer-events: none;
 }
 
 .btn-place-bet i {
-    font-size: 1.05rem;
-    color: #07120d;
+    font-size: 1.15rem;
+    color: #00ff9d;
+    filter:
+        drop-shadow(0 0 6px rgba(0, 255, 157, 0.95))
+        drop-shadow(0 0 14px rgba(0, 255, 157, 0.55));
+    transition: transform 0.35s cubic-bezier(0.3, 1.4, 0.5, 1), filter 0.25s ease;
 }
 
 .btn-place-bet:hover {
     transform: translateY(-2px) !important;
-    filter: brightness(1.05);
-    box-shadow:
-        0 0 0 1px rgba(0, 255, 157, 0.25) inset,
-        0 0 28px rgba(0, 255, 157, 0.55),
-        0 14px 32px rgba(0, 0, 0, 0.4) !important;
+    filter: brightness(1.08);
+    border-color: rgba(0, 255, 157, 1) !important;
+    animation-duration: 1.2s;
+}
+
+.btn-place-bet:hover i {
+    transform: translateY(-2px) rotate(-12deg) scale(1.15);
+    filter:
+        drop-shadow(0 0 10px rgba(0, 255, 157, 1))
+        drop-shadow(0 0 22px rgba(0, 255, 157, 0.75));
 }
 
 .btn-place-bet:hover::after {
