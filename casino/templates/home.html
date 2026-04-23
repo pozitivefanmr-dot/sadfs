@@ -222,14 +222,11 @@
         <div class="box-title">
             <span data-i18n="home.inventoryTitle">YOUR INVENTORY</span>
             <div class="home-value">
-                <div class="home-value__icon"><i class="bi bi-gem"></i></div>
-                <div class="home-value__body">
-                    <span class="home-value__label" data-i18n="home.mm2Value">MM2 VALUE</span>
-                    <div class="home-value__amount">
-                        <img src="{% static 'img/sv_coin.png' %}" class="home-coin" alt="SV">
-                        <span class="home-value__num" id="inventory-mm2-value">{{ total_profit|default:0 }}</span>
-                    </div>
-                </div>
+                <i class="bi bi-graph-up-arrow home-value__icon"></i>
+                <span class="home-value__label" data-i18n="home.mm2Value">MM2 VALUE</span>
+                <span class="home-value__divider"></span>
+                <img src="{% static 'img/sv_coin.png' %}" class="home-coin" alt="SV">
+                <span class="home-value__num" id="inventory-mm2-value">{{ total_profit|default:0 }}</span>
             </div>
         </div>
 
