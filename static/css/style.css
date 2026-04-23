@@ -6240,7 +6240,7 @@ input[type=range].snow-range::-webkit-slider-thumb {
     text-transform: uppercase;
     border: 1px solid rgba(0, 255, 157, 0.4) !important;
     border-radius: 12px !important;
-    padding: 13px 28px !important;
+    padding: 13px 28px 13px 24px !important;
     cursor: pointer;
     box-shadow:
         0 0 0 1px rgba(0, 255, 157, 0.08) inset,
