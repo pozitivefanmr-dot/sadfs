@@ -352,6 +352,8 @@
         "stats.gameHistory":  { en: "GAME HISTORY",              ru: "ИСТОРИЯ ИГР" },
         "stats.noGames":      { en: "No games found",            ru: "Игр не найдено" },
         "stats.noGamesInPeriod": { en: "No games in this period", ru: "Нет игр за этот период" },
+        "stats.win":          { en: "WIN",                       ru: "ВИН" },
+        "stats.loss":         { en: "LOSS",                      ru: "ЛУЗ" },
         "stats.error":        { en: "Error loading stats",       ru: "Ошибка загрузки статистики" },
 
         // ===== CHAT =====

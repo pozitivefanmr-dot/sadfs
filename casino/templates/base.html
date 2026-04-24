@@ -98,9 +98,9 @@
 
     <link rel="icon" type="image/png" sizes="64x64" href="{% static 'img/favicon.png' %}">
     <link rel="apple-touch-icon" sizes="180x180" href="{% static 'img/bg.png' %}">
-    <link rel="stylesheet" href="{% static 'css/style.css' %}?v=20260424h">
+    <link rel="stylesheet" href="{% static 'css/style.css' %}?v=20260424i">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
-    <script src="{% static 'js/i18n.js' %}" defer></script>
+    <script src="{% static 'js/i18n.js' %}?v=20260424i" defer></script>
 </head>
 
 <body>
@@ -269,7 +269,11 @@
         let flipSkipped = false;
         let flipCurrentData = null;
 
-        function _tr(k, f) { return (window.I18N && window.I18N.t) ? window.I18N.t(k) : f; }
+        function _tr(k, f) {
+            if (!window.I18N || !window.I18N.t) return f;
+            const v = window.I18N.t(k);
+            return (v === k) ? f : v; // missing translation -> use fallback
+        }
 
         function checkFlipStatus() {
             if (isAnimating) return;
