@@ -11368,87 +11368,225 @@ input[type=range].snow-range::-webkit-slider-thumb {
     background: linear-gradient(180deg, #33ecff, #33ffb3);
 }
 
-.stats-history-item {
+/* ================================================================
+   GAME HISTORY — REDESIGNED CARD (big coin + opponent + status pill)
+   ================================================================ */
+.stats-history-list {
     display: flex;
-    align-items: center;
+    flex-direction: column;
     gap: 10px;
-    padding: 10px 12px;
-    background: rgba(255, 255, 255, 0.02);
-    border-radius: 10px;
-    border: 1px solid rgba(255, 255, 255, 0.04);
-    transition: 0.2s ease;
 }
 
-.stats-history-item:hover {
-    background: rgba(255, 255, 255, 0.04);
-    border-color: rgba(255, 255, 255, 0.08);
+.stats-history-item {
+    position: relative;
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    padding: 12px 14px 12px 12px;
+    background: linear-gradient(135deg, rgba(24, 30, 34, 0.75) 0%, rgba(14, 20, 22, 0.8) 100%);
+    border-radius: 14px;
+    border: 1px solid rgba(255, 255, 255, 0.05);
+    overflow: hidden;
+    transition: transform 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease, background 0.2s ease;
+}
+
+.stats-history-item::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 0;
+    bottom: 0;
+    width: 4px;
+    border-radius: 4px 0 0 4px;
+    transition: box-shadow 0.2s ease;
+}
+
+.stats-history-item.history-win::before {
+    background: linear-gradient(180deg, #00ff9d, #00b46e);
+    box-shadow: 0 0 14px rgba(0, 255, 157, 0.45);
+}
+.stats-history-item.history-loss::before {
+    background: linear-gradient(180deg, #ff6b6b, #b23a3a);
+    box-shadow: 0 0 14px rgba(255, 77, 77, 0.4);
 }
 
 .stats-history-item.history-win {
-    border-left: 3px solid rgba(0, 255, 157, 0.4);
+    background: linear-gradient(135deg, rgba(0, 255, 157, 0.05) 0%, rgba(14, 20, 22, 0.85) 60%);
+    border-color: rgba(0, 255, 157, 0.14);
 }
-
 .stats-history-item.history-loss {
-    border-left: 3px solid rgba(255, 77, 77, 0.4);
+    background: linear-gradient(135deg, rgba(255, 77, 77, 0.05) 0%, rgba(14, 20, 22, 0.85) 60%);
+    border-color: rgba(255, 77, 77, 0.14);
 }
 
-/* Status icon */
-.history-status-icon {
-    width: 24px;
-    height: 24px;
-    border-radius: 50%;
+.stats-history-item:hover {
+    transform: translateY(-1px);
+    border-color: rgba(255, 255, 255, 0.16);
+    box-shadow: 0 10px 24px rgba(0, 0, 0, 0.3);
+}
+
+/* ---- BIG COIN WITH HALO ---- */
+.history-coin-wrap {
+    position: relative;
+    width: 56px;
+    height: 56px;
+    flex-shrink: 0;
     display: flex;
     align-items: center;
     justify-content: center;
-    font-size: 0.75rem;
-    font-weight: 900;
+}
+.history-coin-halo {
+    position: absolute;
+    inset: 0;
+    border-radius: 50%;
+    background: radial-gradient(circle, rgba(255, 220, 100, 0.25) 0%, rgba(255, 170, 30, 0.08) 55%, transparent 75%);
+    filter: blur(2px);
+    animation: historyCoinHalo 3s ease-in-out infinite;
+}
+.history-win .history-coin-halo {
+    background: radial-gradient(circle, rgba(0, 255, 157, 0.35) 0%, rgba(0, 255, 157, 0.1) 55%, transparent 75%);
+}
+.history-loss .history-coin-halo {
+    background: radial-gradient(circle, rgba(255, 120, 120, 0.28) 0%, rgba(255, 77, 77, 0.08) 55%, transparent 75%);
+}
+
+@keyframes historyCoinHalo {
+    0%, 100% { transform: scale(0.95); opacity: 0.7; }
+    50%      { transform: scale(1.08); opacity: 1; }
+}
+
+.history-color-chip {
+    position: relative;
+    width: 52px !important;
+    height: 52px !important;
+    object-fit: contain;
     flex-shrink: 0;
+    z-index: 1;
+    filter: drop-shadow(0 3px 10px rgba(0, 0, 0, 0.55));
+    transition: transform 0.3s ease;
+}
+.stats-history-item:hover .history-color-chip {
+    transform: rotate(-12deg) scale(1.06);
 }
 
-.history-win .history-status-icon {
-    background: rgba(0, 255, 157, 0.12);
-    color: #00ff9d;
+/* ---- MIDDLE STACK (avatar+name, status+date) ---- */
+.history-middle {
+    flex: 1;
+    min-width: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
 }
-
-.history-loss .history-status-icon {
-    background: rgba(255, 77, 77, 0.12);
-    color: #ff4d4d;
+.history-top-row {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    min-width: 0;
 }
-
-/* Opponent avatar */
 .history-opp-avatar {
     width: 30px;
     height: 30px;
-    border-radius: 8px;
+    border-radius: 50%;
     object-fit: cover;
-    border: 1px solid rgba(255, 255, 255, 0.1);
+    border: 1.5px solid rgba(255, 255, 255, 0.12);
+    background: linear-gradient(135deg, #2a2d33, #1c1f24);
     flex-shrink: 0;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.3);
 }
-
-/* Color chip */
-.history-color-chip {
-    width: 22px;
-    height: 22px;
-    object-fit: contain;
-    flex-shrink: 0;
-}
-
-/* Value */
-.history-value {
-    font-size: 0.85rem;
-    font-weight: 800;
+.history-vs-block {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    min-width: 0;
     flex: 1;
-    text-align: right;
+}
+.history-vs-lbl {
+    font-size: 0.62rem;
+    font-weight: 900;
+    letter-spacing: 1.5px;
+    color: rgba(255, 255, 255, 0.3);
+    padding: 2px 6px;
+    background: rgba(255, 255, 255, 0.05);
+    border-radius: 4px;
+    flex-shrink: 0;
+}
+.history-opp-name {
+    font-size: 0.9rem;
+    font-weight: 700;
+    color: #fff;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    min-width: 0;
+    flex: 1;
+}
+
+.history-bottom-row {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.history-status-pill {
+    display: inline-flex;
+    align-items: center;
+    padding: 3px 10px;
+    border-radius: 999px;
+    font-family: 'Montserrat', sans-serif;
+    font-size: 0.62rem;
+    font-weight: 900;
+    letter-spacing: 1.4px;
+    text-transform: uppercase;
+    line-height: 1.4;
+    flex-shrink: 0;
+}
+.history-status-pill.history-win {
+    background: linear-gradient(135deg, rgba(0, 255, 157, 0.18), rgba(0, 180, 110, 0.25));
+    border: 1px solid rgba(0, 255, 157, 0.45);
+    color: #6bffc2;
+    text-shadow: 0 0 8px rgba(0, 255, 157, 0.45);
+    box-shadow: inset 0 0 8px rgba(0, 255, 157, 0.15), 0 0 12px rgba(0, 255, 157, 0.1);
+}
+.history-status-pill.history-loss {
+    background: linear-gradient(135deg, rgba(255, 90, 90, 0.18), rgba(180, 40, 40, 0.25));
+    border: 1px solid rgba(255, 90, 90, 0.45);
+    color: #ff9e9e;
+    text-shadow: 0 0 8px rgba(255, 90, 90, 0.4);
+    box-shadow: inset 0 0 8px rgba(255, 90, 90, 0.15), 0 0 12px rgba(255, 90, 90, 0.1);
 }
 
 /* Date */
 .history-date {
-    font-size: 0.65rem;
-    color: #556;
+    font-size: 0.7rem;
+    color: rgba(255, 255, 255, 0.35);
     font-weight: 600;
     white-space: nowrap;
-    min-width: 80px;
+    letter-spacing: 0.3px;
+}
+
+/* ---- VALUE (big, right side) ---- */
+.history-value {
+    font-family: 'Montserrat', sans-serif;
+    font-size: 1.15rem;
+    font-weight: 900;
+    letter-spacing: 0.3px;
+    flex-shrink: 0;
     text-align: right;
+    padding: 4px 10px;
+    border-radius: 10px;
+    background: rgba(0, 0, 0, 0.3);
+    border: 1px solid rgba(255, 255, 255, 0.04);
+    line-height: 1.2;
+}
+.history-value.stats-positive {
+    color: #00ff9d;
+    text-shadow: 0 0 14px rgba(0, 255, 157, 0.5);
+    border-color: rgba(0, 255, 157, 0.2);
+}
+.history-value.stats-negative {
+    color: #ff7575;
+    text-shadow: 0 0 14px rgba(255, 77, 77, 0.4);
+    border-color: rgba(255, 90, 90, 0.2);
 }
 
 /* History empty/loading */
@@ -11491,6 +11629,15 @@ input[type=range].snow-range::-webkit-slider-thumb {
     .history-date {
         display: none;
     }
+
+    .stats-history-item {
+        gap: 10px;
+        padding: 10px 10px 10px 10px;
+    }
+    .history-coin-wrap { width: 46px; height: 46px; }
+    .history-color-chip { width: 44px !important; height: 44px !important; }
+    .history-value { font-size: 0.95rem; padding: 3px 8px; }
+    .history-opp-name { font-size: 0.82rem; }
 }
 
 
@@ -14855,25 +15002,25 @@ body .chat-sidebar .chat-bubble-meta {
     gap: 1px;
 }
 
-/* --- AVATAR (dark gray bg circle) --- */
+/* --- AVATAR (darker gray bg + visible border) --- */
 body .chat-sidebar .chat-avatar {
     width: 40px !important;
     height: 40px !important;
     flex-shrink: 0;
     margin: 0 !important;
     padding: 0 !important;
-    border: 1px solid rgba(255, 255, 255, 0.06) !important;
+    border: 1.5px solid rgba(255, 255, 255, 0.14) !important;
     border-radius: 50% !important;
     object-fit: cover;
-    background: linear-gradient(135deg, #2a2d33 0%, #1c1f24 100%) !important;
-    box-shadow: none !important;
-    transition: transform 0.25s ease, border-color 0.25s ease !important;
+    background: linear-gradient(135deg, #1a1d22 0%, #0e1014 100%) !important;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.45) !important;
+    transition: transform 0.25s ease, border-color 0.25s ease, box-shadow 0.25s ease !important;
     cursor: pointer;
 }
 body .chat-sidebar .chat-avatar:hover {
     transform: scale(1.08) !important;
-    border-color: rgba(255, 255, 255, 0.14) !important;
-    box-shadow: none !important;
+    border-color: rgba(255, 255, 255, 0.3) !important;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.6) !important;
 }
 
 /* --- USERNAME --- */
@@ -15177,12 +15324,16 @@ body .chat-sidebar .chat-send-btn {
     z-index: 2 !important;
 }
 body .chat-sidebar .chat-send-btn .bi {
-    font-size: 1.35rem !important;
+    font-size: 1.2rem !important;
     font-weight: 900 !important;
     color: #041a10 !important;
     line-height: 1 !important;
-    transform: none !important;
+    transform: rotate(-45deg) translate(1px, 1px) !important;
     filter: drop-shadow(0 1px 0 rgba(255, 255, 255, 0.45)) !important;
+    transition: transform 0.2s ease !important;
+}
+body .chat-sidebar .chat-send-btn:hover .bi {
+    transform: rotate(-45deg) translate(2px, -1px) !important;
 }
 body .chat-sidebar .chat-send-btn:hover {
     transform: translateY(-1px) !important;
