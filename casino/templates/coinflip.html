@@ -521,6 +521,22 @@
 
 <script>
     // === РђР’РўРћ-РћР‘РќРћР’Р›Р•РќРР• РЎРџРРЎРљРђ РР“Р  ===
+    const EMPTY_GAMES_HTML = `
+        <div class="text-center text-muted empty-msg" style="padding: 80px 20px; display: flex; flex-direction: column; align-items: center; gap: 8px;">
+            <i class="bi bi-dice-3" style="font-size: 2.4rem; color: rgba(0,255,157,0.15);"></i>
+            <h3 style="margin: 0; font-size: 1rem; font-weight: 700; color: #4a5e52; letter-spacing: 2px; text-transform: uppercase;" data-i18n="cf.noGamesYet">NO GAMES YET</h3>
+            <p style="margin: 0; font-size: 0.8rem; color: #3d4f45;" data-i18n="cf.beFirst">Be the first to create one!</p>
+        </div>`;
+
+    function ensureEmptyMessage() {
+        const container = document.getElementById('gamesListContainer');
+        if (!container) return;
+        if (container.querySelectorAll('.game-card').length === 0 && !container.querySelector('.empty-msg')) {
+            container.insertAdjacentHTML('beforeend', EMPTY_GAMES_HTML);
+            if (window.I18N && window.I18N.applyTranslations) window.I18N.applyTranslations();
+        }
+    }
+
     function refreshGames() {
         // РџРѕР»СѓС‡Р°РµРј ID РІСЃРµС… РёРіСЂ, РєРѕС‚РѕСЂС‹Рµ СѓР¶Рµ РµСЃС‚СЊ РЅР° СЃС‚СЂР°РЅРёС†Рµ
         const existingIds = [];
@@ -547,7 +563,10 @@
                     const id = parseInt(card.getAttribute('data-game-id'));
                     if (!serverIds.includes(id)) {
                         card.classList.add('removing'); // РђРЅРёРјР°С†РёСЏ СѓРґР°Р»РµРЅРёСЏ
-                        setTimeout(() => card.remove(), 400);
+                        setTimeout(() => {
+                            card.remove();
+                            ensureEmptyMessage();
+                        }, 400);
                     }
                 });
 

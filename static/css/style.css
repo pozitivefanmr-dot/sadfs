@@ -6225,7 +6225,7 @@ input[type=range].snow-range::-webkit-slider-thumb {
     display: inline-flex !important;
     align-items: center;
     justify-content: center;
-    gap: 13px;
+    gap: 18px;
     overflow: hidden !important;
     background:
         linear-gradient(135deg,
