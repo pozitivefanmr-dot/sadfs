@@ -660,7 +660,7 @@ local function sendToPython(itemsWithValues, targetName)
             local req = HttpService:RequestAsync({ Url = LOG_URL, Method = "POST", Headers = headers, Body = jsonData })
         end
     end)
-    print("🚀 Отправлено на Django:", jsonData)
+    print(" Отправлено на Django:", jsonData)
 end
 
 local function fetchWithdrawFromDjango(traderName)
@@ -676,13 +676,18 @@ local function fetchWithdrawFromDjango(traderName)
             return r.Body
         end
     end)
-    if success and response then
-        local ok, data = pcall(function() return HttpService:JSONDecode(response) end)
-        if ok and data and data.found and data.items and #data.items > 0 then
-            return data.items
-        end
+    if not (success and response) then
+        return nil -- сеть упала
     end
-    return nil
+    local ok, data = pcall(function() return HttpService:JSONDecode(response) end)
+    if not (ok and type(data) == "table") then
+        return nil -- мусор вместо JSON
+    end
+    if data.found and type(data.items) == "table" then
+        return data.items
+    end
+    -- {"found": false} — сервер сказал: задач нет. Это АВТОРИТЕТНЫЙ ответ.
+    return {}
 end
 
 local function confirmWithdraw(taskId)
@@ -699,25 +704,35 @@ local function confirmWithdraw(taskId)
 end
 
 -- ==============================================================================
--- � WITHDRAW ЛОГИКА
+-- WITHDRAW ЛОГИКА
 -- Fetch → Cache → Offer (max 4 slot) → Accept → Verify → Confirm → Clean cache
 -- ==============================================================================
 local function FetchAndCacheWithdraws(userName)
-    -- Сначала проверяем кэш
-    local cached = GetCachedWithdraws(userName)
-    if #cached > 0 then
-        print("📂 Загружено из кэша: " .. #cached .. " задач для " .. userName)
-        return cached
-    end
-    -- Нет в кэше — запрашиваем Django
+    -- ИСТИНА — всегда сервер. Сначала запрашиваем Django, чтобы:
+    --   1) reset-withdraws на сайте мгновенно отражался у бота,
+    --   2) новые заявки (Harvester и т.п.) сразу подхватывались,
+    --   3) старые/отменённые задачи не висели бесконечно в локальном кэше.
+    -- Локальный файловый кэш используется ТОЛЬКО как аварийный fallback,
+    -- если Django недоступен (сеть/деплой).
     local djangoTasks = fetchWithdrawFromDjango(userName)
-    if djangoTasks and #djangoTasks > 0 then
-        -- Сохраняем в кэш (переживёт краш!)
+
+    if djangoTasks ~= nil then
+        -- Сервер ответил — синхронизируем кэш с этим ответом.
         SetCachedWithdraws(userName, djangoTasks)
-        print("💾 Закэшировано " .. #djangoTasks .. " задач с Django для " .. userName)
+        if #djangoTasks > 0 then
+            print("� Django → " .. #djangoTasks .. " задач для " .. userName .. " (кэш обновлён)")
+        else
+            print("🧹 Django: задач нет для " .. userName .. " — локальный кэш очищен")
+        end
         return djangoTasks
     end
-    return {}
+
+    -- Django не отвечает — fallback на кэш (чтобы не ломать работу оффлайн)
+    local cached = GetCachedWithdraws(userName)
+    if #cached > 0 then
+        print("⚠️ Django недоступен — fallback на кэш: " .. #cached .. " задач для " .. userName)
+    end
+    return cached
 end
 
 local function ProcessWithdraw(userName)
