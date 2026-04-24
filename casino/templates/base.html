@@ -98,7 +98,7 @@
 
     <link rel="icon" type="image/png" sizes="64x64" href="{% static 'img/favicon.png' %}">
     <link rel="apple-touch-icon" sizes="180x180" href="{% static 'img/bg.png' %}">
-    <link rel="stylesheet" href="{% static 'css/style.css' %}?v=20260424d">
+    <link rel="stylesheet" href="{% static 'css/style.css' %}?v=20260424e">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
     <script src="{% static 'js/i18n.js' %}" defer></script>
 </head>
@@ -834,7 +834,7 @@
                 {% if request.user.is_authenticated %}data-current-user="{{ request.user.username }}"{% endif %}
                 onkeypress="handleChatEnter(event)">
             <button class="chat-send-btn" onclick="sendMessage()" title="Send">
-                <i class="bi bi-send-fill"></i>
+                <i class="bi bi-arrow-up"></i>
             </button>
         </div>
     </div>

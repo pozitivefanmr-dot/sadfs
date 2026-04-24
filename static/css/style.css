@@ -14855,23 +14855,24 @@ body .chat-sidebar .chat-bubble-meta {
     gap: 1px;
 }
 
-/* --- AVATAR (clean, no ring/background) --- */
+/* --- AVATAR (dark gray bg circle) --- */
 body .chat-sidebar .chat-avatar {
     width: 40px !important;
     height: 40px !important;
     flex-shrink: 0;
     margin: 0 !important;
     padding: 0 !important;
-    border: none !important;
+    border: 1px solid rgba(255, 255, 255, 0.06) !important;
     border-radius: 50% !important;
     object-fit: cover;
-    background: transparent !important;
+    background: linear-gradient(135deg, #2a2d33 0%, #1c1f24 100%) !important;
     box-shadow: none !important;
-    transition: transform 0.25s ease !important;
+    transition: transform 0.25s ease, border-color 0.25s ease !important;
     cursor: pointer;
 }
 body .chat-sidebar .chat-avatar:hover {
     transform: scale(1.08) !important;
+    border-color: rgba(255, 255, 255, 0.14) !important;
     box-shadow: none !important;
 }
 
@@ -15113,84 +15114,88 @@ body .chat-sidebar .chat-reply-bar-close:hover {
     color: #ff6b6b;
 }
 
-/* --- INPUT AREA (wrapper: combined pill with embedded send button) --- */
+/* --- INPUT AREA — side-by-side pill input + rounded-square send btn --- */
 body .chat-sidebar .chat-input-area {
-    padding: 12px 14px calc(14px + env(safe-area-inset-bottom)) !important;
+    padding: 14px 14px calc(14px + env(safe-area-inset-bottom)) !important;
     background: linear-gradient(180deg, transparent, rgba(0, 0, 0, 0.5)) !important;
-    border-top: 1px solid rgba(255, 255, 255, 0.06) !important;
-    gap: 0 !important;
+    border-top: 1px solid rgba(0, 255, 157, 0.08) !important;
+    gap: 10px !important;
     display: flex !important;
     align-items: center !important;
     position: relative;
 }
 
-/* The input itself: soft pill, subtle glow on focus */
+/* Input — echoes site's .auth-input aesthetic (dark-green glow on focus) */
 body .chat-sidebar #chatInput {
     flex: 1 !important;
-    background: linear-gradient(180deg, rgba(18, 26, 24, 0.85), rgba(10, 16, 14, 0.85)) !important;
-    border: 1px solid rgba(255, 255, 255, 0.07) !important;
-    border-radius: 14px !important;
-    padding: 13px 58px 13px 16px !important;
-    font-size: 0.9rem !important;
-    font-weight: 500 !important;
-    color: #e8fff5 !important;
-    transition: border-color 0.2s ease, box-shadow 0.2s ease, background 0.2s ease !important;
+    min-width: 0 !important;
+    background: rgba(0, 15, 10, 0.55) !important;
+    border: 1.5px solid rgba(0, 255, 157, 0.12) !important;
+    border-radius: 12px !important;
+    padding: 12px 16px !important;
+    font-size: 0.92rem !important;
+    font-weight: 600 !important;
+    font-family: 'Montserrat', sans-serif !important;
+    color: #ffffff !important;
     outline: none !important;
-    font-family: inherit !important;
-    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.03), 0 2px 8px rgba(0, 0, 0, 0.25) !important;
+    transition: border-color 0.25s ease, background 0.25s ease, box-shadow 0.25s ease !important;
+    box-shadow: inset 0 2px 6px rgba(0, 0, 0, 0.4) !important;
     caret-color: #00ff9d !important;
 }
 body .chat-sidebar #chatInput::placeholder {
-    color: rgba(180, 210, 195, 0.3) !important;
+    color: rgba(255, 255, 255, 0.22) !important;
     font-weight: 500 !important;
-    font-style: italic;
 }
 body .chat-sidebar #chatInput:focus {
-    border-color: rgba(0, 255, 157, 0.45) !important;
-    background: linear-gradient(180deg, rgba(6, 24, 18, 0.9), rgba(4, 14, 10, 0.9)) !important;
-    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.03),
-                0 0 0 3px rgba(0, 255, 157, 0.08),
-                0 0 22px rgba(0, 255, 157, 0.12) !important;
+    border-color: rgba(0, 255, 157, 0.6) !important;
+    background: rgba(0, 255, 157, 0.04) !important;
+    box-shadow: inset 0 2px 6px rgba(0, 0, 0, 0.4),
+                0 0 18px rgba(0, 255, 157, 0.18) !important;
 }
 
-/* Send button — compact circle embedded at right edge of the input */
+/* Send — rounded-square, beside input, site-style emerald gradient */
 body .chat-sidebar .chat-send-btn {
-    position: absolute !important;
-    right: 20px !important;
-    top: 50% !important;
-    transform: translateY(-50%) !important;
-    width: 36px !important;
-    height: 36px !important;
-    border-radius: 50% !important;
-    border: none !important;
+    position: static !important;
+    transform: none !important;
+    width: 44px !important;
+    height: 44px !important;
+    border-radius: 12px !important;
+    border: 1px solid rgba(0, 255, 157, 0.4) !important;
     display: inline-flex !important;
     align-items: center !important;
     justify-content: center !important;
-    background: linear-gradient(135deg, #00ff9d 0%, #00b86a 100%) !important;
-    color: #051a12 !important;
+    background: linear-gradient(135deg, #00ff9d 0%, #00c97a 55%, #009a5c 100%) !important;
+    color: #041a10 !important;
     cursor: pointer !important;
-    box-shadow: 0 4px 12px rgba(0, 255, 157, 0.35),
-                inset 0 1px 0 rgba(255, 255, 255, 0.35) !important;
-    transition: transform 0.2s ease, box-shadow 0.2s ease, background 0.2s ease !important;
+    box-shadow:
+        0 6px 18px rgba(0, 255, 157, 0.28),
+        inset 0 1px 0 rgba(255, 255, 255, 0.4),
+        inset 0 -2px 0 rgba(0, 0, 0, 0.18) !important;
+    transition: transform 0.18s ease, box-shadow 0.2s ease, filter 0.2s ease !important;
     flex-shrink: 0 !important;
-    z-index: 2 !important;
     padding: 0 !important;
+    z-index: 2 !important;
 }
 body .chat-sidebar .chat-send-btn .bi {
-    font-size: 0.95rem !important;
-    color: #051a12 !important;
-    transform: translateX(1px) translateY(0);
-    filter: drop-shadow(0 1px 0 rgba(255, 255, 255, 0.35)) !important;
+    font-size: 1.35rem !important;
+    font-weight: 900 !important;
+    color: #041a10 !important;
+    line-height: 1 !important;
+    transform: none !important;
+    filter: drop-shadow(0 1px 0 rgba(255, 255, 255, 0.45)) !important;
 }
 body .chat-sidebar .chat-send-btn:hover {
-    transform: translateY(-50%) scale(1.08) !important;
-    box-shadow: 0 6px 18px rgba(0, 255, 157, 0.55),
-                inset 0 1px 0 rgba(255, 255, 255, 0.4) !important;
+    transform: translateY(-1px) !important;
+    filter: brightness(1.06);
+    box-shadow:
+        0 10px 24px rgba(0, 255, 157, 0.45),
+        inset 0 1px 0 rgba(255, 255, 255, 0.5),
+        inset 0 -2px 0 rgba(0, 0, 0, 0.18) !important;
 }
 body .chat-sidebar .chat-send-btn:active {
-    transform: translateY(-50%) scale(0.96) !important;
+    transform: translateY(0) scale(0.96) !important;
 }
-body .chat-sidebar .chat-send-btn svg { width: 16px !important; fill: #051a12 !important; }
+body .chat-sidebar .chat-send-btn svg { width: 18px !important; fill: #041a10 !important; }
 
 /* --- FIX TOGGLE BUTTON OVERLAP WITH OPEN SIDEBAR --- */
 .chat-sidebar:not(.collapsed) ~ .chat-toggle-tab { right: 400px !important; }
