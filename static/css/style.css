@@ -15331,12 +15331,13 @@ body .chat-sidebar .chat-send-btn .bi {
     font-weight: 900 !important;
     color: #041a10 !important;
     line-height: 1 !important;
-    transform: rotate(-45deg) translate(1px, 1px) !important;
+    /* bi-send-fill already points up-right by default; don't rotate */
+    transform: translate(-1px, 1px) !important;
     filter: drop-shadow(0 1px 0 rgba(255, 255, 255, 0.45)) !important;
     transition: transform 0.2s ease !important;
 }
 body .chat-sidebar .chat-send-btn:hover .bi {
-    transform: rotate(-45deg) translate(2px, -1px) !important;
+    transform: translate(0, 0) !important;
 }
 body .chat-sidebar .chat-send-btn:hover {
     transform: translateY(-1px) !important;
