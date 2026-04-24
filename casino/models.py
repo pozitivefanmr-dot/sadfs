@@ -90,6 +90,10 @@ class ChatMessage(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     message = models.TextField(max_length=300)
     created_at = models.DateTimeField(auto_now_add=True)
+    reply_to = models.ForeignKey(
+        'self', on_delete=models.SET_NULL,
+        null=True, blank=True, related_name='replies'
+    )
 
     def __str__(self):
         return f"{self.user.username}: {self.message[:20]}"

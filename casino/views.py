@@ -2012,18 +2012,31 @@ def send_chat_message(request):
     if err:
         return JsonResponse({'status': 'error', 'message': err}, status=400)
 
-    ChatMessage.objects.create(user=request.user, message=cleaned)
+    reply_to_obj = None
+    reply_to_id = data.get('reply_to')
+    if reply_to_id:
+        try:
+            reply_to_obj = ChatMessage.objects.filter(id=int(reply_to_id)).first()
+        except (TypeError, ValueError):
+            reply_to_obj = None
+
+    ChatMessage.objects.create(user=request.user, message=cleaned, reply_to=reply_to_obj)
     return JsonResponse({'status': 'success'})
 
 
 # views.py
 
 def get_chat_messages(request):
-    # Берем последние 50 сообщений
-    msgs = ChatMessage.objects.select_related('user').order_by('-created_at')[:50]
+    # Берем последние 50 сообщений (вместе с reply_to и его user)
+    msgs = (ChatMessage.objects
+            .select_related('user', 'reply_to', 'reply_to__user')
+            .order_by('-created_at')[:50])
 
     # Получаем все префиксы пользователей из этих сообщений
     user_ids = set(msg.user_id for msg in msgs)
+    for msg in msgs:
+        if msg.reply_to and msg.reply_to.user_id:
+            user_ids.add(msg.reply_to.user_id)
     prefixes = {p.user_id: p for p in UserChatPrefix.objects.filter(user_id__in=user_ids)}
 
     data = []
@@ -2035,6 +2048,18 @@ def get_chat_messages(request):
         prefix_text = prefix_data.prefix if prefix_data and prefix_data.prefix else ''
         prefix_color = prefix_data.color if prefix_data and prefix_data.color else ''
 
+        reply_data = None
+        if msg.reply_to and msg.reply_to.user_id:
+            r = msg.reply_to
+            r_prefix = prefixes.get(r.user_id)
+            reply_data = {
+                'id': r.id,
+                'user': r.user.username,
+                'text': (r.message or '')[:140],
+                'prefix': r_prefix.prefix if r_prefix and r_prefix.prefix else '',
+                'prefix_color': r_prefix.color if r_prefix and r_prefix.color else '',
+            }
+
         data.append({
             'id': msg.id,
             'user': msg.user.username,
@@ -2045,6 +2070,7 @@ def get_chat_messages(request):
             'is_me': is_me,
             'prefix': prefix_text,
             'prefix_color': prefix_color,
+            'reply': reply_data,
         })
 
     return JsonResponse({'messages': data})

@@ -98,7 +98,7 @@
 
     <link rel="icon" type="image/png" sizes="64x64" href="{% static 'img/favicon.png' %}">
     <link rel="apple-touch-icon" sizes="180x180" href="{% static 'img/bg.png' %}">
-    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+    <link rel="stylesheet" href="{% static 'css/style.css' %}?v=20260424b">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
     <script src="{% static 'js/i18n.js' %}" defer></script>
 </head>
@@ -795,18 +795,18 @@
     <div class="chat-backdrop" id="chatBackdrop" onclick="closeSidebar()"></div>
     <div class="chat-sidebar" id="chatSidebar">
         <div class="chat-header">
-            <div class="chat-title-wrap">
-                <div class="chat-title-row">
-                    <span class="chat-title-icon chat-title-icon-live"><i class="bi bi-megaphone-fill"></i></span>
-                    <span class="chat-title" data-i18n="chat.title">LIVE CHAT</span>
-                </div>
-                <span class="chat-subtitle" data-i18n="chat.subtitle">real-time messages</span>
+            <div class="chat-header-main">
+                <span class="chat-title" data-i18n="chat.title">Live Chat</span>
+                <span class="chat-header-dot"></span>
+                <span class="chat-header-online" data-i18n="chat.live">Live</span>
             </div>
             <div class="chat-header-actions">
-                <div class="chat-prefix-btn" onclick="openPrefixModal()" title="Prefixes">
+                <button type="button" class="chat-prefix-btn" onclick="openPrefixModal()" title="Prefixes">
                     <i class="bi bi-tag-fill"></i>
-                </div>
-                <div class="chat-close-btn" onclick="toggleSidebar()"><i class="bi bi-x-lg"></i></div>
+                </button>
+                <button type="button" class="chat-close-btn" onclick="toggleSidebar()" title="Close">
+                    <i class="bi bi-x-lg"></i>
+                </button>
             </div>
         </div>
 
@@ -814,15 +814,28 @@
             <div class="chat-loading" data-i18n="chat.connecting">Connecting to server...</div>
         </div>
 
+        <div class="chat-reply-bar" id="chatReplyBar" style="display: none;">
+            <div class="chat-reply-bar-line"></div>
+            <div class="chat-reply-bar-content">
+                <div class="chat-reply-bar-label">
+                    <i class="bi bi-reply-fill"></i>
+                    <span data-i18n="chat.replyingTo">Replying to</span>
+                    <strong id="chatReplyBarUser"></strong>
+                </div>
+                <div class="chat-reply-bar-text" id="chatReplyBarText"></div>
+            </div>
+            <button type="button" class="chat-reply-bar-close" onclick="cancelReply()" title="Cancel">
+                <i class="bi bi-x-lg"></i>
+            </button>
+        </div>
+
         <div class="chat-input-area">
             <input type="text" id="chatInput" placeholder="Message..." maxlength="300"
                 data-i18n-attr="placeholder:chat.placeholder"
                 {% if request.user.is_authenticated %}data-current-user="{{ request.user.username }}"{% endif %}
                 onkeypress="handleChatEnter(event)">
-            <button class="chat-send-btn" onclick="sendMessage()">
-                <svg viewBox="0 0 24 24">
-                    <path d="M2.01 21L23 12 2.01 3 2 10l15 2-15 2z" />
-                </svg>
+            <button class="chat-send-btn" onclick="sendMessage()" title="Send">
+                <i class="bi bi-send-fill"></i>
             </button>
         </div>
     </div>
@@ -948,6 +961,31 @@
             chatArea.scrollTop = chatArea.scrollHeight;
         }
 
+        // === REPLY STATE ===
+        let replyTarget = null; // { id, user, text, prefix, prefix_color }
+
+        function startReply(id, user, text, prefix, prefixColor) {
+            replyTarget = {
+                id: id,
+                user: user,
+                text: text || '',
+                prefix: prefix || '',
+                prefix_color: prefixColor || ''
+            };
+            const bar = document.getElementById('chatReplyBar');
+            document.getElementById('chatReplyBarUser').textContent = user;
+            document.getElementById('chatReplyBarText').textContent = (text || '').slice(0, 120);
+            bar.style.display = 'flex';
+            const input = document.getElementById('chatInput');
+            if (input) input.focus();
+        }
+
+        function cancelReply() {
+            replyTarget = null;
+            const bar = document.getElementById('chatReplyBar');
+            if (bar) bar.style.display = 'none';
+        }
+
         // РћРўРџР РђР’РљРђ
         function sendMessage() {
             const input = document.getElementById('chatInput');
@@ -956,6 +994,7 @@
 
             input.value = '';
 
+            const currentReply = replyTarget;
             const currentUser = input.dataset.currentUser;
             if (currentUser) {
                 const lastAvatar = document.querySelector('.chat-msg-row.msg-me .chat-avatar');
@@ -968,7 +1007,8 @@
                     time: '',
                     is_me: true,
                     prefix: '',
-                    prefix_color: ''
+                    prefix_color: '',
+                    reply: currentReply
                 });
                 tempEl.dataset.temp = '1';
                 tempEl.style.opacity = '0.55';
@@ -977,10 +1017,16 @@
                 scrollToBottom();
             }
 
+            const payload = { message: text };
+            if (currentReply && currentReply.id && !String(currentReply.id).startsWith('temp-')) {
+                payload.reply_to = currentReply.id;
+            }
+            cancelReply();
+
             fetch("{% url 'chat_send' %}", {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json', 'X-CSRFToken': getCsrfToken() },
-                body: JSON.stringify({ message: text })
+                body: JSON.stringify(payload)
             })
                 .then(res => {
                     if (!res.ok) {
@@ -992,6 +1038,16 @@
                     chatArea.querySelectorAll('[data-temp="1"]').forEach(el => el.remove());
                     console.error(err);
                 });
+        }
+
+        // Scroll to and briefly highlight a message by id
+        function chatScrollToMessage(id) {
+            if (!id) return;
+            const el = document.querySelector('.chat-msg-row[data-msg-id="' + id + '"]');
+            if (!el) return;
+            el.scrollIntoView({ behavior: 'smooth', block: 'center' });
+            el.classList.add('chat-msg-flash');
+            setTimeout(() => el.classList.remove('chat-msg-flash'), 1400);
         }
 
         // Р—РђР“Р РЈР—РљРђ (РЎ Р—РђР©РРўРћР™ РћРў РњР•Р Р¦РђРќРРЇ)
@@ -1006,23 +1062,64 @@
             }
         }
 
+        function buildPrefixHtml(name, color) {
+            if (!name) return '';
+            return `<span class="chat-tag" style="color: ${color || '#00ff9d'}">${escapeHtml(name)}</span>`;
+        }
+
         function renderChatMessage(msg) {
             const msgClass = msg.is_me ? 'msg-me' : 'msg-other';
-            const prefixHtml = msg.prefix
-                ? `<span class="chat-tag" style="color: ${msg.prefix_color}">(${escapeHtml(msg.prefix)})</span>`
-                : '';
+            const prefixHtml = buildPrefixHtml(msg.prefix, msg.prefix_color);
             const localTime = formatChatTime(msg.time_iso, msg.time);
+            const safeUser = escapeHtml(msg.user);
+
+            const replyHtml = (msg.reply && msg.reply.user) ? `
+                <div class="chat-reply-quote" onclick="chatScrollToMessage(${Number(msg.reply.id) || 0})">
+                    <div class="chat-reply-quote-bar" style="background: ${msg.reply.prefix_color || (msg.is_me ? '#00ff9d' : '#00e5ff')}"></div>
+                    <div class="chat-reply-quote-body">
+                        <div class="chat-reply-quote-user">
+                            <i class="bi bi-reply-fill"></i>
+                            <span>${escapeHtml(msg.reply.user)}</span>
+                            ${buildPrefixHtml(msg.reply.prefix, msg.reply.prefix_color)}
+                        </div>
+                        <div class="chat-reply-quote-text">${escapeHtml((msg.reply.text || '').slice(0, 140))}</div>
+                    </div>
+                </div>
+            ` : '';
+
+            // Data for reply button (escape quotes for attribute usage)
+            const replyDataAttrs = `
+                data-msg-id="${msg.id}"
+                data-msg-user="${safeUser}"
+                data-msg-text="${escapeHtml(msg.text || '')}"
+                data-msg-prefix="${escapeHtml(msg.prefix || '')}"
+                data-msg-prefix-color="${escapeHtml(msg.prefix_color || '')}"`;
+
+            const replyBtn = (msg.id && !String(msg.id).startsWith('temp-')) ? `
+                <button type="button" class="chat-reply-btn" title="Reply"
+                    ${replyDataAttrs}
+                    onclick="startReply(this.dataset.msgId, this.dataset.msgUser, this.dataset.msgText, this.dataset.msgPrefix, this.dataset.msgPrefixColor)">
+                    <i class="bi bi-reply-fill"></i>
+                </button>` : '';
+
             const wrap = document.createElement('div');
             wrap.className = `chat-msg-row ${msgClass}`;
             wrap.dataset.msgId = msg.id;
             wrap.innerHTML = `
-                <img src="${msg.avatar}" class="chat-avatar clickable-avatar" title="${escapeHtml(msg.user)}" onclick="openStatsModal('${escapeHtml(msg.user)}')">
-                <div class="chat-bubble-group">
-                    <div class="chat-username">${escapeHtml(msg.user)} ${prefixHtml}</div>
-                    <div class="chat-bubble">
-                        <div class="chat-text">${escapeHtml(msg.text)}</div>
+                <div class="chat-bubble">
+                    <div class="chat-bubble-head">
+                        <img src="${msg.avatar}" class="chat-avatar clickable-avatar" title="${safeUser}" onclick="openStatsModal('${safeUser}')">
+                        <div class="chat-bubble-meta">
+                            <div class="chat-username">
+                                <span class="chat-username-name">${safeUser}</span>
+                                ${prefixHtml}
+                            </div>
+                            <div class="chat-time">${escapeHtml(localTime)}</div>
+                        </div>
+                        ${replyBtn}
                     </div>
-                    <div class="chat-time">${escapeHtml(localTime)}</div>
+                    ${replyHtml}
+                    <div class="chat-text">${escapeHtml(msg.text)}</div>
                 </div>
             `;
             return wrap;
