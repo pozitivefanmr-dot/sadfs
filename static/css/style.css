@@ -14800,13 +14800,15 @@ body .chat-sidebar .msg-me    { justify-content: flex-end !important;   flex-dir
     to   { opacity: 1; transform: translateY(0); }
 }
 
-/* --- CARD-STYLE BUBBLE: wraps avatar + header + reply + text --- */
+/* --- CARD-STYLE BUBBLE: fixed full-width card, wraps avatar + header + reply + text --- */
 body .chat-sidebar .chat-bubble {
     display: flex !important;
     flex-direction: column !important;
     gap: 8px !important;
-    width: auto !important;
-    max-width: 90% !important;
+    width: 100% !important;
+    max-width: 100% !important;
+    min-width: 0 !important;
+    box-sizing: border-box !important;
     margin: 0 !important;
     padding: 11px 13px 12px !important;
     border-radius: 16px !important;
@@ -14892,7 +14894,10 @@ body .chat-sidebar .chat-username {
     align-items: center !important;
     justify-content: flex-start !important;
     gap: 6px !important;
-    flex-wrap: wrap !important;
+    flex-wrap: nowrap !important;
+    min-width: 0 !important;
+    max-width: 100% !important;
+    overflow: hidden !important;
     text-shadow: none !important;
     color: inherit !important;
 }
@@ -14900,7 +14905,8 @@ body .chat-sidebar .chat-username-name {
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
-    max-width: 160px;
+    min-width: 0;
+    flex: 0 1 auto;
 }
 body .chat-sidebar .msg-other .chat-username-name { color: #6ef0ff !important; text-shadow: 0 0 10px rgba(0, 229, 255, 0.35); }
 body .chat-sidebar .msg-me    .chat-username-name { color: #6bffc2 !important; text-shadow: 0 0 10px rgba(0, 255, 157, 0.35); }
@@ -14924,7 +14930,11 @@ body .chat-sidebar .chat-tag {
                 inset 0 0 6px color-mix(in srgb, currentColor 18%, transparent) !important;
     text-shadow: 0 0 6px currentColor !important;
     opacity: 1 !important;
-    white-space: nowrap;
+    white-space: nowrap !important;
+    flex-shrink: 0 !important;
+    max-width: 60% !important;
+    overflow: hidden !important;
+    text-overflow: ellipsis !important;
 }
 
 /* --- TIME --- */
