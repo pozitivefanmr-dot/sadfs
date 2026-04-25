@@ -941,8 +941,11 @@
         </div>
         {% else %}
         <a class="chat-login-prompt" onclick="openAuthModal()">
-            <span class="chat-login-prompt__title" data-i18n="chat.loginTitle">Log in to chat</span>
-            <span class="chat-login-prompt__sub" data-i18n="chat.loginSub">Sign in to send messages</span>
+            <span class="chat-login-prompt__icon"><i class="bi bi-door-open-fill"></i></span>
+            <span class="chat-login-prompt__text">
+                <span class="chat-login-prompt__title" data-i18n="chat.loginTitle">Log in to chat</span>
+                <span class="chat-login-prompt__sub" data-i18n="chat.loginSub">Sign in to send messages</span>
+            </span>
             <i class="bi bi-arrow-right chat-login-prompt__arrow"></i>
         </a>
         {% endif %}
