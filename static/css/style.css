@@ -5275,10 +5275,10 @@ input[type=range].snow-range-v2::-moz-range-thumb {
 
 /* КАРТИНКА ВНУТРИ КРУГА */
 .game-item-img {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-    border-radius: 50%;
+    width: 90%;
+    height: 90%;
+    object-fit: contain;
+    margin: auto;
 }
 
 .game-items-count {
@@ -5498,10 +5498,10 @@ input[type=range].snow-range-v2::-moz-range-thumb {
 
 /* КАРТИНКА ВНУТРИ КРУГА */
 .game-item-img {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-    border-radius: 50%;
+    width: 90%;
+    height: 90%;
+    object-fit: contain;
+    margin: auto;
 }
 
 
