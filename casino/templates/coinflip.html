@@ -543,6 +543,57 @@
         }
     }
 
+    // URLs of coin chips for the in-card spinner.
+    const CARD_SPIN_B_CHIP = "{% static 'img/b_chip.png' %}";
+    const CARD_SPIN_H_CHIP = "{% static 'img/h_chip.png' %}";
+
+    // Replaces the right-side actions panel of a card with a spinning coin
+    // (same speed/feel as the main flip animation), then removes the card
+    // 15s after the spin completes.
+    function startCardSpin(card) {
+        if (!card || card.classList.contains('is-spinning')) return;
+        card.classList.add('is-spinning');
+
+        const actions = card.querySelector('.game-actions-section');
+        if (!actions) return;
+
+        actions.innerHTML = `
+            <div class="cf-card-spinner" aria-hidden="true">
+                <div class="cf-card-coin-perspective">
+                    <div class="cf-card-coin">
+                        <div class="cf-card-coin-side cf-card-coin-side--a">
+                            <img src="${CARD_SPIN_B_CHIP}" alt="">
+                        </div>
+                        <div class="cf-card-coin-side cf-card-coin-side--b">
+                            <img src="${CARD_SPIN_H_CHIP}" alt="">
+                        </div>
+                    </div>
+                </div>
+            </div>`;
+
+        const coin = actions.querySelector('.cf-card-coin');
+        if (coin) {
+            coin.style.transition = 'none';
+            coin.style.transform = 'rotateX(0deg)';
+            // force reflow so the next transform animates
+            void coin.offsetHeight;
+            requestAnimationFrame(() => {
+                coin.style.transition = 'transform 8s cubic-bezier(0.1, 0, 0.2, 1)';
+                coin.style.transform = 'rotateX(' + (15 * 360) + 'deg)';
+            });
+        }
+
+        // Spin lasts 8s; keep the card visible for 15s after that, then remove.
+        setTimeout(() => {
+            if (!card.parentNode) return;
+            card.classList.add('removing');
+            setTimeout(() => {
+                card.remove();
+                ensureEmptyMessage();
+            }, 400);
+        }, 8000 + 15000);
+    }
+
     function refreshGames() {
         // РџРѕР»СѓС‡Р°РµРј ID РІСЃРµС… РёРіСЂ, РєРѕС‚РѕСЂС‹Рµ СѓР¶Рµ РµСЃС‚СЊ РЅР° СЃС‚СЂР°РЅРёС†Рµ
         const existingIds = [];
@@ -563,17 +614,26 @@
                     if (onlineEl) onlineEl.textContent = data.online;
                 }
 
-                // 1. РЈР”РђР›Р•РќРР•: Р•СЃР»Рё РёРіСЂР° РµСЃС‚СЊ РЅР° СЃР°Р№С‚Рµ, РЅРѕ РЅРµС‚ РІ РґР°РЅРЅС‹С… СЃРµСЂРІРµСЂР° -> СѓРґР°Р»СЏРµРј
+                // 1. РЈР”РђР›Р•РќРР• / Р—РђРџСѓСЃРљ РђРќРРњРђР¦РР РР“Р Р«
                 const serverIds = data.games.map(g => g.id);
+                const playingIds = data.playing_ids || [];
                 document.querySelectorAll('.game-card').forEach(card => {
                     const id = parseInt(card.getAttribute('data-game-id'));
-                    if (!serverIds.includes(id)) {
-                        card.classList.add('removing'); // РђРЅРёРјР°С†РёСЏ СѓРґР°Р»РµРЅРёСЏ
-                        setTimeout(() => {
-                            card.remove();
-                            ensureEmptyMessage();
-                        }, 400);
+                    if (serverIds.includes(id)) return;
+                    // РЈР¶Рµ РєСЂСѓС‚РёС‚СЃСЏ РјРѕРЅРµС‚РєР° — РЅРµ С‡РµРіРѕ РґРµР»Р°С‚СЊ
+                    if (card.classList.contains('is-spinning')) return;
+                    // РРіСЂР° С‚РѕР»СЊРєРѕ С‡С‚Рѕ РґРѕРёРіСЂР°Р»Р°СЃСЊ (РїСЂРёСЃРѕРµРґРёРЅРёР»РёСЃСЊ) -> Р·Р°РїСѓСЃРєР°РµРј
+                    // РјРѕРЅРµС‚РєСѓ РїСЂСЏРјРѕ РІ РєР°СЂС‚РѕС‡РєРµ РІРјРµСЃС‚Рѕ СѓРґР°Р»РµРЅРёСЏ.
+                    if (playingIds.includes(id)) {
+                        startCardSpin(card);
+                        return;
                     }
+                    // РРЅР°С‡Рµ (РѕС‚РјРµРЅР°, РёСЃС‚РµРєР»Р°) — РїСЂРѕСЃС‚Рѕ СѓРґР°Р»СЏРµРј РєР°Рє РµС‰Рµ
+                    card.classList.add('removing');
+                    setTimeout(() => {
+                        card.remove();
+                        ensureEmptyMessage();
+                    }, 400);
                 });
 
                 // 2. Р”РћР‘РђР’Р›Р•РќРР•: Р•СЃР»Рё РёРіСЂС‹ РЅРµС‚ РЅР° СЃР°Р№С‚Рµ, РЅРѕ РµСЃС‚СЊ РЅР° СЃРµСЂРІРµСЂРµ -> РґРѕР±Р°РІР»СЏРµРј

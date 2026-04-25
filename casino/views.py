@@ -2049,7 +2049,22 @@ def api_active_games_json(request):
             'html': html
         })
 
-    return JsonResponse({'games': games_data, 'online': _online_count_safe()})
+    # IDs of games that just got joined and finished (player2 + winner) —
+    # the front-end keeps these cards visible briefly with a spinning coin
+    # in place of the JOIN button so players can see "this game is being played"
+    # instead of the card silently vanishing.
+    playing_ids = list(
+        CoinflipGame.objects
+        .filter(is_active=False, player2__isnull=False, winner__isnull=False)
+        .order_by('-id')
+        .values_list('id', flat=True)[:30]
+    )
+
+    return JsonResponse({
+        'games': games_data,
+        'online': _online_count_safe(),
+        'playing_ids': playing_ids,
+    })
 
 @login_required
 @require_POST
