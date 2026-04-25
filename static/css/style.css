@@ -10349,8 +10349,8 @@ input[type=range].snow-range::-webkit-slider-thumb {
     position: fixed;
     top: 0;
     right: 0;
-    width: 310px;
-    max-width: min(92vw, 310px);
+    width: 270px;
+    max-width: min(92vw, 270px);
     height: 100vh;
     background:
         radial-gradient(circle at top right, rgba(0, 255, 157, 0.08), transparent 34%),
@@ -11028,8 +11028,8 @@ input[type=range].snow-range::-webkit-slider-thumb {
     position: fixed;
     top: 0;
     right: 0;
-    width: 310px;
-    max-width: min(92vw, 310px);
+    width: 270px;
+    max-width: min(92vw, 270px);
     height: 100vh;
     background: rgba(5, 8, 7, 0.98);
     backdrop-filter: blur(15px);
@@ -11072,7 +11072,7 @@ input[type=range].snow-range::-webkit-slider-thumb {
 
 /* When chat is open, move button next to sidebar */
 .chat-sidebar:not(.collapsed)~.chat-toggle-tab {
-    right: 322px;
+    right: 282px;
 }
 
 /* Hide toggle button when chat is open ON MOBILE */
