@@ -16155,89 +16155,262 @@ body .chat-sidebar .chat-send-btn svg { width: 18px !important; fill: #041a10 !i
 }
 
 /* =================================================================
-   FLIP RESULT — REDESIGN (gray palette, two columns + small fast coin)
-   Overrides legacy .flip-result-box / .coin-container styling.
+   FLIP RESULT — REDESIGN v2
+   Coin keeps its original spin in the center.
+   After spin: coin fades out, result panel animates in with green
+   accents, soft glows and a dramatic X stamp on the loser avatar.
    ================================================================= */
 
-/* Stage: three columns (P1 / coin / P2) */
-.flip-overlay .flip-stage {
+/* Coin wrapper sits centered while spinning, then fades away */
+.flip-overlay .flip-coin-wrap {
     position: relative;
-    z-index: 2;
-    display: grid;
-    grid-template-columns: minmax(220px, 1fr) auto minmax(220px, 1fr);
-    align-items: stretch;
-    justify-items: center;
-    gap: 28px;
-    width: min(940px, calc(100vw - 32px));
-    padding: 28px;
-    background:
-        radial-gradient(ellipse at 50% 0%, rgba(255, 255, 255, 0.04) 0%, transparent 60%),
-        linear-gradient(180deg, rgba(28, 30, 34, 0.85) 0%, rgba(18, 20, 24, 0.92) 100%);
-    border: 1px solid rgba(255, 255, 255, 0.06);
-    border-radius: 24px;
-    box-shadow:
-        0 30px 80px rgba(0, 0, 0, 0.55),
-        inset 0 1px 0 rgba(255, 255, 255, 0.05);
-    backdrop-filter: blur(28px) saturate(1.4);
-    -webkit-backdrop-filter: blur(28px) saturate(1.4);
-}
-
-/* Player column */
-.flip-side {
+    z-index: 3;
     display: flex;
     flex-direction: column;
     align-items: center;
-    gap: 12px;
-    width: 100%;
-    padding: 22px 16px;
-    border-radius: 18px;
-    background: linear-gradient(180deg, rgba(255, 255, 255, 0.025), rgba(255, 255, 255, 0.005));
-    border: 1px solid rgba(255, 255, 255, 0.06);
-    transition: opacity 0.55s ease, filter 0.55s ease, border-color 0.4s ease, background 0.4s ease, transform 0.4s ease;
+    transition: opacity 0.4s ease, transform 0.5s cubic-bezier(0.6, -0.28, 0.74, 0.05);
 }
+.flip-overlay .flip-coin-wrap.fade-out {
+    opacity: 0;
+    transform: scale(0.4) translateY(-30px);
+    pointer-events: none;
+    position: absolute; /* free up layout space for the result panel */
+}
+
+/* Result panel — initially hidden, animates in after the spin */
+.flip-result-panel {
+    position: relative;
+    z-index: 2;
+    display: none;
+    flex-direction: column;
+    align-items: center;
+    gap: 22px;
+    width: min(980px, calc(100vw - 32px));
+    padding: 32px 28px 26px;
+    border-radius: 28px;
+    background:
+        radial-gradient(ellipse at 50% -10%, rgba(0, 255, 157, 0.12) 0%, transparent 55%),
+        radial-gradient(ellipse at 50% 110%, rgba(0, 255, 157, 0.06) 0%, transparent 60%),
+        linear-gradient(180deg, rgba(20, 26, 24, 0.92) 0%, rgba(12, 16, 14, 0.95) 100%);
+    border: 1px solid rgba(0, 255, 157, 0.18);
+    box-shadow:
+        0 32px 90px rgba(0, 0, 0, 0.55),
+        0 0 80px rgba(0, 255, 157, 0.08),
+        inset 0 1px 0 rgba(255, 255, 255, 0.06),
+        inset 0 0 60px rgba(0, 255, 157, 0.04);
+    backdrop-filter: blur(28px) saturate(1.4);
+    -webkit-backdrop-filter: blur(28px) saturate(1.4);
+    opacity: 0;
+    transform: scale(0.86) translateY(20px);
+    transform-origin: center center;
+}
+.flip-result-panel.show {
+    display: flex;
+    animation: flipPanelIn 0.7s cubic-bezier(0.22, 1.2, 0.36, 1) forwards;
+}
+@keyframes flipPanelIn {
+    0%   { opacity: 0; transform: scale(0.82) translateY(24px); }
+    60%  { opacity: 1; transform: scale(1.02) translateY(-2px); }
+    100% { opacity: 1; transform: scale(1) translateY(0); }
+}
+
+/* Headline */
+.flip-result-headline {
+    font-family: 'Montserrat', sans-serif;
+    font-weight: 900;
+    font-size: 2rem;
+    letter-spacing: 5px;
+    text-transform: uppercase;
+    text-align: center;
+    line-height: 1;
+    color: #e6ffe6;
+    text-shadow: 0 2px 12px rgba(0, 0, 0, 0.6);
+    opacity: 0;
+    transform: translateY(-10px);
+    animation: flipChildIn 0.55s cubic-bezier(0.22, 1, 0.36, 1) 0.15s forwards;
+}
+.flip-result-headline.result-win {
+    color: #00ff9d;
+    text-shadow:
+        0 0 18px rgba(0, 255, 157, 0.55),
+        0 0 36px rgba(0, 255, 157, 0.25),
+        0 2px 12px rgba(0, 0, 0, 0.6);
+}
+.flip-result-headline.result-lose {
+    color: #b8c0c5;
+    text-shadow: 0 0 14px rgba(255, 90, 90, 0.25), 0 2px 12px rgba(0, 0, 0, 0.6);
+}
+
+@keyframes flipChildIn {
+    to { opacity: 1; transform: translateY(0); }
+}
+
+/* Stage: P1 | VS | P2 */
+.flip-overlay .flip-stage {
+    position: relative;
+    display: grid;
+    grid-template-columns: minmax(240px, 1fr) auto minmax(240px, 1fr);
+    align-items: stretch;
+    justify-items: center;
+    gap: 18px;
+    width: 100%;
+}
+
+/* VS divider in the middle */
+.flip-vs {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    align-self: center;
+    width: 56px;
+    height: 56px;
+    border-radius: 50%;
+    background:
+        radial-gradient(circle, rgba(0, 255, 157, 0.18) 0%, transparent 70%),
+        linear-gradient(135deg, rgba(20, 26, 24, 0.85), rgba(8, 12, 10, 0.85));
+    border: 1px solid rgba(0, 255, 157, 0.35);
+    box-shadow:
+        0 0 24px rgba(0, 255, 157, 0.18),
+        inset 0 0 16px rgba(0, 255, 157, 0.08);
+    color: #00ff9d;
+    font-family: 'Montserrat', sans-serif;
+    font-weight: 900;
+    font-size: 0.9rem;
+    letter-spacing: 1.5px;
+    text-shadow: 0 0 10px rgba(0, 255, 157, 0.6);
+    opacity: 0;
+    transform: scale(0.6);
+    animation: flipVsIn 0.6s cubic-bezier(0.34, 1.56, 0.64, 1) 0.35s forwards;
+}
+@keyframes flipVsIn {
+    to { opacity: 1; transform: scale(1); }
+}
+
+/* Player column */
+.flip-overlay .flip-side {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 14px;
+    width: 100%;
+    padding: 26px 18px;
+    border-radius: 22px;
+    background: linear-gradient(180deg, rgba(255, 255, 255, 0.025), rgba(255, 255, 255, 0.005));
+    border: 1px solid rgba(255, 255, 255, 0.07);
+    overflow: hidden;
+    transition:
+        opacity 0.6s ease,
+        filter 0.6s ease,
+        border-color 0.45s ease,
+        background 0.45s ease,
+        transform 0.45s ease,
+        box-shadow 0.45s ease;
+    opacity: 0;
+    transform: translateY(16px);
+}
+.flip-result-panel.show .flip-side--p1 {
+    animation: flipSideIn 0.55s cubic-bezier(0.22, 1, 0.36, 1) 0.25s forwards;
+}
+.flip-result-panel.show .flip-side--p2 {
+    animation: flipSideIn 0.55s cubic-bezier(0.22, 1, 0.36, 1) 0.4s forwards;
+}
+@keyframes flipSideIn {
+    to { opacity: 1; transform: translateY(0); }
+}
+
+/* Soft side glow (decorative element behind the column) */
+.flip-side-glow {
+    position: absolute;
+    inset: -40% -20%;
+    pointer-events: none;
+    background: radial-gradient(ellipse at 50% 30%, rgba(0, 255, 157, 0) 0%, transparent 65%);
+    opacity: 0;
+    transition: opacity 0.7s ease, background 0.7s ease;
+    z-index: 0;
+}
+.flip-side > * { position: relative; z-index: 1; }
 
 /* Avatar */
 .flip-side-avatar {
     position: relative;
-    width: 96px;
-    height: 96px;
+    width: 120px;
+    height: 120px;
     border-radius: 50%;
     overflow: hidden;
-    border: 2px solid rgba(255, 255, 255, 0.08);
+    border: 2px solid rgba(255, 255, 255, 0.1);
     box-shadow:
-        0 10px 28px rgba(0, 0, 0, 0.45),
+        0 14px 36px rgba(0, 0, 0, 0.5),
         inset 0 0 0 1px rgba(0, 0, 0, 0.4);
     background: #1a1d22;
-    transition: border-color 0.4s ease, box-shadow 0.4s ease;
+    transition: border-color 0.45s ease, box-shadow 0.45s ease, transform 0.45s ease;
 }
 .flip-side-avatar img {
     width: 100%;
     height: 100%;
     object-fit: cover;
     display: block;
+    transition: filter 0.6s ease;
 }
-/* Loser X overlay (hidden by default) */
+
+/* Crown / trophy badge (winner only) */
+.flip-side-crown {
+    position: absolute;
+    top: -8px;
+    right: -8px;
+    width: 36px;
+    height: 36px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    background: radial-gradient(circle, #00ff9d 0%, #00b46e 100%);
+    color: #062014;
+    font-size: 1rem;
+    box-shadow:
+        0 6px 18px rgba(0, 0, 0, 0.5),
+        0 0 18px rgba(0, 255, 157, 0.55);
+    opacity: 0;
+    transform: scale(0) rotate(-45deg);
+    transition: opacity 0.4s ease, transform 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
+    z-index: 3;
+    pointer-events: none;
+}
+
+/* X stamp overlay — fills the WHOLE avatar */
 .flip-side-avatar .flip-loser-x {
     position: absolute;
     inset: 0;
     display: flex;
     align-items: center;
     justify-content: center;
-    background: rgba(10, 12, 16, 0.55);
-    color: #ff5b5b;
-    font-size: 2.4rem;
-    opacity: 0;
-    transform: scale(0.6) rotate(-12deg);
-    transition: opacity 0.35s ease 0.15s, transform 0.45s cubic-bezier(0.34, 1.56, 0.64, 1) 0.15s;
-    pointer-events: none;
+    background: rgba(8, 10, 14, 0.55);
     backdrop-filter: blur(2px);
+    opacity: 0;
+    transition: opacity 0.25s ease;
+    pointer-events: none;
+    z-index: 2;
+}
+.flip-side-avatar .flip-loser-x svg {
+    width: 100%;
+    height: 100%;
+}
+.flip-side-avatar .flip-loser-x .x-line {
+    stroke: #ff5b5b;
+    stroke-width: 11;
+    stroke-linecap: round;
+    fill: none;
+    filter: drop-shadow(0 0 8px rgba(255, 70, 70, 0.65)) drop-shadow(0 0 16px rgba(255, 70, 70, 0.35));
+    /* Use stroke-dasharray for the draw-in effect */
+    stroke-dasharray: 110;
+    stroke-dashoffset: 110;
 }
 
 /* Name */
 .flip-side-name {
     font-family: 'Montserrat', sans-serif;
     font-weight: 800;
-    font-size: 0.95rem;
+    font-size: 1rem;
     letter-spacing: 0.5px;
     color: #d6dde2;
     text-align: center;
@@ -16245,126 +16418,167 @@ body .chat-sidebar .chat-send-btn svg { width: 18px !important; fill: #041a10 !i
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
-    transition: color 0.4s ease;
+    transition: color 0.4s ease, text-shadow 0.4s ease;
 }
 
-/* Per-side bet */
+/* Per-side bet pill */
 .flip-side-bet {
     display: inline-flex;
     align-items: center;
-    gap: 6px;
-    padding: 6px 12px;
+    gap: 7px;
+    padding: 7px 14px;
     border-radius: 999px;
     background: rgba(255, 255, 255, 0.04);
-    border: 1px solid rgba(255, 255, 255, 0.07);
+    border: 1px solid rgba(255, 255, 255, 0.08);
     color: #fff;
     font-family: 'Montserrat', sans-serif;
     font-weight: 800;
-    font-size: 0.92rem;
-    transition: background 0.4s ease, border-color 0.4s ease, color 0.4s ease;
+    font-size: 0.95rem;
+    transition: background 0.4s ease, border-color 0.4s ease, color 0.4s ease, box-shadow 0.4s ease;
 }
 .flip-side-bet-coin {
-    width: 16px;
-    height: 16px;
+    width: 18px;
+    height: 18px;
     object-fit: contain;
-    opacity: 0.9;
+    opacity: 0.95;
 }
 
-/* Items grid */
+/* Items grid — bigger circles */
 .flip-side-items {
     display: flex;
     flex-wrap: wrap;
     justify-content: center;
-    gap: 6px;
+    gap: 8px;
     width: 100%;
-    margin-top: 4px;
+    margin-top: 6px;
 }
 .flip-side-item {
-    width: 38px;
-    height: 38px;
+    width: 56px;
+    height: 56px;
     border-radius: 50%;
-    background: radial-gradient(circle, #1c1f24 0%, #0d0f12 100%);
-    border: 1px solid rgba(255, 255, 255, 0.08);
+    background:
+        radial-gradient(circle at 30% 30%, rgba(255, 255, 255, 0.06), transparent 60%),
+        radial-gradient(circle, #1f242a 0%, #0d1014 100%);
+    border: 1px solid rgba(255, 255, 255, 0.09);
     overflow: hidden;
     display: flex;
     align-items: center;
     justify-content: center;
     flex-shrink: 0;
+    box-shadow:
+        0 6px 14px rgba(0, 0, 0, 0.45),
+        inset 0 1px 0 rgba(255, 255, 255, 0.04);
+    transition: border-color 0.4s ease, box-shadow 0.4s ease, transform 0.4s ease;
 }
 .flip-side-item img {
-    width: 72%;
-    height: 72%;
+    width: 78%;
+    height: 78%;
     object-fit: contain;
+    filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.5));
 }
 .flip-side-item--more {
     color: #c7cdd3;
     font-family: 'Montserrat', sans-serif;
     font-weight: 800;
-    font-size: 0.72rem;
+    font-size: 0.85rem;
     letter-spacing: 0.5px;
 }
 
-/* Decided state — winner & loser */
+/* === DECIDED state === */
+
+/* WINNER */
 .flip-stage.decided .flip-side.is-winner {
-    border-color: rgba(255, 255, 255, 0.18);
-    background: linear-gradient(180deg, rgba(255, 255, 255, 0.05), rgba(255, 255, 255, 0.015));
-    transform: translateY(-2px);
+    border-color: rgba(0, 255, 157, 0.45);
+    background: linear-gradient(180deg, rgba(0, 255, 157, 0.08), rgba(0, 255, 157, 0.015));
+    transform: translateY(-3px);
+    box-shadow:
+        0 18px 48px rgba(0, 0, 0, 0.55),
+        0 0 36px rgba(0, 255, 157, 0.18),
+        inset 0 0 32px rgba(0, 255, 157, 0.05);
+}
+.flip-stage.decided .flip-side.is-winner .flip-side-glow {
+    opacity: 1;
+    background: radial-gradient(ellipse at 50% 30%, rgba(0, 255, 157, 0.25) 0%, transparent 60%);
+    animation: winnerGlowPulse 2.4s ease-in-out infinite;
+}
+@keyframes winnerGlowPulse {
+    0%, 100% { opacity: 0.85; }
+    50%      { opacity: 1; }
 }
 .flip-stage.decided .flip-side.is-winner .flip-side-avatar {
-    border-color: rgba(255, 255, 255, 0.28);
+    border-color: #00ff9d;
     box-shadow:
-        0 14px 32px rgba(0, 0, 0, 0.5),
-        0 0 0 2px rgba(255, 255, 255, 0.06),
+        0 18px 40px rgba(0, 0, 0, 0.55),
+        0 0 0 3px rgba(0, 255, 157, 0.18),
+        0 0 28px rgba(0, 255, 157, 0.45),
         inset 0 0 0 1px rgba(0, 0, 0, 0.4);
+}
+.flip-stage.decided .flip-side.is-winner .flip-side-crown {
+    opacity: 1;
+    transform: scale(1) rotate(0deg);
+    transition-delay: 0.45s;
 }
 .flip-stage.decided .flip-side.is-winner .flip-side-name {
     color: #ffffff;
+    text-shadow: 0 0 14px rgba(0, 255, 157, 0.45);
 }
 .flip-stage.decided .flip-side.is-winner .flip-side-bet {
-    background: rgba(255, 255, 255, 0.08);
-    border-color: rgba(255, 255, 255, 0.18);
+    background: rgba(0, 255, 157, 0.14);
+    border-color: rgba(0, 255, 157, 0.45);
+    color: #d8ffec;
+    box-shadow: 0 0 18px rgba(0, 255, 157, 0.18);
+}
+.flip-stage.decided .flip-side.is-winner .flip-side-item {
+    border-color: rgba(0, 255, 157, 0.25);
 }
 
+/* LOSER */
 .flip-stage.decided .flip-side.is-loser {
-    opacity: 0.5;
-    filter: grayscale(0.8);
+    opacity: 0.55;
+    filter: grayscale(0.85);
+}
+.flip-stage.decided .flip-side.is-loser .flip-side-avatar img {
+    filter: grayscale(1) brightness(0.7);
 }
 .flip-stage.decided .flip-side.is-loser .flip-loser-x {
     opacity: 1;
-    transform: scale(1) rotate(0deg);
+    /* Stamp animation runs once per decision */
+    animation: xStampShake 0.55s cubic-bezier(0.36, 0, 0.66, -0.56) 0.35s both;
+}
+.flip-stage.decided .flip-side.is-loser .flip-loser-x .x-line-1 {
+    animation: xDraw 0.35s cubic-bezier(0.65, 0, 0.35, 1) 0.55s forwards;
+}
+.flip-stage.decided .flip-side.is-loser .flip-loser-x .x-line-2 {
+    animation: xDraw 0.35s cubic-bezier(0.65, 0, 0.35, 1) 0.78s forwards;
+}
+@keyframes xDraw {
+    to { stroke-dashoffset: 0; }
+}
+/* Stamp impact: brief overshoot scale + tiny rotate */
+@keyframes xStampShake {
+    0%   { transform: scale(2.2) rotate(-8deg); opacity: 0; }
+    35%  { transform: scale(0.9) rotate(2deg);  opacity: 1; }
+    65%  { transform: scale(1.08) rotate(-1deg); }
+    100% { transform: scale(1)    rotate(0deg); }
 }
 
-/* Coin column */
-.flip-overlay .flip-coin-wrap {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 16px;
-    align-self: center;
-}
-
-/* Smaller, faster coin (override legacy 200px) */
-.flip-overlay .coin-container {
-    width: 110px !important;
-    height: 110px !important;
-    margin: 0 !important;
-    perspective: 700px;
-}
-
+/* Total bet block (inside panel, below stage) */
 .flip-total {
     text-align: center;
     display: flex;
     flex-direction: column;
     align-items: center;
     gap: 4px;
+    opacity: 0;
+    animation: flipChildIn 0.5s cubic-bezier(0.22, 1, 0.36, 1) 0.5s forwards;
 }
 .flip-total-label {
     font-family: 'Montserrat', sans-serif;
     font-weight: 800;
-    font-size: 0.6rem;
-    letter-spacing: 2.5px;
+    font-size: 0.65rem;
+    letter-spacing: 3px;
     text-transform: uppercase;
-    color: rgba(255, 255, 255, 0.45);
+    color: rgba(0, 255, 157, 0.65);
 }
 .flip-total-value {
     display: inline-flex;
@@ -16372,109 +16586,83 @@ body .chat-sidebar .chat-send-btn svg { width: 18px !important; fill: #041a10 !i
     gap: 8px;
     font-family: 'Montserrat', sans-serif;
     font-weight: 900;
-    font-size: 1.45rem;
+    font-size: 1.7rem;
     color: #fff;
-    text-shadow: 0 2px 10px rgba(0, 0, 0, 0.4);
+    text-shadow:
+        0 0 14px rgba(0, 255, 157, 0.35),
+        0 2px 10px rgba(0, 0, 0, 0.4);
 }
 .flip-total-coin {
-    width: 22px;
-    height: 22px;
+    width: 24px;
+    height: 24px;
     object-fit: contain;
-    opacity: 0.95;
 }
 
-/* Footer (hash, headline, close) — appears after spin */
-.flip-overlay .flip-footer {
-    position: relative;
-    z-index: 2;
-    margin-top: 22px;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 14px;
-    width: min(540px, calc(100vw - 32px));
-    opacity: 0;
-    transform: translateY(8px);
-    pointer-events: none;
-    transition: opacity 0.45s ease 0.1s, transform 0.45s ease 0.1s;
-}
-.flip-overlay .flip-footer.show {
-    opacity: 1;
-    transform: translateY(0);
-    pointer-events: auto;
-}
-
-.flip-result-headline {
-    font-family: 'Montserrat', sans-serif;
-    font-weight: 900;
-    font-size: 1.6rem;
-    letter-spacing: 4px;
-    text-transform: uppercase;
-    color: #d6dde2;
-    text-align: center;
-    line-height: 1;
-}
-.flip-result-headline.result-win { color: #ffffff; }
-.flip-result-headline.result-lose { color: #9aa0a6; }
-
-.flip-overlay .result-hash {
-    font-size: 0.7rem;
-    color: rgba(255, 255, 255, 0.45);
+/* Hash and close button */
+.flip-result-panel .result-hash {
+    font-size: 0.72rem;
+    color: rgba(255, 255, 255, 0.5);
     font-family: 'Courier New', monospace;
-    padding: 10px 16px;
-    background: rgba(255, 255, 255, 0.025);
-    border: 1px solid rgba(255, 255, 255, 0.06);
+    padding: 10px 18px;
+    background: rgba(0, 255, 157, 0.04);
+    border: 1px solid rgba(0, 255, 157, 0.15);
     border-radius: 12px;
     cursor: pointer;
     word-break: break-all;
-    max-width: 100%;
+    max-width: min(520px, calc(100vw - 60px));
     text-align: center;
     line-height: 1.5;
+    opacity: 0;
+    animation: flipChildIn 0.5s cubic-bezier(0.22, 1, 0.36, 1) 0.6s forwards;
     transition: color 0.25s ease, background 0.25s ease, border-color 0.25s ease;
 }
-.flip-overlay .result-hash i {
-    color: rgba(255, 255, 255, 0.35);
+.flip-result-panel .result-hash i {
+    color: rgba(0, 255, 157, 0.55);
     margin-right: 6px;
-    font-size: 0.75rem;
+    font-size: 0.78rem;
 }
-.flip-overlay .result-hash:hover {
-    color: #ffffff;
-    background: rgba(255, 255, 255, 0.05);
-    border-color: rgba(255, 255, 255, 0.15);
+.flip-result-panel .result-hash:hover {
+    color: #fff;
+    background: rgba(0, 255, 157, 0.08);
+    border-color: rgba(0, 255, 157, 0.35);
 }
 
-.flip-overlay .btn-close-flip {
+.flip-result-panel .btn-close-flip {
     font-family: 'Montserrat', sans-serif !important;
     font-weight: 800 !important;
-    font-size: 0.74rem !important;
+    font-size: 0.78rem !important;
     text-transform: uppercase !important;
     letter-spacing: 2.5px !important;
-    padding: 11px 38px !important;
+    padding: 12px 44px !important;
     border-radius: 12px !important;
-    border: 1px solid rgba(255, 255, 255, 0.1) !important;
-    background: linear-gradient(135deg, rgba(255, 255, 255, 0.06), rgba(255, 255, 255, 0.02)) !important;
-    color: rgba(255, 255, 255, 0.7) !important;
+    border: 1px solid rgba(0, 255, 157, 0.4) !important;
+    background: linear-gradient(135deg, rgba(0, 255, 157, 0.14), rgba(0, 255, 157, 0.04)) !important;
+    color: #d8ffec !important;
     cursor: pointer;
+    box-shadow: 0 0 18px rgba(0, 255, 157, 0.12), inset 0 1px 0 rgba(255, 255, 255, 0.06);
+    opacity: 0;
+    animation: flipChildIn 0.5s cubic-bezier(0.22, 1, 0.36, 1) 0.7s forwards;
     transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1) !important;
 }
-.flip-overlay .btn-close-flip:hover {
+.flip-result-panel .btn-close-flip:hover {
     color: #fff !important;
-    border-color: rgba(255, 255, 255, 0.22) !important;
-    background: rgba(255, 255, 255, 0.07) !important;
+    border-color: #00ff9d !important;
+    background: linear-gradient(135deg, rgba(0, 255, 157, 0.24), rgba(0, 255, 157, 0.08)) !important;
+    box-shadow: 0 0 28px rgba(0, 255, 157, 0.3) !important;
     transform: translateY(-1px);
 }
 
 /* Mobile */
 @media (max-width: 720px) {
+    .flip-result-panel { padding: 22px 16px 20px; gap: 16px; }
+    .flip-result-headline { font-size: 1.4rem; letter-spacing: 3px; }
     .flip-overlay .flip-stage {
         grid-template-columns: 1fr;
-        gap: 14px;
-        padding: 18px;
+        gap: 12px;
     }
-    .flip-overlay .flip-coin-wrap { order: 2; }
-    .flip-overlay .flip-side--p1   { order: 1; }
-    .flip-overlay .flip-side--p2   { order: 3; }
-    .flip-side-avatar { width: 78px; height: 78px; }
-    .flip-overlay .coin-container { width: 90px !important; height: 90px !important; }
-    .flip-result-headline { font-size: 1.25rem; letter-spacing: 3px; }
+    .flip-vs { width: 44px; height: 44px; font-size: 0.78rem; }
+    .flip-side-avatar { width: 92px; height: 92px; }
+    .flip-side-crown { width: 30px; height: 30px; font-size: 0.85rem; top: -6px; right: -6px; }
+    .flip-side-item { width: 44px; height: 44px; }
+    .flip-total-value { font-size: 1.3rem; }
 }

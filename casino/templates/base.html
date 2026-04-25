@@ -221,62 +221,83 @@
     {% include 'footer.html' %}
 
     <div class="flip-overlay" id="globalFlipOverlay">
-        <div class="flip-stage" id="flipStage">
-            <!-- Player 1 (left) -->
-            <div class="flip-side flip-side--p1" id="flipSideP1">
-                <div class="flip-side-avatar">
-                    <img id="flipP1Avatar" src="" alt="P1">
-                    <span class="flip-loser-x"><i class="bi bi-x-lg"></i></span>
-                </div>
-                <div class="flip-side-name" id="flipP1Name">—</div>
-                <div class="flip-side-bet">
-                    <span id="flipP1Bet">0</span>
-                    <img src="{% static 'img/sv_coin.png' %}" class="flip-side-bet-coin" alt="SV">
-                </div>
-                <div class="flip-side-items" id="flipP1Items"></div>
-            </div>
-
-            <!-- Coin in the middle -->
-            <div class="flip-coin-wrap">
-                <div class="coin-container">
-                    <div class="coin" id="globalCoin">
-                        <div class="side side-a">
-                            <img src="{% static 'img/b_chip.png' %}" style="width:100%; height:100%; object-fit:contain;">
-                        </div>
-                        <div class="side side-b">
-                            <img src="{% static 'img/h_chip.png' %}" style="width:100%; height:100%; object-fit:contain;">
-                        </div>
+        <!-- Coin (centered while spinning, then fades away) -->
+        <div class="flip-coin-wrap" id="flipCoinWrap">
+            <div class="coin-container">
+                <div class="coin" id="globalCoin">
+                    <div class="side side-a">
+                        <img src="{% static 'img/b_chip.png' %}" style="width:100%; height:100%; object-fit:contain;">
+                    </div>
+                    <div class="side side-b">
+                        <img src="{% static 'img/h_chip.png' %}" style="width:100%; height:100%; object-fit:contain;">
                     </div>
                 </div>
-                <div class="flip-total" id="flipTotalBlock">
-                    <span class="flip-total-label" data-i18n="flip.totalBet">TOTAL BET</span>
-                    <div class="flip-total-value">
-                        <span id="globalBetText">0</span>
-                        <img src="{% static 'img/sv_coin.png' %}" class="flip-total-coin" alt="SV">
-                    </div>
-                </div>
-            </div>
-
-            <!-- Player 2 (right) -->
-            <div class="flip-side flip-side--p2" id="flipSideP2">
-                <div class="flip-side-avatar">
-                    <img id="flipP2Avatar" src="" alt="P2">
-                    <span class="flip-loser-x"><i class="bi bi-x-lg"></i></span>
-                </div>
-                <div class="flip-side-name" id="flipP2Name">—</div>
-                <div class="flip-side-bet">
-                    <span id="flipP2Bet">0</span>
-                    <img src="{% static 'img/sv_coin.png' %}" class="flip-side-bet-coin" alt="SV">
-                </div>
-                <div class="flip-side-items" id="flipP2Items"></div>
             </div>
         </div>
 
-        <!-- Footer: title + hash + close -->
-        <div class="flip-footer" id="flipFooter">
+        <!-- Result panel: hidden until the spin ends, then animates in -->
+        <div class="flip-result-panel" id="flipResultPanel">
             <div class="flip-result-headline" id="flipResultHeadline">
                 <span id="globalWinnerText">—</span>
             </div>
+
+            <div class="flip-stage" id="flipStage">
+                <!-- Player 1 -->
+                <div class="flip-side flip-side--p1" id="flipSideP1">
+                    <div class="flip-side-glow"></div>
+                    <div class="flip-side-avatar">
+                        <img id="flipP1Avatar" src="" alt="P1">
+                        <span class="flip-loser-x">
+                            <svg viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true">
+                                <line class="x-line x-line-1" x1="14" y1="14" x2="86" y2="86"/>
+                                <line class="x-line x-line-2" x1="86" y1="14" x2="14" y2="86"/>
+                            </svg>
+                        </span>
+                        <div class="flip-side-crown"><i class="bi bi-trophy-fill"></i></div>
+                    </div>
+                    <div class="flip-side-name" id="flipP1Name">—</div>
+                    <div class="flip-side-bet">
+                        <span id="flipP1Bet">0</span>
+                        <img src="{% static 'img/sv_coin.png' %}" class="flip-side-bet-coin" alt="SV">
+                    </div>
+                    <div class="flip-side-items" id="flipP1Items"></div>
+                </div>
+
+                <!-- VS divider -->
+                <div class="flip-vs">
+                    <span>VS</span>
+                </div>
+
+                <!-- Player 2 -->
+                <div class="flip-side flip-side--p2" id="flipSideP2">
+                    <div class="flip-side-glow"></div>
+                    <div class="flip-side-avatar">
+                        <img id="flipP2Avatar" src="" alt="P2">
+                        <span class="flip-loser-x">
+                            <svg viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true">
+                                <line class="x-line x-line-1" x1="14" y1="14" x2="86" y2="86"/>
+                                <line class="x-line x-line-2" x1="86" y1="14" x2="14" y2="86"/>
+                            </svg>
+                        </span>
+                        <div class="flip-side-crown"><i class="bi bi-trophy-fill"></i></div>
+                    </div>
+                    <div class="flip-side-name" id="flipP2Name">—</div>
+                    <div class="flip-side-bet">
+                        <span id="flipP2Bet">0</span>
+                        <img src="{% static 'img/sv_coin.png' %}" class="flip-side-bet-coin" alt="SV">
+                    </div>
+                    <div class="flip-side-items" id="flipP2Items"></div>
+                </div>
+            </div>
+
+            <div class="flip-total" id="flipTotalBlock">
+                <span class="flip-total-label" data-i18n="flip.totalBet">TOTAL BET</span>
+                <div class="flip-total-value">
+                    <span id="globalBetText">0</span>
+                    <img src="{% static 'img/sv_coin.png' %}" class="flip-total-coin" alt="SV">
+                </div>
+            </div>
+
             <div class="result-hash" id="globalHashText" title="Click to copy hash" onclick="copyHash(this)">
                 <i class="bi bi-shield-lock-fill"></i>
                 <span id="globalHashValue">—</span>
@@ -338,14 +359,18 @@
             }
         }
 
-        // Apply decided state: dim loser column, show X overlay on loser avatar.
+        // Apply decided state: hide coin, reveal result panel, dim loser, show X.
         function applyFlipDecision(data) {
             const stage = document.getElementById('flipStage');
             const sideP1 = document.getElementById('flipSideP1');
             const sideP2 = document.getElementById('flipSideP2');
+            const coinWrap = document.getElementById('flipCoinWrap');
+            const panel = document.getElementById('flipResultPanel');
             const winnerName = (data.winner || '').toLowerCase();
             const p1IsWinner = (data.player1 || '').toLowerCase() === winnerName;
 
+            // Set winner/loser classes BEFORE showing the panel so the entrance
+            // animation is consistent. The X stamp is delayed via CSS.
             sideP1.classList.toggle('is-winner', p1IsWinner);
             sideP1.classList.toggle('is-loser', !p1IsWinner);
             sideP2.classList.toggle('is-winner', !p1IsWinner);
@@ -364,7 +389,12 @@
                 headlineWrap.classList.add('result-lose');
                 headline.innerText = _tr('flip.youLost', 'YOU LOST');
             }
-            document.getElementById('flipFooter').classList.add('show');
+
+            // Hide coin (fade + shrink), then reveal result panel.
+            coinWrap.classList.add('fade-out');
+            setTimeout(function () {
+                panel.classList.add('show');
+            }, 220);
         }
 
         function startGlobalAnimation(data) {
@@ -380,7 +410,8 @@
             stage.classList.remove('decided');
             document.getElementById('flipSideP1').classList.remove('is-winner', 'is-loser');
             document.getElementById('flipSideP2').classList.remove('is-winner', 'is-loser');
-            document.getElementById('flipFooter').classList.remove('show');
+            document.getElementById('flipResultPanel').classList.remove('show');
+            document.getElementById('flipCoinWrap').classList.remove('fade-out');
 
             // Populate columns
             document.getElementById('flipP1Avatar').src = data.player1_avatar || '/static/img/item_placeholder.svg';
@@ -399,23 +430,23 @@
             coin.style.transform = 'rotateX(0deg)';
             coin.offsetHeight;
 
-            // Faster spin: 2.5s, 10 rotations
-            const duration = 2.5;
-            const rotations = 10;
+            // Original spin feel: slow & dramatic
+            const duration = 8;
+            const rotations = 15;
             let degrees = rotations * 360;
             if (data.result_code !== 1) degrees += 180;
 
             flipTimeouts.push(setTimeout(function () {
                 if (flipSkipped) return;
-                coin.style.transition = 'transform ' + duration + 's cubic-bezier(0.15, 0.6, 0.25, 1)';
+                coin.style.transition = 'transform ' + duration + 's cubic-bezier(0.1, 0, 0.2, 1)';
                 coin.style.transform = 'rotateX(' + degrees + 'deg)';
-            }, 80));
+            }, 100));
 
             flipTimeouts.push(setTimeout(function () {
                 if (flipSkipped) return;
                 applyFlipDecision(data);
                 markGameAsViewed(data.game_id);
-            }, (duration * 1000) + 350));
+            }, (duration * 1000) + 500));
         }
 
         function markGameAsViewed(gameId) {
@@ -445,7 +476,8 @@
             document.getElementById('flipStage').classList.remove('decided');
             document.getElementById('flipSideP1').classList.remove('is-winner', 'is-loser');
             document.getElementById('flipSideP2').classList.remove('is-winner', 'is-loser');
-            document.getElementById('flipFooter').classList.remove('show');
+            document.getElementById('flipResultPanel').classList.remove('show');
+            document.getElementById('flipCoinWrap').classList.remove('fade-out');
             isAnimating = false;
             if (window.location.pathname.includes('coinflip')) {
                 window.location.reload();
