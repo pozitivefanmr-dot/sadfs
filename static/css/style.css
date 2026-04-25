@@ -1044,21 +1044,51 @@ ul {
         inset 0 1px 0 rgba(0, 255, 157, 0.08);
 }
 
-/* Active (non-soon) cards: soft full-perimeter green halo via box-shadow.
-   Layered with the existing card shadow + transitions handled there. */
+/* Active (non-soon) cards: outer halo + STRONGER inset glow with pulse */
 .game-mode-card:not(.game-mode-card--soon) {
+    animation: gameCardInnerPulse 4s ease-in-out infinite;
     box-shadow:
         0 18px 50px rgba(0, 0, 0, 0.45),
         0 0 24px rgba(0, 255, 157, 0.18),
-        0 0 50px rgba(0, 255, 157, 0.10),
-        inset 0 1px 0 rgba(0, 255, 157, 0.05);
+        0 0 80px rgba(0, 255, 157, 0.06),
+        inset 0 0 0 1px rgba(0, 255, 157, 0.28),
+        inset 0 0 60px rgba(0, 255, 157, 0.18),
+        inset 0 0 120px rgba(0, 255, 157, 0.10),
+        inset 0 1px 0 rgba(0, 255, 157, 0.22);
 }
+
+@keyframes gameCardInnerPulse {
+    0%, 100% {
+        box-shadow:
+            0 18px 50px rgba(0, 0, 0, 0.45),
+            0 0 24px rgba(0, 255, 157, 0.18),
+            0 0 80px rgba(0, 255, 157, 0.06),
+            inset 0 0 0 1px rgba(0, 255, 157, 0.28),
+            inset 0 0 60px rgba(0, 255, 157, 0.18),
+            inset 0 0 120px rgba(0, 255, 157, 0.10),
+            inset 0 1px 0 rgba(0, 255, 157, 0.22);
+    }
+    50% {
+        box-shadow:
+            0 18px 50px rgba(0, 0, 0, 0.45),
+            0 0 28px rgba(0, 255, 157, 0.24),
+            0 0 90px rgba(0, 255, 157, 0.10),
+            inset 0 0 0 1px rgba(0, 255, 157, 0.38),
+            inset 0 0 80px rgba(0, 255, 157, 0.28),
+            inset 0 0 140px rgba(0, 255, 157, 0.16),
+            inset 0 1px 0 rgba(0, 255, 157, 0.32);
+    }
+}
+
 .game-mode-card:not(.game-mode-card--soon):hover {
+    animation: none;
     box-shadow:
         0 24px 60px rgba(0, 0, 0, 0.55),
         0 0 36px rgba(0, 255, 157, 0.32),
         0 0 80px rgba(0, 255, 157, 0.20),
-        inset 0 1px 0 rgba(0, 255, 157, 0.10);
+        inset 0 0 40px rgba(0, 255, 157, 0.18),
+        inset 0 0 110px rgba(0, 255, 157, 0.08),
+        inset 0 1px 0 rgba(0, 255, 157, 0.14);
 }
 
 /* Subtle grid pattern */
@@ -10514,8 +10544,8 @@ input[type=range].snow-range::-webkit-slider-thumb {
     position: fixed;
     top: 0;
     right: 0;
-    width: 240px;
-    max-width: min(92vw, 240px);
+    width: 320px;
+    max-width: min(92vw, 320px);
     height: 100vh;
     background:
         radial-gradient(circle at top right, rgba(0, 255, 157, 0.08), transparent 34%),
@@ -11193,8 +11223,8 @@ input[type=range].snow-range::-webkit-slider-thumb {
     position: fixed;
     top: 0;
     right: 0;
-    width: 240px;
-    max-width: min(92vw, 240px);
+    width: 320px;
+    max-width: min(92vw, 320px);
     height: 100vh;
     background: rgba(5, 8, 7, 0.98);
     backdrop-filter: blur(15px);
@@ -15542,8 +15572,8 @@ input[type="number"] {
    ================================================================= */
 
 body .chat-sidebar {
-    width: 380px !important;
-    max-width: min(92vw, 380px) !important;
+    width: 320px !important;
+    max-width: min(92vw, 320px) !important;
     background:
         radial-gradient(circle at top right, rgba(0, 255, 157, 0.10), transparent 38%),
         radial-gradient(circle at bottom left, rgba(0, 229, 255, 0.04), transparent 40%),
@@ -16071,7 +16101,7 @@ body .chat-sidebar .chat-send-btn:active {
 body .chat-sidebar .chat-send-btn svg { width: 18px !important; fill: #041a10 !important; }
 
 /* --- FIX TOGGLE BUTTON OVERLAP WITH OPEN SIDEBAR --- */
-.chat-sidebar:not(.collapsed) ~ .chat-toggle-tab { right: 400px !important; }
+.chat-sidebar:not(.collapsed) ~ .chat-toggle-tab { right: 320px !important; }
 @media (max-width: 768px) {
     .chat-sidebar:not(.collapsed) ~ .chat-toggle-tab {
         right: 20px !important; /* hidden on mobile anyway, keep safe */
