@@ -795,7 +795,6 @@
         });
     </script>
 
-    {% if user.is_authenticated %}
     <div class="chat-backdrop" id="chatBackdrop" onclick="closeSidebar()"></div>
     <div class="chat-sidebar" id="chatSidebar">
         <div class="chat-header">
@@ -804,9 +803,11 @@
                 <span class="chat-title" data-i18n="chat.title">Live Chat</span>
             </div>
             <div class="chat-header-actions">
+                {% if user.is_authenticated %}
                 <button type="button" class="chat-prefix-btn" onclick="openPrefixModal()" title="Prefixes">
                     <i class="bi bi-star-fill"></i>
                 </button>
+                {% endif %}
                 <button type="button" class="chat-close-btn" onclick="toggleSidebar()" title="Close">
                     <i class="bi bi-x-lg"></i>
                 </button>
@@ -817,6 +818,7 @@
             <div class="chat-loading" data-i18n="chat.connecting">Connecting to server...</div>
         </div>
 
+        {% if user.is_authenticated %}
         <div class="chat-reply-bar" id="chatReplyBar" style="display: none;">
             <div class="chat-reply-bar-line"></div>
             <div class="chat-reply-bar-content">
@@ -834,18 +836,30 @@
 
         <div class="chat-input-area">
             <input type="text" id="chatInput" placeholder="" maxlength="300"
-                {% if request.user.is_authenticated %}data-current-user="{{ request.user.username }}"{% endif %}
+                data-current-user="{{ request.user.username }}"
                 onkeypress="handleChatEnter(event)">
             <button class="chat-send-btn" onclick="sendMessage()" title="Send">
                 <i class="bi bi-send-fill"></i>
             </button>
         </div>
+        {% else %}
+        <div class="chat-login-prompt" onclick="openAuthModal()">
+            <span class="chat-login-prompt__icon"><i class="bi bi-box-arrow-in-right"></i></span>
+            <div class="chat-login-prompt__text">
+                <span class="chat-login-prompt__title" data-i18n="chat.loginTitle">Log in to chat</span>
+                <span class="chat-login-prompt__sub" data-i18n="chat.loginSub">Sign in to send messages</span>
+            </div>
+            <i class="bi bi-arrow-right chat-login-prompt__arrow"></i>
+        </div>
+        {% endif %}
     </div>
 
     <!-- Chat toggle button (OUTSIDE sidebar so transform doesn't affect it) -->
     <div class="chat-toggle-tab" id="chatToggleBtn" onclick="toggleSidebar()">
         <i class="bi bi-chat-dots-fill"></i>
     </div>
+
+    {% if user.is_authenticated %}
 
     <!-- PREFIX MODAL -->
     <div class="prefix-modal-overlay" id="prefixModal">
@@ -886,6 +900,7 @@
             </button>
         </div>
     </div>
+    {% endif %}
 
     <script>
         const chatSidebar = document.getElementById('chatSidebar');
@@ -1179,6 +1194,7 @@
         loadMessages(true);
     </script>
 
+    {% if user.is_authenticated %}
     <script>
         /* === PREFIX MODAL === */
         let selectedPrefix = '';
