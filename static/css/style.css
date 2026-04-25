@@ -971,23 +971,26 @@ ul {
     color: inherit;
     isolation: isolate;
     background:
-        radial-gradient(120% 100% at 0% 0%, rgba(255, 255, 255, 0.04) 0%, transparent 55%),
-        linear-gradient(135deg, #1a1d20 0%, #121416 60%, #0d0f11 100%);
-    border: 1px solid rgba(255, 255, 255, 0.07);
+        radial-gradient(120% 100% at 0% 0%, rgba(0, 255, 157, 0.08) 0%, transparent 55%),
+        radial-gradient(100% 100% at 100% 100%, rgba(0, 255, 157, 0.05) 0%, transparent 60%),
+        linear-gradient(135deg, rgba(14, 30, 22, 0.85) 0%, rgba(10, 20, 15, 0.78) 60%, rgba(8, 14, 11, 0.72) 100%);
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+    border: 1px solid rgba(0, 255, 157, 0.14);
     box-shadow:
         0 18px 50px rgba(0, 0, 0, 0.45),
-        inset 0 1px 0 rgba(255, 255, 255, 0.035);
+        inset 0 1px 0 rgba(0, 255, 157, 0.05);
     transition: transform 0.9s cubic-bezier(0.22, 1, 0.36, 1),
                 box-shadow 0.9s cubic-bezier(0.22, 1, 0.36, 1),
                 border-color 0.9s ease;
 }
 .game-mode-card:hover {
     transform: translateY(-4px);
-    border-color: rgba(255, 255, 255, 0.12);
+    border-color: rgba(0, 255, 157, 0.26);
     box-shadow:
         0 24px 60px rgba(0, 0, 0, 0.55),
-        0 0 40px rgba(247, 198, 107, 0.05),
-        inset 0 1px 0 rgba(255, 255, 255, 0.05);
+        0 0 40px rgba(0, 255, 157, 0.10),
+        inset 0 1px 0 rgba(0, 255, 157, 0.08);
 }
 
 /* Subtle grid pattern */
@@ -996,8 +999,8 @@ ul {
     position: absolute;
     inset: 0;
     background-image:
-        linear-gradient(rgba(255, 255, 255, 0.025) 1px, transparent 1px),
-        linear-gradient(90deg, rgba(255, 255, 255, 0.025) 1px, transparent 1px);
+        linear-gradient(rgba(0, 255, 157, 0.04) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(0, 255, 157, 0.04) 1px, transparent 1px);
     background-size: 36px 36px;
     mask-image: radial-gradient(circle at 20% 50%, #000 0%, transparent 70%);
     -webkit-mask-image: radial-gradient(circle at 20% 50%, #000 0%, transparent 70%);
