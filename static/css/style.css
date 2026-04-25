@@ -1309,7 +1309,7 @@ ul {
                 opacity 1.4s ease !important;
 }
 .game-mode-card--soon:hover .game-mode-card__bg--upgrade {
-    transform: translateY(-50%) rotate(28deg) translateX(-6px) !important;
+    transform: translateY(calc(-50% - 12px)) rotate(18deg) translateX(-4px) !important;
 }
 .game-mode-card__chip--upgrade {
     animation: none !important;
@@ -1317,15 +1317,11 @@ ul {
     transition: filter 1.2s ease !important;
 }
 
-/* Roulette — softer, more subtle tilt the other way */
+/* Roulette — same gentle float as the coin chip */
 .game-mode-card__chip--roulette {
-    animation: rouletteIdleFloat 14s linear infinite !important;
+    animation: chipIdleFloat 11s ease-in-out infinite !important;
     filter: grayscale(0.95) brightness(0.8)
             drop-shadow(0 14px 32px rgba(0, 0, 0, 0.4)) !important;
-}
-@keyframes rouletteIdleFloat {
-    from { transform: rotate(0deg); }
-    to   { transform: rotate(360deg); }
 }
 .game-mode-card--soon .game-mode-card__title {
     background: linear-gradient(135deg, #d8dde2 0%, #98a0a8 60%, #5e656c 100%);
