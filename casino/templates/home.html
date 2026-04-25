@@ -172,28 +172,53 @@
 
     {% if not user.is_authenticated %}
 
-    <a href="{% url 'coinflip' %}" class="game-mode-card">
-        <div class="game-mode-card__bg">
-            <img src="{% static 'img/b_chip.png' %}" alt="" class="game-mode-card__chip">
-        </div>
-        <div class="game-mode-card__glow"></div>
-        <div class="game-mode-card__content">
-            <div class="game-mode-card__top">
-                <span class="game-mode-card__tag"><i class="bi bi-fire"></i> <span data-i18n="home.modeFeatured">FEATURED MODE</span></span>
-                <h2 class="game-mode-card__title">COINFLIP</h2>
-                <p class="game-mode-card__desc" data-i18n="home.modeDesc">Pick green or yellow, stake your MM2 items, flip — winner takes the entire bet.</p>
+    <div class="game-modes-grid">
+        <a href="{% url 'coinflip' %}" class="game-mode-card">
+            <div class="game-mode-card__bg">
+                <img src="{% static 'img/b_chip.png' %}" alt="" class="game-mode-card__chip">
             </div>
-            <div class="game-mode-card__bottom">
-                <span class="game-mode-card__status">
-                    <span class="game-mode-card__pulse"></span>
-                    <b>{{ online_count|default:0 }}</b> <span data-i18n="home.modeOnline">online</span>
-                </span>
-                <span class="game-mode-card__cta">
-                    <i class="bi bi-play-fill"></i> <span data-i18n="home.modePlay">PLAY NOW</span>
-                </span>
+            <div class="game-mode-card__glow"></div>
+            <div class="game-mode-card__content">
+                <div class="game-mode-card__top">
+                    <span class="game-mode-card__tag"><i class="bi bi-fire"></i> <span data-i18n="home.modeFeatured">FEATURED MODE</span></span>
+                    <h2 class="game-mode-card__title">COINFLIP</h2>
+                    <p class="game-mode-card__desc" data-i18n="home.modeDesc">Pick green or yellow, stake your MM2 items, flip — winner takes the entire bet.</p>
+                </div>
+                <div class="game-mode-card__bottom">
+                    <span class="game-mode-card__status">
+                        <span class="game-mode-card__pulse"></span>
+                        <b>{{ online_count|default:0 }}</b> <span data-i18n="home.modeOnline">online</span>
+                    </span>
+                    <span class="game-mode-card__cta">
+                        <i class="bi bi-play-fill"></i> <span data-i18n="home.modePlay">PLAY NOW</span>
+                    </span>
+                </div>
+            </div>
+        </a>
+
+        <div class="game-mode-card game-mode-card--soon" aria-disabled="true">
+            <div class="game-mode-card__bg">
+                <img src="{% static 'img/h_chip.png' %}" alt="" class="game-mode-card__chip">
+            </div>
+            <div class="game-mode-card__glow"></div>
+            <div class="game-mode-card__content">
+                <div class="game-mode-card__top">
+                    <span class="game-mode-card__tag game-mode-card__tag--soon"><i class="bi bi-hourglass-split"></i> <span data-i18n="home.modeSoonTag">IN DEVELOPMENT</span></span>
+                    <h2 class="game-mode-card__title">UPGRADER</h2>
+                    <p class="game-mode-card__desc" data-i18n="home.upgraderDesc">Spin the wheel and try to upgrade your MM2 item to something rarer — risk vs reward.</p>
+                </div>
+                <div class="game-mode-card__bottom">
+                    <span class="game-mode-card__status game-mode-card__status--soon">
+                        <i class="bi bi-tools"></i>
+                        <span data-i18n="home.modeSoonStatus">Work in progress</span>
+                    </span>
+                    <span class="game-mode-card__cta game-mode-card__cta--soon">
+                        <i class="bi bi-lock-fill"></i> <span data-i18n="home.modeComingSoon">COMING SOON</span>
+                    </span>
+                </div>
             </div>
         </div>
-    </a>
+    </div>
     {% endif %}
 
     {% if user.is_authenticated %}
