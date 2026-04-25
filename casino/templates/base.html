@@ -243,20 +243,6 @@
             <span class="flip-corner flip-corner--bl"></span>
             <span class="flip-corner flip-corner--br"></span>
 
-            <!-- Tiny coin that replays the result quickly -->
-            <div class="flip-mini-coin-wrap" id="flipMiniCoinWrap">
-                <div class="flip-mini-coin-perspective">
-                    <div class="flip-mini-coin" id="flipMiniCoin">
-                        <div class="flip-mini-coin-side flip-mini-coin-side--a">
-                            <img src="{% static 'img/b_chip.png' %}" alt="">
-                        </div>
-                        <div class="flip-mini-coin-side flip-mini-coin-side--b">
-                            <img src="{% static 'img/h_chip.png' %}" alt="">
-                        </div>
-                    </div>
-                </div>
-            </div>
-
             <div class="flip-result-headline" id="flipResultHeadline">
                 <span id="globalWinnerText">—</span>
                 <i class="flip-headline-bar"></i>
@@ -284,10 +270,10 @@
                     <div class="flip-side-items" id="flipP1Items"></div>
                 </div>
 
-                <!-- Spinning coin divider -->
+                <!-- Result replay coin (same animation as in-game toss, ~3x faster) -->
                 <div class="flip-vs">
                     <div class="flip-vs-coin-perspective">
-                        <div class="flip-vs-coin">
+                        <div class="flip-vs-coin" id="flipVsCoin">
                             <div class="flip-vs-coin-side flip-vs-coin-side--a">
                                 <img src="{% static 'img/b_chip.png' %}" alt="">
                             </div>
@@ -424,17 +410,18 @@
             coinWrap.classList.add('fade-out');
             setTimeout(function () {
                 panel.classList.add('show');
-                // Quick mini-coin replay matching the result side.
-                const mini = document.getElementById('flipMiniCoin');
-                if (mini) {
-                    mini.style.transition = 'none';
-                    mini.style.transform = 'rotateX(0deg)';
-                    void mini.offsetHeight;
-                    let miniDeg = 8 * 360;
-                    if (data.result_code !== 1) miniDeg += 180;
+                // Replay coin in the result panel: same animation as the in-game toss,
+                // just ~3x faster (8s -> ~2.7s, same 15 rotations + ease curve).
+                const replay = document.getElementById('flipVsCoin');
+                if (replay) {
+                    replay.style.transition = 'none';
+                    replay.style.transform = 'rotateX(0deg)';
+                    void replay.offsetHeight;
+                    let deg = 15 * 360;
+                    if (data.result_code !== 1) deg += 180;
                     requestAnimationFrame(function () {
-                        mini.style.transition = 'transform 1.4s cubic-bezier(0.18, 0.7, 0.25, 1)';
-                        mini.style.transform = 'rotateX(' + miniDeg + 'deg)';
+                        replay.style.transition = 'transform 2.7s cubic-bezier(0.1, 0, 0.2, 1)';
+                        replay.style.transform = 'rotateX(' + deg + 'deg)';
                     });
                 }
             }, 220);
@@ -472,6 +459,13 @@
             coin.style.transition = 'none';
             coin.style.transform = 'rotateX(0deg)';
             coin.offsetHeight;
+
+            // Reset replay coin in the result panel
+            const replayReset = document.getElementById('flipVsCoin');
+            if (replayReset) {
+                replayReset.style.transition = 'none';
+                replayReset.style.transform = 'rotateX(0deg)';
+            }
 
             // Original spin feel: slow & dramatic
             const duration = 8;

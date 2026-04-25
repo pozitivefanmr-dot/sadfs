@@ -16354,7 +16354,7 @@ body .chat-sidebar .chat-send-btn svg { width: 18px !important; fill: #041a10 !i
     position: relative;
     transform-style: preserve-3d;
     will-change: transform;
-    animation: flipVsCoinSpin 2.4s linear infinite;
+    transform: rotateX(0deg);
 }
 .flip-vs-coin-side {
     position: absolute;
@@ -16372,12 +16372,8 @@ body .chat-sidebar .chat-send-btn svg { width: 18px !important; fill: #041a10 !i
     object-fit: contain;
     pointer-events: none;
 }
-.flip-vs-coin-side--a { transform: rotateY(0deg); }
-.flip-vs-coin-side--b { transform: rotateY(180deg); }
-@keyframes flipVsCoinSpin {
-    0%   { transform: rotateY(0deg); }
-    100% { transform: rotateY(360deg); }
-}
+.flip-vs-coin-side--a { transform: rotateX(0deg); }
+.flip-vs-coin-side--b { transform: rotateX(180deg); }
 @keyframes flipVsIn {
     to { opacity: 1; transform: scale(1); }
 }
