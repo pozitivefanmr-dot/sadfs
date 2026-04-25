@@ -413,6 +413,8 @@ def home(request):
         winner__isnull=False
     ).order_by('-created_at')[:50]
 
+    active_games_count = CoinflipGame.objects.filter(is_active=True).count()
+
     # === GIVEAWAYS ===
     # Автоматически завершаем истёкшие розыгрыши
     _resolve_expired_giveaways()
@@ -440,6 +442,7 @@ def home(request):
         'avatar_url': avatar_url,
         'bots_data': bots_data,
         'recent_games': recent_games,
+        'active_games_count': active_games_count,
         'active_giveaways': active_giveaways,
         'ga_avatars': ga_avatars,
         'joined_giveaway_ids': joined_giveaway_ids,

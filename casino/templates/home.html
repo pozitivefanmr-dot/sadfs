@@ -158,10 +158,10 @@
                         <div class="hero-coin-ring hero-coin-ring--outer"></div>
                         <div class="hero-coin-ring hero-coin-ring--inner"></div>
                         <div class="hero-coin">
-                            <img src="{% static 'img/sv_coin.png' %}" alt="">
+                            <img src="{% static 'img/h_chip.png' %}" alt="">
                         </div>
-                        <div class="hero-coin-orbit hero-coin-orbit--1"><span></span></div>
-                        <div class="hero-coin-orbit hero-coin-orbit--2"><span></span></div>
+                        <div class="hero-coin-orbit hero-coin-orbit--outer"><span></span></div>
+                        <div class="hero-coin-orbit hero-coin-orbit--inner"><span></span></div>
                         <div class="hero-coin-vs">VS</div>
                     </div>
                 </div>
@@ -172,36 +172,28 @@
 
     {% if not user.is_authenticated %}
 
-    <div class="hero-features-row">
-        <a href="{% url 'coinflip' %}" class="hero-feature-card hero-feature-card--instant">
-            <div class="hero-feature-icon"><i class="bi bi-coin"></i></div>
-            <div class="hero-feature-title" data-i18n="home.feat1Title">Coinflip Duels</div>
-            <div class="hero-feature-desc" data-i18n="home.feat1Desc">Pick green or red, stake your MM2 items, flip — winner takes the entire pot</div>
-            <div class="hero-feature-arrow"><i class="bi bi-arrow-right"></i></div>
-            <div class="hero-feature-glow"></div>
-        </a>
-        <div class="hero-feature-card hero-feature-card--fair" onclick="openAuthModal()" style="cursor:pointer;">
-            <div class="hero-feature-icon"><i class="bi bi-shield-lock-fill"></i></div>
-            <div class="hero-feature-title" data-i18n="home.feat2Title">Provably Fair</div>
-            <div class="hero-feature-desc" data-i18n="home.feat2Desc">Results powered by random.org — every game gets a SHA-256 hash for proof</div>
-            <div class="hero-feature-arrow"><i class="bi bi-arrow-right"></i></div>
-            <div class="hero-feature-glow"></div>
+    <a href="{% url 'coinflip' %}" class="game-mode-card">
+        <div class="game-mode-card__bg">
+            <img src="{% static 'img/b_chip.png' %}" alt="" class="game-mode-card__chip">
         </div>
-        <div class="hero-feature-card hero-feature-card--trade" onclick="openAuthModal()" style="cursor:pointer;">
-            <div class="hero-feature-icon"><i class="bi bi-box-arrow-in-down-right"></i></div>
-            <div class="hero-feature-title" data-i18n="home.feat3Title">Deposit & Withdraw</div>
-            <div class="hero-feature-desc" data-i18n="home.feat3Desc">Send items to our Roblox bot, play instantly, cash out whenever you want</div>
-            <div class="hero-feature-arrow"><i class="bi bi-arrow-right"></i></div>
-            <div class="hero-feature-glow"></div>
+        <div class="game-mode-card__glow"></div>
+        <div class="game-mode-card__content">
+            <div class="game-mode-card__top">
+                <span class="game-mode-card__tag"><i class="bi bi-fire"></i> <span data-i18n="home.modeFeatured">FEATURED MODE</span></span>
+                <h2 class="game-mode-card__title">COINFLIP</h2>
+                <p class="game-mode-card__desc" data-i18n="home.modeDesc">Pick green or red, stake your MM2 items, flip — winner takes the entire pot.</p>
+            </div>
+            <div class="game-mode-card__bottom">
+                <span class="game-mode-card__status">
+                    <span class="game-mode-card__pulse"></span>
+                    <b>{{ active_games_count|default:0 }}</b> <span data-i18n="home.modeInGame">in game</span>
+                </span>
+                <span class="game-mode-card__cta">
+                    <i class="bi bi-play-fill"></i> <span data-i18n="home.modePlay">PLAY NOW</span>
+                </span>
+            </div>
         </div>
-        <div class="hero-feature-card hero-feature-card--giveaway" onclick="openAuthModal()" style="cursor:pointer;">
-            <div class="hero-feature-icon"><i class="bi bi-gift"></i></div>
-            <div class="hero-feature-title" data-i18n="home.feat4Title">Daily Giveaways</div>
-            <div class="hero-feature-desc" data-i18n="home.feat4Desc">Players drop free items daily — just join and wait for the winner draw</div>
-            <div class="hero-feature-arrow"><i class="bi bi-arrow-right"></i></div>
-            <div class="hero-feature-glow"></div>
-        </div>
-    </div>
+    </a>
     {% endif %}
 
     {% if user.is_authenticated %}
