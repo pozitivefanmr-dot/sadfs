@@ -5277,7 +5277,7 @@ input[type=range].snow-range-v2::-moz-range-thumb {
 .game-item-img {
     width: 80%;
     height: 80%;
-    object-fit: cover;
+    object-fit: contain;
     border-radius: 50%;
     margin: auto;
 }
@@ -5501,7 +5501,7 @@ input[type=range].snow-range-v2::-moz-range-thumb {
 .game-item-img {
     width: 80%;
     height: 80%;
-    object-fit: cover;
+    object-fit: contain;
     border-radius: 50%;
     margin: auto;
 }
@@ -16103,33 +16103,38 @@ body .chat-sidebar .chat-send-btn {
         0 6px 18px rgba(0, 255, 157, 0.28),
         inset 0 1px 0 rgba(255, 255, 255, 0.4),
         inset 0 -2px 0 rgba(0, 0, 0, 0.18) !important;
-    transition: transform 0.18s ease, box-shadow 0.2s ease, filter 0.2s ease !important;
+    transition: transform 0.32s cubic-bezier(0.22, 1, 0.36, 1),
+                box-shadow 0.32s cubic-bezier(0.22, 1, 0.36, 1),
+                filter 0.32s cubic-bezier(0.22, 1, 0.36, 1),
+                background 0.32s cubic-bezier(0.22, 1, 0.36, 1) !important;
     flex-shrink: 0 !important;
     padding: 0 !important;
     z-index: 2 !important;
+    will-change: transform, box-shadow, filter !important;
 }
 body .chat-sidebar .chat-send-btn .bi {
-    font-size: 1.4rem !important;
-    font-weight: 900 !important;
+    font-size: 1.25rem !important;
+    font-weight: 600 !important;
     color: #041a10 !important;
     line-height: 1 !important;
-    transform: none !important;
-    filter: drop-shadow(0 1px 0 rgba(255, 255, 255, 0.45)) !important;
-    transition: transform 0.2s ease !important;
+    transform: translate(0, 0) rotate(0deg) !important;
+    filter: none !important;
+    transition: transform 0.35s cubic-bezier(0.22, 1, 0.36, 1) !important;
 }
 body .chat-sidebar .chat-send-btn:hover .bi {
-    transform: translateY(-1px) !important;
+    transform: translate(2px, -2px) rotate(-8deg) !important;
 }
 body .chat-sidebar .chat-send-btn:hover {
-    transform: translateY(-1px) !important;
-    filter: brightness(1.06);
+    transform: translateY(-2px) scale(1.04) !important;
+    filter: brightness(1.08);
     box-shadow:
-        0 10px 24px rgba(0, 255, 157, 0.45),
-        inset 0 1px 0 rgba(255, 255, 255, 0.5),
+        0 12px 28px rgba(0, 255, 157, 0.5),
+        inset 0 1px 0 rgba(255, 255, 255, 0.55),
         inset 0 -2px 0 rgba(0, 0, 0, 0.18) !important;
 }
 body .chat-sidebar .chat-send-btn:active {
-    transform: translateY(0) scale(0.96) !important;
+    transform: translateY(0) scale(0.94) !important;
+    transition: transform 0.12s ease !important;
 }
 body .chat-sidebar .chat-send-btn svg { width: 18px !important; fill: #041a10 !important; }
 
