@@ -5275,8 +5275,8 @@ input[type=range].snow-range-v2::-moz-range-thumb {
 
 /* КАРТИНКА ВНУТРИ КРУГА */
 .game-item-img {
-    width: 70%;
-    height: 70%;
+    width: 80%;
+    height: 80%;
     object-fit: contain;
     margin: auto;
 }
@@ -5498,8 +5498,8 @@ input[type=range].snow-range-v2::-moz-range-thumb {
 
 /* КАРТИНКА ВНУТРИ КРУГА */
 .game-item-img {
-    width: 70%;
-    height: 70%;
+    width: 80%;
+    height: 80%;
     object-fit: contain;
     margin: auto;
 }
