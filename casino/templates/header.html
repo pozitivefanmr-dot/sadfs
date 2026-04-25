@@ -7,7 +7,6 @@
 
         <div class="nav-links">
             <a href="{% url 'home' %}" class="nav-link"><i class="bi bi-grid"></i> <span data-i18n="nav.dashboard">Dashboard</span></a>
-            <a href="{% url 'trade' %}" class="nav-link"><i class="bi bi-journal-text"></i> <span data-i18n="nav.history">History</span></a>
             <a href="{% url 'coinflip' %}" class="nav-link"><i class="bi bi-dice-3"></i> <span data-i18n="nav.coinflip">Coinflip</span></a>
             <a href="{% url 'leaderboard' %}" class="nav-link"><i class="bi bi-trophy"></i> <span data-i18n="nav.leaderboard">Leaderboard</span></a>
             {% if user.is_superuser %}

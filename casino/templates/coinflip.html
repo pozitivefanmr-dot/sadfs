@@ -94,9 +94,15 @@
         </div>
 
         {% if user.is_authenticated %}
-        <button type="button" class="btn-place-bet" onclick="openCreateModal()">
-            <span><i class="bi bi-rocket-takeoff-fill"></i></span> <span data-i18n="cf.createGame">CREATE GAME</span>
-        </button>
+        <div class="cf-header-actions">
+            <a href="{% url 'trade' %}" class="btn-game-history" title="Game History">
+                <i class="bi bi-journal-text"></i>
+                <span data-i18n="cf.gameHistory">GAME HISTORY</span>
+            </a>
+            <button type="button" class="btn-place-bet" onclick="openCreateModal()">
+                <span><i class="bi bi-plus-lg"></i></span> <span data-i18n="cf.createGame">CREATE GAME</span>
+            </button>
+        </div>
         {% else %}
         <div class="btn-login" onclick="openAuthModal()" style="cursor: pointer;" data-i18n="cf.loginToPlay">LOGIN TO PLAY</div>
         {% endif %}

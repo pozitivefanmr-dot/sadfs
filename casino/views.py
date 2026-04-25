@@ -86,6 +86,122 @@ def safe_image_url(url):
     return url
 
 
+# === ITEM IMAGE SELF-HEALING ===
+# A URL is considered "bad" if it cannot reliably display in the browser:
+# empty, our SVG fallback, the legacy wikia Godly placeholder, the legacy
+# roblox.com/Thumbs/Asset.ashx endpoint (often blank), or any plain http://.
+def _image_url_is_bad(u):
+    if not u:
+        return True
+    u_low = u.lower()
+    if u == SAFE_IMAGE_FALLBACK:
+        return True
+    if 'godly_icon' in u_low:
+        return True
+    if '/thumbs/asset.ashx' in u_low:
+        return True
+    if u_low.startswith('http://'):
+        return True
+    return False
+
+
+def _extract_roblox_asset_id(u):
+    if not u:
+        return None
+    m = re.search(r'(?:rbxassetid://|assetId=|id=)(\d+)', u, re.IGNORECASE)
+    return m.group(1) if m else None
+
+
+def _resolve_asset_ids_via_roblox(asset_ids, *, chunk_size=100, timeout=4):
+    """Batch-resolve a list of Roblox assetIds to imageUrl via thumbnails API.
+    Splits into chunks of `chunk_size`, returns dict {assetId(str): imageUrl}.
+    Failed/missing IDs are simply absent from the result.
+    """
+    out = {}
+    if not asset_ids:
+        return out
+    unique_ids = [str(x) for x in dict.fromkeys(asset_ids)]
+    for start in range(0, len(unique_ids), chunk_size):
+        chunk = unique_ids[start:start + chunk_size]
+        try:
+            api_url = (
+                "https://thumbnails.roblox.com/v1/assets"
+                f"?assetIds={','.join(chunk)}"
+                "&returnPolicy=PlaceHolder&size=420x420&format=Png"
+            )
+            resp = requests.get(api_url, timeout=timeout)
+            if resp.status_code != 200:
+                continue
+            for d in (resp.json().get('data') or []):
+                tid = str(d.get('targetId') or '')
+                iurl = d.get('imageUrl') or ''
+                if tid and iurl:
+                    out[tid] = iurl
+        except Exception as exc:
+            logger.warning("roblox thumbnails batch failed (%s): %s", chunk[:3], exc)
+    return out
+
+
+def heal_item_images(items, *, persist=True):
+    """In-place self-heal of UserItem.image_url for an iterable of items.
+    1) name lookup from other UserItem records (rbxcdn preferred),
+    2) batch Roblox thumbnails API (chunks of 100) for items with assetId,
+    3) persist resolved URLs to DB so subsequent loads are instant,
+    4) anything still bad becomes SAFE_IMAGE_FALLBACK so <img> never breaks.
+    """
+    items = list(items)
+    if not items:
+        return items
+
+    name_to_image = {}
+    for ui in UserItem.objects.exclude(image_url='').values('item_name', 'image_url'):
+        url = (ui['image_url'] or '').strip()
+        if _image_url_is_bad(url):
+            continue
+        name = ui['item_name']
+        existing = name_to_image.get(name, '')
+        if not existing:
+            name_to_image[name] = url
+        elif 'rbxcdn.com' in url and 'rbxcdn.com' not in existing:
+            name_to_image[name] = url
+
+    need_api = []  # (item, asset_id)
+    for item in items:
+        url = (item.image_url or '').strip()
+        if not _image_url_is_bad(url):
+            continue
+        name = item.item_name
+        resolved = name_to_image.get(name, '')
+        if not resolved:
+            base = re.sub(r'\s*\(x+\d+\)\s*$', '', name).strip()
+            if base and base != name:
+                resolved = name_to_image.get(base, '')
+        if resolved:
+            item.image_url = resolved
+            continue
+        aid = _extract_roblox_asset_id(url)
+        if aid:
+            need_api.append((item, aid))
+        else:
+            item.image_url = SAFE_IMAGE_FALLBACK
+
+    if need_api:
+        id_to_url = _resolve_asset_ids_via_roblox([aid for _, aid in need_api])
+        for item, aid in need_api:
+            new_url = id_to_url.get(str(aid))
+            if new_url:
+                item.image_url = new_url
+                if persist:
+                    try:
+                        UserItem.objects.filter(id=item.id).update(image_url=new_url)
+                    except Exception:
+                        pass
+            else:
+                item.image_url = SAFE_IMAGE_FALLBACK
+
+    return items
+
+
 def _client_ip(request):
     xff = request.META.get('HTTP_X_FORWARDED_FOR', '')
     if xff:
@@ -411,103 +527,8 @@ def home(request):
         current_assets = UserItem.objects.filter(owner_name__iexact=request.user.username, status='available')
         total_profit = current_assets.aggregate(Sum('item_value'))['item_value__sum'] or 0
 
-        # Materialize and self-heal item images:
-        #   1) detect bad URLs (empty, legacy wikia Godly fallback, legacy
-        #      roblox.com/Thumbs/Asset.ashx → blank, http://…),
-        #   2) try lookup by item_name from other UserItems (rbxcdn preferred),
-        #   3) for remaining bad URLs that contain an assetId, do ONE batch
-        #      call to Roblox thumbnails API and persist the resolved URL,
-        #   4) fall back to local SVG placeholder so <img> never breaks.
-        inventory_items = list(inventory_qs)
-        if inventory_items:
-            def _is_bad_image_url(u):
-                if not u:
-                    return True
-                u_low = u.lower()
-                if u == SAFE_IMAGE_FALLBACK:
-                    return True
-                if 'godly_icon' in u_low:
-                    return True
-                # Legacy Roblox thumbs endpoint — frequently returns blank image
-                if '/thumbs/asset.ashx' in u_low:
-                    return True
-                # HTTP (not HTTPS) URLs are also rejected by safe_image_url
-                if u_low.startswith('http://'):
-                    return True
-                return False
-
-            def _extract_asset_id(u):
-                if not u:
-                    return None
-                m = re.search(r'(?:rbxassetid://|assetId=|id=)(\d+)', u, re.IGNORECASE)
-                return m.group(1) if m else None
-
-            # Build item_name → best image URL (only valid URLs, prefer rbxcdn)
-            name_to_image = {}
-            for ui in UserItem.objects.exclude(image_url='').values('item_name', 'image_url'):
-                url = (ui['image_url'] or '').strip()
-                if _is_bad_image_url(url):
-                    continue
-                name = ui['item_name']
-                existing = name_to_image.get(name, '')
-                if not existing:
-                    name_to_image[name] = url
-                elif 'rbxcdn.com' in url and 'rbxcdn.com' not in existing:
-                    name_to_image[name] = url
-
-            # Pass 1: name lookup
-            need_api = []  # list of (item, asset_id)
-            for item in inventory_items:
-                url = (item.image_url or '').strip()
-                if not _is_bad_image_url(url):
-                    continue
-                name = item.item_name
-                resolved = name_to_image.get(name, '')
-                if not resolved:
-                    base = re.sub(r'\s*\(x+\d+\)\s*$', '', name).strip()
-                    if base and base != name:
-                        resolved = name_to_image.get(base, '')
-                if resolved:
-                    item.image_url = resolved
-                    continue
-                # Try to recover asset_id from the existing bad URL
-                aid = _extract_asset_id(url)
-                if aid:
-                    need_api.append((item, aid))
-                else:
-                    item.image_url = SAFE_IMAGE_FALLBACK
-
-            # Pass 2: batch Roblox thumbnails API call (one HTTP request)
-            if need_api:
-                unique_ids = list({aid for _, aid in need_api})[:50]  # safety cap
-                id_to_url = {}
-                try:
-                    api_url = (
-                        "https://thumbnails.roblox.com/v1/assets"
-                        f"?assetIds={','.join(unique_ids)}"
-                        "&returnPolicy=PlaceHolder&size=420x420&format=Png"
-                    )
-                    resp = requests.get(api_url, timeout=4)
-                    if resp.status_code == 200:
-                        for d in (resp.json().get('data') or []):
-                            tid = str(d.get('targetId') or '')
-                            iurl = d.get('imageUrl') or ''
-                            if tid and iurl:
-                                id_to_url[tid] = iurl
-                except Exception as exc:
-                    logger.warning("home: roblox thumbnails API failed: %s", exc)
-
-                for item, aid in need_api:
-                    new_url = id_to_url.get(str(aid))
-                    if new_url:
-                        item.image_url = new_url
-                        # Persist resolved URL so subsequent renders are instant
-                        try:
-                            UserItem.objects.filter(id=item.id).update(image_url=new_url)
-                        except Exception:
-                            pass
-                    else:
-                        item.image_url = SAFE_IMAGE_FALLBACK
+        # Self-heal item images (chunked, persisted to DB).
+        inventory_items = heal_item_images(inventory_qs)
 
     # Последние 50 завершённых игр для горизонтальной ленты
     recent_games = CoinflipGame.objects.filter(
@@ -713,11 +734,13 @@ def coinflip_home(request):
     games_lost = 0
 
     if request.user.is_authenticated:
-        my_inventory = UserItem.objects.filter(
+        inv_qs = UserItem.objects.filter(
             owner_name__iexact=request.user.username,
             status='available'
         )
-        total_value = my_inventory.aggregate(Sum('item_value'))['item_value__sum'] or 0
+        total_value = inv_qs.aggregate(Sum('item_value'))['item_value__sum'] or 0
+        # Self-heal item images so the Create-Game modal also shows real icons.
+        my_inventory = heal_item_images(inv_qs)
 
         # --- PROFIT CALCULATIONS ---
         uname = request.user.username
