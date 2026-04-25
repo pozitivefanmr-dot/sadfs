@@ -15823,7 +15823,8 @@ body .chat-sidebar .chat-text {
     white-space: pre-wrap !important;
     hyphens: auto;
     padding: 0;
-    font-size: 0.92rem;
+    font-size: 0.86rem;
+    font-weight: 600;
     line-height: 1.45;
     color: #f0fff7;
     max-width: 100%;
@@ -16070,7 +16071,7 @@ body .chat-sidebar .chat-send-btn:active {
 body .chat-sidebar .chat-send-btn svg { width: 18px !important; fill: #041a10 !important; }
 
 /* --- FIX TOGGLE BUTTON OVERLAP WITH OPEN SIDEBAR --- */
-.chat-sidebar:not(.collapsed) ~ .chat-toggle-tab { right: 320px !important; }
+.chat-sidebar:not(.collapsed) ~ .chat-toggle-tab { right: 360px !important; }
 @media (max-width: 768px) {
     .chat-sidebar:not(.collapsed) ~ .chat-toggle-tab {
         right: 20px !important; /* hidden on mobile anyway, keep safe */
