@@ -420,11 +420,12 @@
                     replay.style.transition = 'none';
                     replay.style.transform = 'rotateX(0deg)';
                     void replay.offsetHeight;
-                    let deg = 15 * 360;
+                    let deg = 22 * 360;
                     if (data.result_code !== 1) deg += 180;
                     requestAnimationFrame(function () {
-                        // Slow start, strong acceleration toward the end (ease-in)
-                        replay.style.transition = 'transform 1.6s cubic-bezier(0.55, 0, 0.95, 0.15)';
+                        // "Tossed coin landing" — fast spin that decelerates hard at the end,
+                        // like a coin in mid-air that's just about to settle on a surface.
+                        replay.style.transition = 'transform 1.5s cubic-bezier(0.16, 0.84, 0.24, 1)';
                         replay.style.transform = 'rotateX(' + deg + 'deg)';
                     });
                 }
