@@ -237,13 +237,7 @@
 
         <!-- Result panel: hidden until the spin ends, then animates in -->
         <div class="flip-result-panel" id="flipResultPanel">
-            <!-- Decorative corner accents -->
-            <span class="flip-corner flip-corner--tl"></span>
-            <span class="flip-corner flip-corner--tr"></span>
-            <span class="flip-corner flip-corner--bl"></span>
-            <span class="flip-corner flip-corner--br"></span>
-
-            <div class="flip-result-headline" id="flipResultHeadline">
+<div class="flip-result-headline" id="flipResultHeadline">
                 <span id="globalWinnerText">—</span>
                 <i class="flip-headline-bar"></i>
             </div>
@@ -547,11 +541,18 @@
             const overlay = document.getElementById('globalFlipOverlay');
             if (!overlay) return;
             overlay.addEventListener('mousedown', function (e) {
-                if (!isAnimating || flipSkipped) return;
-                if (document.getElementById('flipStage').classList.contains('decided')) return;
-                // Don't skip when clicking the close button or hash
-                if (e.target.closest('.btn-close-flip') || e.target.closest('.result-hash')) return;
-                skipFlipAnimation();
+                // Ignore clicks on the panel itself, the close button, or the hash.
+                if (e.target.closest('.flip-result-panel') ||
+                    e.target.closest('.btn-close-flip') ||
+                    e.target.closest('.result-hash')) return;
+
+                // After the result is decided, clicking the dim background closes the panel.
+                if (document.getElementById('flipStage').classList.contains('decided')) {
+                    closeGlobalFlip();
+                    return;
+                }
+                // Mid-animation: a background click skips to the result.
+                if (isAnimating && !flipSkipped) skipFlipAnimation();
             });
 
             {% if user.is_authenticated %}
