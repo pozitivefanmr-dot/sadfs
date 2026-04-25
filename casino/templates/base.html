@@ -829,20 +829,26 @@
                 </div>
                 <div class="chat-reply-bar-text" id="chatReplyBarText"></div>
             </div>
-
-            <div class="chat-input-area">
-                <input type="text" id="chatInput" class="chat-input-field" placeholder="Type a message…" maxlength="300"
-                    data-i18n-placeholder="chat.inputPlaceholder"
-                    data-current-user="{{ request.user.username }}"
-                    onkeypress="handleChatEnter(event)">
-                <button class="chat-send-btn" onclick="sendMessage()" title="Send">
-                    <i class="bi bi-arrow-up-circle-fill"></i>
-                </button>
-                <span class="chat-login-prompt__title" data-i18n="chat.loginTitle">Log in to chat</span>
-                <span class="chat-login-prompt__sub" data-i18n="chat.loginSub">Sign in to send messages</span>
-            </div>
-            <i class="bi bi-arrow-right chat-login-prompt__arrow"></i>
+            <button type="button" class="chat-reply-bar-close" onclick="cancelReply()" title="Cancel">
+                <i class="bi bi-x-lg"></i>
+            </button>
         </div>
+
+        <div class="chat-input-area">
+            <input type="text" id="chatInput" class="chat-input-field" placeholder="Type a message…" maxlength="300"
+                data-i18n-placeholder="chat.inputPlaceholder"
+                data-current-user="{{ request.user.username }}"
+                onkeypress="handleChatEnter(event)">
+            <button class="chat-send-btn" onclick="sendMessage()" title="Send">
+                <i class="bi bi-arrow-up-circle-fill"></i>
+            </button>
+        </div>
+        {% else %}
+        <a class="chat-login-prompt" onclick="openAuthModal()">
+            <span class="chat-login-prompt__title" data-i18n="chat.loginTitle">Log in to chat</span>
+            <span class="chat-login-prompt__sub" data-i18n="chat.loginSub">Sign in to send messages</span>
+            <i class="bi bi-arrow-right chat-login-prompt__arrow"></i>
+        </a>
         {% endif %}
     </div>
 
