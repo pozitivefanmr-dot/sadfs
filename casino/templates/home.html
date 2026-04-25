@@ -197,8 +197,8 @@
         </a>
 
         <div class="game-mode-card game-mode-card--soon" aria-disabled="true">
-            <div class="game-mode-card__bg">
-                <img src="{% static 'img/h_chip.png' %}" alt="" class="game-mode-card__chip">
+            <div class="game-mode-card__bg game-mode-card__bg--upgrade">
+                <img src="{% static 'img/upgrade.png' %}" alt="" class="game-mode-card__chip game-mode-card__chip--upgrade">
             </div>
             <div class="game-mode-card__glow"></div>
             <div class="game-mode-card__content">
@@ -206,6 +206,29 @@
                     <span class="game-mode-card__tag game-mode-card__tag--soon"><i class="bi bi-hourglass-split"></i> <span data-i18n="home.modeSoonTag">IN DEVELOPMENT</span></span>
                     <h2 class="game-mode-card__title">UPGRADER</h2>
                     <p class="game-mode-card__desc" data-i18n="home.upgraderDesc">Spin the wheel and try to upgrade your MM2 item to something rarer — risk vs reward.</p>
+                </div>
+                <div class="game-mode-card__bottom">
+                    <span class="game-mode-card__status game-mode-card__status--soon">
+                        <i class="bi bi-tools"></i>
+                        <span data-i18n="home.modeSoonStatus">Work in progress</span>
+                    </span>
+                    <span class="game-mode-card__cta game-mode-card__cta--soon">
+                        <i class="bi bi-lock-fill"></i> <span data-i18n="home.modeComingSoon">COMING SOON</span>
+                    </span>
+                </div>
+            </div>
+        </div>
+
+        <div class="game-mode-card game-mode-card--soon" aria-disabled="true">
+            <div class="game-mode-card__bg game-mode-card__bg--jackpot">
+                <img src="{% static 'img/sv_coin.png' %}" alt="" class="game-mode-card__chip game-mode-card__chip--jackpot">
+            </div>
+            <div class="game-mode-card__glow"></div>
+            <div class="game-mode-card__content">
+                <div class="game-mode-card__top">
+                    <span class="game-mode-card__tag game-mode-card__tag--soon"><i class="bi bi-hourglass-split"></i> <span data-i18n="home.modeSoonTag">IN DEVELOPMENT</span></span>
+                    <h2 class="game-mode-card__title">JACKPOT</h2>
+                    <p class="game-mode-card__desc" data-i18n="home.jackpotDesc">Pool your items with other players — one random winner takes the entire jackpot.</p>
                 </div>
                 <div class="game-mode-card__bottom">
                     <span class="game-mode-card__status game-mode-card__status--soon">
