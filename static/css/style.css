@@ -16332,25 +16332,51 @@ body .chat-sidebar .chat-send-btn svg { width: 18px !important; fill: #041a10 !i
     align-items: center;
     justify-content: center;
     align-self: center;
-    width: 46px;
-    height: 46px;
-    border-radius: 50%;
-    background:
-        radial-gradient(circle, rgba(0, 255, 157, 0.18) 0%, transparent 70%),
-        linear-gradient(135deg, rgba(20, 26, 24, 0.85), rgba(8, 12, 10, 0.85));
-    border: 1px solid rgba(0, 255, 157, 0.35);
-    box-shadow:
-        0 0 24px rgba(0, 255, 157, 0.18),
-        inset 0 0 16px rgba(0, 255, 157, 0.08);
-    color: #00ff9d;
-    font-family: 'Montserrat', sans-serif;
-    font-weight: 900;
-    font-size: 0.78rem;
-    letter-spacing: 1.2px;
-    text-shadow: 0 0 10px rgba(0, 255, 157, 0.6);
+    width: 110px;
+    height: 110px;
+    background: transparent;
+    border: none;
+    box-shadow: none;
     opacity: 0;
     transform: scale(0.6);
     animation: flipVsIn 0.6s cubic-bezier(0.34, 1.56, 0.64, 1) 0.35s forwards;
+}
+.flip-vs-coin-perspective {
+    width: 100%;
+    height: 100%;
+    perspective: 800px;
+    position: relative;
+    filter: drop-shadow(0 6px 16px rgba(0, 0, 0, 0.55)) drop-shadow(0 0 18px rgba(0, 255, 157, 0.22));
+}
+.flip-vs-coin {
+    width: 100%;
+    height: 100%;
+    position: relative;
+    transform-style: preserve-3d;
+    will-change: transform;
+    animation: flipVsCoinSpin 2.4s linear infinite;
+}
+.flip-vs-coin-side {
+    position: absolute;
+    inset: 0;
+    border-radius: 50%;
+    backface-visibility: hidden;
+    -webkit-backface-visibility: hidden;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+.flip-vs-coin-side img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    pointer-events: none;
+}
+.flip-vs-coin-side--a { transform: rotateY(0deg); }
+.flip-vs-coin-side--b { transform: rotateY(180deg); }
+@keyframes flipVsCoinSpin {
+    0%   { transform: rotateY(0deg); }
+    100% { transform: rotateY(360deg); }
 }
 @keyframes flipVsIn {
     to { opacity: 1; transform: scale(1); }
@@ -16366,8 +16392,9 @@ body .chat-sidebar .chat-send-btn svg { width: 18px !important; fill: #041a10 !i
     width: 100%;
     padding: 16px 12px;
     border-radius: 16px;
-    background: linear-gradient(180deg, rgba(255, 255, 255, 0.025), rgba(255, 255, 255, 0.005));
-    border: 1px solid rgba(255, 255, 255, 0.07);
+    background: linear-gradient(180deg, rgba(255, 255, 255, 0.04), rgba(255, 255, 255, 0.015)),
+        rgba(40, 44, 50, 0.55);
+    border: 1px solid rgba(255, 255, 255, 0.08);
     overflow: hidden;
     transition:
         opacity 0.6s ease,
@@ -16425,12 +16452,13 @@ body .chat-sidebar .chat-send-btn svg { width: 18px !important; fill: #041a10 !i
 
 /* Crown / trophy badge (winner only) */
 .flip-side-crown {
+    display: none !important;
     position: absolute;
     top: -6px;
     right: -6px;
     width: 30px;
     height: 30px;
-    display: flex;
+    /* Hidden — winner is highlighted via the green border/glow on the avatar instead */
     align-items: center;
     justify-content: center;
     border-radius: 50%;
@@ -16523,8 +16551,8 @@ body .chat-sidebar .chat-send-btn svg { width: 18px !important; fill: #041a10 !i
     margin-top: 4px;
 }
 .flip-side-item {
-    width: 70px;
-    height: 70px;
+    width: 58px;
+    height: 58px;
     border-radius: 50%;
     background:
         radial-gradient(circle at 30% 30%, rgba(255, 255, 255, 0.06), transparent 60%),
@@ -16558,29 +16586,28 @@ body .chat-sidebar .chat-send-btn svg { width: 18px !important; fill: #041a10 !i
 
 /* WINNER */
 .flip-stage.decided .flip-side.is-winner {
-    border-color: rgba(0, 255, 157, 0.45);
-    background: linear-gradient(180deg, rgba(0, 255, 157, 0.08), rgba(0, 255, 157, 0.015));
-    transform: translateY(-3px);
+    border-color: rgba(0, 255, 157, 0.3);
+    background: linear-gradient(180deg, rgba(0, 255, 157, 0.035), rgba(255, 255, 255, 0.015)),
+        rgba(40, 44, 50, 0.55);
+    transform: translateY(-2px);
     box-shadow:
-        0 18px 48px rgba(0, 0, 0, 0.55),
-        0 0 36px rgba(0, 255, 157, 0.18),
-        inset 0 0 32px rgba(0, 255, 157, 0.05);
+        0 12px 30px rgba(0, 0, 0, 0.45),
+        0 0 14px rgba(0, 255, 157, 0.07);
 }
 .flip-stage.decided .flip-side.is-winner .flip-side-glow {
-    opacity: 1;
-    background: radial-gradient(ellipse at 50% 30%, rgba(0, 255, 157, 0.25) 0%, transparent 60%);
+    opacity: 0.55;
+    background: radial-gradient(ellipse at 50% 30%, rgba(0, 255, 157, 0.1) 0%, transparent 65%);
     animation: winnerGlowPulse 2.4s ease-in-out infinite;
 }
 @keyframes winnerGlowPulse {
-    0%, 100% { opacity: 0.85; }
-    50%      { opacity: 1; }
+    0%, 100% { opacity: 0.4; }
+    50%      { opacity: 0.6; }
 }
 .flip-stage.decided .flip-side.is-winner .flip-side-avatar {
-    border-color: #00ff9d;
+    border-color: rgba(0, 255, 157, 0.7);
     box-shadow:
-        0 18px 40px rgba(0, 0, 0, 0.55),
-        0 0 0 3px rgba(0, 255, 157, 0.18),
-        0 0 28px rgba(0, 255, 157, 0.45),
+        0 10px 24px rgba(0, 0, 0, 0.5),
+        0 0 12px rgba(0, 255, 157, 0.18),
         inset 0 0 0 1px rgba(0, 0, 0, 0.4);
 }
 .flip-stage.decided .flip-side.is-winner .flip-side-crown {
@@ -16590,13 +16617,13 @@ body .chat-sidebar .chat-send-btn svg { width: 18px !important; fill: #041a10 !i
 }
 .flip-stage.decided .flip-side.is-winner .flip-side-name {
     color: #ffffff;
-    text-shadow: 0 0 14px rgba(0, 255, 157, 0.45);
+    text-shadow: 0 0 8px rgba(0, 255, 157, 0.2);
 }
 .flip-stage.decided .flip-side.is-winner .flip-side-bet {
-    background: rgba(0, 255, 157, 0.14);
-    border-color: rgba(0, 255, 157, 0.45);
+    background: rgba(0, 255, 157, 0.08);
+    border-color: rgba(0, 255, 157, 0.3);
     color: #d8ffec;
-    box-shadow: 0 0 18px rgba(0, 255, 157, 0.18);
+    box-shadow: none;
 }
 .flip-stage.decided .flip-side.is-winner .flip-side-item {
     border-color: rgba(0, 255, 157, 0.25);
@@ -16730,10 +16757,10 @@ body .chat-sidebar .chat-send-btn svg { width: 18px !important; fill: #041a10 !i
         grid-template-columns: 1fr;
         gap: 10px;
     }
-    .flip-vs { width: 38px; height: 38px; font-size: 0.7rem; }
+    .flip-vs { width: 84px; height: 84px; }
     .flip-side-avatar { width: 78px; height: 78px; }
     .flip-side-crown { width: 26px; height: 26px; font-size: 0.78rem; top: -5px; right: -5px; }
-    .flip-side-item { width: 56px; height: 56px; }
+    .flip-side-item { width: 48px; height: 48px; }
     .flip-total-value { font-size: 1.2rem; }
     .flip-mini-coin-perspective { width: 50px; height: 50px; }
 }
