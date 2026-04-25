@@ -1044,6 +1044,42 @@ ul {
         inset 0 1px 0 rgba(0, 255, 157, 0.08);
 }
 
+/* Active (non-soon) cards: brighter side glow strips on left + right */
+.game-mode-card:not(.game-mode-card--soon)::after {
+    content: "";
+    position: absolute;
+    top: 12%;
+    bottom: 12%;
+    left: 0;
+    width: 2px;
+    border-radius: 4px;
+    background: linear-gradient(180deg, transparent, rgba(0, 255, 157, 0.95), transparent);
+    box-shadow: 0 0 20px 2px rgba(0, 255, 157, 0.55), 0 0 40px rgba(0, 255, 157, 0.25);
+    pointer-events: none;
+    opacity: 0.9;
+    transition: opacity 0.6s ease, box-shadow 0.6s ease;
+    z-index: 1;
+}
+.game-mode-card:not(.game-mode-card--soon) .game-mode-card__content::before {
+    content: "";
+    position: absolute;
+    top: 12%;
+    bottom: 12%;
+    right: 0;
+    width: 2px;
+    border-radius: 4px;
+    background: linear-gradient(180deg, transparent, rgba(0, 255, 157, 0.95), transparent);
+    box-shadow: 0 0 20px 2px rgba(0, 255, 157, 0.55), 0 0 40px rgba(0, 255, 157, 0.25);
+    pointer-events: none;
+    opacity: 0.9;
+    transition: opacity 0.6s ease, box-shadow 0.6s ease;
+}
+.game-mode-card:not(.game-mode-card--soon):hover::after,
+.game-mode-card:not(.game-mode-card--soon):hover .game-mode-card__content::before {
+    opacity: 1;
+    box-shadow: 0 0 26px 3px rgba(0, 255, 157, 0.75), 0 0 52px rgba(0, 255, 157, 0.35);
+}
+
 /* Subtle grid pattern */
 .game-mode-card::before {
     content: "";
@@ -1280,24 +1316,36 @@ ul {
             drop-shadow(0 14px 32px rgba(0, 0, 0, 0.4));
 }
 
-/* Upgrader — arrow tilted slightly to the right */
+/* Upgrader — smaller arrow icon, idle float; hover slowly rotates further right */
+.game-mode-card__bg--upgrade {
+    width: 150px !important;
+    height: 150px !important;
+    right: 8px !important;
+    top: 38% !important;
+}
 .game-mode-card__chip--upgrade {
     animation: upgradeIdleFloat 11s ease-in-out infinite !important;
+    transition: transform 1.8s cubic-bezier(0.22, 1, 0.36, 1),
+                filter 1.2s ease !important;
 }
 @keyframes upgradeIdleFloat {
-    0%, 100% { transform: rotate(14deg)  translate(0, 0); }
-    50%      { transform: rotate(20deg)  translate(-4px, -6px); }
+    0%, 100% { transform: rotate(10deg) translate(0, 0); }
+    50%      { transform: rotate(14deg) translate(-3px, -5px); }
+}
+.game-mode-card--soon:hover .game-mode-card__chip--upgrade {
+    animation: none !important;
+    transform: rotate(28deg) translate(-4px, -3px) scale(1.04) !important;
 }
 
-/* Jackpot — softer, more subtle tilt the other way */
-.game-mode-card__chip--jackpot {
-    animation: jackpotIdleFloat 12s ease-in-out infinite !important;
+/* Roulette — softer, more subtle tilt the other way */
+.game-mode-card__chip--roulette {
+    animation: rouletteIdleFloat 14s linear infinite !important;
     filter: grayscale(0.95) brightness(0.8)
             drop-shadow(0 14px 32px rgba(0, 0, 0, 0.4)) !important;
 }
-@keyframes jackpotIdleFloat {
-    0%, 100% { transform: rotate(-6deg) translate(0, 0); }
-    50%      { transform: rotate(0deg)  translate(-4px, -8px); }
+@keyframes rouletteIdleFloat {
+    from { transform: rotate(0deg); }
+    to   { transform: rotate(360deg); }
 }
 .game-mode-card--soon .game-mode-card__title {
     background: linear-gradient(135deg, #d8dde2 0%, #98a0a8 60%, #5e656c 100%);
@@ -10490,8 +10538,8 @@ input[type=range].snow-range::-webkit-slider-thumb {
     position: fixed;
     top: 0;
     right: 0;
-    width: 270px;
-    max-width: min(92vw, 270px);
+    width: 240px;
+    max-width: min(92vw, 240px);
     height: 100vh;
     background:
         radial-gradient(circle at top right, rgba(0, 255, 157, 0.08), transparent 34%),
@@ -11169,8 +11217,8 @@ input[type=range].snow-range::-webkit-slider-thumb {
     position: fixed;
     top: 0;
     right: 0;
-    width: 270px;
-    max-width: min(92vw, 270px);
+    width: 240px;
+    max-width: min(92vw, 240px);
     height: 100vh;
     background: rgba(5, 8, 7, 0.98);
     backdrop-filter: blur(15px);
@@ -11213,7 +11261,7 @@ input[type=range].snow-range::-webkit-slider-thumb {
 
 /* When chat is open, move button next to sidebar */
 .chat-sidebar:not(.collapsed)~.chat-toggle-tab {
-    right: 282px;
+    right: 252px;
 }
 
 /* Hide toggle button when chat is open ON MOBILE */
