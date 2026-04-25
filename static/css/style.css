@@ -16071,7 +16071,7 @@ body .chat-sidebar .chat-send-btn:active {
 body .chat-sidebar .chat-send-btn svg { width: 18px !important; fill: #041a10 !important; }
 
 /* --- FIX TOGGLE BUTTON OVERLAP WITH OPEN SIDEBAR --- */
-.chat-sidebar:not(.collapsed) ~ .chat-toggle-tab { right: 360px !important; }
+.chat-sidebar:not(.collapsed) ~ .chat-toggle-tab { right: 335px !important; }
 @media (max-width: 768px) {
     .chat-sidebar:not(.collapsed) ~ .chat-toggle-tab {
         right: 20px !important; /* hidden on mobile anyway, keep safe */

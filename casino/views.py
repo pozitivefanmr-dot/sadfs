@@ -60,16 +60,20 @@ ALLOWED_IMAGE_HOSTS = {
     'www.roblox.com',
     'roblox.com',
 }
-SAFE_IMAGE_FALLBACK = "https://static.wikia.nocookie.net/murder-mystery-2/images/5/53/Godly_Icon.png"
+SAFE_IMAGE_FALLBACK = "/static/img/item_placeholder.svg"
 
 
 def safe_image_url(url):
-    """Возвращает URL только если он на https и хост в whitelist. Иначе fallback."""
+    """Возвращает URL только если он на https и хост в whitelist. Иначе fallback.
+    Локальные пути (/static/...) пропускаются как валидные."""
     if not url or not isinstance(url, str):
         return SAFE_IMAGE_FALLBACK
     url = url.strip()
     if len(url) > 500:
         return SAFE_IMAGE_FALLBACK
+    # Allow local static placeholder paths
+    if url.startswith('/static/') or url.startswith('/media/'):
+        return url
     try:
         parsed = _urlparse(url)
     except Exception:
@@ -398,14 +402,112 @@ def home(request):
     if request.user.is_authenticated:
         avatar_url = get_cached_avatar(request.user.username)
 
-        inventory_items = UserItem.objects.filter(
+        inventory_qs = UserItem.objects.filter(
             owner_name__iexact=request.user.username,
             status='available'
         )
-        inventory_count = inventory_items.count()
+        inventory_count = inventory_qs.count()
 
         current_assets = UserItem.objects.filter(owner_name__iexact=request.user.username, status='available')
         total_profit = current_assets.aggregate(Sum('item_value'))['item_value__sum'] or 0
+
+        # Materialize and self-heal item images:
+        #   1) detect bad URLs (empty, legacy wikia Godly fallback, legacy
+        #      roblox.com/Thumbs/Asset.ashx → blank, http://…),
+        #   2) try lookup by item_name from other UserItems (rbxcdn preferred),
+        #   3) for remaining bad URLs that contain an assetId, do ONE batch
+        #      call to Roblox thumbnails API and persist the resolved URL,
+        #   4) fall back to local SVG placeholder so <img> never breaks.
+        inventory_items = list(inventory_qs)
+        if inventory_items:
+            def _is_bad_image_url(u):
+                if not u:
+                    return True
+                u_low = u.lower()
+                if u == SAFE_IMAGE_FALLBACK:
+                    return True
+                if 'godly_icon' in u_low:
+                    return True
+                # Legacy Roblox thumbs endpoint — frequently returns blank image
+                if '/thumbs/asset.ashx' in u_low:
+                    return True
+                # HTTP (not HTTPS) URLs are also rejected by safe_image_url
+                if u_low.startswith('http://'):
+                    return True
+                return False
+
+            def _extract_asset_id(u):
+                if not u:
+                    return None
+                m = re.search(r'(?:rbxassetid://|assetId=|id=)(\d+)', u, re.IGNORECASE)
+                return m.group(1) if m else None
+
+            # Build item_name → best image URL (only valid URLs, prefer rbxcdn)
+            name_to_image = {}
+            for ui in UserItem.objects.exclude(image_url='').values('item_name', 'image_url'):
+                url = (ui['image_url'] or '').strip()
+                if _is_bad_image_url(url):
+                    continue
+                name = ui['item_name']
+                existing = name_to_image.get(name, '')
+                if not existing:
+                    name_to_image[name] = url
+                elif 'rbxcdn.com' in url and 'rbxcdn.com' not in existing:
+                    name_to_image[name] = url
+
+            # Pass 1: name lookup
+            need_api = []  # list of (item, asset_id)
+            for item in inventory_items:
+                url = (item.image_url or '').strip()
+                if not _is_bad_image_url(url):
+                    continue
+                name = item.item_name
+                resolved = name_to_image.get(name, '')
+                if not resolved:
+                    base = re.sub(r'\s*\(x+\d+\)\s*$', '', name).strip()
+                    if base and base != name:
+                        resolved = name_to_image.get(base, '')
+                if resolved:
+                    item.image_url = resolved
+                    continue
+                # Try to recover asset_id from the existing bad URL
+                aid = _extract_asset_id(url)
+                if aid:
+                    need_api.append((item, aid))
+                else:
+                    item.image_url = SAFE_IMAGE_FALLBACK
+
+            # Pass 2: batch Roblox thumbnails API call (one HTTP request)
+            if need_api:
+                unique_ids = list({aid for _, aid in need_api})[:50]  # safety cap
+                id_to_url = {}
+                try:
+                    api_url = (
+                        "https://thumbnails.roblox.com/v1/assets"
+                        f"?assetIds={','.join(unique_ids)}"
+                        "&returnPolicy=PlaceHolder&size=420x420&format=Png"
+                    )
+                    resp = requests.get(api_url, timeout=4)
+                    if resp.status_code == 200:
+                        for d in (resp.json().get('data') or []):
+                            tid = str(d.get('targetId') or '')
+                            iurl = d.get('imageUrl') or ''
+                            if tid and iurl:
+                                id_to_url[tid] = iurl
+                except Exception as exc:
+                    logger.warning("home: roblox thumbnails API failed: %s", exc)
+
+                for item, aid in need_api:
+                    new_url = id_to_url.get(str(aid))
+                    if new_url:
+                        item.image_url = new_url
+                        # Persist resolved URL so subsequent renders are instant
+                        try:
+                            UserItem.objects.filter(id=item.id).update(image_url=new_url)
+                        except Exception:
+                            pass
+                    else:
+                        item.image_url = SAFE_IMAGE_FALLBACK
 
     # Последние 50 завершённых игр для горизонтальной ленты
     recent_games = CoinflipGame.objects.filter(
@@ -489,8 +591,7 @@ def trade(request):
         players_set = set()
         for g in logs:
             players_set.add(g.player1)
-            if g.player2:
-                players_set.add(g.player2)
+            if g.player2: players_set.add(g.player2)
         for p_name in players_set:
             game_avatars[p_name] = get_cached_avatar(p_name)
 
@@ -1690,7 +1791,7 @@ def api_confirm_withdraw(request):
 
             # Строго по item_id — удаляем только тот самый UserItem, который был
             # заявлен на вывод. Раньше фильтр шёл по item_name и сносил сразу
-            # все совпадающие withdrawing-предметы (bug C3 → потеря предметов).
+            # все withdrawing-предметы с тем же названием (bug C3 → потеря предметов).
             if task.item_id is not None:
                 withdrawn = list(UserItem.objects.select_for_update().filter(
                     id=task.item_id,
@@ -1755,7 +1856,7 @@ def convert_asset_to_url(roblox_asset_link):
     Конвертация с отладкой.
     Только API. Если API не дало картинку -> возвращает дефолт.
     """
-    DEFAULT_IMG = "https://static.wikia.nocookie.net/murder-mystery-2/images/5/53/Godly_Icon.png"
+    DEFAULT_IMG = SAFE_IMAGE_FALLBACK
 
     if not roblox_asset_link:
         return DEFAULT_IMG

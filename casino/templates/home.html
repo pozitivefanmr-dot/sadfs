@@ -343,7 +343,7 @@
                 <div class="dashboard-item-img">
                     <!-- Используем item.image_url -->
                     <img src="{{ item.image_url }}" alt="{{ item.item_name }}" loading="lazy" decoding="async"
-                        onerror="this.src='https://static.wikia.nocookie.net/murder-mystery-2/images/5/53/Godly_Icon.png'">
+                        onerror="this.onerror=null; this.src='{% static 'img/item_placeholder.svg' %}'">
                 </div>
                 <div class="item-title" title="{{ item.item_name }}">{{ item.item_name }}</div>
                 <div class="item-price-tag">
