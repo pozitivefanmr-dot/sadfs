@@ -1964,16 +1964,34 @@ def check_flip_status(request):
     game = game_p1 or game_p2
 
     if game:
-        # Формируем данные для анимации
+        # Helper: ensure each item dict carries a usable image URL
+        def _normalize_items(items):
+            out = []
+            for it in (items or []):
+                if not isinstance(it, dict):
+                    continue
+                out.append({
+                    'name': it.get('name', ''),
+                    'image': safe_image_url(it.get('image', '')),
+                    'value': it.get('value', 0),
+                })
+            return out
+
         data = {
             'found': True,
             'game_id': game.id,
             'player1': game.player1,
             'player2': game.player2,
+            'player1_avatar': get_cached_avatar(game.player1) or DEFAULT_AVATAR_URL,
+            'player2_avatar': (get_cached_avatar(game.player2) or DEFAULT_AVATAR_URL) if game.player2 else '',
+            'value1': game.value1 or 0,
+            'value2': game.value2 or 0,
+            'items1': _normalize_items(game.items1),
+            'items2': _normalize_items(game.items2),
             'winner': game.winner,
-            'total_bet': game.value1 + game.value2,
-            'creator_side': game.creator_side,  # 'green' или 'yellow'
-            'result_code': game.random_result,  # 1 или 2
+            'total_bet': (game.value1 or 0) + (game.value2 or 0),
+            'creator_side': game.creator_side,
+            'result_code': game.random_result,
             'game_hash': game.game_hash or 'N/A',
         }
         return JsonResponse(data)

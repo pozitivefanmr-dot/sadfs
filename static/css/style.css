@@ -5275,8 +5275,8 @@ input[type=range].snow-range-v2::-moz-range-thumb {
 
 /* КАРТИНКА ВНУТРИ КРУГА */
 .game-item-img {
-    width: 80%;
-    height: 80%;
+    width: 72%;
+    height: 72%;
     object-fit: contain;
     margin: auto;
 }
@@ -5498,8 +5498,8 @@ input[type=range].snow-range-v2::-moz-range-thumb {
 
 /* КАРТИНКА ВНУТРИ КРУГА */
 .game-item-img {
-    width: 80%;
-    height: 80%;
+    width: 72%;
+    height: 72%;
     object-fit: contain;
     margin: auto;
 }
@@ -16152,4 +16152,329 @@ body .chat-sidebar .chat-send-btn svg { width: 18px !important; fill: #041a10 !i
     body .chat-sidebar .chat-avatar { width: 40px !important; height: 40px !important; }
     body .chat-sidebar .chat-bubble { max-width: 95% !important; padding: 10px 12px !important; }
     body .chat-sidebar .chat-username-name { max-width: 120px; }
+}
+
+/* =================================================================
+   FLIP RESULT — REDESIGN (gray palette, two columns + small fast coin)
+   Overrides legacy .flip-result-box / .coin-container styling.
+   ================================================================= */
+
+/* Stage: three columns (P1 / coin / P2) */
+.flip-overlay .flip-stage {
+    position: relative;
+    z-index: 2;
+    display: grid;
+    grid-template-columns: minmax(220px, 1fr) auto minmax(220px, 1fr);
+    align-items: stretch;
+    justify-items: center;
+    gap: 28px;
+    width: min(940px, calc(100vw - 32px));
+    padding: 28px;
+    background:
+        radial-gradient(ellipse at 50% 0%, rgba(255, 255, 255, 0.04) 0%, transparent 60%),
+        linear-gradient(180deg, rgba(28, 30, 34, 0.85) 0%, rgba(18, 20, 24, 0.92) 100%);
+    border: 1px solid rgba(255, 255, 255, 0.06);
+    border-radius: 24px;
+    box-shadow:
+        0 30px 80px rgba(0, 0, 0, 0.55),
+        inset 0 1px 0 rgba(255, 255, 255, 0.05);
+    backdrop-filter: blur(28px) saturate(1.4);
+    -webkit-backdrop-filter: blur(28px) saturate(1.4);
+}
+
+/* Player column */
+.flip-side {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 12px;
+    width: 100%;
+    padding: 22px 16px;
+    border-radius: 18px;
+    background: linear-gradient(180deg, rgba(255, 255, 255, 0.025), rgba(255, 255, 255, 0.005));
+    border: 1px solid rgba(255, 255, 255, 0.06);
+    transition: opacity 0.55s ease, filter 0.55s ease, border-color 0.4s ease, background 0.4s ease, transform 0.4s ease;
+}
+
+/* Avatar */
+.flip-side-avatar {
+    position: relative;
+    width: 96px;
+    height: 96px;
+    border-radius: 50%;
+    overflow: hidden;
+    border: 2px solid rgba(255, 255, 255, 0.08);
+    box-shadow:
+        0 10px 28px rgba(0, 0, 0, 0.45),
+        inset 0 0 0 1px rgba(0, 0, 0, 0.4);
+    background: #1a1d22;
+    transition: border-color 0.4s ease, box-shadow 0.4s ease;
+}
+.flip-side-avatar img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+}
+/* Loser X overlay (hidden by default) */
+.flip-side-avatar .flip-loser-x {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: rgba(10, 12, 16, 0.55);
+    color: #ff5b5b;
+    font-size: 2.4rem;
+    opacity: 0;
+    transform: scale(0.6) rotate(-12deg);
+    transition: opacity 0.35s ease 0.15s, transform 0.45s cubic-bezier(0.34, 1.56, 0.64, 1) 0.15s;
+    pointer-events: none;
+    backdrop-filter: blur(2px);
+}
+
+/* Name */
+.flip-side-name {
+    font-family: 'Montserrat', sans-serif;
+    font-weight: 800;
+    font-size: 0.95rem;
+    letter-spacing: 0.5px;
+    color: #d6dde2;
+    text-align: center;
+    max-width: 100%;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    transition: color 0.4s ease;
+}
+
+/* Per-side bet */
+.flip-side-bet {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 6px 12px;
+    border-radius: 999px;
+    background: rgba(255, 255, 255, 0.04);
+    border: 1px solid rgba(255, 255, 255, 0.07);
+    color: #fff;
+    font-family: 'Montserrat', sans-serif;
+    font-weight: 800;
+    font-size: 0.92rem;
+    transition: background 0.4s ease, border-color 0.4s ease, color 0.4s ease;
+}
+.flip-side-bet-coin {
+    width: 16px;
+    height: 16px;
+    object-fit: contain;
+    opacity: 0.9;
+}
+
+/* Items grid */
+.flip-side-items {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 6px;
+    width: 100%;
+    margin-top: 4px;
+}
+.flip-side-item {
+    width: 38px;
+    height: 38px;
+    border-radius: 50%;
+    background: radial-gradient(circle, #1c1f24 0%, #0d0f12 100%);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+}
+.flip-side-item img {
+    width: 72%;
+    height: 72%;
+    object-fit: contain;
+}
+.flip-side-item--more {
+    color: #c7cdd3;
+    font-family: 'Montserrat', sans-serif;
+    font-weight: 800;
+    font-size: 0.72rem;
+    letter-spacing: 0.5px;
+}
+
+/* Decided state — winner & loser */
+.flip-stage.decided .flip-side.is-winner {
+    border-color: rgba(255, 255, 255, 0.18);
+    background: linear-gradient(180deg, rgba(255, 255, 255, 0.05), rgba(255, 255, 255, 0.015));
+    transform: translateY(-2px);
+}
+.flip-stage.decided .flip-side.is-winner .flip-side-avatar {
+    border-color: rgba(255, 255, 255, 0.28);
+    box-shadow:
+        0 14px 32px rgba(0, 0, 0, 0.5),
+        0 0 0 2px rgba(255, 255, 255, 0.06),
+        inset 0 0 0 1px rgba(0, 0, 0, 0.4);
+}
+.flip-stage.decided .flip-side.is-winner .flip-side-name {
+    color: #ffffff;
+}
+.flip-stage.decided .flip-side.is-winner .flip-side-bet {
+    background: rgba(255, 255, 255, 0.08);
+    border-color: rgba(255, 255, 255, 0.18);
+}
+
+.flip-stage.decided .flip-side.is-loser {
+    opacity: 0.5;
+    filter: grayscale(0.8);
+}
+.flip-stage.decided .flip-side.is-loser .flip-loser-x {
+    opacity: 1;
+    transform: scale(1) rotate(0deg);
+}
+
+/* Coin column */
+.flip-overlay .flip-coin-wrap {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 16px;
+    align-self: center;
+}
+
+/* Smaller, faster coin (override legacy 200px) */
+.flip-overlay .coin-container {
+    width: 110px !important;
+    height: 110px !important;
+    margin: 0 !important;
+    perspective: 700px;
+}
+
+.flip-total {
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 4px;
+}
+.flip-total-label {
+    font-family: 'Montserrat', sans-serif;
+    font-weight: 800;
+    font-size: 0.6rem;
+    letter-spacing: 2.5px;
+    text-transform: uppercase;
+    color: rgba(255, 255, 255, 0.45);
+}
+.flip-total-value {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    font-family: 'Montserrat', sans-serif;
+    font-weight: 900;
+    font-size: 1.45rem;
+    color: #fff;
+    text-shadow: 0 2px 10px rgba(0, 0, 0, 0.4);
+}
+.flip-total-coin {
+    width: 22px;
+    height: 22px;
+    object-fit: contain;
+    opacity: 0.95;
+}
+
+/* Footer (hash, headline, close) — appears after spin */
+.flip-overlay .flip-footer {
+    position: relative;
+    z-index: 2;
+    margin-top: 22px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 14px;
+    width: min(540px, calc(100vw - 32px));
+    opacity: 0;
+    transform: translateY(8px);
+    pointer-events: none;
+    transition: opacity 0.45s ease 0.1s, transform 0.45s ease 0.1s;
+}
+.flip-overlay .flip-footer.show {
+    opacity: 1;
+    transform: translateY(0);
+    pointer-events: auto;
+}
+
+.flip-result-headline {
+    font-family: 'Montserrat', sans-serif;
+    font-weight: 900;
+    font-size: 1.6rem;
+    letter-spacing: 4px;
+    text-transform: uppercase;
+    color: #d6dde2;
+    text-align: center;
+    line-height: 1;
+}
+.flip-result-headline.result-win { color: #ffffff; }
+.flip-result-headline.result-lose { color: #9aa0a6; }
+
+.flip-overlay .result-hash {
+    font-size: 0.7rem;
+    color: rgba(255, 255, 255, 0.45);
+    font-family: 'Courier New', monospace;
+    padding: 10px 16px;
+    background: rgba(255, 255, 255, 0.025);
+    border: 1px solid rgba(255, 255, 255, 0.06);
+    border-radius: 12px;
+    cursor: pointer;
+    word-break: break-all;
+    max-width: 100%;
+    text-align: center;
+    line-height: 1.5;
+    transition: color 0.25s ease, background 0.25s ease, border-color 0.25s ease;
+}
+.flip-overlay .result-hash i {
+    color: rgba(255, 255, 255, 0.35);
+    margin-right: 6px;
+    font-size: 0.75rem;
+}
+.flip-overlay .result-hash:hover {
+    color: #ffffff;
+    background: rgba(255, 255, 255, 0.05);
+    border-color: rgba(255, 255, 255, 0.15);
+}
+
+.flip-overlay .btn-close-flip {
+    font-family: 'Montserrat', sans-serif !important;
+    font-weight: 800 !important;
+    font-size: 0.74rem !important;
+    text-transform: uppercase !important;
+    letter-spacing: 2.5px !important;
+    padding: 11px 38px !important;
+    border-radius: 12px !important;
+    border: 1px solid rgba(255, 255, 255, 0.1) !important;
+    background: linear-gradient(135deg, rgba(255, 255, 255, 0.06), rgba(255, 255, 255, 0.02)) !important;
+    color: rgba(255, 255, 255, 0.7) !important;
+    cursor: pointer;
+    transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1) !important;
+}
+.flip-overlay .btn-close-flip:hover {
+    color: #fff !important;
+    border-color: rgba(255, 255, 255, 0.22) !important;
+    background: rgba(255, 255, 255, 0.07) !important;
+    transform: translateY(-1px);
+}
+
+/* Mobile */
+@media (max-width: 720px) {
+    .flip-overlay .flip-stage {
+        grid-template-columns: 1fr;
+        gap: 14px;
+        padding: 18px;
+    }
+    .flip-overlay .flip-coin-wrap { order: 2; }
+    .flip-overlay .flip-side--p1   { order: 1; }
+    .flip-overlay .flip-side--p2   { order: 3; }
+    .flip-side-avatar { width: 78px; height: 78px; }
+    .flip-overlay .coin-container { width: 90px !important; height: 90px !important; }
+    .flip-result-headline { font-size: 1.25rem; letter-spacing: 3px; }
 }

@@ -98,7 +98,7 @@
 
     <link rel="icon" type="image/png" sizes="64x64" href="{% static 'img/favicon.png' %}">
     <link rel="apple-touch-icon" sizes="180x180" href="{% static 'img/bg.png' %}">
-    <link rel="stylesheet" href="{% static 'css/style.css' %}?v=20260425d">
+    <link rel="stylesheet" href="{% static 'css/style.css' %}?v=20260425e">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
     <script src="{% static 'js/i18n.js' %}?v=20260425a" defer></script>
 </head>
@@ -221,44 +221,66 @@
     {% include 'footer.html' %}
 
     <div class="flip-overlay" id="globalFlipOverlay">
-        <div class="coin-container">
-            <div class="coin" id="globalCoin">
-                <div class="side side-a">
-                    <img src="{% static 'img/b_chip.png' %}" style="width:100%; height:100%; object-fit:contain;">
+        <div class="flip-stage" id="flipStage">
+            <!-- Player 1 (left) -->
+            <div class="flip-side flip-side--p1" id="flipSideP1">
+                <div class="flip-side-avatar">
+                    <img id="flipP1Avatar" src="" alt="P1">
+                    <span class="flip-loser-x"><i class="bi bi-x-lg"></i></span>
                 </div>
-                <div class="side side-b">
-                    <img src="{% static 'img/h_chip.png' %}" style="width:100%; height:100%; object-fit:contain;">
+                <div class="flip-side-name" id="flipP1Name">—</div>
+                <div class="flip-side-bet">
+                    <span id="flipP1Bet">0</span>
+                    <img src="{% static 'img/sv_coin.png' %}" class="flip-side-bet-coin" alt="SV">
                 </div>
+                <div class="flip-side-items" id="flipP1Items"></div>
+            </div>
+
+            <!-- Coin in the middle -->
+            <div class="flip-coin-wrap">
+                <div class="coin-container">
+                    <div class="coin" id="globalCoin">
+                        <div class="side side-a">
+                            <img src="{% static 'img/b_chip.png' %}" style="width:100%; height:100%; object-fit:contain;">
+                        </div>
+                        <div class="side side-b">
+                            <img src="{% static 'img/h_chip.png' %}" style="width:100%; height:100%; object-fit:contain;">
+                        </div>
+                    </div>
+                </div>
+                <div class="flip-total" id="flipTotalBlock">
+                    <span class="flip-total-label" data-i18n="flip.totalBet">TOTAL BET</span>
+                    <div class="flip-total-value">
+                        <span id="globalBetText">0</span>
+                        <img src="{% static 'img/sv_coin.png' %}" class="flip-total-coin" alt="SV">
+                    </div>
+                </div>
+            </div>
+
+            <!-- Player 2 (right) -->
+            <div class="flip-side flip-side--p2" id="flipSideP2">
+                <div class="flip-side-avatar">
+                    <img id="flipP2Avatar" src="" alt="P2">
+                    <span class="flip-loser-x"><i class="bi bi-x-lg"></i></span>
+                </div>
+                <div class="flip-side-name" id="flipP2Name">—</div>
+                <div class="flip-side-bet">
+                    <span id="flipP2Bet">0</span>
+                    <img src="{% static 'img/sv_coin.png' %}" class="flip-side-bet-coin" alt="SV">
+                </div>
+                <div class="flip-side-items" id="flipP2Items"></div>
             </div>
         </div>
 
-        <div class="flip-result-box" id="globalResultBox">
-            <span class="corner-accent tl"></span>
-            <span class="corner-accent tr"></span>
-            <span class="corner-accent bl"></span>
-            <span class="corner-accent br"></span>
-            <!-- Icon -->
-            <div class="result-icon" id="resultIcon">
-                <i class="bi bi-trophy-fill"></i>
+        <!-- Footer: title + hash + close -->
+        <div class="flip-footer" id="flipFooter">
+            <div class="flip-result-headline" id="flipResultHeadline">
+                <span id="globalWinnerText">—</span>
             </div>
-            <!-- Main title -->
-            <div class="result-title" id="globalWinnerText" data-i18n="flip.youWon">YOU WON!</div>
-            <!-- Subtitle -->
-            <div class="result-subtitle" id="resultSubtitle" data-i18n="flip.luckyOne">Lucky one!</div>
-            <!-- Bet -->
-            <div class="result-bet-row">
-                <span class="result-bet-label" data-i18n="flip.totalBet">TOTAL BET</span>
-                <div class="result-bet-amount">
-                    <span class="result-bet-value" id="globalBetText">0</span>
-                    <img src="{% static 'img/sv_coin.png' %}" class="result-coin-img" alt="SV">
-                </div>
-            </div>
-            <!-- Hash -->
             <div class="result-hash" id="globalHashText" title="Click to copy hash" onclick="copyHash(this)">
                 <i class="bi bi-shield-lock-fill"></i>
                 <span id="globalHashValue">—</span>
             </div>
-            <!-- Close -->
             <button class="btn-close-flip" onclick="closeGlobalFlip()" data-i18n="flip.close">CLOSE</button>
         </div>
     </div>
@@ -293,7 +315,58 @@
                 .catch(err => console.error("Polling error:", err));
         }
 
-        // 2. Р¤СѓРЅРєС†РёСЏ Р·Р°РїСѓСЃРєР° Р°РЅРёРјР°С†РёРё (РўРћР§Р¬-Р’-РўРћР§Р¬ РљРђРљ Р‘Р«Р›Рђ)
+        // Renders the items column for one player into the given container.
+        function renderFlipItems(container, items) {
+            container.innerHTML = '';
+            const list = items || [];
+            list.slice(0, 8).forEach(function (it) {
+                const wrap = document.createElement('div');
+                wrap.className = 'flip-side-item';
+                const img = document.createElement('img');
+                img.src = it.image || '/static/img/item_placeholder.svg';
+                img.alt = it.name || '';
+                img.title = it.name || '';
+                img.onerror = function () { this.src = '/static/img/item_placeholder.svg'; };
+                wrap.appendChild(img);
+                container.appendChild(wrap);
+            });
+            if (list.length > 8) {
+                const more = document.createElement('div');
+                more.className = 'flip-side-item flip-side-item--more';
+                more.textContent = '+' + (list.length - 8);
+                container.appendChild(more);
+            }
+        }
+
+        // Apply decided state: dim loser column, show X overlay on loser avatar.
+        function applyFlipDecision(data) {
+            const stage = document.getElementById('flipStage');
+            const sideP1 = document.getElementById('flipSideP1');
+            const sideP2 = document.getElementById('flipSideP2');
+            const winnerName = (data.winner || '').toLowerCase();
+            const p1IsWinner = (data.player1 || '').toLowerCase() === winnerName;
+
+            sideP1.classList.toggle('is-winner', p1IsWinner);
+            sideP1.classList.toggle('is-loser', !p1IsWinner);
+            sideP2.classList.toggle('is-winner', !p1IsWinner);
+            sideP2.classList.toggle('is-loser', p1IsWinner);
+            stage.classList.add('decided');
+
+            const myUsername = "{{ user.username }}".toLowerCase();
+            const iWon = (myUsername === winnerName);
+            const headlineWrap = document.getElementById('flipResultHeadline');
+            const headline = document.getElementById('globalWinnerText');
+            headlineWrap.classList.remove('result-win', 'result-lose');
+            if (iWon) {
+                headlineWrap.classList.add('result-win');
+                headline.innerText = _tr('flip.youWon', 'YOU WON!');
+            } else {
+                headlineWrap.classList.add('result-lose');
+                headline.innerText = _tr('flip.youLost', 'YOU LOST');
+            }
+            document.getElementById('flipFooter').classList.add('show');
+        }
+
         function startGlobalAnimation(data) {
             isAnimating = true;
             flipSkipped = false;
@@ -301,79 +374,50 @@
             flipTimeouts = [];
             const overlay = document.getElementById('globalFlipOverlay');
             const coin = document.getElementById('globalCoin');
-            const resultBox = document.getElementById('globalResultBox');
-            const winnerText = document.getElementById('globalWinnerText');
+            const stage = document.getElementById('flipStage');
 
-            // РџРѕРєР°Р·С‹РІР°РµРј РѕРІРµСЂР»РµР№
             overlay.classList.add('active');
-            resultBox.classList.remove('show');
+            stage.classList.remove('decided');
+            document.getElementById('flipSideP1').classList.remove('is-winner', 'is-loser');
+            document.getElementById('flipSideP2').classList.remove('is-winner', 'is-loser');
+            document.getElementById('flipFooter').classList.remove('show');
 
-            // РЎР±СЂРѕСЃ РїРѕР·РёС†РёРё РјРѕРЅРµС‚РєРё РїРµСЂРµРґ СЃС‚Р°СЂС‚РѕРј
-            coin.style.transition = 'none';
-            coin.style.transform = 'rotateX(0deg)';
-            coin.offsetHeight; // trigger reflow
-
-            // РћРїСЂРµРґРµР»СЏРµРј: СЏ РІС‹РёРіСЂР°Р» РёР»Рё РЅРµС‚?
-            const myUsername = "{{ user.username }}".toLowerCase();
-            const winnerName = data.winner.toLowerCase();
-            const iWon = (myUsername === winnerName);
-
-            // Настраиваем окно результата (win / lose)
-            const subtitle = document.getElementById('resultSubtitle');
-            const iconEl = document.getElementById('resultIcon');
-
-            resultBox.classList.remove('result-win', 'result-lose');
-
-            if (iWon) {
-                resultBox.classList.add('result-win');
-                winnerText.innerText = _tr('flip.youWon', 'YOU WON!');
-                subtitle.innerText = _tr('flip.luckyOne', 'Lucky one!');
-                iconEl.innerHTML = '<i class="bi bi-trophy-fill"></i>';
-            } else {
-                resultBox.classList.add('result-lose');
-                winnerText.innerText = _tr('flip.youLost', 'YOU LOST');
-                subtitle.innerText = _tr('flip.loser', 'Loser :(');
-                iconEl.innerHTML = '<i class="bi bi-heartbreak-fill"></i>';
-            }
-            document.getElementById('globalBetText').innerText = data.total_bet;
+            // Populate columns
+            document.getElementById('flipP1Avatar').src = data.player1_avatar || '/static/img/item_placeholder.svg';
+            document.getElementById('flipP2Avatar').src = data.player2_avatar || '/static/img/item_placeholder.svg';
+            document.getElementById('flipP1Name').innerText = data.player1 || '—';
+            document.getElementById('flipP2Name').innerText = data.player2 || '—';
+            document.getElementById('flipP1Bet').innerText = data.value1 || 0;
+            document.getElementById('flipP2Bet').innerText = data.value2 || 0;
+            renderFlipItems(document.getElementById('flipP1Items'), data.items1);
+            renderFlipItems(document.getElementById('flipP2Items'), data.items2);
+            document.getElementById('globalBetText').innerText = data.total_bet || 0;
             document.getElementById('globalHashValue').innerText = data.game_hash || 'N/A';
 
-            // === РќРђРЎРўР РћР™РљР Р’Р Р•РњР•РќР (Р—Р”Р•РЎР¬ РњР•РќРЇР•Рњ Р”Р›РРўР•Р›Р¬РќРћРЎРўР¬) ===
-            const duration = 8; // Р”Р»РёС‚РµР»СЊРЅРѕСЃС‚СЊ РІ СЃРµРєСѓРЅРґР°С… (Р±С‹Р»Рѕ 3)
-            const rotations = 15; // РљРѕР»РёС‡РµСЃС‚РІРѕ РѕР±РѕСЂРѕС‚РѕРІ (Р±С‹Р»Рѕ 5)
+            // Reset coin orientation
+            coin.style.transition = 'none';
+            coin.style.transform = 'rotateX(0deg)';
+            coin.offsetHeight;
 
-            // Р›РѕРіРёРєР° СЃС‚РѕСЂРѕРЅС‹
-            // 1 (Green) = С‡РµС‚РЅРѕРµ С‡РёСЃР»Рѕ РѕР±РѕСЂРѕС‚РѕРІ * 360
-            // 2 (Yellow) = ... + 180
+            // Faster spin: 2.5s, 10 rotations
+            const duration = 2.5;
+            const rotations = 10;
             let degrees = rotations * 360;
-            if (data.result_code !== 1) {
-                degrees += 180;
-            }
+            if (data.result_code !== 1) degrees += 180;
 
-            // Р—Р°РїСѓСЃРє РІСЂР°С‰РµРЅРёСЏ
-            // cubic-bezier(0.1, 0, 0.2, 1) вЂ” СЌС‚Рѕ СЌС„С„РµРєС‚ "Р±С‹СЃС‚СЂРѕ РІ РЅР°С‡Р°Р»Рµ, РѕС‡РµРЅСЊ РјРµРґР»РµРЅРЅРѕ РІ РєРѕРЅС†Рµ"
-            flipTimeouts.push(setTimeout(() => {
+            flipTimeouts.push(setTimeout(function () {
                 if (flipSkipped) return;
-                coin.style.transition = `transform ${duration}s cubic-bezier(0.1, 0, 0.2, 1)`;
-                coin.style.transform = `rotateX(${degrees}deg)`;
-            }, 100));
+                coin.style.transition = 'transform ' + duration + 's cubic-bezier(0.15, 0.6, 0.25, 1)';
+                coin.style.transform = 'rotateX(' + degrees + 'deg)';
+            }, 80));
 
-            // РџРѕРєР°Р· СЂРµР·СѓР»СЊС‚Р°С‚Р° (Р’СЂРµРјСЏ Р°РЅРёРјР°С†РёРё + 500РјСЃ РїР°СѓР·С‹)
-            flipTimeouts.push(setTimeout(() => {
+            flipTimeouts.push(setTimeout(function () {
                 if (flipSkipped) return;
-                const coinContainer = document.querySelector('.coin-container');
-                if (coinContainer) {
-                    coinContainer.style.transition = 'opacity 0.5s ease, transform 0.5s ease';
-                    coinContainer.style.opacity = '0';
-                    coinContainer.style.transform = 'scale(0.5)';
-                }
-                resultBox.classList.add('show');
-                markGameAsViewed(data.game_id); // РџРѕРєР°Р·С‹РІР°РµРј РѕРєРЅРѕ
-                markGameAsViewed(data.game_id);  // Р“РѕРІРѕСЂРёРј СЃРµСЂРІРµСЂСѓ "СЏ СѓРІРёРґРµР»"
-            }, (duration * 1000) + 500));
+                applyFlipDecision(data);
+                markGameAsViewed(data.game_id);
+            }, (duration * 1000) + 350));
         }
 
-        // 3. РћС‚РјРµС‡Р°РµРј, С‡С‚Рѕ РїРѕСЃРјРѕС‚СЂРµР»Рё
         function markGameAsViewed(gameId) {
             const formData = new FormData();
             formData.append('game_id', gameId);
@@ -384,31 +428,25 @@
         function copyHash(el) {
             const hash = document.getElementById('globalHashValue').innerText;
             if (hash && hash !== '—' && hash !== 'N/A') {
-                navigator.clipboard.writeText(hash).then(() => {
+                navigator.clipboard.writeText(hash).then(function () {
                     el.style.borderColor = '#00ff9d';
                     el.style.color = '#00ff9d';
-                    setTimeout(() => { el.style.borderColor = ''; el.style.color = ''; }, 1500);
+                    setTimeout(function () { el.style.borderColor = ''; el.style.color = ''; }, 1500);
                 });
             }
         }
 
-        // 4. Р—Р°РєСЂС‹С‚РёРµ
         function closeGlobalFlip() {
-            flipTimeouts.forEach(function(t) { clearTimeout(t); });
+            flipTimeouts.forEach(function (t) { clearTimeout(t); });
             flipTimeouts = [];
             flipSkipped = false;
             flipCurrentData = null;
             document.getElementById('globalFlipOverlay').classList.remove('active');
-            // Восстанавливаем монетку
-            const coinContainer = document.querySelector('.coin-container');
-            if (coinContainer) {
-                coinContainer.style.transition = 'none';
-                coinContainer.style.opacity = '1';
-                coinContainer.style.transform = 'scale(1)';
-            }
-            document.getElementById('globalResultBox').classList.remove('show');
+            document.getElementById('flipStage').classList.remove('decided');
+            document.getElementById('flipSideP1').classList.remove('is-winner', 'is-loser');
+            document.getElementById('flipSideP2').classList.remove('is-winner', 'is-loser');
+            document.getElementById('flipFooter').classList.remove('show');
             isAnimating = false;
-            // Р•СЃР»Рё РјС‹ РЅР° СЃС‚СЂР°РЅРёС†Рµ РєРѕРёРЅС„Р»РёРїР°, РѕР±РЅРѕРІРёРј РµС‘, С‡С‚РѕР±С‹ РѕР±РЅРѕРІРёС‚СЊ Р±Р°Р»Р°РЅСЃ
             if (window.location.pathname.includes('coinflip')) {
                 window.location.reload();
             }
@@ -417,51 +455,43 @@
         function skipFlipAnimation() {
             if (flipSkipped || !flipCurrentData) return;
             flipSkipped = true;
-            flipTimeouts.forEach(function(t) { clearTimeout(t); });
+            flipTimeouts.forEach(function (t) { clearTimeout(t); });
             flipTimeouts = [];
-            var coin = document.getElementById('globalCoin');
-            var resultBox = document.getElementById('globalResultBox');
-            var coinContainer = document.querySelector('.coin-container');
+            const coin = document.getElementById('globalCoin');
             coin.style.transition = 'none';
-            var finalDeg = 15 * 360;
+            let finalDeg = 10 * 360;
             if (flipCurrentData.result_code !== 1) finalDeg += 180;
             coin.style.transform = 'rotateX(' + finalDeg + 'deg)';
-            if (coinContainer) {
-                coinContainer.style.transition = 'opacity 0.4s ease, transform 0.4s ease';
-                coinContainer.style.opacity = '0';
-                coinContainer.style.transform = 'scale(0.5)';
-            }
-            resultBox.classList.add('show');
+            applyFlipDecision(flipCurrentData);
             markGameAsViewed(flipCurrentData.game_id);
         }
 
-        document.addEventListener('DOMContentLoaded', function() {
-            document.getElementById('globalFlipOverlay').addEventListener('mousedown', function() {
+        document.addEventListener('DOMContentLoaded', function () {
+            const overlay = document.getElementById('globalFlipOverlay');
+            if (!overlay) return;
+            overlay.addEventListener('mousedown', function (e) {
                 if (!isAnimating || flipSkipped) return;
-                if (document.getElementById('globalResultBox').classList.contains('show')) return;
+                if (document.getElementById('flipStage').classList.contains('decided')) return;
+                // Don't skip when clicking the close button or hash
+                if (e.target.closest('.btn-close-flip') || e.target.closest('.result-hash')) return;
                 skipFlipAnimation();
             });
-        });
 
-        // Запускаем опрос каждые 2 сек
-        {% if user.is_authenticated %}
-        // Сразу проверяем при загрузке (вдруг есть непросмотренная игра)
-        document.addEventListener('DOMContentLoaded', function() {
+            {% if user.is_authenticated %}
             setTimeout(checkFlipStatus, 500);
-        });
+            setInterval(checkFlipStatus, 2000);
 
-        setInterval(checkFlipStatus, 2000);
-
-        // Когда пользователь возвращается на вкладку — моментально проверяем
-        document.addEventListener('visibilitychange', function() {
-            if (!document.hidden && !isAnimating) {
-                checkFlipStatus();
-            }
+            // Когда пользователь возвращается на вкладку — моментально проверяем
+            document.addEventListener('visibilitychange', function() {
+                if (!document.hidden && !isAnimating) {
+                    checkFlipStatus();
+                }
+            });
+            window.addEventListener('focus', function() {
+                if (!isAnimating) checkFlipStatus();
+            });
+            {% endif %}
         });
-        window.addEventListener('focus', function() {
-            if (!isAnimating) checkFlipStatus();
-        });
-        {% endif %}
     </script>
 
 
