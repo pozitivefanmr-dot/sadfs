@@ -16567,9 +16567,9 @@ body .chat-sidebar .chat-send-btn svg { width: 18px !important; fill: #041a10 !i
     display: flex;
     align-items: center;
     justify-content: center;
-    background: rgba(8, 10, 14, 0.55);
-    backdrop-filter: blur(2px);
-    -webkit-backdrop-filter: blur(2px);
+    background: rgba(8, 10, 14, 0.4);
+    backdrop-filter: blur(1px);
+    -webkit-backdrop-filter: blur(1px);
     opacity: 0;
     transition: opacity 0.25s ease;
     pointer-events: none;
@@ -16580,11 +16580,11 @@ body .chat-sidebar .chat-send-btn svg { width: 18px !important; fill: #041a10 !i
     height: 100%;
 }
 .flip-side-avatar .flip-loser-x .x-line {
-    stroke: #ff5b5b;
-    stroke-width: 11;
+    stroke: #e64a4a;
+    stroke-width: 10;
     stroke-linecap: round;
     fill: none;
-    filter: drop-shadow(0 0 8px rgba(255, 70, 70, 0.65)) drop-shadow(0 0 16px rgba(255, 70, 70, 0.35));
+    filter: drop-shadow(0 1px 2px rgba(0, 0, 0, 0.6)) drop-shadow(0 0 4px rgba(255, 70, 70, 0.25));
     /* Use stroke-dasharray for the draw-in effect */
     stroke-dasharray: 110;
     stroke-dashoffset: 110;
@@ -16690,10 +16690,23 @@ body .chat-sidebar .chat-send-btn svg { width: 18px !important; fill: #041a10 !i
     50%      { opacity: 0.6; }
 }
 .flip-stage.decided .flip-side.is-winner .flip-side-avatar {
-    border-color: rgba(255, 255, 255, 0.35);
+    border-color: rgba(255, 255, 255, 0.32);
     box-shadow:
         0 10px 24px rgba(0, 0, 0, 0.55),
+        0 0 14px rgba(255, 255, 255, 0.06),
         inset 0 0 0 1px rgba(0, 0, 0, 0.4);
+}
+.flip-stage.decided .flip-side.is-winner .flip-side-avatar img {
+    filter: drop-shadow(0 0 4px rgba(255, 255, 255, 0.08));
+}
+.flip-stage.decided .flip-side.is-winner .flip-side-item {
+    box-shadow:
+        0 6px 14px rgba(0, 0, 0, 0.45),
+        0 0 6px rgba(255, 255, 255, 0.04),
+        inset 0 1px 0 rgba(255, 255, 255, 0.05);
+}
+.flip-stage.decided .flip-side.is-winner .flip-side-item img {
+    filter: drop-shadow(0 1px 3px rgba(0, 0, 0, 0.55)) drop-shadow(0 0 3px rgba(255, 255, 255, 0.06));
 }
 .flip-stage.decided .flip-side.is-winner .flip-side-crown {
     opacity: 1;
@@ -16714,13 +16727,24 @@ body .chat-sidebar .chat-send-btn svg { width: 18px !important; fill: #041a10 !i
     border-color: rgba(255, 255, 255, 0.16);
 }
 
-/* LOSER */
-.flip-stage.decided .flip-side.is-loser {
-    opacity: 0.55;
-    filter: grayscale(0.85);
+/* LOSER — dim individual elements (NOT the whole side) so the X stamp
+   stays at full opacity even when the current user is the loser. */
+.flip-stage.decided .flip-side.is-loser .flip-side-avatar {
+    border-color: rgba(255, 255, 255, 0.08);
 }
 .flip-stage.decided .flip-side.is-loser .flip-side-avatar img {
-    filter: grayscale(1) brightness(0.7);
+    filter: grayscale(1) brightness(0.6);
+}
+.flip-stage.decided .flip-side.is-loser .flip-side-name {
+    color: rgba(214, 221, 226, 0.55);
+}
+.flip-stage.decided .flip-side.is-loser .flip-side-bet {
+    opacity: 0.55;
+    filter: grayscale(0.7);
+}
+.flip-stage.decided .flip-side.is-loser .flip-side-item {
+    opacity: 0.55;
+    filter: grayscale(0.85);
 }
 .flip-stage.decided .flip-side.is-loser .flip-loser-x {
     opacity: 1;
