@@ -398,11 +398,14 @@
             const headlineWrap = document.getElementById('flipResultHeadline');
             const headline = document.getElementById('globalWinnerText');
             headlineWrap.classList.remove('result-win', 'result-lose');
+            panel.classList.remove('result-win', 'result-lose');
             if (iWon) {
                 headlineWrap.classList.add('result-win');
+                panel.classList.add('result-win');
                 headline.innerText = _tr('flip.youWon', 'YOU WON!');
             } else {
                 headlineWrap.classList.add('result-lose');
+                panel.classList.add('result-lose');
                 headline.innerText = _tr('flip.youLost', 'YOU LOST');
             }
 
@@ -420,7 +423,8 @@
                     let deg = 15 * 360;
                     if (data.result_code !== 1) deg += 180;
                     requestAnimationFrame(function () {
-                        replay.style.transition = 'transform 2.7s cubic-bezier(0.1, 0, 0.2, 1)';
+                        // Slow start, strong acceleration toward the end (ease-in)
+                        replay.style.transition = 'transform 1.6s cubic-bezier(0.55, 0, 0.95, 0.15)';
                         replay.style.transform = 'rotateX(' + deg + 'deg)';
                     });
                 }
@@ -513,7 +517,8 @@
             document.getElementById('flipStage').classList.remove('decided');
             document.getElementById('flipSideP1').classList.remove('is-winner', 'is-loser');
             document.getElementById('flipSideP2').classList.remove('is-winner', 'is-loser');
-            document.getElementById('flipResultPanel').classList.remove('show');
+            const _panel = document.getElementById('flipResultPanel');
+            _panel.classList.remove('show', 'result-win', 'result-lose');
             document.getElementById('flipCoinWrap').classList.remove('fade-out');
             isAnimating = false;
             if (window.location.pathname.includes('coinflip')) {
