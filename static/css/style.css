@@ -1167,25 +1167,31 @@ ul {
     gap: 9px;
     padding: 13px 26px;
     border-radius: 12px;
-    background: linear-gradient(135deg, #2a2d31 0%, #1d1f22 100%);
-    color: #fff;
+    background: linear-gradient(135deg, rgba(0, 255, 157, 0.18) 0%, rgba(0, 200, 130, 0.12) 100%);
+    color: #d6ffec;
     font-size: 0.85rem;
     font-weight: 800;
     letter-spacing: 1.4px;
     text-transform: uppercase;
-    border: 1px solid rgba(255, 255, 255, 0.10);
-    box-shadow: 0 8px 22px rgba(0, 0, 0, 0.4), inset 0 1px 0 rgba(255,255,255,0.05);
+    border: 1px solid rgba(0, 255, 157, 0.28);
+    box-shadow: 0 8px 22px rgba(0, 0, 0, 0.3),
+                0 0 20px rgba(0, 255, 157, 0.08),
+                inset 0 1px 0 rgba(255,255,255,0.06);
+    backdrop-filter: blur(6px);
+    -webkit-backdrop-filter: blur(6px);
     transition: transform 0.6s cubic-bezier(0.22, 1, 0.36, 1),
                 box-shadow 0.6s ease,
                 background 0.6s ease,
                 border-color 0.6s ease;
 }
-.game-mode-card__cta i { font-size: 1.05rem; color: #f7c66b; }
+.game-mode-card__cta i { font-size: 1.05rem; color: #00ff9d; }
 .game-mode-card:hover .game-mode-card__cta {
     transform: translateY(-2px);
-    background: linear-gradient(135deg, #34373b 0%, #25282c 100%);
-    border-color: rgba(247, 198, 107, 0.35);
-    box-shadow: 0 12px 28px rgba(0, 0, 0, 0.5), 0 0 18px rgba(247, 198, 107, 0.12), inset 0 1px 0 rgba(255,255,255,0.07);
+    background: linear-gradient(135deg, rgba(0, 255, 157, 0.28) 0%, rgba(0, 200, 130, 0.18) 100%);
+    border-color: rgba(0, 255, 157, 0.5);
+    box-shadow: 0 12px 28px rgba(0, 0, 0, 0.4),
+                0 0 26px rgba(0, 255, 157, 0.22),
+                inset 0 1px 0 rgba(255,255,255,0.10);
 }
 
 @media (max-width: 820px) {
