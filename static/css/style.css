@@ -1044,40 +1044,21 @@ ul {
         inset 0 1px 0 rgba(0, 255, 157, 0.08);
 }
 
-/* Active (non-soon) cards: brighter side glow strips on left + right */
-.game-mode-card:not(.game-mode-card--soon)::after {
-    content: "";
-    position: absolute;
-    top: 12%;
-    bottom: 12%;
-    left: 0;
-    width: 2px;
-    border-radius: 4px;
-    background: linear-gradient(180deg, transparent, rgba(0, 255, 157, 0.95), transparent);
-    box-shadow: 0 0 20px 2px rgba(0, 255, 157, 0.55), 0 0 40px rgba(0, 255, 157, 0.25);
-    pointer-events: none;
-    opacity: 0.9;
-    transition: opacity 0.6s ease, box-shadow 0.6s ease;
-    z-index: 1;
+/* Active (non-soon) cards: soft full-perimeter green halo via box-shadow.
+   Layered with the existing card shadow + transitions handled there. */
+.game-mode-card:not(.game-mode-card--soon) {
+    box-shadow:
+        0 18px 50px rgba(0, 0, 0, 0.45),
+        0 0 24px rgba(0, 255, 157, 0.18),
+        0 0 50px rgba(0, 255, 157, 0.10),
+        inset 0 1px 0 rgba(0, 255, 157, 0.05);
 }
-.game-mode-card:not(.game-mode-card--soon) .game-mode-card__content::before {
-    content: "";
-    position: absolute;
-    top: 12%;
-    bottom: 12%;
-    right: 0;
-    width: 2px;
-    border-radius: 4px;
-    background: linear-gradient(180deg, transparent, rgba(0, 255, 157, 0.95), transparent);
-    box-shadow: 0 0 20px 2px rgba(0, 255, 157, 0.55), 0 0 40px rgba(0, 255, 157, 0.25);
-    pointer-events: none;
-    opacity: 0.9;
-    transition: opacity 0.6s ease, box-shadow 0.6s ease;
-}
-.game-mode-card:not(.game-mode-card--soon):hover::after,
-.game-mode-card:not(.game-mode-card--soon):hover .game-mode-card__content::before {
-    opacity: 1;
-    box-shadow: 0 0 26px 3px rgba(0, 255, 157, 0.75), 0 0 52px rgba(0, 255, 157, 0.35);
+.game-mode-card:not(.game-mode-card--soon):hover {
+    box-shadow:
+        0 24px 60px rgba(0, 0, 0, 0.55),
+        0 0 36px rgba(0, 255, 157, 0.32),
+        0 0 80px rgba(0, 255, 157, 0.20),
+        inset 0 1px 0 rgba(0, 255, 157, 0.10);
 }
 
 /* Subtle grid pattern */
@@ -1316,25 +1297,24 @@ ul {
             drop-shadow(0 14px 32px rgba(0, 0, 0, 0.4));
 }
 
-/* Upgrader — smaller arrow icon, idle float; hover slowly rotates further right */
+/* Upgrader — smaller centered arrow; rotation lives on the wrapper to avoid
+   conflicts with the chip's idle animation. */
 .game-mode-card__bg--upgrade {
     width: 150px !important;
     height: 150px !important;
-    right: 8px !important;
-    top: 38% !important;
+    right: 18px !important;
+    top: 50% !important;
+    transform: translateY(-50%) rotate(10deg) !important;
+    transition: transform 1.8s cubic-bezier(0.22, 1, 0.36, 1),
+                opacity 1.4s ease !important;
+}
+.game-mode-card--soon:hover .game-mode-card__bg--upgrade {
+    transform: translateY(-50%) rotate(28deg) translateX(-6px) !important;
 }
 .game-mode-card__chip--upgrade {
-    animation: upgradeIdleFloat 11s ease-in-out infinite !important;
-    transition: transform 1.8s cubic-bezier(0.22, 1, 0.36, 1),
-                filter 1.2s ease !important;
-}
-@keyframes upgradeIdleFloat {
-    0%, 100% { transform: rotate(10deg) translate(0, 0); }
-    50%      { transform: rotate(14deg) translate(-3px, -5px); }
-}
-.game-mode-card--soon:hover .game-mode-card__chip--upgrade {
     animation: none !important;
-    transform: rotate(28deg) translate(-4px, -3px) scale(1.04) !important;
+    transform: none !important;
+    transition: filter 1.2s ease !important;
 }
 
 /* Roulette — softer, more subtle tilt the other way */
