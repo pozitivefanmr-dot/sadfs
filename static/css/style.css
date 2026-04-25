@@ -16269,13 +16269,18 @@ body .chat-sidebar .chat-send-btn svg { width: 18px !important; fill: #041a10 !i
     border-radius: inherit;
     padding: 2px;
     background:
+        /* Bright comet sweep on top */
         conic-gradient(
             from var(--flip-border-angle, 0deg),
             transparent 0deg,
-            transparent 260deg,
-            var(--flip-border-color, rgba(255, 255, 255, 0.18)) 320deg,
-            var(--flip-border-color-bright, rgba(255, 255, 255, 0.55)) 355deg,
-            var(--flip-border-color, rgba(255, 255, 255, 0.18)) 360deg
+            transparent 280deg,
+            var(--flip-border-color-bright, rgba(255, 255, 255, 0.85)) 350deg,
+            transparent 360deg
+        ),
+        /* Steady base ring underneath */
+        linear-gradient(
+            var(--flip-border-base, rgba(255, 255, 255, 0.18)),
+            var(--flip-border-base, rgba(255, 255, 255, 0.18))
         );
     -webkit-mask:
         linear-gradient(#000 0 0) content-box,
@@ -16283,7 +16288,7 @@ body .chat-sidebar .chat-send-btn svg { width: 18px !important; fill: #041a10 !i
     -webkit-mask-composite: xor;
             mask-composite: exclude;
     pointer-events: none;
-    animation: flipBorderSpin 6s linear infinite;
+    animation: flipBorderSpin 5s linear infinite;
 }
 @property --flip-border-angle {
     syntax: '<angle>';
@@ -16296,7 +16301,7 @@ body .chat-sidebar .chat-send-btn svg { width: 18px !important; fill: #041a10 !i
 /* Fallback for browsers without @property: rotate the whole element */
 @supports not (background: conic-gradient(from var(--x), red, blue)) {
     .flip-result-panel::before {
-        animation: flipBorderRotate 6s linear infinite;
+        animation: flipBorderRotate 5s linear infinite;
     }
     @keyframes flipBorderRotate {
         to { transform: rotate(360deg); }
@@ -16305,25 +16310,27 @@ body .chat-sidebar .chat-send-btn svg { width: 18px !important; fill: #041a10 !i
 
 /* WIN — subtle green tint over the dark gray */
 .flip-result-panel.result-win {
-    --flip-border-color: rgba(0, 200, 130, 0.18);
-    --flip-border-color-bright: rgba(0, 230, 145, 0.55);
+    --flip-border-base: rgba(0, 200, 130, 0.32);
+    --flip-border-color-bright: rgba(120, 255, 200, 0.95);
     background:
-        radial-gradient(ellipse at 50% -10%, rgba(0, 255, 157, 0.025) 0%, transparent 50%),
+        radial-gradient(ellipse at 50% -10%, rgba(0, 255, 157, 0.04) 0%, transparent 55%),
         linear-gradient(180deg, rgba(20, 22, 24, 0.98) 0%, rgba(13, 14, 16, 0.98) 100%);
     box-shadow:
         0 28px 70px rgba(0, 0, 0, 0.65),
+        0 0 28px rgba(0, 255, 157, 0.07),
         inset 0 1px 0 rgba(255, 255, 255, 0.04);
 }
 
 /* LOSE — subtle red tint over the dark gray */
 .flip-result-panel.result-lose {
-    --flip-border-color: rgba(220, 80, 80, 0.18);
-    --flip-border-color-bright: rgba(240, 95, 95, 0.55);
+    --flip-border-base: rgba(220, 80, 80, 0.3);
+    --flip-border-color-bright: rgba(255, 170, 170, 0.95);
     background:
-        radial-gradient(ellipse at 50% -10%, rgba(255, 80, 80, 0.025) 0%, transparent 50%),
+        radial-gradient(ellipse at 50% -10%, rgba(255, 80, 80, 0.04) 0%, transparent 55%),
         linear-gradient(180deg, rgba(24, 21, 21, 0.98) 0%, rgba(15, 13, 13, 0.98) 100%);
     box-shadow:
         0 28px 70px rgba(0, 0, 0, 0.65),
+        0 0 28px rgba(255, 80, 80, 0.06),
         inset 0 1px 0 rgba(255, 255, 255, 0.04);
 }
 .flip-result-panel.show {
@@ -16549,11 +16556,14 @@ body .chat-sidebar .chat-send-btn svg { width: 18px !important; fill: #041a10 !i
 .flip-side-avatar .flip-loser-x {
     position: absolute;
     inset: 0;
+    border-radius: 50%;
+    overflow: hidden;
     display: flex;
     align-items: center;
     justify-content: center;
     background: rgba(8, 10, 14, 0.55);
     backdrop-filter: blur(2px);
+    -webkit-backdrop-filter: blur(2px);
     opacity: 0;
     transition: opacity 0.25s ease;
     pointer-events: none;

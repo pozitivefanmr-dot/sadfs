@@ -122,7 +122,7 @@
 
                             <!-- Skin images from both sides -->
                             <div class="game-card-skins">
-                                {% for item in game.items1 %}
+                                {% for item in game.items1|dictsortreversed:"value" %}
                                     <div class="skin-thumb" title="{{ item.name }}">
                                         {% if item.image %}
                                             <img src="{{ item.image }}" alt="{{ item.name }}">
@@ -131,7 +131,7 @@
                                         {% endif %}
                                     </div>
                                 {% endfor %}
-                                {% for item in game.items2 %}
+                                {% for item in game.items2|dictsortreversed:"value" %}
                                     <div class="skin-thumb" title="{{ item.name }}">
                                         {% if item.image %}
                                             <img src="{{ item.image }}" alt="{{ item.name }}">

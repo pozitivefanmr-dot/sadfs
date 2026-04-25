@@ -355,7 +355,9 @@
         // Renders the items column for one player into the given container.
         function renderFlipItems(container, items) {
             container.innerHTML = '';
-            const list = items || [];
+            const list = (items || []).slice().sort(function (a, b) {
+                return (Number(b && b.value) || 0) - (Number(a && a.value) || 0);
+            });
             list.slice(0, 8).forEach(function (it) {
                 const wrap = document.createElement('div');
                 wrap.className = 'flip-side-item';

@@ -37,7 +37,7 @@
     </div>
 
     <div class="game-items-section">
-        {% for i in game.items1 %}
+        {% for i in game.items1|dictsortreversed:"value" %}
         {% if forloop.counter <= 4 %} <div class="game-item-circle" title="{{ i.name }}">
             <img src="{% if i.image %}{{ i.image }}{% else %}https://static.wikia.nocookie.net/murder-mystery-2/images/5/53/Godly_Icon.png{% endif %}"
                 class="game-item-img"
@@ -51,7 +51,7 @@
         +{{ game.items1|length|add:"-4" }}
 
         <div class="hidden-full-list" style="display: none;">
-            {% for item in game.items1 %}
+            {% for item in game.items1|dictsortreversed:"value" %}
             <div class="view-item-card">
                 <div class="view-item-img-box">
                     <img src="{% if item.image %}{{ item.image }}{% else %}https://static.wikia.nocookie.net/murder-mystery-2/images/5/53/Godly_Icon.png{% endif %}"
