@@ -98,7 +98,7 @@
 
     <link rel="icon" type="image/png" sizes="64x64" href="{% static 'img/favicon.png' %}">
     <link rel="apple-touch-icon" sizes="180x180" href="{% static 'img/bg.png' %}">
-    <link rel="stylesheet" href="{% static 'css/style.css' %}?v=20260426a">
+    <link rel="stylesheet" href="{% static 'css/style.css' %}?v=20260426b">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
     <script src="{% static 'js/i18n.js' %}?v=20260425a" defer></script>
 </head>
@@ -237,8 +237,29 @@
 
         <!-- Result panel: hidden until the spin ends, then animates in -->
         <div class="flip-result-panel" id="flipResultPanel">
+            <!-- Decorative corner accents -->
+            <span class="flip-corner flip-corner--tl"></span>
+            <span class="flip-corner flip-corner--tr"></span>
+            <span class="flip-corner flip-corner--bl"></span>
+            <span class="flip-corner flip-corner--br"></span>
+
+            <!-- Tiny coin that replays the result quickly -->
+            <div class="flip-mini-coin-wrap" id="flipMiniCoinWrap">
+                <div class="flip-mini-coin-perspective">
+                    <div class="flip-mini-coin" id="flipMiniCoin">
+                        <div class="flip-mini-coin-side flip-mini-coin-side--a">
+                            <img src="{% static 'img/b_chip.png' %}" alt="">
+                        </div>
+                        <div class="flip-mini-coin-side flip-mini-coin-side--b">
+                            <img src="{% static 'img/h_chip.png' %}" alt="">
+                        </div>
+                    </div>
+                </div>
+            </div>
+
             <div class="flip-result-headline" id="flipResultHeadline">
                 <span id="globalWinnerText">—</span>
+                <i class="flip-headline-bar"></i>
             </div>
 
             <div class="flip-stage" id="flipStage">
@@ -394,6 +415,19 @@
             coinWrap.classList.add('fade-out');
             setTimeout(function () {
                 panel.classList.add('show');
+                // Quick mini-coin replay matching the result side.
+                const mini = document.getElementById('flipMiniCoin');
+                if (mini) {
+                    mini.style.transition = 'none';
+                    mini.style.transform = 'rotateX(0deg)';
+                    void mini.offsetHeight;
+                    let miniDeg = 8 * 360;
+                    if (data.result_code !== 1) miniDeg += 180;
+                    requestAnimationFrame(function () {
+                        mini.style.transition = 'transform 1.4s cubic-bezier(0.18, 0.7, 0.25, 1)';
+                        mini.style.transform = 'rotateX(' + miniDeg + 'deg)';
+                    });
+                }
             }, 220);
         }
 

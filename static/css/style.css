@@ -16241,10 +16241,10 @@ body .chat-sidebar .chat-send-btn svg { width: 18px !important; fill: #041a10 !i
     display: none;
     flex-direction: column;
     align-items: center;
-    gap: 22px;
-    width: min(980px, calc(100vw - 32px));
-    padding: 32px 28px 26px;
-    border-radius: 28px;
+    gap: 14px;
+    width: min(680px, calc(100vw - 32px));
+    padding: 22px 22px 20px;
+    border-radius: 22px;
     background:
         radial-gradient(ellipse at 50% -10%, rgba(0, 255, 157, 0.12) 0%, transparent 55%),
         radial-gradient(ellipse at 50% 110%, rgba(0, 255, 157, 0.06) 0%, transparent 60%),
@@ -16273,18 +16273,31 @@ body .chat-sidebar .chat-send-btn svg { width: 18px !important; fill: #041a10 !i
 
 /* Headline */
 .flip-result-headline {
+    position: relative;
     font-family: 'Montserrat', sans-serif;
     font-weight: 900;
-    font-size: 2rem;
-    letter-spacing: 5px;
+    font-size: 1.5rem;
+    letter-spacing: 4px;
     text-transform: uppercase;
     text-align: center;
     line-height: 1;
     color: #e6ffe6;
     text-shadow: 0 2px 12px rgba(0, 0, 0, 0.6);
+    padding-bottom: 10px;
     opacity: 0;
     transform: translateY(-10px);
     animation: flipChildIn 0.55s cubic-bezier(0.22, 1, 0.36, 1) 0.15s forwards;
+}
+.flip-headline-bar {
+    position: absolute;
+    left: 50%;
+    bottom: 0;
+    transform: translateX(-50%);
+    width: 60px;
+    height: 2px;
+    border-radius: 2px;
+    background: linear-gradient(90deg, transparent, rgba(0, 255, 157, 0.7), transparent);
+    box-shadow: 0 0 8px rgba(0, 255, 157, 0.5);
 }
 .flip-result-headline.result-win {
     color: #00ff9d;
@@ -16306,10 +16319,10 @@ body .chat-sidebar .chat-send-btn svg { width: 18px !important; fill: #041a10 !i
 .flip-overlay .flip-stage {
     position: relative;
     display: grid;
-    grid-template-columns: minmax(240px, 1fr) auto minmax(240px, 1fr);
+    grid-template-columns: minmax(190px, 1fr) auto minmax(190px, 1fr);
     align-items: stretch;
     justify-items: center;
-    gap: 18px;
+    gap: 12px;
     width: 100%;
 }
 
@@ -16319,8 +16332,8 @@ body .chat-sidebar .chat-send-btn svg { width: 18px !important; fill: #041a10 !i
     align-items: center;
     justify-content: center;
     align-self: center;
-    width: 56px;
-    height: 56px;
+    width: 46px;
+    height: 46px;
     border-radius: 50%;
     background:
         radial-gradient(circle, rgba(0, 255, 157, 0.18) 0%, transparent 70%),
@@ -16332,8 +16345,8 @@ body .chat-sidebar .chat-send-btn svg { width: 18px !important; fill: #041a10 !i
     color: #00ff9d;
     font-family: 'Montserrat', sans-serif;
     font-weight: 900;
-    font-size: 0.9rem;
-    letter-spacing: 1.5px;
+    font-size: 0.78rem;
+    letter-spacing: 1.2px;
     text-shadow: 0 0 10px rgba(0, 255, 157, 0.6);
     opacity: 0;
     transform: scale(0.6);
@@ -16349,10 +16362,10 @@ body .chat-sidebar .chat-send-btn svg { width: 18px !important; fill: #041a10 !i
     display: flex;
     flex-direction: column;
     align-items: center;
-    gap: 14px;
+    gap: 10px;
     width: 100%;
-    padding: 26px 18px;
-    border-radius: 22px;
+    padding: 16px 12px;
+    border-radius: 16px;
     background: linear-gradient(180deg, rgba(255, 255, 255, 0.025), rgba(255, 255, 255, 0.005));
     border: 1px solid rgba(255, 255, 255, 0.07);
     overflow: hidden;
@@ -16391,13 +16404,13 @@ body .chat-sidebar .chat-send-btn svg { width: 18px !important; fill: #041a10 !i
 /* Avatar */
 .flip-side-avatar {
     position: relative;
-    width: 120px;
-    height: 120px;
+    width: 84px;
+    height: 84px;
     border-radius: 50%;
     overflow: hidden;
     border: 2px solid rgba(255, 255, 255, 0.1);
     box-shadow:
-        0 14px 36px rgba(0, 0, 0, 0.5),
+        0 10px 26px rgba(0, 0, 0, 0.5),
         inset 0 0 0 1px rgba(0, 0, 0, 0.4);
     background: #1a1d22;
     transition: border-color 0.45s ease, box-shadow 0.45s ease, transform 0.45s ease;
@@ -16413,17 +16426,17 @@ body .chat-sidebar .chat-send-btn svg { width: 18px !important; fill: #041a10 !i
 /* Crown / trophy badge (winner only) */
 .flip-side-crown {
     position: absolute;
-    top: -8px;
-    right: -8px;
-    width: 36px;
-    height: 36px;
+    top: -6px;
+    right: -6px;
+    width: 30px;
+    height: 30px;
     display: flex;
     align-items: center;
     justify-content: center;
     border-radius: 50%;
     background: radial-gradient(circle, #00ff9d 0%, #00b46e 100%);
     color: #062014;
-    font-size: 1rem;
+    font-size: 0.85rem;
     box-shadow:
         0 6px 18px rgba(0, 0, 0, 0.5),
         0 0 18px rgba(0, 255, 157, 0.55);
@@ -16467,7 +16480,7 @@ body .chat-sidebar .chat-send-btn svg { width: 18px !important; fill: #041a10 !i
 .flip-side-name {
     font-family: 'Montserrat', sans-serif;
     font-weight: 800;
-    font-size: 1rem;
+    font-size: 0.9rem;
     letter-spacing: 0.5px;
     color: #d6dde2;
     text-align: center;
@@ -16482,36 +16495,36 @@ body .chat-sidebar .chat-send-btn svg { width: 18px !important; fill: #041a10 !i
 .flip-side-bet {
     display: inline-flex;
     align-items: center;
-    gap: 7px;
-    padding: 7px 14px;
+    gap: 6px;
+    padding: 5px 12px;
     border-radius: 999px;
     background: rgba(255, 255, 255, 0.04);
     border: 1px solid rgba(255, 255, 255, 0.08);
     color: #fff;
     font-family: 'Montserrat', sans-serif;
     font-weight: 800;
-    font-size: 0.95rem;
+    font-size: 0.85rem;
     transition: background 0.4s ease, border-color 0.4s ease, color 0.4s ease, box-shadow 0.4s ease;
 }
 .flip-side-bet-coin {
-    width: 18px;
-    height: 18px;
+    width: 15px;
+    height: 15px;
     object-fit: contain;
     opacity: 0.95;
 }
 
-/* Items grid — bigger circles */
+/* Items grid — bigger circles (weapons more prominent) */
 .flip-side-items {
     display: flex;
     flex-wrap: wrap;
     justify-content: center;
-    gap: 8px;
+    gap: 7px;
     width: 100%;
-    margin-top: 6px;
+    margin-top: 4px;
 }
 .flip-side-item {
-    width: 56px;
-    height: 56px;
+    width: 70px;
+    height: 70px;
     border-radius: 50%;
     background:
         radial-gradient(circle at 30% 30%, rgba(255, 255, 255, 0.06), transparent 60%),
@@ -16528,16 +16541,16 @@ body .chat-sidebar .chat-send-btn svg { width: 18px !important; fill: #041a10 !i
     transition: border-color 0.4s ease, box-shadow 0.4s ease, transform 0.4s ease;
 }
 .flip-side-item img {
-    width: 78%;
-    height: 78%;
+    width: 86%;
+    height: 86%;
     object-fit: contain;
-    filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.5));
+    filter: drop-shadow(0 2px 5px rgba(0, 0, 0, 0.55));
 }
 .flip-side-item--more {
     color: #c7cdd3;
     font-family: 'Montserrat', sans-serif;
     font-weight: 800;
-    font-size: 0.85rem;
+    font-size: 0.95rem;
     letter-spacing: 0.5px;
 }
 
@@ -16640,18 +16653,18 @@ body .chat-sidebar .chat-send-btn svg { width: 18px !important; fill: #041a10 !i
 .flip-total-value {
     display: inline-flex;
     align-items: center;
-    gap: 8px;
+    gap: 7px;
     font-family: 'Montserrat', sans-serif;
     font-weight: 900;
-    font-size: 1.7rem;
+    font-size: 1.4rem;
     color: #fff;
     text-shadow:
         0 0 14px rgba(0, 255, 157, 0.35),
         0 2px 10px rgba(0, 0, 0, 0.4);
 }
 .flip-total-coin {
-    width: 24px;
-    height: 24px;
+    width: 20px;
+    height: 20px;
     object-fit: contain;
 }
 
@@ -16711,15 +16724,80 @@ body .chat-sidebar .chat-send-btn svg { width: 18px !important; fill: #041a10 !i
 
 /* Mobile */
 @media (max-width: 720px) {
-    .flip-result-panel { padding: 22px 16px 20px; gap: 16px; }
-    .flip-result-headline { font-size: 1.4rem; letter-spacing: 3px; }
+    .flip-result-panel { padding: 18px 14px 16px; gap: 12px; }
+    .flip-result-headline { font-size: 1.15rem; letter-spacing: 2.5px; }
     .flip-overlay .flip-stage {
         grid-template-columns: 1fr;
-        gap: 12px;
+        gap: 10px;
     }
-    .flip-vs { width: 44px; height: 44px; font-size: 0.78rem; }
-    .flip-side-avatar { width: 92px; height: 92px; }
-    .flip-side-crown { width: 30px; height: 30px; font-size: 0.85rem; top: -6px; right: -6px; }
-    .flip-side-item { width: 44px; height: 44px; }
-    .flip-total-value { font-size: 1.3rem; }
+    .flip-vs { width: 38px; height: 38px; font-size: 0.7rem; }
+    .flip-side-avatar { width: 78px; height: 78px; }
+    .flip-side-crown { width: 26px; height: 26px; font-size: 0.78rem; top: -5px; right: -5px; }
+    .flip-side-item { width: 56px; height: 56px; }
+    .flip-total-value { font-size: 1.2rem; }
+    .flip-mini-coin-perspective { width: 50px; height: 50px; }
 }
+
+/* Decorative corner accents */
+.flip-corner {
+    position: absolute;
+    width: 22px;
+    height: 22px;
+    border-color: rgba(0, 255, 157, 0.55);
+    border-style: solid;
+    border-width: 0;
+    pointer-events: none;
+    opacity: 0;
+    animation: flipChildIn 0.5s cubic-bezier(0.22, 1, 0.36, 1) 0.4s forwards;
+}
+.flip-corner--tl { top: 10px; left: 10px;    border-top-width: 2px;    border-left-width: 2px;    border-top-left-radius: 6px; }
+.flip-corner--tr { top: 10px; right: 10px;   border-top-width: 2px;    border-right-width: 2px;   border-top-right-radius: 6px; }
+.flip-corner--bl { bottom: 10px; left: 10px; border-bottom-width: 2px; border-left-width: 2px;    border-bottom-left-radius: 6px; }
+.flip-corner--br { bottom: 10px; right: 10px;border-bottom-width: 2px; border-right-width: 2px;   border-bottom-right-radius: 6px; }
+
+/* Mini replay coin (above headline) */
+.flip-mini-coin-wrap {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 2px;
+    opacity: 0;
+    transform: scale(0.6);
+    animation: flipMiniCoinIn 0.4s cubic-bezier(0.34, 1.56, 0.64, 1) 0.05s forwards;
+}
+@keyframes flipMiniCoinIn {
+    to { opacity: 1; transform: scale(1); }
+}
+.flip-mini-coin-perspective {
+    width: 60px;
+    height: 60px;
+    perspective: 500px;
+    position: relative;
+    filter: drop-shadow(0 4px 10px rgba(0, 255, 157, 0.25));
+}
+.flip-mini-coin {
+    width: 100%;
+    height: 100%;
+    position: relative;
+    transform-style: preserve-3d;
+    transform: rotateX(0deg);
+    will-change: transform;
+}
+.flip-mini-coin-side {
+    position: absolute;
+    inset: 0;
+    border-radius: 50%;
+    backface-visibility: hidden;
+    -webkit-backface-visibility: hidden;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+.flip-mini-coin-side img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    pointer-events: none;
+}
+.flip-mini-coin-side--a { transform: rotateX(0deg); }
+.flip-mini-coin-side--b { transform: rotateX(180deg); }
