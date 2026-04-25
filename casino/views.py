@@ -414,6 +414,7 @@ def home(request):
     ).order_by('-created_at')[:50]
 
     active_games_count = CoinflipGame.objects.filter(is_active=True).count()
+    online_count = _online_count_safe()
 
     # === GIVEAWAYS ===
     # Автоматически завершаем истёкшие розыгрыши
@@ -443,6 +444,7 @@ def home(request):
         'bots_data': bots_data,
         'recent_games': recent_games,
         'active_games_count': active_games_count,
+        'online_count': online_count,
         'active_giveaways': active_giveaways,
         'ga_avatars': ga_avatars,
         'joined_giveaway_ids': joined_giveaway_ids,
