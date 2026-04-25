@@ -116,31 +116,54 @@
             </div>
         </div>
         {% else %}
-        <div class="welcome-hero">
+        <div class="welcome-hero welcome-hero--split">
             <div class="welcome-hero-glow"></div>
             <div class="welcome-hero-particles">
                 <span></span><span></span><span></span><span></span><span></span>
             </div>
-            <div class="welcome-hero-content">
-                <div class="hero-game-badge" onclick="openAuthModal()" style="cursor:pointer;">
-                    <div class="hero-game-badge-icon">
-                        <i class="bi bi-crosshair"></i>
+            <div class="welcome-hero-grid">
+                <div class="welcome-hero-content">
+                    <div class="hero-game-badge" onclick="openAuthModal()" style="cursor:pointer;">
+                        <div class="hero-game-badge-icon">
+                            <i class="bi bi-crosshair"></i>
+                        </div>
+                        <div class="hero-game-badge-text">
+                            <span class="hero-game-badge-title" data-i18n="home.heroBadgeTitle">MURDER MYSTERY 2</span>
+                            <span class="hero-game-badge-sub" data-i18n="home.heroBadgeSub">Roblox MM2 Trading & Flipping</span>
+                        </div>
+                        <i class="bi bi-arrow-right hero-game-badge-arrow"></i>
                     </div>
-                    <div class="hero-game-badge-text">
-                        <span class="hero-game-badge-title" data-i18n="home.heroBadgeTitle">MURDER MYSTERY 2</span>
-                        <span class="hero-game-badge-sub" data-i18n="home.heroBadgeSub">Roblox MM2 Trading & Flipping</span>
+                    <h1 class="welcome-hero-title">
+                        <span class="brand-mark">MMFLIP</span>
+                        <span class="welcome-hero-title-sub"><span data-i18n="home.heroTitlePre">MURDER MYSTERY</span> <span data-i18n="home.heroTitleAcc">COINFLIP</span></span>
+                    </h1>
+                    <p class="welcome-hero-desc" data-i18n="home.heroDesc">Stake your MM2 items in 1v1 coinflip duels. Fair odds, instant results, real inventory prizes.</p>
+                    <div class="welcome-hero-actions">
+                        <div class="btn-hero-primary" onclick="openAuthModal()" style="cursor:pointer;">
+                            <i class="bi bi-play-fill"></i> <span data-i18n="home.heroStart">START PLAYING</span>
+                            <span class="btn-hero-shine"></span>
+                        </div>
+                        <a href="{% url 'coinflip' %}" class="btn-hero-secondary">
+                            <i class="bi bi-eye"></i> <span data-i18n="home.heroWatch">WATCH GAMES</span>
+                        </a>
                     </div>
-                    <i class="bi bi-arrow-right hero-game-badge-arrow"></i>
+                    <div class="welcome-hero-trust">
+                        <span class="trust-pill"><span class="trust-dot trust-dot--green"></span> <span data-i18n="home.trustFair">Provably Fair</span></span>
+                        <span class="trust-pill"><span class="trust-dot trust-dot--cyan"></span> <span data-i18n="home.trustInstant">Instant Trades</span></span>
+                        <span class="trust-pill"><span class="trust-dot trust-dot--purple"></span> <span data-i18n="home.trustNoFee">0% House Edge</span></span>
+                    </div>
                 </div>
-                <h1 class="welcome-hero-title"><span class="brand-mark">MMFLIP</span> — <span data-i18n="home.heroTitlePre">MURDER MYSTERY</span> <span data-i18n="home.heroTitleAcc">COINFLIP</span></h1>
-                <p class="welcome-hero-desc" data-i18n="home.heroDesc">Stake your MM2 items in 1v1 coinflip duels. Fair odds, instant results, real inventory prizes.</p>
-                <div class="welcome-hero-actions">
-                    <div class="btn-hero-primary" onclick="openAuthModal()" style="cursor:pointer;">
-                        <i class="bi bi-play-fill"></i> <span data-i18n="home.heroStart">START PLAYING</span>
+                <div class="welcome-hero-visual" aria-hidden="true">
+                    <div class="hero-coin-stage">
+                        <div class="hero-coin-ring hero-coin-ring--outer"></div>
+                        <div class="hero-coin-ring hero-coin-ring--inner"></div>
+                        <div class="hero-coin">
+                            <img src="{% static 'img/sv_coin.png' %}" alt="">
+                        </div>
+                        <div class="hero-coin-orbit hero-coin-orbit--1"><span></span></div>
+                        <div class="hero-coin-orbit hero-coin-orbit--2"><span></span></div>
+                        <div class="hero-coin-vs">VS</div>
                     </div>
-                    <a href="{% url 'coinflip' %}" class="btn-hero-secondary">
-                        <i class="bi bi-eye"></i> <span data-i18n="home.heroWatch">WATCH GAMES</span>
-                    </a>
                 </div>
             </div>
         </div>
