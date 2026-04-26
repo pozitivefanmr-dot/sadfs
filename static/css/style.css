@@ -17603,27 +17603,30 @@ body .chat-sidebar .chat-send-btn svg { width: 18px !important; fill: #041a10 !i
 }
 
 .tip-item-value {
-    display: inline-flex;
-    align-items: center;
-    gap: 5px;
     color: #fff8d8;
-    font-size: 0.82rem;
+    font-size: 0.78rem;
     font-weight: 900;
     text-shadow: 0 0 10px rgba(255, 211, 80, 0.35);
+    white-space: nowrap;
     position: relative;
     z-index: 1;
 }
 
+.tip-item-value .tip-coin-ic {
+    margin-left: 4px;
+}
+
 .tip-coin-ic {
-    width: 14px;
-    height: 14px;
+    width: 1em;
+    height: 1em;
     object-fit: contain;
+    vertical-align: -0.12em;
     filter: drop-shadow(0 0 6px rgba(255, 211, 80, 0.55));
     flex: 0 0 auto;
 }
 
-.tip-coin-ic.sm { width: 13px; height: 13px; }
-.tip-coin-ic.lg { width: 17px; height: 17px; }
+.tip-coin-ic.sm,
+.tip-coin-ic.lg { width: 1em; height: 1em; }
 
 .tip-selection-bar {
     flex: 0 0 auto;
@@ -17660,14 +17663,16 @@ body .chat-sidebar .chat-send-btn svg { width: 18px !important; fill: #041a10 !i
 }
 
 .tip-selection-summary .tip-selection-total {
-    display: inline-flex;
-    align-items: center;
-    gap: 6px;
     color: #fff8d8;
     font-size: 1.05rem;
     font-weight: 900;
     letter-spacing: 0.4px;
     text-shadow: 0 0 12px rgba(255, 211, 80, 0.4);
+    white-space: nowrap;
+}
+
+.tip-selection-summary .tip-selection-total .tip-coin-ic {
+    margin-left: 5px;
 }
 
 .tip-selection-actions {
@@ -17799,13 +17804,15 @@ body .chat-sidebar .chat-send-btn svg { width: 18px !important; fill: #041a10 !i
 }
 
 .tip-confirm-row-value {
-    display: inline-flex;
-    align-items: center;
-    gap: 5px;
     color: #fff8d8;
     font-size: 0.88rem;
     font-weight: 900;
     text-shadow: 0 0 10px rgba(255, 211, 80, 0.35);
+    white-space: nowrap;
+}
+
+.tip-confirm-row-value .tip-coin-ic {
+    margin-left: 4px;
 }
 
 .tip-confirm-foot {
@@ -17828,14 +17835,16 @@ body .chat-sidebar .chat-send-btn svg { width: 18px !important; fill: #041a10 !i
 }
 
 .tip-confirm-foot-total {
-    display: inline-flex;
-    align-items: center;
-    gap: 6px;
     color: #fff8d8;
     font-size: 1.02rem;
     font-weight: 900;
     margin-left: 6px;
     text-shadow: 0 0 12px rgba(255, 211, 80, 0.4);
+    white-space: nowrap;
+}
+
+.tip-confirm-foot-total .tip-coin-ic {
+    margin-left: 5px;
 }
 
 .tip-confirm-actions {
