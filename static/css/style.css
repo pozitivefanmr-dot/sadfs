@@ -16308,29 +16308,27 @@ body .chat-sidebar .chat-send-btn svg { width: 18px !important; fill: #041a10 !i
     }
 }
 
-/* WIN — subtle green tint over the dark gray */
+/* Both states share the same neutral dark gray background. The win/lose
+   mood comes from: the running comet border, the headline color, the
+   coin glow, and (only on win) extra green shadows on the winner side. */
 .flip-result-panel.result-win {
     --flip-border-base: rgba(0, 200, 130, 0.32);
     --flip-border-color-bright: rgba(120, 255, 200, 0.95);
     background:
-        radial-gradient(ellipse at 50% -10%, rgba(0, 255, 157, 0.04) 0%, transparent 55%),
-        linear-gradient(180deg, rgba(20, 22, 24, 0.98) 0%, rgba(13, 14, 16, 0.98) 100%);
+        radial-gradient(ellipse at 50% -10%, rgba(0, 255, 157, 0.03) 0%, transparent 50%),
+        linear-gradient(180deg, rgba(22, 24, 27, 0.97) 0%, rgba(13, 14, 17, 0.98) 100%);
     box-shadow:
         0 28px 70px rgba(0, 0, 0, 0.65),
-        0 0 28px rgba(0, 255, 157, 0.07),
         inset 0 1px 0 rgba(255, 255, 255, 0.04);
 }
-
-/* LOSE — subtle red tint over the dark gray */
 .flip-result-panel.result-lose {
     --flip-border-base: rgba(220, 80, 80, 0.3);
     --flip-border-color-bright: rgba(255, 170, 170, 0.95);
     background:
-        radial-gradient(ellipse at 50% -10%, rgba(255, 80, 80, 0.04) 0%, transparent 55%),
-        linear-gradient(180deg, rgba(24, 21, 21, 0.98) 0%, rgba(15, 13, 13, 0.98) 100%);
+        radial-gradient(ellipse at 50% -10%, rgba(255, 80, 80, 0.025) 0%, transparent 50%),
+        linear-gradient(180deg, rgba(22, 24, 27, 0.97) 0%, rgba(13, 14, 17, 0.98) 100%);
     box-shadow:
         0 28px 70px rgba(0, 0, 0, 0.65),
-        0 0 28px rgba(255, 80, 80, 0.06),
         inset 0 1px 0 rgba(255, 255, 255, 0.04);
 }
 .flip-result-panel.show {
@@ -16475,8 +16473,9 @@ body .chat-sidebar .chat-send-btn svg { width: 18px !important; fill: #041a10 !i
     width: 100%;
     padding: 16px 12px;
     border-radius: 16px;
-    background: linear-gradient(180deg, rgba(255, 255, 255, 0.04), rgba(255, 255, 255, 0.015)),
-        rgba(40, 44, 50, 0.55);
+    background: linear-gradient(180deg,
+        rgba(22, 24, 28, 0.85) 0%,
+        rgba(40, 44, 50, 0.55) 100%);
     border: 1px solid rgba(255, 255, 255, 0.08);
     overflow: hidden;
     transition:
@@ -16567,9 +16566,7 @@ body .chat-sidebar .chat-send-btn svg { width: 18px !important; fill: #041a10 !i
     display: flex;
     align-items: center;
     justify-content: center;
-    background: rgba(8, 10, 14, 0.4);
-    backdrop-filter: blur(1px);
-    -webkit-backdrop-filter: blur(1px);
+    background: rgba(8, 10, 14, 0.3);
     opacity: 0;
     transition: opacity 0.25s ease;
     pointer-events: none;
@@ -16580,11 +16577,11 @@ body .chat-sidebar .chat-send-btn svg { width: 18px !important; fill: #041a10 !i
     height: 100%;
 }
 .flip-side-avatar .flip-loser-x .x-line {
-    stroke: #e64a4a;
-    stroke-width: 10;
+    stroke: rgba(210, 100, 100, 0.78);
+    stroke-width: 9;
     stroke-linecap: round;
     fill: none;
-    filter: drop-shadow(0 1px 2px rgba(0, 0, 0, 0.6)) drop-shadow(0 0 4px rgba(255, 70, 70, 0.25));
+    filter: drop-shadow(0 1px 2px rgba(0, 0, 0, 0.55));
     /* Use stroke-dasharray for the draw-in effect */
     stroke-dasharray: 110;
     stroke-dashoffset: 110;
@@ -16673,8 +16670,9 @@ body .chat-sidebar .chat-send-btn svg { width: 18px !important; fill: #041a10 !i
 /* WINNER */
 .flip-stage.decided .flip-side.is-winner {
     border-color: rgba(255, 255, 255, 0.16);
-    background: linear-gradient(180deg, rgba(255, 255, 255, 0.05), rgba(255, 255, 255, 0.02)),
-        rgba(48, 52, 58, 0.6);
+    background: linear-gradient(180deg,
+        rgba(26, 29, 33, 0.9) 0%,
+        rgba(48, 52, 58, 0.65) 100%);
     transform: translateY(-2px);
     box-shadow:
         0 12px 30px rgba(0, 0, 0, 0.5),
@@ -16688,6 +16686,48 @@ body .chat-sidebar .chat-send-btn svg { width: 18px !important; fill: #041a10 !i
 @keyframes winnerGlowPulse {
     0%, 100% { opacity: 0.4; }
     50%      { opacity: 0.6; }
+}
+
+/* Green accent on the winner side — ONLY when the current user won.
+   When the user lost, the opposing winner stays neutral gray. */
+.flip-result-panel.result-win .flip-side.is-winner {
+    border-color: rgba(0, 230, 145, 0.28);
+    box-shadow:
+        0 14px 32px rgba(0, 0, 0, 0.55),
+        0 0 24px rgba(0, 230, 145, 0.14),
+        0 0 60px rgba(0, 230, 145, 0.08),
+        inset 0 1px 0 rgba(255, 255, 255, 0.05);
+}
+.flip-result-panel.result-win .flip-side.is-winner .flip-side-glow {
+    background: radial-gradient(ellipse at 50% 30%, rgba(0, 230, 145, 0.18) 0%, transparent 65%);
+    opacity: 0.85;
+}
+.flip-result-panel.result-win .flip-side.is-winner .flip-side-avatar {
+    border-color: rgba(0, 230, 145, 0.5);
+    box-shadow:
+        0 10px 24px rgba(0, 0, 0, 0.55),
+        0 0 18px rgba(0, 230, 145, 0.22),
+        inset 0 0 0 1px rgba(0, 0, 0, 0.4);
+}
+.flip-result-panel.result-win .flip-side.is-winner .flip-side-avatar img {
+    filter: drop-shadow(0 0 6px rgba(0, 230, 145, 0.18));
+}
+.flip-result-panel.result-win .flip-side.is-winner .flip-side-item {
+    border-color: rgba(0, 230, 145, 0.18);
+    box-shadow:
+        0 6px 14px rgba(0, 0, 0, 0.45),
+        0 0 8px rgba(0, 230, 145, 0.08),
+        inset 0 1px 0 rgba(255, 255, 255, 0.05);
+}
+.flip-result-panel.result-win .flip-side.is-winner .flip-side-item img {
+    filter: drop-shadow(0 1px 3px rgba(0, 0, 0, 0.55)) drop-shadow(0 0 4px rgba(0, 230, 145, 0.14));
+}
+.flip-result-panel.result-win .flip-side.is-winner .flip-side-name {
+    text-shadow: 0 0 10px rgba(0, 230, 145, 0.3), 0 2px 8px rgba(0, 0, 0, 0.5);
+}
+.flip-result-panel.result-win .flip-side.is-winner .flip-side-bet {
+    border-color: rgba(0, 230, 145, 0.28);
+    background: rgba(0, 230, 145, 0.06);
 }
 .flip-stage.decided .flip-side.is-winner .flip-side-avatar {
     border-color: rgba(255, 255, 255, 0.32);
@@ -16831,13 +16871,17 @@ body .chat-sidebar .chat-send-btn svg { width: 18px !important; fill: #041a10 !i
     border-color: rgba(255, 255, 255, 0.18);
 }
 
-/* Close button — minimalist dark pill with smooth opacity-driven hover */
+/* Close button — minimalist dark pill. All properties marked !important
+   to defeat the legacy `.btn-close-flip` glass design at line ~7527 and
+   the size override at `.flip-overlay .btn-close-flip` (~15557). */
 .flip-result-panel .btn-close-flip {
     position: relative !important;
+    overflow: visible !important;
     display: inline-flex !important;
     align-items: center !important;
     justify-content: center !important;
     gap: 10px !important;
+    margin-top: 0 !important;
     font-family: 'Montserrat', sans-serif !important;
     font-weight: 700 !important;
     font-size: 0.72rem !important;
@@ -16859,29 +16903,45 @@ body .chat-sidebar .chat-send-btn svg { width: 18px !important; fill: #041a10 !i
         color 0.55s cubic-bezier(0.22, 1, 0.36, 1),
         background 0.55s cubic-bezier(0.22, 1, 0.36, 1),
         border-color 0.55s cubic-bezier(0.22, 1, 0.36, 1),
-        letter-spacing 0.55s cubic-bezier(0.22, 1, 0.36, 1),
+        box-shadow 0.55s cubic-bezier(0.22, 1, 0.36, 1),
         transform 0.4s cubic-bezier(0.22, 1, 0.36, 1) !important;
 }
 @keyframes flipBtnIn {
     to { opacity: 1; transform: translateY(0) scale(1); }
 }
+/* The legacy CSS uses ::before as an expanding-circle hover effect;
+   reset every property and replace with our static x-icon. */
 .flip-result-panel .btn-close-flip::before {
-    content: '\F62A'; /* Bootstrap Icons: x-lg */
+    content: '\F62A' !important; /* Bootstrap Icons: x-lg */
+    position: static !important;
+    top: auto !important;
+    left: auto !important;
+    width: auto !important;
+    height: auto !important;
+    border-radius: 0 !important;
+    background: transparent !important;
+    transform: none !important;
+    z-index: auto !important;
     font-family: 'bootstrap-icons' !important;
-    font-size: 0.78rem;
-    font-weight: 400;
-    letter-spacing: 0;
-    opacity: 0.55;
-    transition: opacity 0.55s cubic-bezier(0.22, 1, 0.36, 1);
+    font-size: 0.78rem !important;
+    font-weight: 400 !important;
+    letter-spacing: 0 !important;
+    line-height: 1 !important;
+    opacity: 0.55 !important;
+    transition: opacity 0.55s cubic-bezier(0.22, 1, 0.36, 1) !important;
 }
 .flip-result-panel .btn-close-flip:hover {
     color: #fff !important;
     background: rgba(255, 255, 255, 0.09) !important;
     border-color: rgba(255, 255, 255, 0.22) !important;
-    letter-spacing: 3.4px !important;
+    box-shadow: 0 0 0 4px rgba(255, 255, 255, 0.04) !important;
+    transform: translateY(0) scale(1) !important; /* override legacy translateY(-2px) */
 }
 .flip-result-panel .btn-close-flip:hover::before {
-    opacity: 1;
+    opacity: 1 !important;
+    width: auto !important;  /* defeat legacy 350px expansion */
+    height: auto !important;
+    background: transparent !important;
 }
 .flip-result-panel .btn-close-flip:active {
     transform: translateY(0) scale(0.97) !important;
