@@ -1554,25 +1554,37 @@
                 <div class="tip-icon"><i class="bi bi-gift-fill"></i></div>
                 <div>
                     <div class="tip-title">SEND TIP</div>
-                    <div class="tip-subtitle">Choose a godly to gift to <span id="tipRecipientName">Player</span></div>
+                    <div class="tip-subtitle">Pick godlies to gift to <span id="tipRecipientName">Player</span></div>
                 </div>
             </div>
+            <div class="tip-status" id="tipStatus">Loading your inventory...</div>
+            <div class="tip-grid" id="tipItemGrid"></div>
             <div class="tip-confirm-panel" id="tipConfirmPanel">
                 <div class="tip-confirm-title">CONFIRM YOUR TIP</div>
-                <div class="tip-confirm-item">
-                    <img src="" id="tipConfirmImg" alt="">
-                    <div>
-                        <div class="tip-confirm-name" id="tipConfirmName">Item</div>
-                        <div class="tip-confirm-meta"><span id="tipConfirmValue">0</span> SV to <span id="tipConfirmRecipient">Player</span></div>
-                    </div>
+                <div class="tip-confirm-list" id="tipConfirmList"></div>
+                <div class="tip-confirm-foot">
+                    <span>Sending <strong id="tipConfirmCount">0</strong> item(s) to <span id="tipConfirmRecipient">Player</span></span>
+                    <span>Total: <strong id="tipConfirmTotal">0</strong> SV</span>
                 </div>
                 <div class="tip-confirm-actions">
                     <button type="button" class="tip-secondary-btn" onclick="hideTipConfirm()">BACK</button>
                     <button type="button" class="tip-send-btn" id="tipSendBtn" onclick="sendTip()">CONFIRM TIP</button>
                 </div>
             </div>
-            <div class="tip-status" id="tipStatus">Loading your inventory...</div>
-            <div class="tip-grid" id="tipItemGrid"></div>
+            <div class="tip-selection-bar" id="tipSelectionBar">
+                <div class="tip-selection-chips" id="tipSelectionChips"></div>
+                <div class="tip-selection-row">
+                    <div class="tip-selection-summary">
+                        <span><strong id="tipSelectedCount">0</strong> selected</span>
+                        <span>·</span>
+                        <span><span class="tip-selection-total" id="tipSelectedTotal">0</span> SV</span>
+                    </div>
+                    <div class="tip-selection-actions">
+                        <button type="button" class="tip-secondary-btn" onclick="clearTipSelection()">CLEAR</button>
+                        <button type="button" class="tip-send-btn" id="tipReviewBtn" onclick="showTipConfirm()" disabled>REVIEW &amp; SEND</button>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
     {% endif %}
@@ -1709,20 +1721,21 @@
     <script>
         let tipRecipient = '';
         let tipItems = [];
-        let selectedTipItem = null;
+        let tipSelectedIds = new Set();
 
         function openTipModal(username) {
             if (!username) return;
             const me = "{{ request.user.username|escapejs }}";
             if (username.toLowerCase() === me.toLowerCase()) return;
             tipRecipient = username;
-            selectedTipItem = null;
+            tipSelectedIds = new Set();
             document.getElementById('tipRecipientName').textContent = username;
             document.getElementById('tipModal').classList.add('active');
             document.getElementById('tipConfirmPanel').classList.remove('active');
             document.getElementById('tipItemGrid').innerHTML = '';
             document.getElementById('tipStatus').style.display = 'block';
             document.getElementById('tipStatus').textContent = 'Loading your inventory...';
+            renderTipSelection();
             fetch("{% url 'api_tip_inventory' %}")
                 .then(r => r.json())
                 .then(data => {
@@ -1749,27 +1762,76 @@
                 status.style.display = 'block';
                 status.textContent = 'No available godlies to tip';
                 grid.innerHTML = '';
+                renderTipSelection();
                 return;
             }
             status.style.display = 'none';
-            grid.innerHTML = tipItems.map(item => `
-                <button type="button" class="tip-item-card" data-item-id="${item.id}" onclick="selectTipItem(${Number(item.id) || 0})">
+            grid.innerHTML = tipItems.map(item => {
+                const id = Number(item.id) || 0;
+                const isActive = tipSelectedIds.has(id);
+                return `
+                <button type="button" class="tip-item-card${isActive ? ' active' : ''}" data-item-id="${id}" onclick="toggleTipItem(${id})">
                     <span class="tip-item-glow"></span>
+                    <span class="tip-item-check"><i class="bi bi-check-lg"></i></span>
                     <img src="${escapeHtml(item.image || '/static/img/item_placeholder.svg')}" alt="${escapeHtml(item.name)}" onerror="this.src='/static/img/item_placeholder.svg'">
                     <span class="tip-item-name">${escapeHtml(item.name)}</span>
                     <span class="tip-item-value">${Number(item.value || 0).toLocaleString()} SV</span>
+                </button>`;
+            }).join('');
+            renderTipSelection();
+        }
+
+        function toggleTipItem(itemId) {
+            const id = Number(itemId);
+            const item = tipItems.find(i => Number(i.id) === id);
+            if (!item) return;
+            if (tipSelectedIds.has(id)) tipSelectedIds.delete(id);
+            else tipSelectedIds.add(id);
+            const card = document.querySelector(`.tip-item-card[data-item-id="${id}"]`);
+            if (card) card.classList.toggle('active', tipSelectedIds.has(id));
+            renderTipSelection();
+        }
+
+        function clearTipSelection() {
+            tipSelectedIds = new Set();
+            document.querySelectorAll('.tip-item-card.active').forEach(c => c.classList.remove('active'));
+            renderTipSelection();
+        }
+
+        function getSelectedTipItems() {
+            return tipItems.filter(i => tipSelectedIds.has(Number(i.id)));
+        }
+
+        function renderTipSelection() {
+            const selected = getSelectedTipItems();
+            const total = selected.reduce((s, i) => s + Number(i.value || 0), 0);
+            document.getElementById('tipSelectedCount').textContent = selected.length;
+            document.getElementById('tipSelectedTotal').textContent = total.toLocaleString();
+            document.getElementById('tipReviewBtn').disabled = selected.length === 0;
+            const chips = document.getElementById('tipSelectionChips');
+            chips.innerHTML = selected.map(item => `
+                <button type="button" class="tip-chip" onclick="toggleTipItem(${Number(item.id) || 0})" title="Remove">
+                    <img src="${escapeHtml(item.image || '/static/img/item_placeholder.svg')}" alt="" onerror="this.src='/static/img/item_placeholder.svg'">
+                    <span class="tip-chip-name">${escapeHtml(item.name)}</span>
+                    <span class="tip-chip-x"><i class="bi bi-x-lg"></i></span>
                 </button>
             `).join('');
         }
 
-        function selectTipItem(itemId) {
-            selectedTipItem = tipItems.find(item => Number(item.id) === Number(itemId));
-            if (!selectedTipItem) return;
-            document.querySelectorAll('.tip-item-card').forEach(card => card.classList.toggle('active', Number(card.dataset.itemId) === Number(itemId)));
-            document.getElementById('tipConfirmImg').src = selectedTipItem.image || '/static/img/item_placeholder.svg';
-            document.getElementById('tipConfirmName').textContent = selectedTipItem.name;
-            document.getElementById('tipConfirmValue').textContent = Number(selectedTipItem.value || 0).toLocaleString();
+        function showTipConfirm() {
+            const selected = getSelectedTipItems();
+            if (!selected.length) return;
+            const total = selected.reduce((s, i) => s + Number(i.value || 0), 0);
+            document.getElementById('tipConfirmCount').textContent = selected.length;
+            document.getElementById('tipConfirmTotal').textContent = total.toLocaleString();
             document.getElementById('tipConfirmRecipient').textContent = tipRecipient;
+            document.getElementById('tipConfirmList').innerHTML = selected.map(item => `
+                <div class="tip-confirm-row">
+                    <img src="${escapeHtml(item.image || '/static/img/item_placeholder.svg')}" alt="" onerror="this.src='/static/img/item_placeholder.svg'">
+                    <span class="tip-confirm-row-name">${escapeHtml(item.name)}</span>
+                    <span class="tip-confirm-row-value">${Number(item.value || 0).toLocaleString()} SV</span>
+                </div>
+            `).join('');
             document.getElementById('tipConfirmPanel').classList.add('active');
         }
 
@@ -1777,32 +1839,48 @@
             document.getElementById('tipConfirmPanel').classList.remove('active');
         }
 
-        function sendTip() {
-            if (!selectedTipItem || !tipRecipient) return;
+        async function sendTip() {
+            const selected = getSelectedTipItems();
+            if (!selected.length || !tipRecipient) return;
             const btn = document.getElementById('tipSendBtn');
             btn.disabled = true;
             btn.textContent = 'SENDING...';
-            fetch("{% url 'api_send_tip' %}", {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json', 'X-CSRFToken': getCsrfToken() },
-                body: JSON.stringify({ recipient: tipRecipient, item_id: selectedTipItem.id })
-            })
-                .then(r => r.json())
-                .then(data => {
+
+            let sent = 0;
+            const failures = [];
+            for (const item of selected) {
+                try {
+                    const r = await fetch("{% url 'api_send_tip' %}", {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json', 'X-CSRFToken': getCsrfToken() },
+                        body: JSON.stringify({ recipient: tipRecipient, item_id: item.id })
+                    });
+                    const data = await r.json();
                     if (data.status === 'success') {
-                        closeTipModal();
-                        showTipToast(`You sent ${data.item.name} to ${data.recipient}`);
-                        tipItems = tipItems.filter(item => Number(item.id) !== Number(selectedTipItem.id));
-                        selectedTipItem = null;
+                        sent += 1;
+                        tipItems = tipItems.filter(i => Number(i.id) !== Number(item.id));
+                        tipSelectedIds.delete(Number(item.id));
                     } else {
-                        showTipToast(data.message || 'Tip failed', true);
+                        failures.push(`${item.name}: ${data.message || 'failed'}`);
                     }
-                })
-                .catch(() => showTipToast('Tip failed', true))
-                .finally(() => {
-                    btn.disabled = false;
-                    btn.textContent = 'CONFIRM TIP';
-                });
+                } catch (e) {
+                    failures.push(`${item.name}: network error`);
+                }
+            }
+
+            btn.disabled = false;
+            btn.textContent = 'CONFIRM TIP';
+
+            if (sent > 0 && !failures.length) {
+                closeTipModal();
+                showTipToast(`Sent ${sent} item${sent === 1 ? '' : 's'} to ${tipRecipient}`);
+            } else if (sent > 0 && failures.length) {
+                showTipToast(`Sent ${sent}, ${failures.length} failed`, true);
+                renderTipItems();
+                document.getElementById('tipConfirmPanel').classList.remove('active');
+            } else {
+                showTipToast(failures[0] || 'Tip failed', true);
+            }
         }
 
         function showTipToast(text, isError) {
