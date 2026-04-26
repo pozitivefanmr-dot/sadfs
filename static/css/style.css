@@ -16474,8 +16474,8 @@ body .chat-sidebar .chat-send-btn svg { width: 18px !important; fill: #041a10 !i
     padding: 16px 12px;
     border-radius: 16px;
     background: linear-gradient(180deg,
-        rgba(22, 24, 28, 0.85) 0%,
-        rgba(40, 44, 50, 0.55) 100%);
+        rgba(56, 60, 68, 0.55) 0%,
+        rgba(28, 30, 35, 0.85) 100%);
     border: 1px solid rgba(255, 255, 255, 0.08);
     overflow: hidden;
     transition:
@@ -16671,12 +16671,12 @@ body .chat-sidebar .chat-send-btn svg { width: 18px !important; fill: #041a10 !i
 .flip-stage.decided .flip-side.is-winner {
     border-color: rgba(255, 255, 255, 0.16);
     background: linear-gradient(180deg,
-        rgba(26, 29, 33, 0.9) 0%,
-        rgba(48, 52, 58, 0.65) 100%);
+        rgba(64, 68, 76, 0.6) 0%,
+        rgba(30, 33, 38, 0.9) 100%);
     transform: translateY(-2px);
     box-shadow:
         0 12px 30px rgba(0, 0, 0, 0.5),
-        inset 0 1px 0 rgba(255, 255, 255, 0.05);
+        inset 0 1px 0 rgba(255, 255, 255, 0.06);
 }
 .flip-stage.decided .flip-side.is-winner .flip-side-glow {
     opacity: 0.5;
@@ -16691,12 +16691,16 @@ body .chat-sidebar .chat-send-btn svg { width: 18px !important; fill: #041a10 !i
 /* Green accent on the winner side — ONLY when the current user won.
    When the user lost, the opposing winner stays neutral gray. */
 .flip-result-panel.result-win .flip-side.is-winner {
-    border-color: rgba(0, 230, 145, 0.28);
+    border-color: rgba(0, 230, 145, 0.4);
+    background: linear-gradient(180deg,
+        rgba(48, 78, 64, 0.55) 0%,
+        rgba(20, 30, 25, 0.9) 100%);
     box-shadow:
         0 14px 32px rgba(0, 0, 0, 0.55),
-        0 0 24px rgba(0, 230, 145, 0.14),
-        0 0 60px rgba(0, 230, 145, 0.08),
-        inset 0 1px 0 rgba(255, 255, 255, 0.05);
+        0 0 32px rgba(0, 230, 145, 0.22),
+        0 0 80px rgba(0, 230, 145, 0.12),
+        inset 0 0 28px rgba(0, 230, 145, 0.06),
+        inset 0 1px 0 rgba(255, 255, 255, 0.06);
 }
 .flip-result-panel.result-win .flip-side.is-winner .flip-side-glow {
     background: radial-gradient(ellipse at 50% 30%, rgba(0, 230, 145, 0.18) 0%, transparent 65%);
@@ -16769,8 +16773,20 @@ body .chat-sidebar .chat-send-btn svg { width: 18px !important; fill: #041a10 !i
 
 /* LOSER — dim individual elements (NOT the whole side) so the X stamp
    stays at full opacity even when the current user is the loser. */
+.flip-stage.decided .flip-side.is-loser {
+    border-color: rgba(220, 80, 80, 0.22);
+    background: linear-gradient(180deg,
+        rgba(74, 50, 52, 0.45) 0%,
+        rgba(28, 20, 22, 0.85) 100%);
+    box-shadow:
+        0 12px 30px rgba(0, 0, 0, 0.5),
+        0 0 22px rgba(220, 80, 80, 0.1),
+        0 0 60px rgba(220, 80, 80, 0.06),
+        inset 0 0 22px rgba(220, 80, 80, 0.04),
+        inset 0 1px 0 rgba(255, 255, 255, 0.04);
+}
 .flip-stage.decided .flip-side.is-loser .flip-side-avatar {
-    border-color: rgba(255, 255, 255, 0.08);
+    border-color: rgba(220, 80, 80, 0.18);
 }
 .flip-stage.decided .flip-side.is-loser .flip-side-avatar img {
     filter: grayscale(1) brightness(0.6);
@@ -16880,7 +16896,7 @@ body .chat-sidebar .chat-send-btn svg { width: 18px !important; fill: #041a10 !i
     display: inline-flex !important;
     align-items: center !important;
     justify-content: center !important;
-    gap: 10px !important;
+    gap: 0 !important;
     margin-top: 0 !important;
     font-family: 'Montserrat', sans-serif !important;
     font-weight: 700 !important;
@@ -16910,25 +16926,10 @@ body .chat-sidebar .chat-send-btn svg { width: 18px !important; fill: #041a10 !i
     to { opacity: 1; transform: translateY(0) scale(1); }
 }
 /* The legacy CSS uses ::before as an expanding-circle hover effect;
-   reset every property and replace with our static x-icon. */
+   neutralize every property so neither the icon nor the circle render. */
 .flip-result-panel .btn-close-flip::before {
-    content: '\F62A' !important; /* Bootstrap Icons: x-lg */
-    position: static !important;
-    top: auto !important;
-    left: auto !important;
-    width: auto !important;
-    height: auto !important;
-    border-radius: 0 !important;
-    background: transparent !important;
-    transform: none !important;
-    z-index: auto !important;
-    font-family: 'bootstrap-icons' !important;
-    font-size: 0.78rem !important;
-    font-weight: 400 !important;
-    letter-spacing: 0 !important;
-    line-height: 1 !important;
-    opacity: 0.55 !important;
-    transition: opacity 0.55s cubic-bezier(0.22, 1, 0.36, 1) !important;
+    content: none !important;
+    display: none !important;
 }
 .flip-result-panel .btn-close-flip:hover {
     color: #fff !important;
@@ -16938,8 +16939,8 @@ body .chat-sidebar .chat-send-btn svg { width: 18px !important; fill: #041a10 !i
     transform: translateY(0) scale(1) !important; /* override legacy translateY(-2px) */
 }
 .flip-result-panel .btn-close-flip:hover::before {
-    opacity: 1 !important;
-    width: auto !important;  /* defeat legacy 350px expansion */
+    display: none !important;
+    width: auto !important;
     height: auto !important;
     background: transparent !important;
 }
