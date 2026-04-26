@@ -149,6 +149,8 @@ class ItemLog(models.Model):
         ('withdraw_cancelled', 'Withdraw cancelled'),
         ('giveaway_create', 'Sent to giveaway'),
         ('giveaway_won', 'Won in giveaway'),
+        ('tip_sent', 'Tip sent'),
+        ('tip_received', 'Tip received'),
         ('delete', 'Deleted by user'),
         ('admin_delete', 'Deleted by admin'),
     ]

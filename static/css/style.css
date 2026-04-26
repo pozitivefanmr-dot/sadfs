@@ -17336,3 +17336,370 @@ body .chat-sidebar .chat-send-btn svg { width: 18px !important; fill: #041a10 !i
     .flip-vs { width: 52px !important; height: 52px !important; margin: 2px auto !important; }
     .flip-side-item { width: 42px !important; height: 42px !important; }
 }
+
+/* =========================================================
+   TIP SYSTEM
+   ========================================================= */
+.stats-user-main {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 8px;
+    min-width: 0;
+}
+
+.stats-tip-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 7px;
+    border: 1px solid rgba(0, 255, 157, 0.36);
+    border-radius: 999px;
+    padding: 8px 15px;
+    background: linear-gradient(135deg, rgba(0, 255, 157, 0.18), rgba(0, 229, 255, 0.08));
+    color: #eafff7;
+    font-family: var(--font-main);
+    font-size: 0.72rem;
+    font-weight: 900;
+    letter-spacing: 1.1px;
+    cursor: pointer;
+    box-shadow: 0 0 18px rgba(0, 255, 157, 0.08), inset 0 1px 0 rgba(255, 255, 255, 0.05);
+    transition: transform 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease, background 0.2s ease;
+}
+
+.stats-tip-btn i {
+    color: var(--primary-green);
+    filter: drop-shadow(0 0 8px rgba(0, 255, 157, 0.45));
+}
+
+.stats-tip-btn:hover {
+    transform: translateY(-1px);
+    border-color: rgba(0, 255, 157, 0.72);
+    background: linear-gradient(135deg, rgba(0, 255, 157, 0.28), rgba(0, 229, 255, 0.12));
+    box-shadow: 0 0 28px rgba(0, 255, 157, 0.18);
+}
+
+.tip-overlay {
+    position: fixed;
+    inset: 0;
+    z-index: 100000;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 18px;
+    background: rgba(0, 0, 0, 0.88);
+    backdrop-filter: blur(12px);
+    opacity: 0;
+    visibility: hidden;
+    pointer-events: none;
+    transition: opacity 0.3s ease, visibility 0.3s ease;
+}
+
+.tip-overlay.active {
+    opacity: 1;
+    visibility: visible;
+    pointer-events: auto;
+}
+
+.tip-box {
+    width: 760px;
+    max-width: 96vw;
+    max-height: 88vh;
+    overflow: hidden;
+    position: relative;
+    border-radius: 22px;
+    border: 1px solid rgba(0, 255, 157, 0.16);
+    background: radial-gradient(circle at 20% 0%, rgba(0, 255, 157, 0.08), transparent 35%), linear-gradient(145deg, #0c1410 0%, #070c09 100%);
+    box-shadow: 0 30px 90px rgba(0, 0, 0, 0.68), 0 0 70px rgba(0, 255, 157, 0.08);
+    transform: translateY(18px) scale(0.96);
+    transition: transform 0.34s cubic-bezier(0.25, 0.8, 0.25, 1);
+}
+
+.tip-overlay.active .tip-box {
+    transform: translateY(0) scale(1);
+}
+
+.tip-close {
+    position: absolute;
+    top: 16px;
+    right: 16px;
+    width: 36px;
+    height: 36px;
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: 11px;
+    background: rgba(255, 255, 255, 0.03);
+    color: #8fa396;
+    cursor: pointer;
+    transition: 0.2s ease;
+    z-index: 3;
+}
+
+.tip-close:hover {
+    color: #fff;
+    border-color: rgba(0, 255, 157, 0.3);
+    background: rgba(0, 255, 157, 0.08);
+}
+
+.tip-head {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    padding: 24px 26px 18px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+}
+
+.tip-icon {
+    width: 52px;
+    height: 52px;
+    border-radius: 15px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: linear-gradient(135deg, rgba(0, 255, 157, 0.18), rgba(0, 229, 255, 0.1));
+    border: 1px solid rgba(0, 255, 157, 0.18);
+    color: var(--primary-green);
+    font-size: 1.35rem;
+    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.06);
+}
+
+.tip-title {
+    color: #fff;
+    font-size: 1.18rem;
+    font-weight: 900;
+    letter-spacing: 1.4px;
+}
+
+.tip-subtitle {
+    margin-top: 3px;
+    color: var(--text-muted);
+    font-size: 0.78rem;
+    font-weight: 700;
+}
+
+.tip-subtitle span {
+    color: var(--primary-green);
+}
+
+.tip-status {
+    margin: 22px 26px;
+    padding: 18px;
+    text-align: center;
+    color: var(--text-muted);
+    border: 1px solid rgba(255, 255, 255, 0.06);
+    border-radius: 14px;
+    background: rgba(255, 255, 255, 0.025);
+    font-size: 0.86rem;
+    font-weight: 700;
+}
+
+.tip-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(130px, 1fr));
+    gap: 12px;
+    max-height: 430px;
+    overflow-y: auto;
+    padding: 22px 26px 26px;
+}
+
+.tip-grid::-webkit-scrollbar { width: 6px; }
+.tip-grid::-webkit-scrollbar-track { background: rgba(255, 255, 255, 0.04); border-radius: 6px; }
+.tip-grid::-webkit-scrollbar-thumb { background: linear-gradient(180deg, #00e5ff, #00ff9d); border-radius: 6px; }
+
+.tip-item-card {
+    height: 150px;
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-between;
+    gap: 7px;
+    border: 1px solid rgba(255, 255, 255, 0.07);
+    border-radius: 14px;
+    padding: 12px 10px;
+    background: radial-gradient(circle at center, #1a1f24 0%, #0b0f0d 100%);
+    color: #fff;
+    cursor: pointer;
+    overflow: hidden;
+    transition: transform 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.tip-item-card:hover,
+.tip-item-card.active {
+    transform: translateY(-3px);
+    border-color: rgba(0, 255, 157, 0.52);
+    box-shadow: 0 14px 28px rgba(0, 0, 0, 0.28), inset 0 0 0 1px rgba(0, 255, 157, 0.18);
+}
+
+.tip-item-glow {
+    position: absolute;
+    inset: auto 16px -24px;
+    height: 46px;
+    background: radial-gradient(circle, rgba(0, 255, 157, 0.18), transparent 70%);
+    pointer-events: none;
+}
+
+.tip-item-card img {
+    width: 74px;
+    height: 74px;
+    object-fit: contain;
+    filter: drop-shadow(0 8px 12px rgba(0, 0, 0, 0.55));
+    position: relative;
+    z-index: 1;
+}
+
+.tip-item-name {
+    width: 100%;
+    color: #dce9e3;
+    font-size: 0.67rem;
+    font-weight: 800;
+    text-transform: uppercase;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    position: relative;
+    z-index: 1;
+}
+
+.tip-item-value {
+    color: var(--primary-green);
+    font-size: 0.78rem;
+    font-weight: 900;
+    position: relative;
+    z-index: 1;
+}
+
+.tip-confirm-panel {
+    display: none;
+    margin: 18px 26px 0;
+    padding: 16px;
+    border-radius: 16px;
+    border: 1px solid rgba(0, 255, 157, 0.16);
+    background: linear-gradient(135deg, rgba(0, 255, 157, 0.08), rgba(255, 255, 255, 0.025));
+}
+
+.tip-confirm-panel.active {
+    display: block;
+}
+
+.tip-confirm-title {
+    color: var(--primary-green);
+    font-size: 0.72rem;
+    font-weight: 900;
+    letter-spacing: 1.3px;
+    margin-bottom: 12px;
+}
+
+.tip-confirm-item {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+}
+
+.tip-confirm-item img {
+    width: 62px;
+    height: 62px;
+    object-fit: contain;
+    border-radius: 12px;
+    background: rgba(255, 255, 255, 0.04);
+}
+
+.tip-confirm-name {
+    color: #fff;
+    font-size: 0.95rem;
+    font-weight: 900;
+}
+
+.tip-confirm-meta {
+    margin-top: 3px;
+    color: var(--text-muted);
+    font-size: 0.78rem;
+    font-weight: 700;
+}
+
+.tip-confirm-actions {
+    display: flex;
+    gap: 10px;
+    justify-content: flex-end;
+    margin-top: 14px;
+}
+
+.tip-secondary-btn,
+.tip-send-btn {
+    border: 0;
+    border-radius: 11px;
+    padding: 11px 16px;
+    font-family: var(--font-main);
+    font-size: 0.74rem;
+    font-weight: 900;
+    letter-spacing: 0.8px;
+    cursor: pointer;
+    transition: 0.2s ease;
+}
+
+.tip-secondary-btn {
+    color: #c7d5ce;
+    background: rgba(255, 255, 255, 0.07);
+}
+
+.tip-send-btn {
+    color: #03110b;
+    background: linear-gradient(135deg, #00e5ff, #00ff9d);
+    box-shadow: 0 0 22px rgba(0, 255, 157, 0.22);
+}
+
+.tip-send-btn:hover,
+.tip-secondary-btn:hover {
+    transform: translateY(-1px);
+}
+
+.tip-send-btn:disabled {
+    opacity: 0.65;
+    cursor: wait;
+}
+
+.tip-toast-wrap {
+    position: fixed;
+    right: 18px;
+    bottom: 18px;
+    z-index: 100001;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    pointer-events: none;
+}
+
+.tip-toast {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    min-width: 280px;
+    max-width: 360px;
+    padding: 14px 16px;
+    border-radius: 14px;
+    border: 1px solid rgba(0, 255, 157, 0.24);
+    background: linear-gradient(135deg, rgba(9, 20, 15, 0.98), rgba(5, 10, 8, 0.98));
+    color: #ecfff6;
+    font-size: 0.82rem;
+    font-weight: 800;
+    box-shadow: 0 16px 38px rgba(0, 0, 0, 0.45), 0 0 26px rgba(0, 255, 157, 0.08);
+    opacity: 0;
+    transform: translateY(12px);
+    transition: opacity 0.25s ease, transform 0.25s ease;
+}
+
+.tip-toast.show {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+.tip-toast i {
+    color: var(--primary-green);
+    font-size: 1rem;
+}
+
+.tip-toast-error {
+    border-color: rgba(255, 77, 77, 0.34);
+}
+
+.tip-toast-error i {
+    color: var(--primary-red);
+}

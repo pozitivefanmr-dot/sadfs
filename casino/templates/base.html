@@ -98,7 +98,7 @@
 
     <link rel="icon" type="image/png" sizes="64x64" href="{% static 'img/favicon.png' %}">
     <link rel="apple-touch-icon" sizes="180x180" href="{% static 'img/bg.png' %}">
-    <link rel="stylesheet" href="{% static 'css/style.css' %}?v=20260426b">
+    <link rel="stylesheet" href="{% static 'css/style.css' %}?v=20260426c">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
     <script src="{% static 'js/i18n.js' %}?v=20260425a" defer></script>
 </head>
@@ -1491,7 +1491,15 @@
                 <!-- User Header -->
                 <div class="stats-user-header">
                     <img src="" class="stats-avatar" id="statsAvatar" alt="Avatar">
-                    <div class="stats-username" id="statsUsername" data-i18n="stats.player">Player</div>
+                    <div class="stats-user-main">
+                        <div class="stats-username" id="statsUsername" data-i18n="stats.player">Player</div>
+                        {% if user.is_authenticated %}
+                        <button type="button" class="stats-tip-btn" id="statsTipBtn" onclick="openTipModal(currentStatsUser)">
+                            <i class="bi bi-gift-fill"></i>
+                            <span>TIP</span>
+                        </button>
+                        {% endif %}
+                    </div>
                 </div>
 
                 <!-- Period Tabs -->
@@ -1535,6 +1543,39 @@
             </div>
         </div>
     </div>
+
+    {% if user.is_authenticated %}
+    <div class="tip-toast-wrap" id="tipToastWrap"></div>
+
+    <div class="tip-overlay" id="tipModal">
+        <div class="tip-box">
+            <button type="button" class="tip-close" onclick="closeTipModal()"><i class="bi bi-x-lg"></i></button>
+            <div class="tip-head">
+                <div class="tip-icon"><i class="bi bi-gift-fill"></i></div>
+                <div>
+                    <div class="tip-title">SEND TIP</div>
+                    <div class="tip-subtitle">Choose a godly to gift to <span id="tipRecipientName">Player</span></div>
+                </div>
+            </div>
+            <div class="tip-confirm-panel" id="tipConfirmPanel">
+                <div class="tip-confirm-title">CONFIRM YOUR TIP</div>
+                <div class="tip-confirm-item">
+                    <img src="" id="tipConfirmImg" alt="">
+                    <div>
+                        <div class="tip-confirm-name" id="tipConfirmName">Item</div>
+                        <div class="tip-confirm-meta"><span id="tipConfirmValue">0</span> SV to <span id="tipConfirmRecipient">Player</span></div>
+                    </div>
+                </div>
+                <div class="tip-confirm-actions">
+                    <button type="button" class="tip-secondary-btn" onclick="hideTipConfirm()">BACK</button>
+                    <button type="button" class="tip-send-btn" id="tipSendBtn" onclick="sendTip()">CONFIRM TIP</button>
+                </div>
+            </div>
+            <div class="tip-status" id="tipStatus">Loading your inventory...</div>
+            <div class="tip-grid" id="tipItemGrid"></div>
+        </div>
+    </div>
+    {% endif %}
 
     <script>
         let currentStatsUser = '';
@@ -1581,6 +1622,11 @@
                     // Fill header
                     document.getElementById('statsAvatar').src = data.avatar || '';
                     document.getElementById('statsUsername').textContent = data.username;
+                    const tipBtn = document.getElementById('statsTipBtn');
+                    if (tipBtn) {
+                        const me = "{{ request.user.username|escapejs }}".toLowerCase();
+                        tipBtn.style.display = (me && data.username && data.username.toLowerCase() !== me) ? 'inline-flex' : 'none';
+                    }
 
                     // Fill stats
                     const profitEl = document.getElementById('statsProfit');
@@ -1658,6 +1704,130 @@
             }
         });
     </script>
+
+    {% if user.is_authenticated %}
+    <script>
+        let tipRecipient = '';
+        let tipItems = [];
+        let selectedTipItem = null;
+
+        function openTipModal(username) {
+            if (!username) return;
+            const me = "{{ request.user.username|escapejs }}";
+            if (username.toLowerCase() === me.toLowerCase()) return;
+            tipRecipient = username;
+            selectedTipItem = null;
+            document.getElementById('tipRecipientName').textContent = username;
+            document.getElementById('tipModal').classList.add('active');
+            document.getElementById('tipConfirmPanel').classList.remove('active');
+            document.getElementById('tipItemGrid').innerHTML = '';
+            document.getElementById('tipStatus').style.display = 'block';
+            document.getElementById('tipStatus').textContent = 'Loading your inventory...';
+            fetch("{% url 'api_tip_inventory' %}")
+                .then(r => r.json())
+                .then(data => {
+                    if (data.status !== 'ok') {
+                        document.getElementById('tipStatus').textContent = data.message || 'Could not load inventory';
+                        return;
+                    }
+                    tipItems = data.items || [];
+                    renderTipItems();
+                })
+                .catch(() => {
+                    document.getElementById('tipStatus').textContent = 'Could not load inventory';
+                });
+        }
+
+        function closeTipModal() {
+            document.getElementById('tipModal').classList.remove('active');
+        }
+
+        function renderTipItems() {
+            const grid = document.getElementById('tipItemGrid');
+            const status = document.getElementById('tipStatus');
+            if (!tipItems.length) {
+                status.style.display = 'block';
+                status.textContent = 'No available godlies to tip';
+                grid.innerHTML = '';
+                return;
+            }
+            status.style.display = 'none';
+            grid.innerHTML = tipItems.map(item => `
+                <button type="button" class="tip-item-card" data-item-id="${item.id}" onclick="selectTipItem(${Number(item.id) || 0})">
+                    <span class="tip-item-glow"></span>
+                    <img src="${escapeHtml(item.image || '/static/img/item_placeholder.svg')}" alt="${escapeHtml(item.name)}" onerror="this.src='/static/img/item_placeholder.svg'">
+                    <span class="tip-item-name">${escapeHtml(item.name)}</span>
+                    <span class="tip-item-value">${Number(item.value || 0).toLocaleString()} SV</span>
+                </button>
+            `).join('');
+        }
+
+        function selectTipItem(itemId) {
+            selectedTipItem = tipItems.find(item => Number(item.id) === Number(itemId));
+            if (!selectedTipItem) return;
+            document.querySelectorAll('.tip-item-card').forEach(card => card.classList.toggle('active', Number(card.dataset.itemId) === Number(itemId)));
+            document.getElementById('tipConfirmImg').src = selectedTipItem.image || '/static/img/item_placeholder.svg';
+            document.getElementById('tipConfirmName').textContent = selectedTipItem.name;
+            document.getElementById('tipConfirmValue').textContent = Number(selectedTipItem.value || 0).toLocaleString();
+            document.getElementById('tipConfirmRecipient').textContent = tipRecipient;
+            document.getElementById('tipConfirmPanel').classList.add('active');
+        }
+
+        function hideTipConfirm() {
+            document.getElementById('tipConfirmPanel').classList.remove('active');
+        }
+
+        function sendTip() {
+            if (!selectedTipItem || !tipRecipient) return;
+            const btn = document.getElementById('tipSendBtn');
+            btn.disabled = true;
+            btn.textContent = 'SENDING...';
+            fetch("{% url 'api_send_tip' %}", {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json', 'X-CSRFToken': getCsrfToken() },
+                body: JSON.stringify({ recipient: tipRecipient, item_id: selectedTipItem.id })
+            })
+                .then(r => r.json())
+                .then(data => {
+                    if (data.status === 'success') {
+                        closeTipModal();
+                        showTipToast(`You sent ${data.item.name} to ${data.recipient}`);
+                        tipItems = tipItems.filter(item => Number(item.id) !== Number(selectedTipItem.id));
+                        selectedTipItem = null;
+                    } else {
+                        showTipToast(data.message || 'Tip failed', true);
+                    }
+                })
+                .catch(() => showTipToast('Tip failed', true))
+                .finally(() => {
+                    btn.disabled = false;
+                    btn.textContent = 'CONFIRM TIP';
+                });
+        }
+
+        function showTipToast(text, isError) {
+            const wrap = document.getElementById('tipToastWrap');
+            const toast = document.createElement('div');
+            toast.className = 'tip-toast' + (isError ? ' tip-toast-error' : '');
+            toast.innerHTML = `<i class="bi ${isError ? 'bi-x-circle-fill' : 'bi-check-circle-fill'}"></i><span>${escapeHtml(text)}</span>`;
+            wrap.appendChild(toast);
+            setTimeout(() => toast.classList.add('show'), 20);
+            setTimeout(() => {
+                toast.classList.remove('show');
+                setTimeout(() => toast.remove(), 300);
+            }, 3600);
+        }
+
+        document.addEventListener('DOMContentLoaded', function () {
+            const tipOverlay = document.getElementById('tipModal');
+            if (tipOverlay) {
+                tipOverlay.addEventListener('mousedown', function (e) {
+                    if (e.target === this) closeTipModal();
+                });
+            }
+        });
+    </script>
+    {% endif %}
 
     <script>
         // Smooth scroll for anchor links

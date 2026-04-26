@@ -2159,6 +2159,85 @@ def api_get_avatar(request, username):
 
 
 @login_required
+def api_tip_inventory(request):
+    if request.method != 'GET':
+        return JsonResponse({'status': 'error', 'message': 'GET only'}, status=405)
+    items = list(UserItem.objects.filter(
+        owner_name__iexact=request.user.username,
+        status='available',
+    ).order_by('-item_value', 'item_name', 'id'))
+    heal_item_images(items)
+    return JsonResponse({
+        'status': 'ok',
+        'items': [
+            {
+                'id': item.id,
+                'name': item.item_name,
+                'value': item.item_value,
+                'image': safe_image_url(item.image_url),
+            }
+            for item in items
+        ]
+    })
+
+
+@login_required
+@require_POST
+@ratelimit(key='user', rate='10/m', block=False)
+def api_send_tip(request):
+    if getattr(request, 'limited', False):
+        return JsonResponse({'status': 'error', 'message': 'Too many tips. Slow down.'}, status=429)
+    try:
+        data = json.loads(request.body)
+    except (ValueError, TypeError):
+        return JsonResponse({'status': 'error', 'message': 'Bad request'}, status=400)
+
+    recipient_name = str(data.get('recipient') or '').strip()
+    item_id = data.get('item_id')
+    if not recipient_name:
+        return JsonResponse({'status': 'error', 'message': 'Recipient is required'}, status=400)
+    if recipient_name.lower() == request.user.username.lower():
+        return JsonResponse({'status': 'error', 'message': 'You cannot tip yourself'}, status=400)
+
+    recipient = User.objects.filter(username__iexact=recipient_name).first()
+    if not recipient:
+        return JsonResponse({'status': 'error', 'message': 'User not found'}, status=404)
+
+    try:
+        with transaction.atomic():
+            item = UserItem.objects.select_for_update().get(
+                id=item_id,
+                owner_name__iexact=request.user.username,
+                status='available',
+            )
+            item_name = item.item_name
+            item_value = item.item_value
+            item_image = safe_image_url(item.image_url)
+            item.owner_name = recipient.username
+            item.status = 'available'
+            item.save(update_fields=['owner_name', 'status'])
+            log_item_action(request.user.username, 'tip_sent', item_id=item.id,
+                            item_name=item_name, item_value=item_value,
+                            note=f'to {recipient.username}', request=request)
+            log_item_action(recipient.username, 'tip_received', item_id=item.id,
+                            item_name=item_name, item_value=item_value,
+                            note=f'from {request.user.username}', request=request)
+    except UserItem.DoesNotExist:
+        return JsonResponse({'status': 'error', 'message': 'Item not found or unavailable'}, status=404)
+
+    return JsonResponse({
+        'status': 'success',
+        'recipient': recipient.username,
+        'item': {
+            'id': item_id,
+            'name': item_name,
+            'value': item_value,
+            'image': item_image,
+        }
+    })
+
+
+@login_required
 @require_POST
 @ratelimit(key='user', rate='5/10s', block=False)
 @ratelimit(key='user', rate='30/m', block=False)
