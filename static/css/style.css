@@ -17603,12 +17603,27 @@ body .chat-sidebar .chat-send-btn svg { width: 18px !important; fill: #041a10 !i
 }
 
 .tip-item-value {
-    color: var(--primary-green);
-    font-size: 0.78rem;
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    color: #fff8d8;
+    font-size: 0.82rem;
     font-weight: 900;
+    text-shadow: 0 0 10px rgba(255, 211, 80, 0.35);
     position: relative;
     z-index: 1;
 }
+
+.tip-coin-ic {
+    width: 14px;
+    height: 14px;
+    object-fit: contain;
+    filter: drop-shadow(0 0 6px rgba(255, 211, 80, 0.55));
+    flex: 0 0 auto;
+}
+
+.tip-coin-ic.sm { width: 13px; height: 13px; }
+.tip-coin-ic.lg { width: 17px; height: 17px; }
 
 .tip-selection-bar {
     flex: 0 0 auto;
@@ -17645,10 +17660,14 @@ body .chat-sidebar .chat-send-btn svg { width: 18px !important; fill: #041a10 !i
 }
 
 .tip-selection-summary .tip-selection-total {
-    color: var(--primary-green);
-    font-size: 1rem;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    color: #fff8d8;
+    font-size: 1.05rem;
     font-weight: 900;
     letter-spacing: 0.4px;
+    text-shadow: 0 0 12px rgba(255, 211, 80, 0.4);
 }
 
 .tip-selection-actions {
@@ -17780,9 +17799,13 @@ body .chat-sidebar .chat-send-btn svg { width: 18px !important; fill: #041a10 !i
 }
 
 .tip-confirm-row-value {
-    color: var(--primary-green);
-    font-size: 0.82rem;
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    color: #fff8d8;
+    font-size: 0.88rem;
     font-weight: 900;
+    text-shadow: 0 0 10px rgba(255, 211, 80, 0.35);
 }
 
 .tip-confirm-foot {
@@ -17798,10 +17821,21 @@ body .chat-sidebar .chat-send-btn svg { width: 18px !important; fill: #041a10 !i
 }
 
 .tip-confirm-foot strong {
-    color: var(--primary-green);
+    color: #fff;
     font-size: 0.95rem;
     font-weight: 900;
     margin-left: 6px;
+}
+
+.tip-confirm-foot-total {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    color: #fff8d8;
+    font-size: 1.02rem;
+    font-weight: 900;
+    margin-left: 6px;
+    text-shadow: 0 0 12px rgba(255, 211, 80, 0.4);
 }
 
 .tip-confirm-actions {

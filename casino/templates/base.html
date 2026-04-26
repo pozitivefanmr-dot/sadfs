@@ -1564,7 +1564,7 @@
                 <div class="tip-confirm-list" id="tipConfirmList"></div>
                 <div class="tip-confirm-foot">
                     <span>Sending <strong id="tipConfirmCount">0</strong> item(s) to <span id="tipConfirmRecipient">Player</span></span>
-                    <span>Total: <strong id="tipConfirmTotal">0</strong> SV</span>
+                    <span>Total: <span class="tip-confirm-foot-total"><span id="tipConfirmTotal">0</span> SV <img src="/static/img/sv_coin.png" class="tip-coin-ic lg" alt=""></span></span>
                 </div>
                 <div class="tip-confirm-actions">
                     <button type="button" class="tip-secondary-btn" onclick="hideTipConfirm()">BACK</button>
@@ -1577,7 +1577,7 @@
                     <div class="tip-selection-summary">
                         <span><strong id="tipSelectedCount">0</strong> selected</span>
                         <span>·</span>
-                        <span><span class="tip-selection-total" id="tipSelectedTotal">0</span> SV</span>
+                        <span class="tip-selection-total"><span id="tipSelectedTotal">0</span> SV <img src="/static/img/sv_coin.png" class="tip-coin-ic lg" alt=""></span>
                     </div>
                     <div class="tip-selection-actions">
                         <button type="button" class="tip-secondary-btn" onclick="clearTipSelection()">CLEAR</button>
@@ -1775,7 +1775,7 @@
                     <span class="tip-item-check"><i class="bi bi-check-lg"></i></span>
                     <img src="${escapeHtml(item.image || '/static/img/item_placeholder.svg')}" alt="${escapeHtml(item.name)}" onerror="this.src='/static/img/item_placeholder.svg'">
                     <span class="tip-item-name">${escapeHtml(item.name)}</span>
-                    <span class="tip-item-value">${Number(item.value || 0).toLocaleString()} SV</span>
+                    <span class="tip-item-value">${Number(item.value || 0).toLocaleString()} SV <img src="/static/img/sv_coin.png" class="tip-coin-ic" alt=""></span>
                 </button>`;
             }).join('');
             renderTipSelection();
@@ -1829,7 +1829,7 @@
                 <div class="tip-confirm-row">
                     <img src="${escapeHtml(item.image || '/static/img/item_placeholder.svg')}" alt="" onerror="this.src='/static/img/item_placeholder.svg'">
                     <span class="tip-confirm-row-name">${escapeHtml(item.name)}</span>
-                    <span class="tip-confirm-row-value">${Number(item.value || 0).toLocaleString()} SV</span>
+                    <span class="tip-confirm-row-value">${Number(item.value || 0).toLocaleString()} SV <img src="/static/img/sv_coin.png" class="tip-coin-ic" alt=""></span>
                 </div>
             `).join('');
             document.getElementById('tipConfirmPanel').classList.add('active');
