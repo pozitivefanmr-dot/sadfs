@@ -157,6 +157,7 @@
         "footer.community":   { en: "Community",         ru: "Сообщество" },
         "footer.discordSub":  { en: "Join our server",   ru: "Зайти на сервер" },
         "footer.telegramSub": { en: "Follow updates",    ru: "Следить за обновлениями" },
+        "footer.xSub":        { en: "Latest posts",      ru: "Свежие посты" },
         "footer.faqTitle":    { en: "Frequently Asked Questions", ru: "Часто задаваемые вопросы" },
         "footer.copyright":   { en: "All rights reserved.", ru: "Все права защищены." },
         "footer.badge.uid":   { en: "Unique Game UID",   ru: "Уникальный UID игры" },
