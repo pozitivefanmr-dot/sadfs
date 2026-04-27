@@ -17591,7 +17591,7 @@ body .chat-sidebar .chat-send-btn svg { width: 18px !important; fill: #041a10 !i
 
 .tip-item-name {
     width: 100%;
-    color: #dce9e3;
+    color: #ffffff;
     font-size: 0.67rem;
     font-weight: 800;
     text-transform: uppercase;
@@ -17603,10 +17603,9 @@ body .chat-sidebar .chat-send-btn svg { width: 18px !important; fill: #041a10 !i
 }
 
 .tip-item-value {
-    color: #fff8d8;
+    color: #ffffff;
     font-size: 0.78rem;
     font-weight: 900;
-    text-shadow: 0 0 10px rgba(255, 211, 80, 0.35);
     white-space: nowrap;
     position: relative;
     z-index: 1;
