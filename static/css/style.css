@@ -17728,11 +17728,11 @@ body .chat-sidebar .chat-send-btn svg { width: 18px !important; fill: #041a10 !i
 }
 
 .tip-selection-summary .tip-selection-total {
-    color: #fff8d8;
+    color: #ffffff;
     font-size: 1.05rem;
     font-weight: 900;
     letter-spacing: 0.4px;
-    text-shadow: 0 0 12px rgba(255, 211, 80, 0.4);
+    text-shadow: 0 0 10px rgba(255, 255, 255, 0.18);
     white-space: nowrap;
 }
 
@@ -17869,10 +17869,10 @@ body .chat-sidebar .chat-send-btn svg { width: 18px !important; fill: #041a10 !i
 }
 
 .tip-confirm-row-value {
-    color: #fff8d8;
+    color: #ffffff;
     font-size: 0.88rem;
     font-weight: 900;
-    text-shadow: 0 0 10px rgba(255, 211, 80, 0.35);
+    text-shadow: 0 0 8px rgba(255, 255, 255, 0.16);
     white-space: nowrap;
 }
 
@@ -17900,11 +17900,11 @@ body .chat-sidebar .chat-send-btn svg { width: 18px !important; fill: #041a10 !i
 }
 
 .tip-confirm-foot-total {
-    color: #fff8d8;
+    color: #ffffff;
     font-size: 1.02rem;
     font-weight: 900;
     margin-left: 6px;
-    text-shadow: 0 0 12px rgba(255, 211, 80, 0.4);
+    text-shadow: 0 0 10px rgba(255, 255, 255, 0.18);
     white-space: nowrap;
 }
 
