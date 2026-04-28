@@ -173,11 +173,7 @@ def heal_item_images(items, *, persist=True):
     need_api = []  # (item, asset_id)
     for item in items:
         url = (item.image_url or '').strip()
-        is_bad = _image_url_is_bad(url)
-        # Soft upgrade: even if URL isn't "bad", prefer an rbxcdn match by name
-        # over fragile sources (e.g. wikia hotlinks that 403 for some users).
-        is_fragile = (not is_bad) and ('rbxcdn.com' not in url.lower())
-        if not is_bad and not is_fragile:
+        if not _image_url_is_bad(url):
             continue
         name = item.item_name or ''
         resolved = name_to_image.get(_norm(name), '')
@@ -185,9 +181,6 @@ def heal_item_images(items, *, persist=True):
             base = re.sub(r'\s*\(x+\d+\)\s*$', '', name).strip()
             if base and base != name:
                 resolved = name_to_image.get(_norm(base), '')
-        if is_fragile and (not resolved or 'rbxcdn.com' not in resolved.lower()):
-            # No rbxcdn upgrade available — leave the fragile URL as-is.
-            continue
         if resolved:
             item.image_url = resolved
             if persist:
@@ -195,8 +188,6 @@ def heal_item_images(items, *, persist=True):
                     UserItem.objects.filter(id=item.id).update(image_url=resolved)
                 except Exception:
                     pass
-            continue
-        if is_fragile:
             continue
         aid = _extract_roblox_asset_id(url)
         if aid:
@@ -219,97 +210,6 @@ def heal_item_images(items, *, persist=True):
                 item.image_url = SAFE_IMAGE_FALLBACK
 
     return items
-
-
-def displayable_image_url(url):
-    """Return a URL the browser can reliably load.
-    - Empty / fallback → SAFE_IMAGE_FALLBACK
-    - Local (/static, /media) → unchanged
-    - rbxcdn (any t*.rbxcdn.com / tr.rbxcdn.com) → unchanged
-    - Anything else (wikia, roblox.com, etc.) → routed through /img/proxy/
-      so the request is server-to-server (same Referer/UA every time) and the
-      response is identical for every viewer.
-    """
-    if not url or not isinstance(url, str):
-        return SAFE_IMAGE_FALLBACK
-    u = url.strip()
-    if not u:
-        return SAFE_IMAGE_FALLBACK
-    if u.startswith('/static/') or u.startswith('/media/') or u.startswith('/img/proxy/'):
-        return u
-    low = u.lower()
-    if 'rbxcdn.com' in low and low.startswith('https://'):
-        return u
-    try:
-        parsed = _urlparse(u)
-    except Exception:
-        return SAFE_IMAGE_FALLBACK
-    if parsed.scheme not in ('http', 'https'):
-        return SAFE_IMAGE_FALLBACK
-    host = (parsed.hostname or '').lower()
-    if host not in ALLOWED_IMAGE_HOSTS:
-        return SAFE_IMAGE_FALLBACK
-    from urllib.parse import quote as _quote
-    return '/img/proxy/?u=' + _quote(u, safe='')
-
-
-# In-memory image proxy cache (sha1 → (bytes, content_type, expires_at)).
-# Bounded; LRU-ish via simple periodic prune.
-_IMG_PROXY_CACHE = {}
-_IMG_PROXY_CACHE_LIMIT = 512
-_IMG_PROXY_TTL = 60 * 60 * 24 * 7  # 7 days
-
-
-def img_proxy(request):
-    """Server-side image fetcher so all viewers see the same image regardless
-    of browser cache / hotlink protection (wikia, roblox.com, etc).
-    """
-    from django.http import HttpResponse, HttpResponseBadRequest, HttpResponseNotFound
-    src = (request.GET.get('u') or '').strip()
-    if not src or len(src) > 800:
-        return HttpResponseBadRequest('bad u')
-    try:
-        parsed = _urlparse(src)
-    except Exception:
-        return HttpResponseBadRequest('bad url')
-    if parsed.scheme not in ('http', 'https'):
-        return HttpResponseBadRequest('bad scheme')
-    host = (parsed.hostname or '').lower()
-    if host not in ALLOWED_IMAGE_HOSTS:
-        return HttpResponseBadRequest('host not allowed')
-
-    key = hashlib.sha1(src.encode('utf-8')).hexdigest()
-    now = time.time()
-    hit = _IMG_PROXY_CACHE.get(key)
-    if hit and hit[2] > now:
-        body, ctype, _ = hit
-        resp = HttpResponse(body, content_type=ctype)
-        resp['Cache-Control'] = 'public, max-age=604800, immutable'
-        return resp
-
-    try:
-        r = requests.get(src, timeout=6, headers={
-            'User-Agent': 'Mozilla/5.0 (compatible; mmflip-imgproxy/1.0)',
-            'Accept': 'image/avif,image/webp,image/png,image/*,*/*;q=0.8',
-        })
-    except Exception as exc:
-        logger.warning('img_proxy fetch failed %s: %s', src, exc)
-        return HttpResponseNotFound('fetch failed')
-    if r.status_code != 200 or not r.content:
-        return HttpResponseNotFound('upstream %s' % r.status_code)
-    ctype = (r.headers.get('Content-Type') or 'image/png').split(';', 1)[0].strip()
-    if not ctype.startswith('image/'):
-        return HttpResponseBadRequest('not an image')
-
-    if len(_IMG_PROXY_CACHE) >= _IMG_PROXY_CACHE_LIMIT:
-        # prune oldest ~10%
-        for k, _ in sorted(_IMG_PROXY_CACHE.items(), key=lambda kv: kv[1][2])[:max(1, _IMG_PROXY_CACHE_LIMIT // 10)]:
-            _IMG_PROXY_CACHE.pop(k, None)
-    _IMG_PROXY_CACHE[key] = (r.content, ctype, now + _IMG_PROXY_TTL)
-
-    resp = HttpResponse(r.content, content_type=ctype)
-    resp['Cache-Control'] = 'public, max-age=604800, immutable'
-    return resp
 
 
 def _client_ip(request):
@@ -1119,7 +1019,7 @@ def create_game(request):
                     'id': item.id,
                     'name': item.item_name,
                     'value': item.item_value,
-                    'image': displayable_image_url(item.image_url),
+                    'image': item.image_url,
                 })
 
             game = CoinflipGame.objects.create(
@@ -1213,7 +1113,7 @@ def join_game(request, game_id):
                 item.status = 'betting'
                 item.save(update_fields=['status'])
                 items_json_p2.append({
-                    'id': item.id, 'name': item.item_name, 'value': item.item_value, 'image': displayable_image_url(item.image_url),
+                    'id': item.id, 'name': item.item_name, 'value': item.item_value, 'image': item.image_url,
                 })
                 log_item_action(request.user.username, 'bet_lock', item=item,
                                 related_game_id=game.id, request=request)
@@ -1389,35 +1289,6 @@ def admin_panel(request):
             except (ValueError, TypeError):
                 amount = 1
             image_url = request.POST.get('image_url', '').strip()
-
-            # Resolve to a stable rbxcdn URL so all users see the image.
-            # 1) Try name lookup against existing UserItems (case/space-insensitive).
-            # 2) If admin provided a Roblox assetId URL, batch-resolve via thumbnails API.
-            # 3) Otherwise keep admin-provided URL as-is.
-            def _norm(s):
-                return re.sub(r'\s+', ' ', (s or '').strip()).lower()
-            target_key = _norm(item_name)
-            best_match = ''
-            for ui in UserItem.objects.exclude(image_url='').values('item_name', 'image_url'):
-                u = (ui['image_url'] or '').strip()
-                if _image_url_is_bad(u):
-                    continue
-                if _norm(ui['item_name']) != target_key:
-                    continue
-                if 'rbxcdn.com' in u:
-                    best_match = u
-                    break
-                if not best_match:
-                    best_match = u
-            if best_match:
-                image_url = best_match
-            elif _image_url_is_bad(image_url):
-                aid = _extract_roblox_asset_id(image_url)
-                if aid:
-                    resolved_map = _resolve_asset_ids_via_roblox([aid])
-                    new_url = resolved_map.get(str(aid))
-                    if new_url:
-                        image_url = new_url
 
             # Создаём amount штук отдельных предметов
             for _ in range(max(1, amount)):
@@ -2113,7 +1984,7 @@ def check_flip_status(request):
                     continue
                 out.append({
                     'name': it.get('name', ''),
-                    'image': displayable_image_url(it.get('image', '')),
+                    'image': safe_image_url(it.get('image', '')),
                     'value': it.get('value', 0),
                 })
             return out
@@ -2315,7 +2186,7 @@ def api_tip_inventory(request):
                 'id': item.id,
                 'name': item.item_name,
                 'value': item.item_value,
-                'image': displayable_image_url(item.image_url),
+                'image': safe_image_url(item.image_url),
             }
             for item in items
         ]
@@ -2353,7 +2224,7 @@ def api_send_tip(request):
             )
             item_name = item.item_name
             item_value = item.item_value
-            item_image = displayable_image_url(item.image_url)
+            item_image = safe_image_url(item.image_url)
             item.owner_name = recipient.username
             item.status = 'available'
             item.save(update_fields=['owner_name', 'status'])

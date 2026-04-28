@@ -187,8 +187,8 @@
                     <div class="check-indicator"></div>
 
                     <div class="item-img-container" style="height: 60px; background: transparent;">
-                        <img src="{{ item.image_url|disp_img }}" class="item-img" alt="{{ item.item_name }}" loading="lazy" decoding="async"
-                            onerror="this.onerror=null; this.src='{% static 'img/item_placeholder.svg' %}'">
+                        <img src="{{ item.image_url }}" class="item-img" alt="{{ item.item_name }}" loading="lazy" decoding="async"
+                            onerror="this.src='https://static.wikia.nocookie.net/murder-mystery-2/images/5/53/Godly_Icon.png'">
                     </div>
 
                     <div class="item-title" title="{{ item.item_name }}">{{ item.item_name }}</div>

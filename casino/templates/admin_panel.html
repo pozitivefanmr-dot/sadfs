@@ -1,6 +1,5 @@
 {% extends 'base.html' %}
 {% load static %}
-{% load custom_filters %}
 
 {% block content %}
 {% include 'header.html' %}
@@ -356,7 +355,7 @@
             {% for item in lookup_inventory %}
             <div class="ap-inv-item">
                 {% if item.image_url %}
-                <img src="{{ item.image_url|disp_img }}" class="ap-inv-img" alt="" onerror="this.onerror=null; this.src='{% static 'img/item_placeholder.svg' %}'">
+                <img src="{{ item.image_url }}" class="ap-inv-img" alt="">
                 {% else %}
                 <div class="ap-inv-placeholder"><i class="bi bi-box-seam"></i></div>
                 {% endif %}
@@ -588,7 +587,7 @@
             {% for item in inventory %}
             <div class="ap-inv-item">
                 {% if item.image_url %}
-                <img src="{{ item.image_url|disp_img }}" class="ap-inv-img" alt="" onerror="this.onerror=null; this.src='{% static 'img/item_placeholder.svg' %}'">
+                <img src="{{ item.image_url }}" class="ap-inv-img" alt="">
                 {% else %}
                 <div class="ap-inv-placeholder">
                     <i class="bi bi-box-seam"></i>
