@@ -2186,7 +2186,7 @@ def api_tip_inventory(request):
                 'id': item.id,
                 'name': item.item_name,
                 'value': item.item_value,
-                'image': safe_image_url(item.image_url),
+                'image': item.image_url or '',
             }
             for item in items
         ]
