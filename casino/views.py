@@ -112,6 +112,52 @@ def _extract_roblox_asset_id(u):
     return m.group(1) if m else None
 
 
+_FANDOM_IMAGE_CACHE = {}  # norm_name → url ('' = miss, also cached)
+
+
+def _resolve_image_via_fandom(item_name, *, timeout=4):
+    """Last-resort lookup: query the MM2 Fandom wiki for an image of the item.
+    Tries File:<Name>.png and File:<Name>.gif. Result (including miss) is cached
+    in-process. Returns '' on miss.
+    """
+    if not item_name:
+        return ''
+    key = re.sub(r'\s+', ' ', item_name.strip()).lower()
+    if key in _FANDOM_IMAGE_CACHE:
+        return _FANDOM_IMAGE_CACHE[key]
+    base = item_name.strip().replace(' ', '_')
+    candidates = [f'File:{base}.png', f'File:{base}.gif', f'File:{base}_(Knife).png',
+                  f'File:{base}_(Gun).png']
+    found = ''
+    for title in candidates:
+        try:
+            r = requests.get(
+                'https://murder-mystery-2.fandom.com/api.php',
+                params={
+                    'action': 'query', 'titles': title,
+                    'prop': 'imageinfo', 'iiprop': 'url',
+                    'format': 'json', 'redirects': 1,
+                },
+                timeout=timeout,
+            )
+            if r.status_code != 200:
+                continue
+            pages = ((r.json() or {}).get('query') or {}).get('pages') or {}
+            for _, page in pages.items():
+                infos = page.get('imageinfo') or []
+                if infos:
+                    url = infos[0].get('url') or ''
+                    if url:
+                        found = url
+                        break
+            if found:
+                break
+        except Exception as exc:
+            logger.warning('fandom lookup failed for %s: %s', title, exc)
+    _FANDOM_IMAGE_CACHE[key] = found
+    return found
+
+
 def _resolve_asset_ids_via_roblox(asset_ids, *, chunk_size=100, timeout=4):
     """Batch-resolve a list of Roblox assetIds to imageUrl via thumbnails API.
     Splits into chunks of `chunk_size`, returns dict {assetId(str): imageUrl}.
@@ -156,19 +202,30 @@ def heal_item_images(items, *, persist=True):
     def _norm(s):
         return re.sub(r'\s+', ' ', (s or '').strip()).lower()
 
-    name_to_image = {}
-    for ui in UserItem.objects.exclude(image_url='').values('item_name', 'image_url'):
-        url = (ui['image_url'] or '').strip()
-        if _image_url_is_bad(url):
-            continue
-        key = _norm(ui['item_name'])
-        if not key:
-            continue
-        existing = name_to_image.get(key, '')
+    def _record(map_, key, url):
+        if not key or not url or _image_url_is_bad(url):
+            return
+        existing = map_.get(key, '')
         if not existing:
-            name_to_image[key] = url
+            map_[key] = url
         elif 'rbxcdn.com' in url and 'rbxcdn.com' not in existing:
-            name_to_image[key] = url
+            map_[key] = url
+
+    name_to_image = {}
+    # Source 1: existing UserItem records.
+    for ui in UserItem.objects.exclude(image_url='').values('item_name', 'image_url'):
+        _record(name_to_image, _norm(ui['item_name']), (ui['image_url'] or '').strip())
+    # Source 2: CoinflipGame.items1/items2 — embedded {name, image} dicts often
+    # carry rbxcdn URLs even for items whose UserItem rows have empty image_url
+    # (e.g. older entries created via admin panel without an image).
+    try:
+        for game in CoinflipGame.objects.exclude(items1__isnull=True).only('items1', 'items2'):
+            for arr in (game.items1 or [], game.items2 or []):
+                for it in arr:
+                    if isinstance(it, dict):
+                        _record(name_to_image, _norm(it.get('name', '')), (it.get('image') or '').strip())
+    except Exception as exc:
+        logger.warning('heal_item_images: CoinflipGame scan failed: %s', exc)
 
     need_api = []  # (item, asset_id)
     for item in items:
@@ -192,6 +249,22 @@ def heal_item_images(items, *, persist=True):
         aid = _extract_roblox_asset_id(url)
         if aid:
             need_api.append((item, aid))
+            continue
+        # Last-resort: ask MM2 Fandom wiki for an image by item name.
+        wiki_url = _resolve_image_via_fandom(name)
+        if not wiki_url:
+            base = re.sub(r'\s*\(x+\d+\)\s*$', '', name).strip()
+            if base and base != name:
+                wiki_url = _resolve_image_via_fandom(base)
+        if wiki_url:
+            item.image_url = wiki_url
+            # Cache hit for the rest of this batch with the same name.
+            _record(name_to_image, _norm(name), wiki_url)
+            if persist:
+                try:
+                    UserItem.objects.filter(id=item.id).update(image_url=wiki_url)
+                except Exception:
+                    pass
         else:
             item.image_url = SAFE_IMAGE_FALLBACK
 
@@ -2564,7 +2637,7 @@ def api_user_stats(request):
             'opponent_avatar': opp_avatars.get(opponent, '') if opponent else '',
             'winning_color': winning_color,
             'value_change': opp_value if won else -my_value,
-            'date': g.created_at.strftime('%d %b %Y, %H:%M'),
+            'date': g.created_at.isoformat() if g.created_at else '',
         })
 
     games_played = wins + losses

@@ -12059,28 +12059,87 @@ input[type=range].snow-range::-webkit-slider-thumb {
 .stats-wl-row {
     display: flex;
     justify-content: center;
-    gap: 24px;
+    gap: 12px;
     margin-bottom: 22px;
     padding-bottom: 18px;
     border-bottom: 1px solid rgba(255, 255, 255, 0.06);
 }
 
-.stats-wl-win {
-    color: #00ff9d;
-    font-weight: 800;
-    font-size: 0.85rem;
-    display: flex;
+.stats-wl-pill {
+    display: inline-flex;
     align-items: center;
-    gap: 5px;
+    gap: 8px;
+    padding: 7px 14px 7px 8px;
+    border-radius: 999px;
+    font-weight: 800;
+    font-size: 0.86rem;
+    line-height: 1;
+    letter-spacing: 0.4px;
+    border: 1px solid transparent;
+    transition: transform 0.18s ease, box-shadow 0.18s ease, border-color 0.18s ease;
+}
+
+.stats-wl-pill:hover {
+    transform: translateY(-1px);
+}
+
+.stats-wl-pill .stats-wl-ic {
+    width: 22px;
+    height: 22px;
+    border-radius: 50%;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.7rem;
+}
+
+.stats-wl-pill .stats-wl-num {
+    font-size: 0.95rem;
+    font-weight: 900;
+    color: #fff;
+}
+
+.stats-wl-pill .stats-wl-tag {
+    font-size: 0.74rem;
+    font-weight: 800;
+    opacity: 0.78;
+    letter-spacing: 0.6px;
+}
+
+.stats-wl-win {
+    color: #4dffb6;
+    background: linear-gradient(135deg, rgba(0, 255, 157, 0.14), rgba(0, 255, 157, 0.04));
+    border-color: rgba(0, 255, 157, 0.28);
+    box-shadow: 0 4px 14px rgba(0, 255, 157, 0.10);
+}
+
+.stats-wl-win .stats-wl-ic {
+    background: linear-gradient(135deg, #00ff9d, #00c878);
+    color: #062313;
+    box-shadow: 0 0 12px rgba(0, 255, 157, 0.45);
+}
+
+.stats-wl-win:hover {
+    border-color: rgba(0, 255, 157, 0.48);
+    box-shadow: 0 6px 18px rgba(0, 255, 157, 0.18);
 }
 
 .stats-wl-loss {
-    color: #ff4d4d;
-    font-weight: 800;
-    font-size: 0.85rem;
-    display: flex;
-    align-items: center;
-    gap: 5px;
+    color: #ff8b8b;
+    background: linear-gradient(135deg, rgba(255, 77, 77, 0.14), rgba(255, 77, 77, 0.04));
+    border-color: rgba(255, 77, 77, 0.28);
+    box-shadow: 0 4px 14px rgba(255, 77, 77, 0.10);
+}
+
+.stats-wl-loss .stats-wl-ic {
+    background: linear-gradient(135deg, #ff5d5d, #c82a2a);
+    color: #2a0808;
+    box-shadow: 0 0 12px rgba(255, 77, 77, 0.45);
+}
+
+.stats-wl-loss:hover {
+    border-color: rgba(255, 77, 77, 0.48);
+    box-shadow: 0 6px 18px rgba(255, 77, 77, 0.18);
 }
 
 /* History */

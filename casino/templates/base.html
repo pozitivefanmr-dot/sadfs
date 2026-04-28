@@ -1620,9 +1620,16 @@
 
                 <!-- W/L Row -->
                 <div class="stats-wl-row">
-                    <span class="stats-wl-win"><i class="bi bi-trophy-fill"></i> <span id="statsWins">0</span>W</span>
-                    <span class="stats-wl-loss"><i class="bi bi-x-circle-fill"></i> <span
-                            id="statsLosses">0</span>L</span>
+                    <span class="stats-wl-pill stats-wl-win">
+                        <span class="stats-wl-ic"><i class="bi bi-trophy-fill"></i></span>
+                        <span class="stats-wl-num" id="statsWins">0</span>
+                        <span class="stats-wl-tag">W</span>
+                    </span>
+                    <span class="stats-wl-pill stats-wl-loss">
+                        <span class="stats-wl-ic"><i class="bi bi-x-lg"></i></span>
+                        <span class="stats-wl-num" id="statsLosses">0</span>
+                        <span class="stats-wl-tag">L</span>
+                    </span>
                 </div>
 
                 <!-- Game History -->
@@ -1759,6 +1766,16 @@
                             const valueClass = g.won ? 'stats-positive' : 'stats-negative';
                             const oppAvatar = g.opponent_avatar || fbAvatar;
                             const oppName = (g.opponent || 'Player').replace(/</g, '&lt;');
+                            let dateStr = g.date || '';
+                            if (dateStr) {
+                                const d = new Date(dateStr);
+                                if (!isNaN(d.getTime())) {
+                                    dateStr = d.toLocaleString(undefined, {
+                                        day: '2-digit', month: 'short', year: 'numeric',
+                                        hour: '2-digit', minute: '2-digit'
+                                    });
+                                }
+                            }
 
                             html += `
                                 <div class="stats-history-item ${statusClass}">
@@ -1777,7 +1794,7 @@
                                         </div>
                                         <div class="history-bottom-row">
                                             <span class="history-status-pill ${statusClass}">${statusText}</span>
-                                            <span class="history-date">${g.date}</span>
+                                            <span class="history-date">${dateStr}</span>
                                         </div>
                                     </div>
                                     <div class="history-value ${valueClass}">${valueSign}${g.value_change.toLocaleString()}</div>
