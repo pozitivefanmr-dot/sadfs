@@ -17581,17 +17581,17 @@ body .chat-sidebar .chat-send-btn svg { width: 18px !important; fill: #041a10 !i
 .tip-grid::-webkit-scrollbar-thumb { background: linear-gradient(180deg, #00e5ff, #00ff9d); border-radius: 6px; }
 
 .tip-item-card {
-    height: 158px;
+    height: 168px;
     position: relative;
     display: flex;
     flex-direction: column;
     align-items: center;
-    justify-content: space-between;
-    gap: 7px;
-    border: 1px solid rgba(255, 255, 255, 0.07);
+    justify-content: flex-start;
+    gap: 8px;
+    border: 1px solid rgba(255, 255, 255, 0.08);
     border-radius: 14px;
-    padding: 12px 10px;
-    background: radial-gradient(circle at center, #1a1f24 0%, #0b0f0d 100%);
+    padding: 14px 10px 12px;
+    background: linear-gradient(180deg, #1b2126 0%, #0c1113 100%);
     color: #fff;
     cursor: pointer;
     overflow: hidden;
@@ -17602,14 +17602,14 @@ body .chat-sidebar .chat-send-btn svg { width: 18px !important; fill: #041a10 !i
 .tip-item-card:hover {
     transform: translateY(-3px);
     border-color: rgba(0, 255, 157, 0.34);
-    box-shadow: 0 14px 28px rgba(0, 0, 0, 0.28);
+    box-shadow: 0 14px 28px rgba(0, 0, 0, 0.32);
 }
 
 .tip-item-card.active {
     transform: translateY(-3px);
-    border-color: rgba(0, 255, 157, 0.78);
-    background: radial-gradient(circle at center, #1d2a23 0%, #0a1410 100%);
-    box-shadow: 0 16px 32px rgba(0, 0, 0, 0.36), inset 0 0 0 1px rgba(0, 255, 157, 0.42), 0 0 24px rgba(0, 255, 157, 0.18);
+    border-color: rgba(0, 255, 157, 0.7);
+    background: linear-gradient(180deg, #1d2a23 0%, #0a1410 100%);
+    box-shadow: 0 16px 32px rgba(0, 0, 0, 0.36), inset 0 0 0 1px rgba(0, 255, 157, 0.32);
 }
 
 .tip-item-check {
@@ -17640,45 +17640,68 @@ body .chat-sidebar .chat-send-btn svg { width: 18px !important; fill: #041a10 !i
 
 .tip-item-glow {
     position: absolute;
-    inset: auto 16px -24px;
-    height: 46px;
-    background: radial-gradient(circle, rgba(0, 255, 157, 0.18), transparent 70%);
+    inset: 0;
+    background: radial-gradient(ellipse 70% 55% at 50% 38%, rgba(0, 255, 157, 0.10), transparent 70%);
+    opacity: 0;
+    transition: opacity 0.2s ease;
     pointer-events: none;
 }
 
+.tip-item-card:hover .tip-item-glow,
+.tip-item-card.active .tip-item-glow {
+    opacity: 1;
+}
+
 .tip-item-card > img {
-    width: 74px;
-    height: 74px;
+    width: 78px;
+    height: 78px;
     object-fit: contain;
-    filter: drop-shadow(0 8px 12px rgba(0, 0, 0, 0.55));
+    filter: drop-shadow(0 6px 10px rgba(0, 0, 0, 0.55));
     position: relative;
     z-index: 1;
+    margin-top: 2px;
 }
 
 .tip-item-name {
     width: 100%;
-    color: #ffffff;
-    font-size: 0.67rem;
-    font-weight: 800;
+    color: #e8efe9;
+    font-size: 0.68rem;
+    font-weight: 700;
+    letter-spacing: 0.3px;
     text-transform: uppercase;
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
+    text-align: center;
     position: relative;
     z-index: 1;
+    margin-top: auto;
 }
 
 .tip-item-value {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
     color: #ffffff;
     font-size: 0.78rem;
-    font-weight: 900;
+    font-weight: 800;
+    line-height: 1;
+    padding: 5px 10px;
+    border-radius: 999px;
+    background: rgba(255, 255, 255, 0.04);
+    border: 1px solid rgba(255, 255, 255, 0.07);
     white-space: nowrap;
     position: relative;
     z-index: 1;
 }
 
+.tip-item-card.active .tip-item-value {
+    background: rgba(0, 255, 157, 0.10);
+    border-color: rgba(0, 255, 157, 0.32);
+}
+
 .tip-item-value .tip-coin-ic {
-    margin-left: 4px;
+    margin-left: 1px;
 }
 
 .tip-coin-ic {
@@ -17686,7 +17709,6 @@ body .chat-sidebar .chat-send-btn svg { width: 18px !important; fill: #041a10 !i
     height: 1em;
     object-fit: contain;
     vertical-align: -0.12em;
-    filter: drop-shadow(0 0 6px rgba(255, 211, 80, 0.55));
     flex: 0 0 auto;
 }
 

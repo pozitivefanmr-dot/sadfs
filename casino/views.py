@@ -153,31 +153,41 @@ def heal_item_images(items, *, persist=True):
     if not items:
         return items
 
+    def _norm(s):
+        return re.sub(r'\s+', ' ', (s or '').strip()).lower()
+
     name_to_image = {}
     for ui in UserItem.objects.exclude(image_url='').values('item_name', 'image_url'):
         url = (ui['image_url'] or '').strip()
         if _image_url_is_bad(url):
             continue
-        name = ui['item_name']
-        existing = name_to_image.get(name, '')
+        key = _norm(ui['item_name'])
+        if not key:
+            continue
+        existing = name_to_image.get(key, '')
         if not existing:
-            name_to_image[name] = url
+            name_to_image[key] = url
         elif 'rbxcdn.com' in url and 'rbxcdn.com' not in existing:
-            name_to_image[name] = url
+            name_to_image[key] = url
 
     need_api = []  # (item, asset_id)
     for item in items:
         url = (item.image_url or '').strip()
         if not _image_url_is_bad(url):
             continue
-        name = item.item_name
-        resolved = name_to_image.get(name, '')
+        name = item.item_name or ''
+        resolved = name_to_image.get(_norm(name), '')
         if not resolved:
             base = re.sub(r'\s*\(x+\d+\)\s*$', '', name).strip()
             if base and base != name:
-                resolved = name_to_image.get(base, '')
+                resolved = name_to_image.get(_norm(base), '')
         if resolved:
             item.image_url = resolved
+            if persist:
+                try:
+                    UserItem.objects.filter(id=item.id).update(image_url=resolved)
+                except Exception:
+                    pass
             continue
         aid = _extract_roblox_asset_id(url)
         if aid:
@@ -1437,11 +1447,12 @@ def admin_panel(request):
         return redirect('admin_panel')
 
     # GET — show panel
-    inventory = UserItem.objects.filter(
+    inventory_qs = UserItem.objects.filter(
         owner_name__iexact=request.user.username,
         status='available'
     ).order_by('-received_at')
-    total_value = inventory.aggregate(Sum('item_value'))['item_value__sum'] or 0
+    total_value = inventory_qs.aggregate(Sum('item_value'))['item_value__sum'] or 0
+    inventory = heal_item_images(inventory_qs)
 
     bots_data = get_bots_status()
     avatar_url = get_cached_avatar(request.user.username)
@@ -1461,11 +1472,12 @@ def admin_panel(request):
         lookup_pending_withdrawals = WithdrawRequest.objects.filter(
             user_name__iexact=lookup_username, is_completed=False
         ).order_by('-created_at')
-        lookup_inventory = UserItem.objects.filter(
+        lookup_inv_qs = UserItem.objects.filter(
             owner_name__iexact=lookup_username,
             status='available'
         ).order_by('-received_at')
-        lookup_total = lookup_inventory.aggregate(Sum('item_value'))['item_value__sum'] or 0
+        lookup_total = lookup_inv_qs.aggregate(Sum('item_value'))['item_value__sum'] or 0
+        lookup_inventory = heal_item_images(lookup_inv_qs)
         lookup_games = CoinflipGame.objects.filter(
             Q(player1__iexact=lookup_username) | Q(player2__iexact=lookup_username)
         ).order_by('-created_at')[:20]
