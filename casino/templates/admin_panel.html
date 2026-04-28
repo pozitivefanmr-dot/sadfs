@@ -219,6 +219,50 @@
         .ap-inv-grid { grid-template-columns: 1fr; }
         .ap-card { padding: 20px 18px; }
     }
+
+    /* Bulk select / delete */
+    .ap-bulk-form { margin: 0; }
+    .ap-bulk-bar {
+        display: flex; align-items: center; gap: 14px;
+        padding: 10px 12px; margin-bottom: 12px;
+        background: rgba(255,255,255,0.02);
+        border: 1px solid rgba(255,255,255,0.05);
+        border-radius: 11px;
+    }
+    .ap-bulk-check {
+        display: inline-flex; align-items: center; gap: 8px;
+        color: #c7d5ce; font-size: 0.78rem; font-weight: 600;
+        cursor: pointer; user-select: none;
+    }
+    .ap-bulk-check input { width: 15px; height: 15px; accent-color: #a855f7; cursor: pointer; }
+    .ap-bulk-counter {
+        color: #6b7c71; font-size: 0.74rem; font-weight: 600;
+        margin-right: auto;
+    }
+    .ap-btn-bulk-del {
+        display: inline-flex; align-items: center; gap: 6px;
+        padding: 8px 16px; border-radius: 9px;
+        background: rgba(255,75,75,0.1);
+        border: 1px solid rgba(255,75,75,0.22);
+        color: #ff6b6b; font-weight: 700; font-size: 0.78rem;
+        font-family: inherit; cursor: pointer;
+        transition: all 0.18s ease;
+    }
+    .ap-btn-bulk-del:not(:disabled):hover {
+        background: rgba(255,75,75,0.2);
+        border-color: rgba(255,75,75,0.45);
+        transform: translateY(-1px);
+    }
+    .ap-btn-bulk-del:disabled { opacity: 0.4; cursor: not-allowed; }
+    .ap-inv-item--check { cursor: pointer; user-select: none; }
+    .ap-inv-item--check:has(.ap-inv-cb:checked) {
+        border-color: rgba(255,75,75,0.45);
+        background: rgba(255,75,75,0.06);
+    }
+    .ap-inv-cb {
+        width: 16px; height: 16px; flex: 0 0 auto;
+        accent-color: #ff4b4b; cursor: pointer;
+    }
 </style>
 
 <div class="ap">
@@ -351,28 +395,36 @@
         </div>
 
         {% if lookup_inventory %}
-        <div class="ap-inv-grid">
-            {% for item in lookup_inventory %}
-            <div class="ap-inv-item">
-                {% if item.image_url %}
-                <img src="{{ item.image_url }}" class="ap-inv-img" alt="">
-                {% else %}
-                <div class="ap-inv-placeholder"><i class="bi bi-box-seam"></i></div>
-                {% endif %}
-                <div style="flex:1; min-width:0;">
-                    <div class="ap-inv-name">{{ item.item_name }}</div>
-                    <div class="ap-inv-meta">{{ item.item_value }} SV · #{{ item.id }}</div>
-                </div>
-                <form method="POST" action="{% url 'admin_panel' %}" style="margin:0;"
-                      onsubmit="return confirm('Delete {{ item.item_name }} from {{ lookup_username }}?');">
-                    {% csrf_token %}
-                    <input type="hidden" name="action" value="delete_user_item">
-                    <input type="hidden" name="item_id" value="{{ item.id }}">
-                    <button type="submit" class="ap-btn-del" title="Delete"><i class="bi bi-trash"></i></button>
-                </form>
+        <form method="POST" action="{% url 'admin_panel' %}" class="ap-bulk-form" data-bulk-form>
+            {% csrf_token %}
+            <input type="hidden" name="action" value="bulk_delete_items">
+            <div class="ap-bulk-bar">
+                <label class="ap-bulk-check">
+                    <input type="checkbox" data-bulk-toggle-all> <span>Select all</span>
+                </label>
+                <span class="ap-bulk-counter" data-bulk-counter>0 selected</span>
+                <button type="submit" class="ap-btn-bulk-del" data-bulk-submit disabled
+                        onclick="return confirm('Delete selected items from ' + '{{ lookup_username|escapejs }}' + '? This cannot be undone.');">
+                    <i class="bi bi-trash"></i> Delete selected
+                </button>
             </div>
-            {% endfor %}
-        </div>
+            <div class="ap-inv-grid">
+                {% for item in lookup_inventory %}
+                <label class="ap-inv-item ap-inv-item--check">
+                    <input type="checkbox" name="item_ids" value="{{ item.id }}" class="ap-inv-cb" data-bulk-cb>
+                    {% if item.image_url %}
+                    <img src="{{ item.image_url }}" class="ap-inv-img" alt="" onerror="this.onerror=null; this.src='{% static 'img/item_placeholder.svg' %}'">
+                    {% else %}
+                    <div class="ap-inv-placeholder"><i class="bi bi-box-seam"></i></div>
+                    {% endif %}
+                    <div style="flex:1; min-width:0;">
+                        <div class="ap-inv-name">{{ item.item_name }}</div>
+                        <div class="ap-inv-meta">{{ item.item_value }} SV · #{{ item.id }}</div>
+                    </div>
+                </label>
+                {% endfor %}
+            </div>
+        </form>
         {% else %}
         <div class="ap-empty"><i class="bi bi-inbox"></i> No items in inventory</div>
         {% endif %}
@@ -583,31 +635,38 @@
         </div>
 
         {% if inventory %}
-        <div class="ap-inv-grid">
-            {% for item in inventory %}
-            <div class="ap-inv-item">
-                {% if item.image_url %}
-                <img src="{{ item.image_url }}" class="ap-inv-img" alt="">
-                {% else %}
-                <div class="ap-inv-placeholder">
-                    <i class="bi bi-box-seam"></i>
-                </div>
-                {% endif %}
-                <div style="flex:1; min-width:0;">
-                    <div class="ap-inv-name">{{ item.item_name }}</div>
-                    <div class="ap-inv-meta">{{ item.item_value }} SV · #{{ item.id }}</div>
-                </div>
-                <form method="POST" action="{% url 'admin_panel' %}" style="margin:0;">
-                    {% csrf_token %}
-                    <input type="hidden" name="action" value="delete_item">
-                    <input type="hidden" name="item_id" value="{{ item.id }}">
-                    <button type="submit" class="ap-btn-del" title="Delete">
-                        <i class="bi bi-trash"></i>
-                    </button>
-                </form>
+        <form method="POST" action="{% url 'admin_panel' %}" class="ap-bulk-form" data-bulk-form>
+            {% csrf_token %}
+            <input type="hidden" name="action" value="bulk_delete_items">
+            <div class="ap-bulk-bar">
+                <label class="ap-bulk-check">
+                    <input type="checkbox" data-bulk-toggle-all> <span>Select all</span>
+                </label>
+                <span class="ap-bulk-counter" data-bulk-counter>0 selected</span>
+                <button type="submit" class="ap-btn-bulk-del" data-bulk-submit disabled
+                        onclick="return confirm('Delete selected items? This cannot be undone.');">
+                    <i class="bi bi-trash"></i> Delete selected
+                </button>
             </div>
-            {% endfor %}
-        </div>
+            <div class="ap-inv-grid">
+                {% for item in inventory %}
+                <label class="ap-inv-item ap-inv-item--check">
+                    <input type="checkbox" name="item_ids" value="{{ item.id }}" class="ap-inv-cb" data-bulk-cb>
+                    {% if item.image_url %}
+                    <img src="{{ item.image_url }}" class="ap-inv-img" alt="" onerror="this.onerror=null; this.src='{% static 'img/item_placeholder.svg' %}'">
+                    {% else %}
+                    <div class="ap-inv-placeholder">
+                        <i class="bi bi-box-seam"></i>
+                    </div>
+                    {% endif %}
+                    <div style="flex:1; min-width:0;">
+                        <div class="ap-inv-name">{{ item.item_name }}</div>
+                        <div class="ap-inv-meta">{{ item.item_value }} SV · #{{ item.id }}</div>
+                    </div>
+                </label>
+                {% endfor %}
+            </div>
+        </form>
         {% else %}
         <div class="ap-empty">
             <i class="bi bi-inbox"></i>
@@ -617,5 +676,35 @@
     </div>
 
 </div>
+
+<script>
+    (function () {
+        document.querySelectorAll('[data-bulk-form]').forEach(function (form) {
+            var toggleAll = form.querySelector('[data-bulk-toggle-all]');
+            var counter = form.querySelector('[data-bulk-counter]');
+            var submit = form.querySelector('[data-bulk-submit]');
+            var cbs = form.querySelectorAll('[data-bulk-cb]');
+
+            function refresh() {
+                var checked = 0;
+                cbs.forEach(function (cb) { if (cb.checked) checked++; });
+                if (counter) counter.textContent = checked + ' selected';
+                if (submit) submit.disabled = checked === 0;
+                if (toggleAll) {
+                    toggleAll.checked = checked > 0 && checked === cbs.length;
+                    toggleAll.indeterminate = checked > 0 && checked < cbs.length;
+                }
+            }
+            cbs.forEach(function (cb) { cb.addEventListener('change', refresh); });
+            if (toggleAll) {
+                toggleAll.addEventListener('change', function () {
+                    cbs.forEach(function (cb) { cb.checked = toggleAll.checked; });
+                    refresh();
+                });
+            }
+            refresh();
+        });
+    })();
+</script>
 
 {% endblock %}

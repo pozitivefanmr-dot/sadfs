@@ -1344,6 +1344,38 @@ def admin_panel(request):
             except UserItem.DoesNotExist:
                 messages.error(request, 'Item not found')
 
+        elif action == 'bulk_delete_items':
+            raw_ids = request.POST.getlist('item_ids')
+            ids = []
+            for raw in raw_ids:
+                for piece in str(raw).split(','):
+                    piece = piece.strip()
+                    if piece.isdigit():
+                        ids.append(int(piece))
+            ids = list(dict.fromkeys(ids))
+            if not ids:
+                messages.error(request, 'No items selected')
+                return redirect('admin_panel')
+            qs = UserItem.objects.filter(id__in=ids)
+            snapshot = list(qs.values('id', 'owner_name', 'item_name', 'item_value'))
+            count = qs.count()
+            total_val = sum(s['item_value'] or 0 for s in snapshot)
+            owners = sorted({s['owner_name'] for s in snapshot if s['owner_name']})
+            qs.delete()
+            messages.success(request, f'Deleted {count} item(s) — {total_val} SV total')
+            try:
+                preview = ', '.join(f"#{s['id']} {s['item_name']}" for s in snapshot[:6])
+                if len(snapshot) > 6:
+                    preview += f' (+{len(snapshot) - 6} more)'
+                send_admin_log(
+                    '🗑️ Admin Bulk Delete Items',
+                    f"**Admin:** {request.user.username}\n**Owners:** {', '.join(owners) or '—'}\n**Count:** {count}\n**Total Value:** {total_val} SV\n**Items:** {preview}",
+                    color=0xe74c3c
+                )
+            except Exception:
+                pass
+            return redirect('admin_panel')
+
         elif action == 'lookup_user':
             lookup_name = request.POST.get('lookup_username', '').strip()
             if lookup_name:
