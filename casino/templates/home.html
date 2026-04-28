@@ -278,7 +278,7 @@
                 <!-- Картинка оружия -->
                 <div class="dashboard-item-img">
                     <!-- Используем item.image_url -->
-                    <img src="{{ item.image_url }}" alt="{{ item.item_name }}" loading="lazy" decoding="async"
+                    <img src="{{ item.image_url|disp_img }}" alt="{{ item.item_name }}" loading="lazy" decoding="async"
                         onerror="this.onerror=null; this.src='{% static 'img/item_placeholder.svg' %}'">
                 </div>
                 <div class="item-title" title="{{ item.item_name }}">{{ item.item_name }}</div>

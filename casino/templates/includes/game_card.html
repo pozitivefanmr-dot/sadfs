@@ -39,9 +39,9 @@
     <div class="game-items-section">
         {% for i in game.items1|dictsortreversed:"value" %}
         {% if forloop.counter <= 4 %} <div class="game-item-circle" title="{{ i.name }}">
-            <img src="{% if i.image %}{{ i.image }}{% else %}https://static.wikia.nocookie.net/murder-mystery-2/images/5/53/Godly_Icon.png{% endif %}"
+            <img src="{{ i.image|disp_img }}"
                 class="game-item-img"
-                onerror="this.src='https://static.wikia.nocookie.net/murder-mystery-2/images/5/53/Godly_Icon.png'">
+                onerror="this.onerror=null; this.src='{% static 'img/item_placeholder.svg' %}'">
     </div>
     {% endif %}
     {% endfor %}
@@ -54,8 +54,9 @@
             {% for item in game.items1|dictsortreversed:"value" %}
             <div class="view-item-card">
                 <div class="view-item-img-box">
-                    <img src="{% if item.image %}{{ item.image }}{% else %}https://static.wikia.nocookie.net/murder-mystery-2/images/5/53/Godly_Icon.png{% endif %}"
-                        alt="{{ item.name }}">
+                    <img src="{{ item.image|disp_img }}"
+                        alt="{{ item.name }}"
+                        onerror="this.onerror=null; this.src='{% static 'img/item_placeholder.svg' %}'">
                 </div>
                 <div class="view-item-name">{{ item.name }}</div>
                 <div class="view-item-val">
