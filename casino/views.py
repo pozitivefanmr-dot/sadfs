@@ -154,6 +154,33 @@ def _resolve_image_via_fandom(item_name, *, timeout=4):
                 break
         except Exception as exc:
             logger.warning('fandom lookup failed for %s: %s', title, exc)
+    # Fallback: many items (e.g. Blue Seer and other Seers) store their image
+    # under a UUID filename, so File:<Name>.png misses. Ask the article page
+    # itself for its lead image via prop=pageimages.
+    if not found:
+        for page_title in (base, base.replace('_', ' ')):
+            try:
+                r = requests.get(
+                    'https://murder-mystery-2.fandom.com/api.php',
+                    params={
+                        'action': 'query', 'titles': page_title,
+                        'prop': 'pageimages', 'piprop': 'original',
+                        'format': 'json', 'redirects': 1,
+                    },
+                    timeout=timeout,
+                )
+                if r.status_code != 200:
+                    continue
+                pages = ((r.json() or {}).get('query') or {}).get('pages') or {}
+                for _, page in pages.items():
+                    original = (page.get('original') or {}).get('source') or ''
+                    if original:
+                        found = original
+                        break
+                if found:
+                    break
+            except Exception as exc:
+                logger.warning('fandom pageimages lookup failed for %s: %s', page_title, exc)
     _FANDOM_IMAGE_CACHE[key] = found
     return found
 
