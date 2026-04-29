@@ -5431,8 +5431,8 @@ input[type=range].snow-range-v2::-moz-range-thumb {
 
 .game-avatar-wrapper {
     position: relative;
-    width: 58px;
-    height: 58px;
+    width: 52px;
+    height: 52px;
 }
 
 .game-avatar {
@@ -11845,8 +11845,8 @@ input[type=range].snow-range::-webkit-slider-thumb {
 }
 
 .clickable-avatar:hover {
-    transform: scale(1.08);
-    box-shadow: 0 0 18px rgba(0, 229, 255, 0.35);
+    transform: scale(1.03);
+    box-shadow: 0 0 6px rgba(0, 229, 255, 0.15);
 }
 
 /* Overlay */
