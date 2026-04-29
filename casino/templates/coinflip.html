@@ -579,7 +579,7 @@
         }
     }
 
-    function startCardSpin(card) {
+    function startCardSpin(card, resultCode) {
         if (!card || card.classList.contains('is-spinning')) return;
         card.classList.add('is-spinning');
 
@@ -606,9 +606,18 @@
             coin.style.transform = 'rotateX(0deg)';
             // force reflow so the next transform animates
             void coin.offsetHeight;
+            // Land on the SAME side as the actual flip overlay:
+            // result_code === 1  → side-a (b_chip), no offset
+            // result_code !== 1  → side-b (h_chip), +180°
+            // (result_code is the same field used in the participant overlay,
+            // so spectators see the same outcome as the players.)
+            let degrees = 15 * 360;
+            if (resultCode !== undefined && resultCode !== null && Number(resultCode) !== 1) {
+                degrees += 180;
+            }
             requestAnimationFrame(() => {
                 coin.style.transition = 'transform 8s cubic-bezier(0.1, 0, 0.2, 1)';
-                coin.style.transform = 'rotateX(' + (15 * 360) + 'deg)';
+                coin.style.transform = 'rotateX(' + degrees + 'deg)';
             });
         }
 
@@ -658,7 +667,7 @@
                     if (playingIds.includes(id)) {
                         const pg = playingGamesById[id];
                         if (pg) fillOpponentAvatar(card, pg.player2, pg.player2_avatar);
-                        startCardSpin(card);
+                        startCardSpin(card, pg ? pg.result_code : null);
                         return;
                     }
                     // РРЅР°С‡Рµ (РѕС‚РјРµРЅР°, РёСЃС‚РµРєР»Р°) — РїСЂРѕСЃС‚Рѕ СѓРґР°Р»СЏРµРј РєР°Рє РµС‰Рµ

@@ -2201,7 +2201,7 @@ def api_active_games_json(request):
         CoinflipGame.objects
         .filter(is_active=False, player2__isnull=False, winner__isnull=False)
         .order_by('-id')
-        .values('id', 'player2')[:30]
+        .values('id', 'player2', 'random_result', 'creator_side')[:30]
     )
     playing_ids = []
     playing_games = []
@@ -2212,6 +2212,8 @@ def api_active_games_json(request):
             'id': row['id'],
             'player2': p2,
             'player2_avatar': get_cached_avatar(p2) if p2 else '',
+            'result_code': row['random_result'],
+            'creator_side': row['creator_side'],
         })
 
     return JsonResponse({
