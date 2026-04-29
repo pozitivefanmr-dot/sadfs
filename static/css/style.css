@@ -5425,14 +5425,14 @@ input[type=range].snow-range-v2::-moz-range-thumb {
 .game-players-section {
     display: flex;
     align-items: center;
-    gap: 20px;
-    min-width: 200px;
+    gap: 22px;
+    min-width: 210px;
 }
 
 .game-avatar-wrapper {
     position: relative;
-    width: 49px;
-    height: 49px;
+    width: 58px;
+    height: 58px;
 }
 
 .game-avatar {

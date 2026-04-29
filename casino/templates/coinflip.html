@@ -550,6 +550,35 @@
     // Replaces the right-side actions panel of a card with a spinning coin
     // (same speed/feel as the main flip animation), then removes the card
     // 15s after the spin completes.
+    // Replace the placeholder "?" avatar in slot 2 with the real opponent's
+    // avatar so other viewers see who joined, not just the spinning coin.
+    function fillOpponentAvatar(card, player2, avatarUrl) {
+        if (!card || !player2 || !avatarUrl) return;
+        const wrappers = card.querySelectorAll('.game-avatar-wrapper');
+        if (wrappers.length < 2) return;
+        const slot = wrappers[1];
+        const existingImg = slot.querySelector('img.game-avatar');
+        if (existingImg) {
+            existingImg.src = avatarUrl;
+            existingImg.setAttribute('onclick', "openStatsModal('" + player2.replace(/'/g, "\\'") + "')");
+            existingImg.classList.add('clickable-avatar');
+            return;
+        }
+        const placeholder = slot.querySelector('.game-avatar');
+        const img = document.createElement('img');
+        img.className = 'game-avatar clickable-avatar';
+        img.src = avatarUrl;
+        img.setAttribute('onclick', "openStatsModal('" + player2.replace(/'/g, "\\'") + "')");
+        img.onerror = function () {
+            this.src = 'https://tr.rbxcdn.com/53db0d0cb349309a7c91eb4361790e39/150/150/AvatarHeadshot/Png';
+        };
+        if (placeholder) {
+            placeholder.replaceWith(img);
+        } else {
+            slot.prepend(img);
+        }
+    }
+
     function startCardSpin(card) {
         if (!card || card.classList.contains('is-spinning')) return;
         card.classList.add('is-spinning');
@@ -617,6 +646,8 @@
                 // 1. РЈР”РђР›Р•РќРР• / Р—РђРџСѓСЃРљ РђРќРРњРђР¦РР РР“Р Р«
                 const serverIds = data.games.map(g => g.id);
                 const playingIds = data.playing_ids || [];
+                const playingGamesById = {};
+                (data.playing_games || []).forEach(pg => { playingGamesById[pg.id] = pg; });
                 document.querySelectorAll('.game-card').forEach(card => {
                     const id = parseInt(card.getAttribute('data-game-id'));
                     if (serverIds.includes(id)) return;
@@ -625,6 +656,8 @@
                     // РРіСЂР° С‚РѕР»СЊРєРѕ С‡С‚Рѕ РґРѕРёРіСЂР°Р»Р°СЃСЊ (РїСЂРёСЃРѕРµРґРёРЅРёР»РёСЃСЊ) -> Р·Р°РїСѓСЃРєР°РµРј
                     // РјРѕРЅРµС‚РєСѓ РїСЂСЏРјРѕ РІ РєР°СЂС‚РѕС‡РєРµ РІРјРµСЃС‚Рѕ СѓРґР°Р»РµРЅРёСЏ.
                     if (playingIds.includes(id)) {
+                        const pg = playingGamesById[id];
+                        if (pg) fillOpponentAvatar(card, pg.player2, pg.player2_avatar);
                         startCardSpin(card);
                         return;
                     }
